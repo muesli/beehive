@@ -10,29 +10,28 @@ import (
 type ModuleInterface interface {
 	// Name of the module
 	Name() 		string
-//	Events()	[]Event
-//	Actions()	[]Action
+	Events()	[]Event
+	Actions()	[]Action
 //	Outs()		[]Placeholder
 
 	Handle(event Event) bool
-	Run()
+	Run(event chan Event)
 }
 
 type Event struct {
 	Name	string
-//	Options	[]Placeholder
+	Options	[]Placeholder
 }
 
 type Action struct {
 	Name	string
-//	Options	[]Placeholder
+	Options	[]Placeholder
 }
 
-type Message struct {
-	To     []string
-	Msg    string
-	Source string
-	Authed bool
+type Placeholder struct {
+	Name	string
+	Type 	string
+	Value	string
 }
 
 var (
@@ -44,6 +43,16 @@ var (
 
 func init() {
 	fmt.Println("Waking the bees...")
+
+	go func() {
+		for {
+			event := <-EventsIn
+			fmt.Println("Event received:", event.Name)
+			for _, v := range event.Options {
+				fmt.Println("\tOptions:", v)
+			}
+		}
+	}()
 
 	go func() {
 		for {
@@ -73,6 +82,6 @@ func GetModule(identifier string) *ModuleInterface {
 // Starts all registered modules
 func StartModules() {
 	for _, mod := range modules {
-		(*mod).Run()
+		(*mod).Run(EventsIn)
 	}
 }

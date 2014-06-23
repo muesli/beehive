@@ -27,9 +27,52 @@ type IrcBee struct {
 	channels    []string
 }
 
+// Interface impl
+
 func (sys *IrcBee) Name() string {
 	return "ircbee"
 }
+
+func (sys *IrcBee) Events() []modules.Event {
+	events := []modules.Event{}
+	return events
+}
+
+func (sys *IrcBee) Actions() []modules.Action {
+	actions := []modules.Action{}
+	return actions
+}
+
+func (sys *IrcBee) Handle(cm modules.Event) bool {
+	log.Println("Handling event:", cm.Name)
+
+/*	if len(cm.To) == 0 {
+		sys.client.Privmsg(sys.ircchannel, cm.Msg)
+		return true
+	} else {
+		for _, recv := range cm.To {
+			if recv == "*" {
+				// special: send to all joined channels
+				for _, to := range sys.channels {
+					sys.client.Privmsg(to, cm.Msg)
+				}
+			} else {
+				// needs stripping hostname when sending to user!host
+				if strings.Index(recv, "!") > 0 {
+					recv = recv[0:strings.Index(recv, "!")]
+				}
+
+				sys.client.Privmsg(recv, cm.Msg)
+			}
+		}
+
+		return true
+	}*/
+
+	return false
+}
+
+// ircbee specific impl
 
 func (sys *IrcBee) Rejoin() {
 	for _, channel := range sys.channels {
@@ -56,7 +99,7 @@ func (sys *IrcBee) Part(channel string) {
 	}
 }
 
-func (sys *IrcBee) Run() {
+func (sys *IrcBee) Run(channelIn chan modules.Event) {
 	if len(sys.irchost) == 0 {
 		return
 	}
@@ -77,19 +120,33 @@ func (sys *IrcBee) Run() {
 	sys.client.AddHandler("PRIVMSG", func(conn *irc.Conn, line *irc.Line) {
 		channel := line.Args[0]
 		if channel == sys.client.Me.Nick {
-			log.Println("PM from " + line.Src)
+//			log.Println("PM from " + line.Src)
 			channel = line.Src // replies go via PM too.
 		} else {
-			log.Println("Message in channel " + line.Args[0] + " from " + line.Src)
+//			log.Println("Message in channel " + channel + " from " + line.Src)
 		}
 
-/*		msg := modules.Message{
-			To:     []string{channel},
-			Msg:    line.Args[1],
-			Source: line.Src,
-			Authed: false, //auth.IsAuthed(line.Src),
+		ev := modules.Event{
+			Name: channel,
+			Options: []modules.Placeholder{
+				modules.Placeholder{
+					Name: "channel",
+					Type: "string",
+					Value: channel,
+				},
+				modules.Placeholder{
+					Name: "user",
+					Type: "string",
+					Value: line.Src,
+				},
+				modules.Placeholder{
+					Name: "params",
+					Type: "string",
+					Value: line.Args[1],
+				},
+			},
 		}
-		channelIn <- msg*/
+		channelIn <- ev
 	})
 
 	// loop on IRC dis/connected events
@@ -122,33 +179,6 @@ func (sys *IrcBee) Run() {
 			time.Sleep(5 * time.Second)
 		}
 	}()
-}
-
-func (sys *IrcBee) Handle(cm modules.Event) bool {
-/*	if len(cm.To) == 0 {
-		sys.client.Privmsg(sys.ircchannel, cm.Msg)
-		return true
-	} else {
-		for _, recv := range cm.To {
-			if recv == "*" {
-				// special: send to all joined channels
-				for _, to := range sys.channels {
-					sys.client.Privmsg(to, cm.Msg)
-				}
-			} else {
-				// needs stripping hostname when sending to user!host
-				if strings.Index(recv, "!") > 0 {
-					recv = recv[0:strings.Index(recv, "!")]
-				}
-
-				sys.client.Privmsg(recv, cm.Msg)
-			}
-		}
-
-		return true
-	}*/
-
-	return false
 }
 
 func init() {
