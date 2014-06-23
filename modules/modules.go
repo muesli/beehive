@@ -10,8 +10,8 @@ import (
 type ModuleInterface interface {
 	// Name of the module
 	Name() 		string
-	Events()	[]Event
-	Actions()	[]Action
+//	Events()	[]Event
+//	Actions()	[]Action
 //	Outs()		[]Placeholder
 
 	Handle(event Event) bool
