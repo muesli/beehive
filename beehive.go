@@ -4,7 +4,7 @@ import (
 	"fmt"
 	_ "log"
 
-	// "github.com/muesli/beehive/app"
+	"github.com/muesli/beehive/app"
 
 	/* "github.com/muesli/beehive/commands"
 	_ "github.com/muesli/beehive/commands/send" */
@@ -14,7 +14,7 @@ import (
 
 func main() {
 	// Parse command-line args for all registered sub modules
-	// app.Run()
+	app.Run()
 
 	// Initialize commands and messaging sub-systems
 	// commands.StartCommands()
