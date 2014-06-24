@@ -78,7 +78,20 @@ func init() {
 // Modules need to call this method to register themselves
 func RegisterModule(mod ModuleInterface) {
 	log.Println("Worker bee ready:", mod.Name(), "-", mod.Description())
+	for _, ev := range mod.Events() {
+		log.Println("\tProvides event:", ev.Name, "-", ev.Description)
+		for _, opt := range ev.Options {
+			log.Println("\t\tPlaceholder:", opt.Name, "-", opt.Description)
+		}
+	}
+	for _, ac := range mod.Actions() {
+		log.Println("\tOffers action:", ac.Name, "-", ac.Description)
+		for _, opt := range ac.Options {
+			log.Println("\t\tPlaceholder:", opt.Name, "-", opt.Description)
+		}
+	}
 
+	log.Println()
 	modules[mod.Name()] = &mod
 }
 

@@ -40,17 +40,21 @@ func (sys *IrcBee) Events() []modules.Event {
 	events := []modules.Event{
 		modules.Event{
 			Name: "message",
+			Description: "A message was received over IRC, either in a channel or a private query",
 			Options: []modules.Placeholder{
 				modules.Placeholder{
 					Name: "text",
+					Description: "The message that was received",
 					Type: "string",
 				},
 				modules.Placeholder{
 					Name: "channel",
+					Description: "The channel the message was received in",
 					Type: "string",
 				},
 				modules.Placeholder{
 					Name: "user",
+					Description: "The user that sent the message",
 					Type: "string",
 				},
 			},
@@ -63,31 +67,38 @@ func (sys *IrcBee) Actions() []modules.Action {
 	actions := []modules.Action{
 		modules.Action{
 			Name: "send",
+			Description: "Sends a message to a channel or a private query",
 			Options: []modules.Placeholder{
 				modules.Placeholder{
 					Name: "channel",
+					Description: "Which channel to send the message to",
 					Type: "string",
 				},
 				modules.Placeholder{
 					Name: "text",
+					Description: "Content of the message",
 					Type: "string",
 				},
 			},
 		},
 		modules.Action{
 			Name: "join",
+			Description: "Joins a channel",
 			Options: []modules.Placeholder{
 				modules.Placeholder{
 					Name: "channel",
+					Description: "Channel to join",
 					Type: "string",
 				},
 			},
 		},
 		modules.Action{
 			Name: "part",
+			Description: "Parts a channel",
 			Options: []modules.Placeholder{
 				modules.Placeholder{
 					Name: "channel",
+					Description: "Channel to part",
 					Type: "string",
 				},
 			},

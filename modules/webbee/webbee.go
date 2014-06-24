@@ -33,7 +33,24 @@ func (sys *WebBee) Run(channelIn chan modules.Event, channelOut chan modules.Act
 }
 
 func (sys *WebBee) Events() []modules.Event {
-	events := []modules.Event{}
+	events := []modules.Event{
+		modules.Event{
+			Name: "post",
+			Description: "A POST call was received by the HTTP server",
+			Options: []modules.Placeholder{
+				modules.Placeholder{
+					Name: "json",
+					Description: "JSON map received from caller",
+					Type: "json",
+				},
+				modules.Placeholder{
+					Name: "ip",
+					Description: "IP of the caller",
+					Type: "string",
+				},
+			},
+		},
+	}
 	return events
 }
 
