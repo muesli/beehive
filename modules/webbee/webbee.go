@@ -41,7 +41,7 @@ func (sys *WebBee) Events() []modules.Event {
 				modules.Placeholder{
 					Name:        "json",
 					Description: "JSON map received from caller",
-					Type:        "json",
+					Type:        "map",
 				},
 				modules.Placeholder{
 					Name:        "ip",
@@ -63,6 +63,27 @@ func (sys *WebBee) Action(action modules.Action) bool {
 	return false
 }
 
+func GetRequest(ctx *web.Context) {
+	//FIXME
+	ms := make(map[string]string)
+	ev := modules.Event{
+		Name: "get",
+		Options: []modules.Placeholder{
+			modules.Placeholder{
+				Name:  "query_params",
+				Type:  "map",
+				Value: ms,
+			},
+			modules.Placeholder{
+				Name:  "ip",
+				Type:  "string",
+				Value: "tbd",
+			},
+		},
+	}
+	cIn <- ev
+}
+
 func PostRequest(ctx *web.Context) {
 	b, err := ioutil.ReadAll(ctx.Request.Body)
 	if err != nil {
@@ -82,7 +103,7 @@ func PostRequest(ctx *web.Context) {
 		Options: []modules.Placeholder{
 			modules.Placeholder{
 				Name:  "json",
-				Type:  "json",
+				Type:  "map",
 				Value: payload,
 			},
 			modules.Placeholder{
@@ -99,6 +120,7 @@ func init() {
 	w := WebBee{
 		Addr: "0.0.0.0:12345",
 	}
+	web.Get("/event", GetRequest)
 	web.Post("/event", PostRequest)
 
 	modules.RegisterModule(&w)
