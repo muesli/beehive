@@ -1,8 +1,7 @@
 package main
 
 import (
-	"fmt"
-	_ "log"
+	"log"
 
 	"github.com/muesli/beehive/app"
 
@@ -13,13 +12,12 @@ import (
 )
 
 func main() {
-	// Parse command-line args for all registered sub modules
+	// Parse command-line args for all registered modules
 	app.Run()
 
-	fmt.Println("Beehive is buzzing...")
+	log.Println("Beehive is buzzing...")
 
-	// Initialize commands and messaging sub-systems
-	// commands.StartCommands()
+	// Initialize modules
 	modules.StartModules()
 
 	// Keep app alive

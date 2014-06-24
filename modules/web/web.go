@@ -1,12 +1,11 @@
-// ircflu's integrated web-server to handle web-hooks.
-package irc
+// beehive's web-module.
+package web
 
 import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"github.com/hoisie/web"
-_	"github.com/muesli/beehive/app"
 	"github.com/muesli/beehive/modules"
 )
 

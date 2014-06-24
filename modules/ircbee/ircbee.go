@@ -2,7 +2,6 @@
 package ircbee
 
 import (
-	_ "fmt"
 	irc "github.com/fluffle/goirc/client"
 	"github.com/muesli/beehive/app"
 	"github.com/muesli/beehive/modules"
