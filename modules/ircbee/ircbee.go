@@ -152,28 +152,8 @@ func (sys *IrcBee) Run(channelIn chan modules.Event, channelOut chan modules.Act
 	sys.client.AddHandler("PRIVMSG", func(conn *irc.Conn, line *irc.Line) {
 		channel := line.Args[0]
 		if channel == sys.client.Me.Nick {
-			//			log.Println("PM from " + line.Src)
 			channel = line.Src // replies go via PM too.
-		} else {
-			//			log.Println("Message in channel " + channel + " from " + line.Src)
 		}
-
-		action := modules.Action{
-			Name: "send",
-			Options: []modules.Placeholder{
-				modules.Placeholder{
-					Name:  "channel",
-					Type:  "string",
-					Value: channel,
-				},
-				modules.Placeholder{
-					Name:  "text",
-					Type:  "string",
-					Value: line.Src + " said: " + line.Args[1],
-				},
-			},
-		}
-		sys.Action(action)
 
 		ev := modules.Event{
 			Name: channel,
