@@ -14,7 +14,6 @@ type ModuleInterface interface {
 	Actions()	[]Action
 //	Outs()		[]Placeholder
 
-	Handle(event Event) bool
 	Run(event chan Event)
 }
 
