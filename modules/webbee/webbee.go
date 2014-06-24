@@ -50,6 +50,22 @@ func (sys *WebBee) Events() []modules.Event {
 				},
 			},
 		},
+		modules.Event{
+			Name:        "get",
+			Description: "A GET call was received by the HTTP server",
+			Options: []modules.Placeholder{
+				modules.Placeholder{
+					Name:        "query_params",
+					Description: "Map of query parameters received from caller",
+					Type:        "map",
+				},
+				modules.Placeholder{
+					Name:        "ip",
+					Description: "IP of the caller",
+					Type:        "string",
+				},
+			},
+		},
 	}
 	return events
 }
