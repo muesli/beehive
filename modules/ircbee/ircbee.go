@@ -23,7 +23,7 @@ type IrcBee struct {
 	ircssl      bool
 	ircchannel  string
 
-	channels    []string
+	channels []string
 }
 
 // Interface impl
@@ -97,8 +97,6 @@ func (sys *IrcBee) Action(action modules.Action) bool {
 				recv = recv[0:strings.Index(recv, "!")]
 			}
 
-			log.Println("recv:", recv)
-			log.Println("text:", text)
 			sys.client.Privmsg(recv, text)
 		}
 	}
@@ -154,23 +152,23 @@ func (sys *IrcBee) Run(channelIn chan modules.Event, channelOut chan modules.Act
 	sys.client.AddHandler("PRIVMSG", func(conn *irc.Conn, line *irc.Line) {
 		channel := line.Args[0]
 		if channel == sys.client.Me.Nick {
-//			log.Println("PM from " + line.Src)
+			//			log.Println("PM from " + line.Src)
 			channel = line.Src // replies go via PM too.
 		} else {
-//			log.Println("Message in channel " + channel + " from " + line.Src)
+			//			log.Println("Message in channel " + channel + " from " + line.Src)
 		}
 
 		action := modules.Action{
 			Name: "send",
 			Options: []modules.Placeholder{
 				modules.Placeholder{
-					Name: "channel",
-					Type: "string",
+					Name:  "channel",
+					Type:  "string",
 					Value: channel,
 				},
 				modules.Placeholder{
-					Name: "text",
-					Type: "string",
+					Name:  "text",
+					Type:  "string",
 					Value: line.Src + " said: " + line.Args[1],
 				},
 			},
@@ -181,18 +179,18 @@ func (sys *IrcBee) Run(channelIn chan modules.Event, channelOut chan modules.Act
 			Name: channel,
 			Options: []modules.Placeholder{
 				modules.Placeholder{
-					Name: "channel",
-					Type: "string",
+					Name:  "channel",
+					Type:  "string",
 					Value: channel,
 				},
 				modules.Placeholder{
-					Name: "user",
-					Type: "string",
+					Name:  "user",
+					Type:  "string",
 					Value: line.Src,
 				},
 				modules.Placeholder{
-					Name: "params",
-					Type: "string",
+					Name:  "params",
+					Type:  "string",
 					Value: line.Args[1],
 				},
 			},

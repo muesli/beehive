@@ -26,10 +26,10 @@ func AddFlags(flags []CliFlag) {
 func Run() {
 	for _, f := range appflags {
 		switch f.Value.(type) {
-			case string:
-				flag.StringVar((f.V).(*string), f.Name, f.Value.(string), f.Desc)
-			case bool:
-				flag.BoolVar((f.V).(*bool), f.Name, f.Value.(bool), f.Desc)
+		case string:
+			flag.StringVar((f.V).(*string), f.Name, f.Value.(string), f.Desc)
+		case bool:
+			flag.BoolVar((f.V).(*bool), f.Name, f.Value.(bool), f.Desc)
 		}
 	}
 

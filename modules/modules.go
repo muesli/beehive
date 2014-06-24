@@ -1,4 +1,4 @@
-// beehive's central module system. 
+// beehive's central module system.
 package modules
 
 import (
@@ -9,33 +9,33 @@ import (
 // Interface which all modules need to implement
 type ModuleInterface interface {
 	// Name of the module
-	Name() 		string
-	Events()	[]Event
-	Actions()	[]Action
-//	Outs()		[]Placeholder
+	Name() string
+	Events() []Event
+	Actions() []Action
+	//	Outs()		[]Placeholder
 
 	Run(eventChannel chan Event, actionChannel chan Action)
 	Action(action Action) bool
 }
 
 type Event struct {
-	Name	string
-	Options	[]Placeholder
+	Name    string
+	Options []Placeholder
 }
 
 type Action struct {
-	Name	string
-	Options	[]Placeholder
+	Name    string
+	Options []Placeholder
 }
 
 type Placeholder struct {
-	Name	string
-	Type 	string
-	Value	string
+	Name  string
+	Type  string
+	Value string
 }
 
 var (
-	EventsIn  = make(chan Event)
+	EventsIn   = make(chan Event)
 	ActionsOut = make(chan Action)
 
 	modules map[string]*ModuleInterface = make(map[string]*ModuleInterface)

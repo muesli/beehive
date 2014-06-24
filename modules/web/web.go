@@ -4,13 +4,13 @@ package web
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"github.com/hoisie/web"
 	"github.com/muesli/beehive/modules"
+	"io/ioutil"
 )
 
-var(
-	cIn chan modules.Event
+var (
+	cIn  chan modules.Event
 	cOut chan modules.Action
 )
 
@@ -49,8 +49,6 @@ func ActionRequest(ctx *web.Context) {
 		return
 	}
 
-	fmt.Println("Params:", string(b))
-
 	var payload interface{}
 	err = json.Unmarshal(b, &payload)
 	if err != nil {
@@ -65,21 +63,21 @@ func ActionRequest(ctx *web.Context) {
 	channel := data["channel"].(string)
 	text := data["text"].(string)
 
-		action := modules.Action{
-			Name: name,
-			Options: []modules.Placeholder{
-				modules.Placeholder{
-					Name: "channel",
-					Type: "string",
-					Value: channel,
-				},
-				modules.Placeholder{
-					Name: "text",
-					Type: "string",
-					Value: text,
-				},
+	action := modules.Action{
+		Name: name,
+		Options: []modules.Placeholder{
+			modules.Placeholder{
+				Name:  "channel",
+				Type:  "string",
+				Value: channel,
 			},
-		}
+			modules.Placeholder{
+				Name:  "text",
+				Type:  "string",
+				Value: text,
+			},
+		},
+	}
 
 	cOut <- action
 }
