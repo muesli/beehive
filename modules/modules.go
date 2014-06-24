@@ -14,7 +14,8 @@ type ModuleInterface interface {
 	Actions()	[]Action
 //	Outs()		[]Placeholder
 
-	Run(event chan Event)
+	Run(eventChannel chan Event, actionChannel chan Action)
+	Action(action Action) bool
 }
 
 type Event struct {
@@ -57,6 +58,12 @@ func init() {
 		for {
 			action := <-ActionsOut
 			fmt.Println("Action:", action.Name)
+			for _, v := range action.Options {
+				fmt.Println("\tOptions:", v)
+			}
+			for _, mod := range modules {
+				(*mod).Action(action)
+			}
 		}
 	}()
 }
@@ -81,6 +88,6 @@ func GetModule(identifier string) *ModuleInterface {
 // Starts all registered modules
 func StartModules() {
 	for _, mod := range modules {
-		(*mod).Run(EventsIn)
+		(*mod).Run(EventsIn, ActionsOut)
 	}
 }
