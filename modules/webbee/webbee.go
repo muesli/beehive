@@ -3,10 +3,10 @@ package web
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/hoisie/web"
 	"github.com/muesli/beehive/modules"
 	"io/ioutil"
+	"log"
 )
 
 var (
@@ -35,18 +35,18 @@ func (sys *WebBee) Run(channelIn chan modules.Event, channelOut chan modules.Act
 func (sys *WebBee) Events() []modules.Event {
 	events := []modules.Event{
 		modules.Event{
-			Name: "post",
+			Name:        "post",
 			Description: "A POST call was received by the HTTP server",
 			Options: []modules.Placeholder{
 				modules.Placeholder{
-					Name: "json",
+					Name:        "json",
 					Description: "JSON map received from caller",
-					Type: "json",
+					Type:        "json",
 				},
 				modules.Placeholder{
-					Name: "ip",
+					Name:        "ip",
 					Description: "IP of the caller",
-					Type: "string",
+					Type:        "string",
 				},
 			},
 		},
@@ -63,51 +63,43 @@ func (sys *WebBee) Action(action modules.Action) bool {
 	return false
 }
 
-func ActionRequest(ctx *web.Context) {
+func PostRequest(ctx *web.Context) {
 	b, err := ioutil.ReadAll(ctx.Request.Body)
 	if err != nil {
-		fmt.Println("Error:", err)
+		log.Println("Error:", err)
 		return
 	}
 
 	var payload interface{}
 	err = json.Unmarshal(b, &payload)
 	if err != nil {
-		fmt.Println("Error:", err)
+		log.Println("Error:", err)
 		return
 	}
 
-	fmt.Println("JSON'd:", payload)
-
-	data := payload.(map[string]interface{})
-	name := data["name"].(string)
-	channel := data["channel"].(string)
-	text := data["text"].(string)
-
-	action := modules.Action{
-		Name: name,
+	ev := modules.Event{
+		Name: "post",
 		Options: []modules.Placeholder{
 			modules.Placeholder{
-				Name:  "channel",
-				Type:  "string",
-				Value: channel,
+				Name:  "json",
+				Type:  "json",
+				Value: payload,
 			},
 			modules.Placeholder{
-				Name:  "text",
+				Name:  "ip",
 				Type:  "string",
-				Value: text,
+				Value: "tbd",
 			},
 		},
 	}
-
-	cOut <- action
+	cIn <- ev
 }
 
 func init() {
 	w := WebBee{
 		Addr: "0.0.0.0:12345",
 	}
-	web.Post("/action", ActionRequest)
+	web.Post("/event", PostRequest)
 
 	modules.RegisterModule(&w)
 }

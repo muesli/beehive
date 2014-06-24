@@ -23,22 +23,22 @@ type ModuleInterface interface {
 }
 
 type Event struct {
-	Name    string
+	Name        string
 	Description string
-	Options []Placeholder
+	Options     []Placeholder
 }
 
 type Action struct {
-	Name    string
+	Name        string
 	Description string
-	Options []Placeholder
+	Options     []Placeholder
 }
 
 type Placeholder struct {
-	Name  string
+	Name        string
 	Description string
-	Type  string
-	Value interface{}
+	Type        string
+	Value       interface{}
 }
 
 var (
