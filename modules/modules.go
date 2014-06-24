@@ -2,19 +2,21 @@
 package modules
 
 import (
-	"fmt"
-	_ "strings"
+	"log"
 )
 
 // Interface which all modules need to implement
 type ModuleInterface interface {
 	// Name of the module
 	Name() string
+	// Events defined by module
 	Events() []Event
+	// Actions supported by module
 	Actions() []Action
-	//	Outs()		[]Placeholder
 
+	// Activates the module
 	Run(eventChannel chan Event, actionChannel chan Action)
+	// Handles an action
 	Action(action Action) bool
 }
 
@@ -42,14 +44,14 @@ var (
 )
 
 func init() {
-	fmt.Println("Waking the bees...")
+	log.Println("Waking the bees...")
 
 	go func() {
 		for {
 			event := <-EventsIn
-			fmt.Println("Event received:", event.Name)
+			log.Println("Event received:", event.Name)
 			for _, v := range event.Options {
-				fmt.Println("\tOptions:", v)
+				log.Println("\tOptions:", v)
 			}
 		}
 	}()
@@ -57,9 +59,9 @@ func init() {
 	go func() {
 		for {
 			action := <-ActionsOut
-			fmt.Println("Action:", action.Name)
+			log.Println("Action:", action.Name)
 			for _, v := range action.Options {
-				fmt.Println("\tOptions:", v)
+				log.Println("\tOptions:", v)
 			}
 			for _, mod := range modules {
 				(*mod).Action(action)
@@ -70,7 +72,7 @@ func init() {
 
 // Sub-systems need to call this method to register themselves
 func RegisterModule(mod ModuleInterface) {
-	fmt.Println("Registering bee:", mod.Name())
+	log.Println("Registering bee:", mod.Name())
 
 	modules[mod.Name()] = &mod
 }
