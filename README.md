@@ -22,4 +22,4 @@ Now we can build beehive:
 
 API docs can be found [here](http://godoc.org/github.com/muesli/beehive).
 
-Continous integration: [![Build Status](https://secure.travis-ci.org/muesli/beehive.png)](http://travis-ci.org/muesli/beehive)
+Continuous integration: [![Build Status](https://secure.travis-ci.org/muesli/beehive.png)](http://travis-ci.org/muesli/beehive)
