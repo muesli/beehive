@@ -58,7 +58,7 @@ type Chain struct {
 }
 
 var (
-	config = "/tmp/beehive.conf"
+	config = "./beehive.conf"
 
 	EventsIn   = make(chan Event)
 
@@ -146,13 +146,11 @@ func GetModule(identifier string) *ModuleInterface {
 // Loads chains from config
 func LoadChains() {
 	j, err := ioutil.ReadFile(config)
-	if err != nil {
-		log.Println("Couldn't read config from:", config)
-	}
-
-	err = json.Unmarshal(j, &chains)
-	if err != nil {
-		panic(err)
+	if err == nil {
+		err = json.Unmarshal(j, &chains)
+		if err != nil {
+			panic(err)
+		}
 	}
 }
 
@@ -163,7 +161,7 @@ func SaveChains() {
 		panic(err)
 	}
 
-    err = ioutil.WriteFile("/tmp/beehive.conf", j, 0644)
+    err = ioutil.WriteFile(config, j, 0644)
 }
 
 func FakeChain() {
