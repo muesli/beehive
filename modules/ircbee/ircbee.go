@@ -39,7 +39,7 @@ func (sys *IrcBee) Description() string {
 func (sys *IrcBee) Events() []modules.Event {
 	events := []modules.Event{
 		modules.Event{
-			Namespace:	 sys.Name(),
+			Namespace:   sys.Name(),
 			Name:        "message",
 			Description: "A message was received over IRC, either in a channel or a private query",
 			Options: []modules.Placeholder{
@@ -67,7 +67,7 @@ func (sys *IrcBee) Events() []modules.Event {
 func (sys *IrcBee) Actions() []modules.Action {
 	actions := []modules.Action{
 		modules.Action{
-			Namespace:	 sys.Name(),
+			Namespace:   sys.Name(),
 			Name:        "send",
 			Description: "Sends a message to a channel or a private query",
 			Options: []modules.Placeholder{
@@ -84,7 +84,7 @@ func (sys *IrcBee) Actions() []modules.Action {
 			},
 		},
 		modules.Action{
-			Namespace:	 sys.Name(),
+			Namespace:   sys.Name(),
 			Name:        "join",
 			Description: "Joins a channel",
 			Options: []modules.Placeholder{
@@ -96,7 +96,7 @@ func (sys *IrcBee) Actions() []modules.Action {
 			},
 		},
 		modules.Action{
-			Namespace:	 sys.Name(),
+			Namespace:   sys.Name(),
 			Name:        "part",
 			Description: "Parts a channel",
 			Options: []modules.Placeholder{
@@ -203,7 +203,7 @@ func (sys *IrcBee) Run(channelIn chan modules.Event) {
 
 		ev := modules.Event{
 			Namespace: sys.Name(),
-			Name: "message",
+			Name:      "message",
 			Options: []modules.Placeholder{
 				modules.Placeholder{
 					Name:  "channel",

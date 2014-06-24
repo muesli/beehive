@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	cIn  chan modules.Event
+	cIn chan modules.Event
 )
 
 type WebBee struct {
@@ -33,7 +33,7 @@ func (sys *WebBee) Run(channelIn chan modules.Event) {
 func (sys *WebBee) Events() []modules.Event {
 	events := []modules.Event{
 		modules.Event{
-			Namespace:	 sys.Name(),
+			Namespace:   sys.Name(),
 			Name:        "post",
 			Description: "A POST call was received by the HTTP server",
 			Options: []modules.Placeholder{
@@ -50,7 +50,7 @@ func (sys *WebBee) Events() []modules.Event {
 			},
 		},
 		modules.Event{
-			Namespace:	 sys.Name(),
+			Namespace:   sys.Name(),
 			Name:        "get",
 			Description: "A GET call was received by the HTTP server",
 			Options: []modules.Placeholder{
@@ -85,7 +85,7 @@ func GetRequest(ctx *web.Context) {
 	ms := make(map[string]string)
 	ev := modules.Event{
 		Namespace: "webbee",
-		Name: "get",
+		Name:      "get",
 		Options: []modules.Placeholder{
 			modules.Placeholder{
 				Name:  "query_params",
@@ -118,7 +118,7 @@ func PostRequest(ctx *web.Context) {
 
 	ev := modules.Event{
 		Namespace: "webbee",
-		Name: "post",
+		Name:      "post",
 		Options: []modules.Placeholder{
 			modules.Placeholder{
 				Name:  "json",

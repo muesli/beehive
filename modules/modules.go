@@ -25,14 +25,14 @@ type ModuleInterface interface {
 }
 
 type Event struct {
-	Namespace	string
+	Namespace   string
 	Name        string
 	Description string
 	Options     []Placeholder
 }
 
 type Action struct {
-	Namespace	string
+	Namespace   string
 	Name        string
 	Description string
 	Options     []Placeholder
@@ -46,65 +46,65 @@ type Placeholder struct {
 }
 
 type ChainElement struct {
-	Action Action
-	PlaceholderMap map[string]string
+	Action  Action
+	Mapping map[string]string
 }
 
 type Chain struct {
 	Name        string
 	Description string
 	Event       *Event
-	Elements []ChainElement
+	Elements    []ChainElement
 }
 
 var (
 	config = "./beehive.conf"
 
-	EventsIn   = make(chan Event)
+	EventsIn = make(chan Event)
 
 	modules map[string]*ModuleInterface = make(map[string]*ModuleInterface)
-	chains []Chain
+	chains  []Chain
 )
 
 func handleEvents() {
-		for {
-			event := <-EventsIn
+	for {
+		event := <-EventsIn
 
-			log.Println()
-			log.Println("Event received:", event.Namespace, "/", event.Name)
-			for _, v := range event.Options {
-				log.Println("\tOptions:", v)
+		log.Println()
+		log.Println("Event received:", event.Namespace, "/", event.Name)
+		for _, v := range event.Options {
+			log.Println("\tOptions:", v)
+		}
+
+		for _, c := range chains {
+			if c.Event.Name != event.Name || c.Event.Namespace != event.Namespace {
+				continue
 			}
 
-			for _, c := range chains {
-				if c.Event.Name != event.Name || c.Event.Namespace != event.Namespace {
-					continue
-				}
-
-				log.Println("Executing chain:", c.Name, "-", c.Description)
-				for _, el := range c.Elements {
-					action := el.Action
-					for k, v := range el.PlaceholderMap {
-						for _, ov := range event.Options {
-							if ov.Name == k {
-								opt := Placeholder{
-									Name: v,
-									Type: ov.Type,
-									Value: ov.Value,
-								}
-								action.Options = append(action.Options, opt)
-							} 
+			log.Println("Executing chain:", c.Name, "-", c.Description)
+			for _, el := range c.Elements {
+				action := el.Action
+				for k, v := range el.Mapping {
+					for _, ov := range event.Options {
+						if ov.Name == k {
+							opt := Placeholder{
+								Name:  v,
+								Type:  ov.Type,
+								Value: ov.Value,
+							}
+							action.Options = append(action.Options, opt)
 						}
 					}
-
-					log.Println("\tExecuting action:", action.Namespace, "/", action.Name, "-", action.Description)
-					for _, v := range action.Options {
-						log.Println("\t\tOptions:", v)
-					}
-					(*GetModule(action.Namespace)).Action(action)
 				}
+
+				log.Println("\tExecuting action:", action.Namespace, "/", action.Name, "-", action.Description)
+				for _, v := range action.Options {
+					log.Println("\t\tOptions:", v)
+				}
+				(*GetModule(action.Namespace)).Action(action)
 			}
 		}
+	}
 }
 
 func init() {
@@ -161,7 +161,7 @@ func SaveChains() {
 		panic(err)
 	}
 
-    err = ioutil.WriteFile(config, j, 0644)
+	err = ioutil.WriteFile(config, j, 0644)
 }
 
 func FakeChain() {
@@ -181,8 +181,8 @@ func FakeChain() {
 			actionTest = ac
 			actionTest.Options = []Placeholder{
 				Placeholder{
-					Name: "channel",
-					Type: "string",
+					Name:  "channel",
+					Type:  "string",
 					Value: "muesli",
 				},
 			}
@@ -198,17 +198,17 @@ func FakeChain() {
 
 	chains = []Chain{
 		Chain{
-			Name: "Parrot",
+			Name:        "Parrot",
 			Description: "Echoes everything you say on IRC",
-			Event: &event,
+			Event:       &event,
 			Elements: []ChainElement{
 				ChainElement{
-					Action: action,
-					PlaceholderMap: ma,
+					Action:  action,
+					Mapping: ma,
 				},
 				ChainElement{
-					Action: actionTest,
-					PlaceholderMap: mb,
+					Action:  actionTest,
+					Mapping: mb,
 				},
 			},
 		},
