@@ -34,42 +34,77 @@ func (sys *IrcBee) Name() string {
 }
 
 func (sys *IrcBee) Events() []modules.Event {
-	events := []modules.Event{}
+	events := []modules.Event{
+		modules.Event{
+			Name: "ping",
+			Options: []modules.Placeholder{
+				modules.Placeholder{
+					Name: "text",
+					Type: "string",
+				},
+			},
+		},
+	}
 	return events
 }
 
 func (sys *IrcBee) Actions() []modules.Action {
-	actions := []modules.Action{}
+	actions := []modules.Action{
+		modules.Action{
+			Name: "send",
+			Options: []modules.Placeholder{
+				modules.Placeholder{
+					Name: "channel",
+					Type: "string",
+				},
+				modules.Placeholder{
+					Name: "text",
+					Type: "string",
+				},
+			},
+		},
+	}
 	return actions
 }
 
-func (sys *IrcBee) Handle(cm modules.Event) bool {
-	log.Println("Handling event:", cm.Name)
+func (sys *IrcBee) Action(action modules.Action) bool {
+	tos := []string{}
+	text := ""
 
-/*	if len(cm.To) == 0 {
-		sys.client.Privmsg(sys.ircchannel, cm.Msg)
-		return true
-	} else {
-		for _, recv := range cm.To {
-			if recv == "*" {
-				// special: send to all joined channels
-				for _, to := range sys.channels {
-					sys.client.Privmsg(to, cm.Msg)
-				}
-			} else {
-				// needs stripping hostname when sending to user!host
-				if strings.Index(recv, "!") > 0 {
-					recv = recv[0:strings.Index(recv, "!")]
-				}
-
-				sys.client.Privmsg(recv, cm.Msg)
+	switch action.Name {
+	case "send":
+		for _, opt := range action.Options {
+			if opt.Name == "channel" {
+				tos = append(tos, opt.Value)
+			}
+			if opt.Name == "text" {
+				text = opt.Value
 			}
 		}
+	default:
+		// unknown action
+		return false
+	}
 
-		return true
-	}*/
+	for _, recv := range tos {
+		if recv == "*" {
+			// special: send to all joined channels
+			for _, to := range sys.channels {
+				sys.client.Privmsg(to, text)
+			}
+		} else {
+			// needs stripping hostname when sending to user!host
+			if strings.Index(recv, "!") > 0 {
+				recv = recv[0:strings.Index(recv, "!")]
+			}
 
-	return false
+			log.Println("recv:", recv)
+			log.Println("text:", text)
+			sys.client.Privmsg(recv, text)
+		}
+	}
+
+	return true
 }
 
 // ircbee specific impl
@@ -99,7 +134,7 @@ func (sys *IrcBee) Part(channel string) {
 	}
 }
 
-func (sys *IrcBee) Run(channelIn chan modules.Event) {
+func (sys *IrcBee) Run(channelIn chan modules.Event, channelOut chan modules.Action) {
 	if len(sys.irchost) == 0 {
 		return
 	}
@@ -125,6 +160,23 @@ func (sys *IrcBee) Run(channelIn chan modules.Event) {
 		} else {
 //			log.Println("Message in channel " + channel + " from " + line.Src)
 		}
+
+		action := modules.Action{
+			Name: "send",
+			Options: []modules.Placeholder{
+				modules.Placeholder{
+					Name: "channel",
+					Type: "string",
+					Value: channel,
+				},
+				modules.Placeholder{
+					Name: "text",
+					Type: "string",
+					Value: line.Src + " said: " + line.Args[1],
+				},
+			},
+		}
+		sys.Action(action)
 
 		ev := modules.Event{
 			Name: channel,
