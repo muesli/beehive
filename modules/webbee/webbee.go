@@ -11,7 +11,6 @@ import (
 
 var (
 	cIn  chan modules.Event
-	cOut chan modules.Action
 )
 
 type WebBee struct {
@@ -26,15 +25,15 @@ func (sys *WebBee) Description() string {
 	return "A RESTful HTTP module for beehive"
 }
 
-func (sys *WebBee) Run(channelIn chan modules.Event, channelOut chan modules.Action) {
+func (sys *WebBee) Run(channelIn chan modules.Event) {
 	cIn = channelIn
-	cOut = channelOut
 	go web.Run(sys.Addr)
 }
 
 func (sys *WebBee) Events() []modules.Event {
 	events := []modules.Event{
 		modules.Event{
+			Namespace:	 sys.Name(),
 			Name:        "post",
 			Description: "A POST call was received by the HTTP server",
 			Options: []modules.Placeholder{
@@ -51,6 +50,7 @@ func (sys *WebBee) Events() []modules.Event {
 			},
 		},
 		modules.Event{
+			Namespace:	 sys.Name(),
 			Name:        "get",
 			Description: "A GET call was received by the HTTP server",
 			Options: []modules.Placeholder{
@@ -84,6 +84,7 @@ func GetRequest(ctx *web.Context) {
 	//FIXME
 	ms := make(map[string]string)
 	ev := modules.Event{
+		Namespace: "webbee",
 		Name: "get",
 		Options: []modules.Placeholder{
 			modules.Placeholder{
@@ -116,6 +117,7 @@ func PostRequest(ctx *web.Context) {
 	}
 
 	ev := modules.Event{
+		Namespace: "webbee",
 		Name: "post",
 		Options: []modules.Placeholder{
 			modules.Placeholder{

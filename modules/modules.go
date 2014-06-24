@@ -2,6 +2,8 @@
 package modules
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"log"
 )
 
@@ -17,18 +19,20 @@ type ModuleInterface interface {
 	Actions() []Action
 
 	// Activates the module
-	Run(eventChannel chan Event, actionChannel chan Action)
+	Run(eventChannel chan Event)
 	// Handles an action
 	Action(action Action) []Placeholder
 }
 
 type Event struct {
+	Namespace	string
 	Name        string
 	Description string
 	Options     []Placeholder
 }
 
 type Action struct {
+	Namespace	string
 	Name        string
 	Description string
 	Options     []Placeholder
@@ -54,26 +58,26 @@ type Chain struct {
 }
 
 var (
+	config = "/tmp/beehive.conf"
+
 	EventsIn   = make(chan Event)
-	ActionsOut = make(chan Action)
 
 	modules map[string]*ModuleInterface = make(map[string]*ModuleInterface)
 	chains []Chain
 )
 
-func init() {
-	log.Println("Waking the bees...")
-
-	go func() {
+func handleEvents() {
 		for {
 			event := <-EventsIn
-			log.Println("Event received:", event.Name)
+
+			log.Println()
+			log.Println("Event received:", event.Namespace, "/", event.Name)
 			for _, v := range event.Options {
 				log.Println("\tOptions:", v)
 			}
 
 			for _, c := range chains {
-				if c.Event.Name != event.Name {
+				if c.Event.Name != event.Name || c.Event.Namespace != event.Namespace {
 					continue
 				}
 
@@ -93,24 +97,20 @@ func init() {
 						}
 					}
 
-					(*GetModule("ircbee")).Action(action)
+					log.Println("\tExecuting action:", action.Namespace, "/", action.Name, "-", action.Description)
+					for _, v := range action.Options {
+						log.Println("\t\tOptions:", v)
+					}
+					(*GetModule(action.Namespace)).Action(action)
 				}
 			}
 		}
-	}()
+}
 
-	go func() {
-		for {
-			action := <-ActionsOut
-			log.Println("Action:", action.Name)
-			for _, v := range action.Options {
-				log.Println("\tOptions:", v)
-			}
-			for _, mod := range modules {
-				(*mod).Action(action)
-			}
-		}
-	}()
+func init() {
+	log.Println("Waking the bees...")
+
+	go handleEvents()
 }
 
 // Modules need to call this method to register themselves
@@ -143,11 +143,36 @@ func GetModule(identifier string) *ModuleInterface {
 	return nil
 }
 
+// Loads chains from config
+func LoadChains() {
+	j, err := ioutil.ReadFile(config)
+	if err != nil {
+		log.Println("Couldn't read config from:", config)
+	}
+
+	err = json.Unmarshal(j, &chains)
+	if err != nil {
+		panic(err)
+	}
+}
+
+// Loads chains from config
+func SaveChains() {
+	j, err := json.Marshal(chains)
+	if err != nil {
+		panic(err)
+	}
+
+    err = ioutil.WriteFile("/tmp/beehive.conf", j, 0644)
+}
+
 // Starts all registered modules
 func StartModules() {
 	for _, mod := range modules {
-		(*mod).Run(EventsIn, ActionsOut)
+		(*mod).Run(EventsIn)
 	}
+
+	LoadChains()
 
 	// Create a fake sample chain
 	event := Event{}
@@ -197,4 +222,6 @@ func StartModules() {
 			},
 		},
 	}
+
+	SaveChains()
 }
