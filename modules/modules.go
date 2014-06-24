@@ -38,7 +38,7 @@ type Placeholder struct {
 	Name  string
 	Description string
 	Type  string
-	Value string
+	Value interface{}
 }
 
 var (

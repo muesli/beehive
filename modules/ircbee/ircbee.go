@@ -115,10 +115,10 @@ func (sys *IrcBee) Action(action modules.Action) bool {
 	case "send":
 		for _, opt := range action.Options {
 			if opt.Name == "channel" {
-				tos = append(tos, opt.Value)
+				tos = append(tos, opt.Value.(string))
 			}
 			if opt.Name == "text" {
-				text = opt.Value
+				text = opt.Value.(string)
 			}
 		}
 	default:
