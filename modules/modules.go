@@ -166,14 +166,7 @@ func SaveChains() {
     err = ioutil.WriteFile("/tmp/beehive.conf", j, 0644)
 }
 
-// Starts all registered modules
-func StartModules() {
-	for _, mod := range modules {
-		(*mod).Run(EventsIn)
-	}
-
-	LoadChains()
-
+func FakeChain() {
 	// Create a fake sample chain
 	event := Event{}
 	for _, ev := range (*GetModule("ircbee")).Events() {
@@ -222,6 +215,15 @@ func StartModules() {
 			},
 		},
 	}
+}
 
+// Starts all registered modules
+func StartModules() {
+	for _, mod := range modules {
+		(*mod).Run(EventsIn)
+	}
+
+	LoadChains()
+	FakeChain()
 	SaveChains()
 }
