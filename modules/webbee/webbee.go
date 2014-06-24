@@ -75,8 +75,9 @@ func (sys *WebBee) Actions() []modules.Action {
 	return actions
 }
 
-func (sys *WebBee) Action(action modules.Action) bool {
-	return false
+func (sys *WebBee) Action(action modules.Action) []modules.Placeholder {
+	outs := []modules.Placeholder{}
+	return outs
 }
 
 func GetRequest(ctx *web.Context) {

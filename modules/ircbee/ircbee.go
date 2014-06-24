@@ -107,7 +107,12 @@ func (sys *IrcBee) Actions() []modules.Action {
 	return actions
 }
 
-func (sys *IrcBee) Action(action modules.Action) bool {
+func (sys *IrcBee) Action(action modules.Action) []modules.Placeholder {
+	for _, opt := range action.Options {
+		log.Println("opt:", opt.Name, "-", opt.Value)
+	}
+
+	outs := []modules.Placeholder{}
 	tos := []string{}
 	text := ""
 
@@ -123,7 +128,7 @@ func (sys *IrcBee) Action(action modules.Action) bool {
 		}
 	default:
 		// unknown action
-		return false
+		return outs
 	}
 
 	for _, recv := range tos {
@@ -142,7 +147,7 @@ func (sys *IrcBee) Action(action modules.Action) bool {
 		}
 	}
 
-	return true
+	return outs
 }
 
 // ircbee specific impl

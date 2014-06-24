@@ -19,7 +19,7 @@ type ModuleInterface interface {
 	// Activates the module
 	Run(eventChannel chan Event, actionChannel chan Action)
 	// Handles an action
-	Action(action Action) bool
+	Action(action Action) []Placeholder
 }
 
 type Event struct {
@@ -41,11 +41,24 @@ type Placeholder struct {
 	Value       interface{}
 }
 
+type ChainElement struct {
+	Action Action
+	PlaceholderMap map[string]string
+}
+
+type Chain struct {
+	Name        string
+	Description string
+	Event       *Event
+	Elements []ChainElement
+}
+
 var (
 	EventsIn   = make(chan Event)
 	ActionsOut = make(chan Action)
 
 	modules map[string]*ModuleInterface = make(map[string]*ModuleInterface)
+	chains []Chain
 )
 
 func init() {
@@ -57,6 +70,31 @@ func init() {
 			log.Println("Event received:", event.Name)
 			for _, v := range event.Options {
 				log.Println("\tOptions:", v)
+			}
+
+			for _, c := range chains {
+				if c.Event.Name != event.Name {
+					continue
+				}
+
+				log.Println("Executing chain:", c.Name, "-", c.Description)
+				for _, el := range c.Elements {
+					action := el.Action
+					for k, v := range el.PlaceholderMap {
+						for _, ov := range event.Options {
+							if ov.Name == k {
+								opt := Placeholder{
+									Name: v,
+									Type: ov.Type,
+									Value: ov.Value,
+								}
+								action.Options = append(action.Options, opt)
+							} 
+						}
+					}
+
+					(*GetModule("ircbee")).Action(action)
+				}
 			}
 		}
 	}()
@@ -109,5 +147,54 @@ func GetModule(identifier string) *ModuleInterface {
 func StartModules() {
 	for _, mod := range modules {
 		(*mod).Run(EventsIn, ActionsOut)
+	}
+
+	// Create a fake sample chain
+	event := Event{}
+	for _, ev := range (*GetModule("ircbee")).Events() {
+		if ev.Name == "message" {
+			event = ev
+		}
+	}
+	action := Action{}
+	actionTest := Action{}
+	for _, ac := range (*GetModule("ircbee")).Actions() {
+		if ac.Name == "send" {
+			action = ac
+			action.Options = []Placeholder{}
+			actionTest = ac
+			actionTest.Options = []Placeholder{
+				Placeholder{
+					Name: "channel",
+					Type: "string",
+					Value: "muesli",
+				},
+			}
+		}
+	}
+
+	// does the in/out placeholder mapping
+	ma := make(map[string]string)
+	ma["text"] = "text"
+	ma["channel"] = "channel"
+	mb := make(map[string]string)
+	mb["text"] = "text"
+
+	chains = []Chain{
+		Chain{
+			Name: "Parrot",
+			Description: "Echoes everything you say on IRC",
+			Event: &event,
+			Elements: []ChainElement{
+				ChainElement{
+					Action: action,
+					PlaceholderMap: ma,
+				},
+				ChainElement{
+					Action: actionTest,
+					PlaceholderMap: mb,
+				},
+			},
+		},
 	}
 }
