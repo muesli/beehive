@@ -9,6 +9,8 @@ import (
 type ModuleInterface interface {
 	// Name of the module
 	Name() string
+	// Description of the module
+	Description() string
 	// Events defined by module
 	Events() []Event
 	// Actions supported by module
@@ -22,16 +24,19 @@ type ModuleInterface interface {
 
 type Event struct {
 	Name    string
+	Description string
 	Options []Placeholder
 }
 
 type Action struct {
 	Name    string
+	Description string
 	Options []Placeholder
 }
 
 type Placeholder struct {
 	Name  string
+	Description string
 	Type  string
 	Value string
 }
@@ -70,14 +75,14 @@ func init() {
 	}()
 }
 
-// Sub-systems need to call this method to register themselves
+// Modules need to call this method to register themselves
 func RegisterModule(mod ModuleInterface) {
-	log.Println("Registering bee:", mod.Name())
+	log.Println("Worker bee ready:", mod.Name(), "-", mod.Description())
 
 	modules[mod.Name()] = &mod
 }
 
-// Returns sub-system with this name
+// Returns module with this name
 func GetModule(identifier string) *ModuleInterface {
 	mod, ok := modules[identifier]
 	if ok {

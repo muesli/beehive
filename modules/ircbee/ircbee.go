@@ -32,13 +32,25 @@ func (sys *IrcBee) Name() string {
 	return "ircbee"
 }
 
+func (sys *IrcBee) Description() string {
+	return "An IRC module for beehive"
+}
+
 func (sys *IrcBee) Events() []modules.Event {
 	events := []modules.Event{
 		modules.Event{
-			Name: "ping",
+			Name: "message",
 			Options: []modules.Placeholder{
 				modules.Placeholder{
 					Name: "text",
+					Type: "string",
+				},
+				modules.Placeholder{
+					Name: "channel",
+					Type: "string",
+				},
+				modules.Placeholder{
+					Name: "user",
 					Type: "string",
 				},
 			},
@@ -58,6 +70,24 @@ func (sys *IrcBee) Actions() []modules.Action {
 				},
 				modules.Placeholder{
 					Name: "text",
+					Type: "string",
+				},
+			},
+		},
+		modules.Action{
+			Name: "join",
+			Options: []modules.Placeholder{
+				modules.Placeholder{
+					Name: "channel",
+					Type: "string",
+				},
+			},
+		},
+		modules.Action{
+			Name: "part",
+			Options: []modules.Placeholder{
+				modules.Placeholder{
+					Name: "channel",
 					Type: "string",
 				},
 			},
@@ -156,7 +186,7 @@ func (sys *IrcBee) Run(channelIn chan modules.Event, channelOut chan modules.Act
 		}
 
 		ev := modules.Event{
-			Name: channel,
+			Name: "message",
 			Options: []modules.Placeholder{
 				modules.Placeholder{
 					Name:  "channel",
@@ -169,7 +199,7 @@ func (sys *IrcBee) Run(channelIn chan modules.Event, channelOut chan modules.Act
 					Value: line.Src,
 				},
 				modules.Placeholder{
-					Name:  "params",
+					Name:  "text",
 					Type:  "string",
 					Value: line.Args[1],
 				},

@@ -22,6 +22,10 @@ func (sys *WebBee) Name() string {
 	return "webbee"
 }
 
+func (sys *WebBee) Description() string {
+	return "A RESTful HTTP module for beehive"
+}
+
 func (sys *WebBee) Run(channelIn chan modules.Event, channelOut chan modules.Action) {
 	cIn = channelIn
 	cOut = channelOut
