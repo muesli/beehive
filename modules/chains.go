@@ -22,13 +22,14 @@
 package modules
 
 import (
+	"bytes"
 	"log"
+	"text/template"
 )
 
 // An element in a Chain
 type ChainElement struct {
 	Action  Action
-	Mapping map[string]string
 }
 
 // A user defined Chain
@@ -48,18 +49,31 @@ func execChains(event *Event) {
 
 		log.Println("Executing chain:", c.Name, "-", c.Description)
 		for _, el := range c.Elements {
-			action := el.Action
-			for k, v := range el.Mapping {
-				for _, ov := range event.Options {
-					if ov.Name == k {
-						opt := Placeholder{
-							Name:  v,
-							Type:  ov.Type,
-							Value: ov.Value,
-						}
-						action.Options = append(action.Options, opt)
-					}
+			action := Action{
+				Namespace: el.Action.Namespace,
+				Name: el.Action.Name,
+			}
+			m := make(map[string]interface{})
+			for _, opt := range event.Options {
+				m[opt.Name] = opt.Value
+			}
+
+			for _, opt := range el.Action.Options {
+				var value bytes.Buffer
+				tmpl, err := template.New(el.Action.Namespace + "_" + el.Action.Name + "_" + opt.Name).Parse(opt.Value.(string))
+				if err == nil {
+					err = tmpl.Execute(&value, m)
 				}
+				if err != nil {
+					panic(err)
+				}
+
+				ph := Placeholder{
+					Name:  opt.Name,
+					Type:  "string", //FIXME
+					Value: value.String(),
+				}
+				action.Options = append(action.Options, ph)
 			}
 
 			log.Println("\tExecuting action:", action.Namespace, "/", action.Name, "-", GetActionDescriptor(&action).Description)
