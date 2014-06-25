@@ -19,7 +19,7 @@
  */
 
 // beehive's contains-filter.
-package contains
+package containsfilter
 
 import (
 	"github.com/muesli/beehive/filters"
