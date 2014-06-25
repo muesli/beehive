@@ -14,6 +14,10 @@ func (sys *HelloBee) Name() string {
 	return "hellobee"
 }
 
+func (sys *HelloBee) Description() string {
+	return "A 'Hello World' module for beehive"
+}
+
 func (sys *HelloBee) Events() []modules.Event {
 	events := []modules.Event{}
 	return events
@@ -31,6 +35,10 @@ func (sys *HelloBee) Run(MyChannel chan modules.Event) {
 	}
 
 	MyChannel <- hello_event
+}
+
+func (sys *HelloBee) Action(action modules.Action) []modules.Placeholder {
+	return []modules.Placeholder{}
 }
 
 func init() {
