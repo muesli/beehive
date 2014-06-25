@@ -30,7 +30,7 @@ import (
 )
 
 var (
-	cIn chan modules.Event
+	eventChan chan modules.Event
 )
 
 type WebBee struct {
@@ -45,8 +45,8 @@ func (mod *WebBee) Description() string {
 	return "A RESTful HTTP module for beehive"
 }
 
-func (mod *WebBee) Run(eventChan chan modules.Event) {
-	cIn = eventChan
+func (mod *WebBee) Run(cin chan modules.Event) {
+	eventChan = cin
 	go web.Run(mod.Addr)
 }
 
@@ -119,7 +119,7 @@ func GetRequest(ctx *web.Context) {
 			},
 		},
 	}
-	cIn <- ev
+	eventChan <- ev
 }
 
 func PostRequest(ctx *web.Context) {
@@ -152,7 +152,7 @@ func PostRequest(ctx *web.Context) {
 			},
 		},
 	}
-	cIn <- ev
+	eventChan <- ev
 }
 
 func init() {

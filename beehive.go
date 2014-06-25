@@ -23,6 +23,8 @@
 package main
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"log"
 
 	"github.com/muesli/beehive/app"
@@ -34,6 +36,35 @@ import (
 	_ "github.com/muesli/beehive/modules/webbee"
 )
 
+var (
+	config = "./beehive.conf"
+)
+
+// Loads chains from config
+func loadConfig() []modules.Chain {
+	chains := []modules.Chain{}
+
+	j, err := ioutil.ReadFile(config)
+	if err == nil {
+		err = json.Unmarshal(j, &chains)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	return chains
+}
+
+// Saves chains to config
+func saveConfig(chains []modules.Chain) {
+	j, err := json.MarshalIndent(chains, "", "  ")
+	if err != nil {
+		panic(err)
+	}
+
+	err = ioutil.WriteFile(config, j, 0644)
+}
+
 func main() {
 	// Parse command-line args for all registered modules
 	app.Run()
@@ -42,8 +73,13 @@ func main() {
 
 	// Initialize modules
 	modules.StartModules()
+	// Load chains from config
+	modules.SetChains(loadConfig())
 
 	// Keep app alive
 	ch := make(chan bool)
 	<-ch
+
+	// Save chains to config
+	saveConfig(modules.Chains())
 }

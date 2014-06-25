@@ -22,8 +22,6 @@
 package modules
 
 import (
-	"encoding/json"
-	"io/ioutil"
 	"log"
 )
 
@@ -105,9 +103,7 @@ type Chain struct {
 }
 
 var (
-	config = "./beehive.conf"
-
-	EventsIn                             = make(chan Event)
+	eventsIn                             = make(chan Event)
 	modules  map[string]*ModuleInterface = make(map[string]*ModuleInterface)
 	chains   []Chain
 )
@@ -171,7 +167,7 @@ func execChains(event *Event) {
 // Handles incoming events and executes matching Chains.
 func handleEvents() {
 	for {
-		event := <-EventsIn
+		event := <-eventsIn
 
 		log.Println()
 		log.Println("Event received:", event.Namespace, "/", event.Name, "-", GetEventDescriptor(&event).Description)
@@ -213,35 +209,21 @@ func GetModule(identifier string) *ModuleInterface {
 	return nil
 }
 
-// Loads chains from config
-func LoadChains() {
-	j, err := ioutil.ReadFile(config)
-	if err == nil {
-		err = json.Unmarshal(j, &chains)
-		if err != nil {
-			panic(err)
-		}
-	}
+// Getter for chains
+func Chains() []Chain {
+	return chains
 }
 
-// Saves chains to config
-func SaveChains() {
-	j, err := json.MarshalIndent(chains, "", "  ")
-	if err != nil {
-		panic(err)
-	}
-
-	err = ioutil.WriteFile(config, j, 0644)
+// Setter for chains
+func SetChains(cs []Chain) {
+	chains = cs
 }
 
 // Starts all registered modules
 func StartModules() {
 	for _, mod := range modules {
-		(*mod).Run(EventsIn)
+		(*mod).Run(eventsIn)
 	}
-
-	LoadChains()
-	//	SaveChains()
 }
 
 func init() {
