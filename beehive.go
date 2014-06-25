@@ -30,6 +30,7 @@ import (
 	"github.com/muesli/beehive/app"
 	_ "github.com/muesli/beehive/filters"
 	_ "github.com/muesli/beehive/filters/contains"
+	_ "github.com/muesli/beehive/filters/startswith"
 
 	"github.com/muesli/beehive/modules"
 	//_ "github.com/muesli/beehive/modules/hellobee"
