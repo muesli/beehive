@@ -13,6 +13,7 @@ First we need to get the required dependencies. beehive itself is part of that
 list so the main executable can depend on our sub-packages:
 
     go get github.com/fluffle/goirc/client
+    go get github.com/mattn/go-xmpp
     go get github.com/hoisie/web
     go get github.com/muesli/beehive
 
