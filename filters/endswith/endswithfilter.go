@@ -30,7 +30,7 @@ type EndsWithFilter struct {
 }
 
 func (filter *EndsWithFilter) Name() string {
-	return "startswith"
+	return "endswith"
 }
 
 func (filter *EndsWithFilter) Description() string {
