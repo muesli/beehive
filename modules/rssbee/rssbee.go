@@ -18,13 +18,12 @@
  *      Michael Wendland <michiwend@michiwend.com>
  */
 
-// RSS module for beehive 
+// RSS module for beehive
 package rssbee
 
 import (
-	"github.com/muesli/beehive/app"
 	"github.com/muesli/beehive/modules"
-    rss "github.com/jteeuwen/go-pkg-rss"
+//    rss "github.com/jteeuwen/go-pkg-rss"
 )
 
 var (
@@ -32,7 +31,6 @@ var (
 )
 
 type RSSBee struct {
-	some_flag string
 }
 
 func (mod *RSSBee) Name() string {
@@ -50,9 +48,8 @@ func (mod *RSSBee) Events() []modules.EventDescriptor {
             Name: "incoming",
             Description: "A new post has been received through the Feed",
             Options: []modules.PlaceholderDescriptor{
-                Name
-            }
-        }
+            },
+        },
     }
 	return events
 }
@@ -63,13 +60,7 @@ func (mod *RSSBee) Actions() []modules.ActionDescriptor {
 }
 
 func (mod *RSSBee) Run(eventChan chan modules.Event) {
-/*	helloEvent := modules.Event{
-		Namespace: mod.Name(),
-		Name:      "Say Hello",
-		Options:   []modules.Placeholder{},
-	}
-
-	eventChan <- helloEvent*/
+//	eventChan <- ev
 }
 
 func (mod *RSSBee) Action(action modules.Action) []modules.Placeholder {
@@ -77,11 +68,7 @@ func (mod *RSSBee) Action(action modules.Action) []modules.Placeholder {
 }
 
 func init() {
-	hello := RSSBee{}
+	bee := RSSBee{}
 
-	app.AddFlags([]app.CliFlag{
-		app.CliFlag{&hello.some_flag, "foo", "default value", "some option"},
-	})
-
-	modules.RegisterModule(&hello)
+	modules.RegisterModule(&bee)
 }

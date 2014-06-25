@@ -37,6 +37,7 @@ import (
 	//_ "github.com/muesli/beehive/modules/hellobee"
 	_ "github.com/muesli/beehive/modules/ircbee"
 	_ "github.com/muesli/beehive/modules/jabberbee"
+	_ "github.com/muesli/beehive/modules/rssbee"
 	_ "github.com/muesli/beehive/modules/webbee"
 )
 
