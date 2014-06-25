@@ -116,6 +116,7 @@ func GetEventDescriptor(event *Event) EventDescriptor {
 	return EventDescriptor{}
 }
 
+// Execute chains for an event we received.
 func execChains(event *Event) {
 	for _, c := range chains {
 		if c.Event.Name != event.Name || c.Event.Namespace != event.Namespace {
