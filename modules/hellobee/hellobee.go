@@ -49,13 +49,13 @@ func (mod *HelloBee) Actions() []modules.ActionDescriptor {
 }
 
 func (mod *HelloBee) Run(eventChan chan modules.Event) {
-	helloEvent := modules.Event{
+/*	helloEvent := modules.Event{
 		Namespace: mod.Name(),
 		Name:      "Say Hello",
 		Options:   []modules.Placeholder{},
 	}
 
-	eventChan <- helloEvent
+	eventChan <- helloEvent*/
 }
 
 func (mod *HelloBee) Action(action modules.Action) []modules.Placeholder {
