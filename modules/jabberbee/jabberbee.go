@@ -38,7 +38,7 @@ type JabberBee struct {
 	notls    bool
 }
 
-func (sys *JabberBee) Name() string {
+func (mod *JabberBee) Name() string {
 	return "jabberbee"
 }
 
