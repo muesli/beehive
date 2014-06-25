@@ -19,7 +19,7 @@
  */
 
 // beehive's startsWith-filter.
-package startswithfilter
+package startswith
 
 import (
 	"github.com/muesli/beehive/filters"
