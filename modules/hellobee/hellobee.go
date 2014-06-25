@@ -10,26 +10,27 @@ type HelloBee struct {
 	some_flag string
 }
 
-func (sys *HelloBee) Name() string {
+func (mod *HelloBee) Name() string {
 	return "hellobee"
 }
 
-func (sys *HelloBee) Description() string {
+func (mod *HelloBee) Description() string {
 	return "A 'Hello World' module for beehive"
 }
 
-func (sys *HelloBee) Events() []modules.Event {
+func (mod *HelloBee) Events() []modules.Event {
 	events := []modules.Event{}
 	return events
 }
 
-func (sys *HelloBee) Actions() []modules.Action {
+func (mod *HelloBee) Actions() []modules.Action {
 	actions := []modules.Action{}
 	return actions
 }
 
-func (sys *HelloBee) Run(MyChannel chan modules.Event) {
+func (mod *HelloBee) Run(MyChannel chan modules.Event) {
 	hello_event := modules.Event{
+		Namespace: mod.Name(),
 		Name:    "Say Hello",
 		Options: []modules.Placeholder{},
 	}
@@ -37,7 +38,7 @@ func (sys *HelloBee) Run(MyChannel chan modules.Event) {
 	MyChannel <- hello_event
 }
 
-func (sys *HelloBee) Action(action modules.Action) []modules.Placeholder {
+func (mod *HelloBee) Action(action modules.Action) []modules.Placeholder {
 	return []modules.Placeholder{}
 }
 
@@ -45,7 +46,7 @@ func init() {
 	hello := HelloBee{}
 
 	app.AddFlags([]app.CliFlag{
-		app.CliFlag{&hello.some_flag, "foo", "", "some text"},
+		app.CliFlag{&hello.some_flag, "foo", "default value", "some option"},
 	})
 
 	modules.RegisterModule(&hello)

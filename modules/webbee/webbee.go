@@ -17,23 +17,23 @@ type WebBee struct {
 	Addr string
 }
 
-func (sys *WebBee) Name() string {
+func (mod *WebBee) Name() string {
 	return "webbee"
 }
 
-func (sys *WebBee) Description() string {
+func (mod *WebBee) Description() string {
 	return "A RESTful HTTP module for beehive"
 }
 
-func (sys *WebBee) Run(channelIn chan modules.Event) {
+func (mod *WebBee) Run(channelIn chan modules.Event) {
 	cIn = channelIn
-	go web.Run(sys.Addr)
+	go web.Run(mod.Addr)
 }
 
-func (sys *WebBee) Events() []modules.Event {
+func (mod *WebBee) Events() []modules.Event {
 	events := []modules.Event{
 		modules.Event{
-			Namespace:   sys.Name(),
+			Namespace:   mod.Name(),
 			Name:        "post",
 			Description: "A POST call was received by the HTTP server",
 			Options: []modules.Placeholder{
@@ -50,7 +50,7 @@ func (sys *WebBee) Events() []modules.Event {
 			},
 		},
 		modules.Event{
-			Namespace:   sys.Name(),
+			Namespace:   mod.Name(),
 			Name:        "get",
 			Description: "A GET call was received by the HTTP server",
 			Options: []modules.Placeholder{
@@ -70,12 +70,12 @@ func (sys *WebBee) Events() []modules.Event {
 	return events
 }
 
-func (sys *WebBee) Actions() []modules.Action {
+func (mod *WebBee) Actions() []modules.Action {
 	actions := []modules.Action{}
 	return actions
 }
 
-func (sys *WebBee) Action(action modules.Action) []modules.Placeholder {
+func (mod *WebBee) Action(action modules.Action) []modules.Placeholder {
 	outs := []modules.Placeholder{}
 	return outs
 }

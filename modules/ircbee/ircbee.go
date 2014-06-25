@@ -28,18 +28,18 @@ type IrcBee struct {
 
 // Interface impl
 
-func (sys *IrcBee) Name() string {
+func (mod *IrcBee) Name() string {
 	return "ircbee"
 }
 
-func (sys *IrcBee) Description() string {
+func (mod *IrcBee) Description() string {
 	return "An IRC module for beehive"
 }
 
-func (sys *IrcBee) Events() []modules.Event {
+func (mod *IrcBee) Events() []modules.Event {
 	events := []modules.Event{
 		modules.Event{
-			Namespace:   sys.Name(),
+			Namespace:   mod.Name(),
 			Name:        "message",
 			Description: "A message was received over IRC, either in a channel or a private query",
 			Options: []modules.Placeholder{
@@ -64,10 +64,10 @@ func (sys *IrcBee) Events() []modules.Event {
 	return events
 }
 
-func (sys *IrcBee) Actions() []modules.Action {
+func (mod *IrcBee) Actions() []modules.Action {
 	actions := []modules.Action{
 		modules.Action{
-			Namespace:   sys.Name(),
+			Namespace:   mod.Name(),
 			Name:        "send",
 			Description: "Sends a message to a channel or a private query",
 			Options: []modules.Placeholder{
@@ -84,7 +84,7 @@ func (sys *IrcBee) Actions() []modules.Action {
 			},
 		},
 		modules.Action{
-			Namespace:   sys.Name(),
+			Namespace:   mod.Name(),
 			Name:        "join",
 			Description: "Joins a channel",
 			Options: []modules.Placeholder{
@@ -96,7 +96,7 @@ func (sys *IrcBee) Actions() []modules.Action {
 			},
 		},
 		modules.Action{
-			Namespace:   sys.Name(),
+			Namespace:   mod.Name(),
 			Name:        "part",
 			Description: "Parts a channel",
 			Options: []modules.Placeholder{
@@ -111,7 +111,7 @@ func (sys *IrcBee) Actions() []modules.Action {
 	return actions
 }
 
-func (sys *IrcBee) Action(action modules.Action) []modules.Placeholder {
+func (mod *IrcBee) Action(action modules.Action) []modules.Placeholder {
 	outs := []modules.Placeholder{}
 	tos := []string{}
 	text := ""
@@ -134,8 +134,8 @@ func (sys *IrcBee) Action(action modules.Action) []modules.Placeholder {
 	for _, recv := range tos {
 		if recv == "*" {
 			// special: send to all joined channels
-			for _, to := range sys.channels {
-				sys.client.Privmsg(to, text)
+			for _, to := range mod.channels {
+				mod.client.Privmsg(to, text)
 			}
 		} else {
 			// needs stripping hostname when sending to user!host
@@ -143,7 +143,7 @@ func (sys *IrcBee) Action(action modules.Action) []modules.Placeholder {
 				recv = recv[0:strings.Index(recv, "!")]
 			}
 
-			sys.client.Privmsg(recv, text)
+			mod.client.Privmsg(recv, text)
 		}
 	}
 
@@ -152,57 +152,57 @@ func (sys *IrcBee) Action(action modules.Action) []modules.Placeholder {
 
 // ircbee specific impl
 
-func (sys *IrcBee) Rejoin() {
-	for _, channel := range sys.channels {
-		sys.client.Join(channel)
+func (mod *IrcBee) Rejoin() {
+	for _, channel := range mod.channels {
+		mod.client.Join(channel)
 	}
 }
 
-func (sys *IrcBee) Join(channel string) {
+func (mod *IrcBee) Join(channel string) {
 	channel = strings.TrimSpace(channel)
-	sys.client.Join(channel)
+	mod.client.Join(channel)
 
-	sys.channels = append(sys.channels, channel)
+	mod.channels = append(mod.channels, channel)
 }
 
-func (sys *IrcBee) Part(channel string) {
+func (mod *IrcBee) Part(channel string) {
 	channel = strings.TrimSpace(channel)
-	sys.client.Part(channel)
+	mod.client.Part(channel)
 
-	for k, v := range sys.channels {
+	for k, v := range mod.channels {
 		if v == channel {
-			sys.channels = append(sys.channels[:k], sys.channels[k+1:]...)
+			mod.channels = append(mod.channels[:k], mod.channels[k+1:]...)
 			return
 		}
 	}
 }
 
-func (sys *IrcBee) Run(channelIn chan modules.Event) {
-	if len(sys.irchost) == 0 {
+func (mod *IrcBee) Run(channelIn chan modules.Event) {
+	if len(mod.irchost) == 0 {
 		return
 	}
 
 	// channel signaling irc connection status
-	sys.ConnectedState = make(chan bool)
+	mod.ConnectedState = make(chan bool)
 
 	// setup IRC client:
-	sys.client = irc.SimpleClient(sys.ircnick, "beehive", "beehive")
-	sys.client.SSL = sys.ircssl
+	mod.client = irc.SimpleClient(mod.ircnick, "beehive", "beehive")
+	mod.client.SSL = mod.ircssl
 
-	sys.client.AddHandler(irc.CONNECTED, func(conn *irc.Conn, line *irc.Line) {
-		sys.ConnectedState <- true
+	mod.client.AddHandler(irc.CONNECTED, func(conn *irc.Conn, line *irc.Line) {
+		mod.ConnectedState <- true
 	})
-	sys.client.AddHandler(irc.DISCONNECTED, func(conn *irc.Conn, line *irc.Line) {
-		sys.ConnectedState <- false
+	mod.client.AddHandler(irc.DISCONNECTED, func(conn *irc.Conn, line *irc.Line) {
+		mod.ConnectedState <- false
 	})
-	sys.client.AddHandler("PRIVMSG", func(conn *irc.Conn, line *irc.Line) {
+	mod.client.AddHandler("PRIVMSG", func(conn *irc.Conn, line *irc.Line) {
 		channel := line.Args[0]
-		if channel == sys.client.Me.Nick {
+		if channel == mod.client.Me.Nick {
 			channel = line.Src // replies go via PM too.
 		}
 
 		ev := modules.Event{
-			Namespace: sys.Name(),
+			Namespace: mod.Name(),
 			Name:      "message",
 			Options: []modules.Placeholder{
 				modules.Placeholder{
@@ -228,27 +228,27 @@ func (sys *IrcBee) Run(channelIn chan modules.Event) {
 	// loop on IRC dis/connected events
 	go func() {
 		for {
-			log.Println("Connecting to IRC:", sys.irchost)
-			err := sys.client.Connect(sys.irchost, sys.ircpassword)
+			log.Println("Connecting to IRC:", mod.irchost)
+			err := mod.client.Connect(mod.irchost, mod.ircpassword)
 			if err != nil {
-				log.Println("Failed to connect to IRC:", sys.irchost)
+				log.Println("Failed to connect to IRC:", mod.irchost)
 				log.Println(err)
 				continue
 			}
 			for {
-				status := <-sys.ConnectedState
+				status := <-mod.ConnectedState
 				if status {
-					log.Println("Connected to IRC:", sys.irchost)
+					log.Println("Connected to IRC:", mod.irchost)
 
-					if len(sys.channels) == 0 {
+					if len(mod.channels) == 0 {
 						// join default channel
-						sys.Join(sys.ircchannel)
+						mod.Join(mod.ircchannel)
 					} else {
 						// we must have been disconnected, rejoin channels
-						sys.Rejoin()
+						mod.Rejoin()
 					}
 				} else {
-					log.Println("Disconnected from IRC:", sys.irchost)
+					log.Println("Disconnected from IRC:", mod.irchost)
 					break
 				}
 			}
