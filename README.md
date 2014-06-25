@@ -24,6 +24,16 @@ Now we can build beehive:
     cd beehive
     go build
 
+To run the application you will (currently) need to specify at least a few options:
+
+    ./beehive -irchost="some.server:6667" -ircchannel="#beehive"
+
+Run beehive -help to see a full list of options!
+
+## Configuring your chains
+
+TO BE WRITTEN! :-)
+
 ## Development
 
 API docs can be found [here](http://godoc.org/github.com/muesli/beehive).
