@@ -156,7 +156,7 @@ func LoadChains() {
 
 // Loads chains from config
 func SaveChains() {
-	j, err := json.Marshal(chains)
+	j, err := json.MarshalIndent(chains, "", "  ")
 	if err != nil {
 		panic(err)
 	}
