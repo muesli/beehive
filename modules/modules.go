@@ -164,57 +164,6 @@ func SaveChains() {
 	err = ioutil.WriteFile(config, j, 0644)
 }
 
-func FakeChain() {
-	// Create a fake sample chain
-	event := Event{}
-	for _, ev := range (*GetModule("ircbee")).Events() {
-		if ev.Name == "message" {
-			event = ev
-		}
-	}
-	action := Action{}
-	actionTest := Action{}
-	for _, ac := range (*GetModule("ircbee")).Actions() {
-		if ac.Name == "send" {
-			action = ac
-			action.Options = []Placeholder{}
-			actionTest = ac
-			actionTest.Options = []Placeholder{
-				Placeholder{
-					Name:  "channel",
-					Type:  "string",
-					Value: "muesli",
-				},
-			}
-		}
-	}
-
-	// does the in/out placeholder mapping
-	ma := make(map[string]string)
-	ma["text"] = "text"
-	ma["channel"] = "channel"
-	mb := make(map[string]string)
-	mb["text"] = "text"
-
-	chains = []Chain{
-		Chain{
-			Name:        "Parrot",
-			Description: "Echoes everything you say on IRC",
-			Event:       &event,
-			Elements: []ChainElement{
-				ChainElement{
-					Action:  action,
-					Mapping: ma,
-				},
-				ChainElement{
-					Action:  actionTest,
-					Mapping: mb,
-				},
-			},
-		},
-	}
-}
-
 // Starts all registered modules
 func StartModules() {
 	for _, mod := range modules {
@@ -222,6 +171,5 @@ func StartModules() {
 	}
 
 	LoadChains()
-	FakeChain()
-	SaveChains()
+//	SaveChains()
 }
