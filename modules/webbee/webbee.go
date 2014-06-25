@@ -1,5 +1,5 @@
 // beehive's web-module.
-package web
+package webbee
 
 import (
 	"encoding/json"
