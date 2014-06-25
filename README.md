@@ -34,6 +34,7 @@ Run beehive -help to see a full list of options!
 ## Configuring your chains
 
 To be written by someone! :-)
+
 Until then you can find a [few chain recipes here](https://github.com/muesli/beehive/tree/master/recipes).
 Pick one, edit it to your needs and store it as 'beehive.conf'. beehive looks for this
 configuration file in its current working directory.
