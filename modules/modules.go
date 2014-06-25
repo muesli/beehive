@@ -14,9 +14,9 @@ type ModuleInterface interface {
 	// Description of the module
 	Description() string
 	// Events defined by module
-	Events() []Event
+	Events() []EventDescriptor
 	// Actions supported by module
-	Actions() []Action
+	Actions() []ActionDescriptor
 
 	// Activates the module
 	Run(eventChannel chan Event)
@@ -27,23 +27,44 @@ type ModuleInterface interface {
 type Event struct {
 	Namespace   string
 	Name        string
-	Description string
 	Options     []Placeholder
 }
 
 type Action struct {
 	Namespace   string
 	Name        string
-	Description string
 	Options     []Placeholder
 }
 
 type Placeholder struct {
 	Name        string
-	Description string
 	Type        string
 	Value       interface{}
 }
+
+// Descriptors
+
+type EventDescriptor struct {
+	Namespace   string
+	Name        string
+	Description string
+	Options     []PlaceholderDescriptor
+}
+
+type ActionDescriptor struct {
+	Namespace   string
+	Name        string
+	Description string
+	Options     []PlaceholderDescriptor
+}
+
+type PlaceholderDescriptor struct {
+	Name        string
+	Description string
+	Type        string
+}
+
+// Chain
 
 type ChainElement struct {
 	Action  Action
@@ -61,17 +82,38 @@ var (
 	config = "./beehive.conf"
 
 	EventsIn = make(chan Event)
-
 	modules map[string]*ModuleInterface = make(map[string]*ModuleInterface)
 	chains  []Chain
 )
+
+func ActionDescription(action *Action) string {
+	mod := (*GetModule(action.Namespace))
+	for _, ac := range mod.Actions() {
+		if ac.Name == action.Name {
+			return ac.Description
+		}
+	}
+
+	return ""
+}
+
+func EventDescription(event *Event) string {
+	mod := (*GetModule(event.Namespace))
+	for _, ev := range mod.Events() {
+		if ev.Name == event.Name {
+			return ev.Description
+		}
+	}
+
+	return ""
+}
 
 func handleEvents() {
 	for {
 		event := <-EventsIn
 
 		log.Println()
-		log.Println("Event received:", event.Namespace, "/", event.Name)
+		log.Println("Event received:", event.Namespace, "/", event.Name, "-", EventDescription(&event))
 		for _, v := range event.Options {
 			log.Println("\tOptions:", v)
 		}
@@ -97,7 +139,7 @@ func handleEvents() {
 					}
 				}
 
-				log.Println("\tExecuting action:", action.Namespace, "/", action.Name, "-", action.Description)
+				log.Println("\tExecuting action:", action.Namespace, "/", action.Name, "-", ActionDescription(&action))
 				for _, v := range action.Options {
 					log.Println("\t\tOptions:", v)
 				}
@@ -105,12 +147,6 @@ func handleEvents() {
 			}
 		}
 	}
-}
-
-func init() {
-	log.Println("Waking the bees...")
-
-	go handleEvents()
 }
 
 // Modules need to call this method to register themselves
@@ -172,4 +208,10 @@ func StartModules() {
 
 	LoadChains()
 //	SaveChains()
+}
+
+func init() {
+	log.Println("Waking the bees...")
+
+	go handleEvents()
 }
