@@ -32,7 +32,7 @@ import (
 
 type IrcBee struct {
 	// channel signaling irc connection status
-	ConnectedState chan bool
+	connectedState chan bool
 
 	// setup IRC client:
 	client *irc.Conn
@@ -203,17 +203,17 @@ func (mod *IrcBee) Run(eventChan chan modules.Event) {
 	}
 
 	// channel signaling irc connection status
-	mod.ConnectedState = make(chan bool)
+	mod.connectedState = make(chan bool)
 
 	// setup IRC client:
 	mod.client = irc.SimpleClient(mod.ircnick, "beehive", "beehive")
 	mod.client.SSL = mod.ircssl
 
 	mod.client.AddHandler(irc.CONNECTED, func(conn *irc.Conn, line *irc.Line) {
-		mod.ConnectedState <- true
+		mod.connectedState <- true
 	})
 	mod.client.AddHandler(irc.DISCONNECTED, func(conn *irc.Conn, line *irc.Line) {
-		mod.ConnectedState <- false
+		mod.connectedState <- false
 	})
 	mod.client.AddHandler("PRIVMSG", func(conn *irc.Conn, line *irc.Line) {
 		channel := line.Args[0]
@@ -260,7 +260,7 @@ func (mod *IrcBee) Run(eventChan chan modules.Event) {
 				continue
 			}
 			for {
-				status := <-mod.ConnectedState
+				status := <-mod.connectedState
 				if status {
 					log.Println("Connected to IRC:", mod.irchost)
 
