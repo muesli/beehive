@@ -24,7 +24,8 @@ Now we can build beehive:
     cd beehive
     go build
 
-To run the application you will (currently) need to specify at least a few options:
+To run the application you will (currently) need to specify at least a few options,
+e.g. for using the IRC-bee module:
 
     ./beehive -irchost="some.server:6667" -ircchannel="#beehive"
 
@@ -32,7 +33,10 @@ Run beehive -help to see a full list of options!
 
 ## Configuring your chains
 
-TO BE WRITTEN! :-)
+To be written by someone! :-)
+Until then you can find a [few chain recipes here](https://github.com/muesli/beehive/tree/master/recipes).
+Pick one, edit it to your needs and store it as 'beehive.conf'. beehive looks for this
+configuration file in its current working directory.
 
 ## Development
 
