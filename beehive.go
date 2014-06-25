@@ -50,7 +50,7 @@ func loadConfig() []modules.Chain {
 	}
 
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	return chains
@@ -64,7 +64,7 @@ func saveConfig(chains []modules.Chain) {
 	}
 
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 }
 
