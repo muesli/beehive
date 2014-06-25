@@ -63,106 +63,11 @@ type Placeholder struct {
 	Value interface{}
 }
 
-// Descriptors
-
-// Modules provide events, which are described in an EventDescriptor.
-type EventDescriptor struct {
-	Namespace   string
-	Name        string
-	Description string
-	Options     []PlaceholderDescriptor
-}
-
-// Modules offer actions, which are described in an ActionDescriptor.
-type ActionDescriptor struct {
-	Namespace   string
-	Name        string
-	Description string
-	Options     []PlaceholderDescriptor
-}
-
-// A PlaceholderDescriptor shows which in & out values a module expects and returns.
-type PlaceholderDescriptor struct {
-	Name        string
-	Description string
-	Type        string
-}
-
-// An element in a Chain
-type ChainElement struct {
-	Action  Action
-	Mapping map[string]string
-}
-
-// A user defined Chain
-type Chain struct {
-	Name        string
-	Description string
-	Event       *Event
-	Elements    []ChainElement
-}
-
 var (
 	eventsIn                             = make(chan Event)
 	modules  map[string]*ModuleInterface = make(map[string]*ModuleInterface)
 	chains   []Chain
 )
-
-// Returns the ActionDescriptor matching an action.
-func GetActionDescriptor(action *Action) ActionDescriptor {
-	mod := (*GetModule(action.Namespace))
-	for _, ac := range mod.Actions() {
-		if ac.Name == action.Name {
-			return ac
-		}
-	}
-
-	return ActionDescriptor{}
-}
-
-// Returns the EventDescriptor matching an event.
-func GetEventDescriptor(event *Event) EventDescriptor {
-	mod := (*GetModule(event.Namespace))
-	for _, ev := range mod.Events() {
-		if ev.Name == event.Name {
-			return ev
-		}
-	}
-
-	return EventDescriptor{}
-}
-
-// Execute chains for an event we received.
-func execChains(event *Event) {
-	for _, c := range chains {
-		if c.Event.Name != event.Name || c.Event.Namespace != event.Namespace {
-			continue
-		}
-
-		log.Println("Executing chain:", c.Name, "-", c.Description)
-		for _, el := range c.Elements {
-			action := el.Action
-			for k, v := range el.Mapping {
-				for _, ov := range event.Options {
-					if ov.Name == k {
-						opt := Placeholder{
-							Name:  v,
-							Type:  ov.Type,
-							Value: ov.Value,
-						}
-						action.Options = append(action.Options, opt)
-					}
-				}
-			}
-
-			log.Println("\tExecuting action:", action.Namespace, "/", action.Name, "-", GetActionDescriptor(&action).Description)
-			for _, v := range action.Options {
-				log.Println("\t\tOptions:", v)
-			}
-			(*GetModule(action.Namespace)).Action(action)
-		}
-	}
-}
 
 // Handles incoming events and executes matching Chains.
 func handleEvents() {
