@@ -6,7 +6,7 @@ import (
 	"github.com/muesli/beehive/app"
 
 	"github.com/muesli/beehive/modules"
-	//_ "github.com/muesli/beehive/modules/hellobee"
+	_ "github.com/muesli/beehive/modules/hellobee"
 	_ "github.com/muesli/beehive/modules/ircbee"
 	_ "github.com/muesli/beehive/modules/webbee"
 )
