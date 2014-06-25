@@ -220,6 +220,10 @@ func (mod *IrcBee) Run(eventChan chan modules.Event) {
 		if channel == mod.client.Me.Nick {
 			channel = line.Src // replies go via PM too.
 		}
+		msg := ""
+		if len(line.Args) > 1 {
+			msg = line.Args[1]
+		}
 
 		ev := modules.Event{
 			Namespace: mod.Name(),
@@ -238,7 +242,7 @@ func (mod *IrcBee) Run(eventChan chan modules.Event) {
 				modules.Placeholder{
 					Name:  "text",
 					Type:  "string",
-					Value: line.Args[1],
+					Value: msg,
 				},
 			},
 		}
