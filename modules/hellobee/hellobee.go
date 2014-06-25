@@ -18,13 +18,13 @@ func (mod *HelloBee) Description() string {
 	return "A 'Hello World' module for beehive"
 }
 
-func (mod *HelloBee) Events() []modules.Event {
-	events := []modules.Event{}
+func (mod *HelloBee) Events() []modules.EventDescriptor {
+	events := []modules.EventDescriptor{}
 	return events
 }
 
-func (mod *HelloBee) Actions() []modules.Action {
-	actions := []modules.Action{}
+func (mod *HelloBee) Actions() []modules.ActionDescriptor {
+	actions := []modules.ActionDescriptor{}
 	return actions
 }
 

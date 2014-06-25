@@ -30,36 +30,36 @@ func (mod *WebBee) Run(channelIn chan modules.Event) {
 	go web.Run(mod.Addr)
 }
 
-func (mod *WebBee) Events() []modules.Event {
-	events := []modules.Event{
-		modules.Event{
+func (mod *WebBee) Events() []modules.EventDescriptor {
+	events := []modules.EventDescriptor{
+		modules.EventDescriptor{
 			Namespace:   mod.Name(),
 			Name:        "post",
 			Description: "A POST call was received by the HTTP server",
-			Options: []modules.Placeholder{
-				modules.Placeholder{
+			Options: []modules.PlaceholderDescriptor{
+				modules.PlaceholderDescriptor{
 					Name:        "json",
 					Description: "JSON map received from caller",
 					Type:        "map",
 				},
-				modules.Placeholder{
+				modules.PlaceholderDescriptor{
 					Name:        "ip",
 					Description: "IP of the caller",
 					Type:        "string",
 				},
 			},
 		},
-		modules.Event{
+		modules.EventDescriptor{
 			Namespace:   mod.Name(),
 			Name:        "get",
 			Description: "A GET call was received by the HTTP server",
-			Options: []modules.Placeholder{
-				modules.Placeholder{
+			Options: []modules.PlaceholderDescriptor{
+				modules.PlaceholderDescriptor{
 					Name:        "query_params",
 					Description: "Map of query parameters received from caller",
 					Type:        "map",
 				},
-				modules.Placeholder{
+				modules.PlaceholderDescriptor{
 					Name:        "ip",
 					Description: "IP of the caller",
 					Type:        "string",
@@ -70,8 +70,8 @@ func (mod *WebBee) Events() []modules.Event {
 	return events
 }
 
-func (mod *WebBee) Actions() []modules.Action {
-	actions := []modules.Action{}
+func (mod *WebBee) Actions() []modules.ActionDescriptor {
+	actions := []modules.ActionDescriptor{}
 	return actions
 }
 

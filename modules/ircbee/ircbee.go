@@ -36,24 +36,24 @@ func (mod *IrcBee) Description() string {
 	return "An IRC module for beehive"
 }
 
-func (mod *IrcBee) Events() []modules.Event {
-	events := []modules.Event{
-		modules.Event{
+func (mod *IrcBee) Events() []modules.EventDescriptor {
+	events := []modules.EventDescriptor{
+		modules.EventDescriptor{
 			Namespace:   mod.Name(),
 			Name:        "message",
 			Description: "A message was received over IRC, either in a channel or a private query",
-			Options: []modules.Placeholder{
-				modules.Placeholder{
+			Options: []modules.PlaceholderDescriptor{
+				modules.PlaceholderDescriptor{
 					Name:        "text",
 					Description: "The message that was received",
 					Type:        "string",
 				},
-				modules.Placeholder{
+				modules.PlaceholderDescriptor{
 					Name:        "channel",
 					Description: "The channel the message was received in",
 					Type:        "string",
 				},
-				modules.Placeholder{
+				modules.PlaceholderDescriptor{
 					Name:        "user",
 					Description: "The user that sent the message",
 					Type:        "string",
@@ -64,43 +64,43 @@ func (mod *IrcBee) Events() []modules.Event {
 	return events
 }
 
-func (mod *IrcBee) Actions() []modules.Action {
-	actions := []modules.Action{
-		modules.Action{
+func (mod *IrcBee) Actions() []modules.ActionDescriptor {
+	actions := []modules.ActionDescriptor{
+		modules.ActionDescriptor{
 			Namespace:   mod.Name(),
 			Name:        "send",
 			Description: "Sends a message to a channel or a private query",
-			Options: []modules.Placeholder{
-				modules.Placeholder{
+			Options: []modules.PlaceholderDescriptor{
+				modules.PlaceholderDescriptor{
 					Name:        "channel",
 					Description: "Which channel to send the message to",
 					Type:        "string",
 				},
-				modules.Placeholder{
+				modules.PlaceholderDescriptor{
 					Name:        "text",
 					Description: "Content of the message",
 					Type:        "string",
 				},
 			},
 		},
-		modules.Action{
+		modules.ActionDescriptor{
 			Namespace:   mod.Name(),
 			Name:        "join",
 			Description: "Joins a channel",
-			Options: []modules.Placeholder{
-				modules.Placeholder{
+			Options: []modules.PlaceholderDescriptor{
+				modules.PlaceholderDescriptor{
 					Name:        "channel",
 					Description: "Channel to join",
 					Type:        "string",
 				},
 			},
 		},
-		modules.Action{
+		modules.ActionDescriptor{
 			Namespace:   mod.Name(),
 			Name:        "part",
 			Description: "Parts a channel",
-			Options: []modules.Placeholder{
-				modules.Placeholder{
+			Options: []modules.PlaceholderDescriptor{
+				modules.PlaceholderDescriptor{
 					Name:        "channel",
 					Description: "Channel to part",
 					Type:        "string",
