@@ -34,7 +34,7 @@ var (
 )
 
 type WebBee struct {
-	Addr string
+	addr string
 }
 
 func (mod *WebBee) Name() string {
@@ -47,7 +47,7 @@ func (mod *WebBee) Description() string {
 
 func (mod *WebBee) Run(cin chan modules.Event) {
 	eventChan = cin
-	go web.Run(mod.Addr)
+	go web.Run(mod.addr)
 }
 
 func (mod *WebBee) Events() []modules.EventDescriptor {
@@ -157,7 +157,7 @@ func PostRequest(ctx *web.Context) {
 
 func init() {
 	w := WebBee{
-		Addr: "0.0.0.0:12345",
+		addr: "0.0.0.0:12345",
 	}
 	web.Get("/event", GetRequest)
 	web.Post("/event", PostRequest)
