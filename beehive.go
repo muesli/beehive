@@ -47,9 +47,10 @@ func loadConfig() []modules.Chain {
 	j, err := ioutil.ReadFile(config)
 	if err == nil {
 		err = json.Unmarshal(j, &chains)
-		if err != nil {
-			panic(err)
-		}
+	}
+
+	if err != nil {
+		panic(err)
 	}
 
 	return chains
@@ -58,11 +59,13 @@ func loadConfig() []modules.Chain {
 // Saves chains to config
 func saveConfig(chains []modules.Chain) {
 	j, err := json.MarshalIndent(chains, "", "  ")
+	if err == nil {
+		err = ioutil.WriteFile(config, j, 0644)
+	}
+
 	if err != nil {
 		panic(err)
 	}
-
-	err = ioutil.WriteFile(config, j, 0644)
 }
 
 func main() {

@@ -209,6 +209,13 @@ func GetModule(identifier string) *ModuleInterface {
 	return nil
 }
 
+// Starts all registered modules
+func StartModules() {
+	for _, mod := range modules {
+		(*mod).Run(eventsIn)
+	}
+}
+
 // Getter for chains
 func Chains() []Chain {
 	return chains
@@ -217,13 +224,6 @@ func Chains() []Chain {
 // Setter for chains
 func SetChains(cs []Chain) {
 	chains = cs
-}
-
-// Starts all registered modules
-func StartModules() {
-	for _, mod := range modules {
-		(*mod).Run(eventsIn)
-	}
 }
 
 func init() {
