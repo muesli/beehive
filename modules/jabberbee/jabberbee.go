@@ -22,11 +22,11 @@
 package jabberbee
 
 import (
-	"fmt"
 	"github.com/mattn/go-xmpp"
 	"github.com/muesli/beehive/app"
 	"github.com/muesli/beehive/modules"
 	"log"
+	"strings"
 )
 
 type JabberBee struct {
@@ -103,11 +103,15 @@ func (mod *JabberBee) Run(eventChan chan modules.Event) {
 
 	var talk *xmpp.Client
 	var err error
-	if mod.notls {
-		talk, err = xmpp.NewClientNoTLS(mod.server, mod.username, mod.password, false)
-	} else {
-		talk, err = xmpp.NewClient(mod.server, mod.username, mod.password, false)
+
+	options := xmpp.Options{
+		Host: mod.server,
+		User:     mod.username,
+		Password: mod.password,
+		NoTLS:    mod.notls,
+		Debug:    false,
 	}
+	talk, err = options.NewClient()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -121,7 +125,7 @@ func (mod *JabberBee) Run(eventChan chan modules.Event) {
 			switch v := chat.(type) {
 			case xmpp.Chat:
 				if len(v.Text) > 0 {
-					fmt.Println(v.Remote, v.Text)
+					text := strings.TrimSpace(v.Text)
 
 					ev := modules.Event{
 						Namespace: mod.Name(),
@@ -135,7 +139,7 @@ func (mod *JabberBee) Run(eventChan chan modules.Event) {
 							modules.Placeholder{
 								Name:  "text",
 								Type:  "string",
-								Value: v.Text,
+								Value: text,
 							},
 						},
 					}
@@ -143,7 +147,7 @@ func (mod *JabberBee) Run(eventChan chan modules.Event) {
 				}
 
 			case xmpp.Presence:
-				fmt.Println(v.From, v.Show)
+//				fmt.Println(v.From, v.Show)
 			}
 		}
 	}()
