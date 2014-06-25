@@ -86,26 +86,26 @@ var (
 	chains  []Chain
 )
 
-func ActionDescription(action *Action) string {
+func GetActionDescriptor(action *Action) ActionDescriptor {
 	mod := (*GetModule(action.Namespace))
 	for _, ac := range mod.Actions() {
 		if ac.Name == action.Name {
-			return ac.Description
+			return ac
 		}
 	}
 
-	return ""
+	return ActionDescriptor{}
 }
 
-func EventDescription(event *Event) string {
+func GetEventDescriptor(event *Event) EventDescriptor {
 	mod := (*GetModule(event.Namespace))
 	for _, ev := range mod.Events() {
 		if ev.Name == event.Name {
-			return ev.Description
+			return ev
 		}
 	}
 
-	return ""
+	return EventDescriptor{}
 }
 
 func handleEvents() {
@@ -113,7 +113,7 @@ func handleEvents() {
 		event := <-EventsIn
 
 		log.Println()
-		log.Println("Event received:", event.Namespace, "/", event.Name, "-", EventDescription(&event))
+		log.Println("Event received:", event.Namespace, "/", event.Name, "-", GetEventDescriptor(&event).Description)
 		for _, v := range event.Options {
 			log.Println("\tOptions:", v)
 		}
@@ -139,7 +139,7 @@ func handleEvents() {
 					}
 				}
 
-				log.Println("\tExecuting action:", action.Namespace, "/", action.Name, "-", ActionDescription(&action))
+				log.Println("\tExecuting action:", action.Namespace, "/", action.Name, "-", GetActionDescriptor(&action).Description)
 				for _, v := range action.Options {
 					log.Println("\t\tOptions:", v)
 				}
