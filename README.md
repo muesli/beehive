@@ -1,6 +1,10 @@
 beehive
 =======
 
+beehive is a flexible event system, which allows you to create your own action-
+chains. It is modular and easy to extend - for anyone. It can be your IRC bot,
+it can activate your heating system or make you a cup of coffee. Yes, finally!
+
 ## Installation
 
 Make sure you have a working Go environment. See the [install instructions](http://golang.org/doc/install.html).
