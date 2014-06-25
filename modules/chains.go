@@ -64,7 +64,7 @@ func execChains(event *Event) {
 				log.Println("\tExecuting filter:", filter.Name(), "-", filter.Description())
 				for _, opt := range el.Filter.Options {
 					log.Println("\t\tOptions:", opt)
-					if !filter.Passes(m[opt.Name], opt.Value) {
+					if filter.Passes(m[opt.Name], opt.Value) == opt.Inverse {
 						log.Println("\t\tDid not pass filter!")
 						passes = false
 						break

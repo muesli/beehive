@@ -59,7 +59,15 @@ type Action struct {
 // A Filter
 type Filter struct {
 	Name      string
-	Options   []Placeholder
+	Options   []FilterOption
+}
+
+// A FilterOption used by filters
+type FilterOption struct {
+	Name  string
+	Type  string
+	Inverse bool
+	Value interface{}
 }
 
 // A Placeholder used by ins & outs of a module.
