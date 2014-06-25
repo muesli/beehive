@@ -202,7 +202,7 @@ func (mod *IrcBee) Run(eventChan chan modules.Event) {
 		return
 	}
 
-	// channel signaling irc connection status
+	// channel signaling IRC connection status
 	mod.connectedState = make(chan bool)
 
 	// setup IRC client:
