@@ -56,6 +56,12 @@ type Action struct {
 	Options   []Placeholder
 }
 
+// A Filter
+type Filter struct {
+	Name      string
+	Options   []Placeholder
+}
+
 // A Placeholder used by ins & outs of a module.
 type Placeholder struct {
 	Name  string

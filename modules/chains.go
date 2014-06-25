@@ -25,11 +25,14 @@ import (
 	"bytes"
 	"log"
 	"text/template"
+
+	"github.com/muesli/beehive/filters"
 )
 
 // An element in a Chain
 type ChainElement struct {
 	Action  Action
+	Filter	Filter
 }
 
 // A user defined Chain
@@ -49,38 +52,60 @@ func execChains(event *Event) {
 
 		log.Println("Executing chain:", c.Name, "-", c.Description)
 		for _, el := range c.Elements {
-			action := Action{
-				Namespace: el.Action.Namespace,
-				Name: el.Action.Name,
-			}
 			m := make(map[string]interface{})
 			for _, opt := range event.Options {
 				m[opt.Name] = opt.Value
 			}
 
-			for _, opt := range el.Action.Options {
-				var value bytes.Buffer
-				tmpl, err := template.New(el.Action.Namespace + "_" + el.Action.Name + "_" + opt.Name).Parse(opt.Value.(string))
-				if err == nil {
-					err = tmpl.Execute(&value, m)
-				}
-				if err != nil {
-					panic(err)
+			if el.Filter.Name != "" {
+				filter := *filters.GetFilter(el.Filter.Name)
+				passes := true
+
+				log.Println("\tExecuting filter:", filter.Name(), "-", filter.Description())
+				for _, opt := range el.Filter.Options {
+					log.Println("\t\tOptions:", opt)
+					if !filter.Passes(m[opt.Name], opt.Value) {
+						log.Println("\t\tDid not pass filter!")
+						passes = false
+						break
+					}
 				}
 
-				ph := Placeholder{
-					Name:  opt.Name,
-					Type:  "string", //FIXME
-					Value: value.String(),
+				if !passes {
+					break
 				}
-				action.Options = append(action.Options, ph)
+				log.Println("\t\tPassed filter!")
 			}
+			if el.Action.Name != "" {
+				action := Action{
+					Namespace: el.Action.Namespace,
+					Name: el.Action.Name,
+				}
 
-			log.Println("\tExecuting action:", action.Namespace, "/", action.Name, "-", GetActionDescriptor(&action).Description)
-			for _, v := range action.Options {
-				log.Println("\t\tOptions:", v)
+				for _, opt := range el.Action.Options {
+					var value bytes.Buffer
+					tmpl, err := template.New(el.Action.Namespace + "_" + el.Action.Name + "_" + opt.Name).Parse(opt.Value.(string))
+					if err == nil {
+						err = tmpl.Execute(&value, m)
+					}
+					if err != nil {
+						panic(err)
+					}
+
+					ph := Placeholder{
+						Name:  opt.Name,
+						Type:  "string", //FIXME
+						Value: value.String(),
+					}
+					action.Options = append(action.Options, ph)
+				}
+
+				log.Println("\tExecuting action:", action.Namespace, "/", action.Name, "-", GetActionDescriptor(&action).Description)
+				for _, v := range action.Options {
+					log.Println("\t\tOptions:", v)
+				}
+				(*GetModule(action.Namespace)).Action(action)
 			}
-			(*GetModule(action.Namespace)).Action(action)
 		}
 	}
 }
