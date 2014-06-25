@@ -24,18 +24,21 @@ type ModuleInterface interface {
 	Action(action Action) []Placeholder
 }
 
+// An Event
 type Event struct {
 	Namespace   string
 	Name        string
 	Options     []Placeholder
 }
 
+// An Action
 type Action struct {
 	Namespace   string
 	Name        string
 	Options     []Placeholder
 }
 
+// A Placeholder used by ins & outs of a module.
 type Placeholder struct {
 	Name        string
 	Type        string
@@ -44,6 +47,7 @@ type Placeholder struct {
 
 // Descriptors
 
+// Modules provide events, which are described in an EventDescriptor.
 type EventDescriptor struct {
 	Namespace   string
 	Name        string
@@ -51,6 +55,7 @@ type EventDescriptor struct {
 	Options     []PlaceholderDescriptor
 }
 
+// Modules offer actions, which are described in an ActionDescriptor.
 type ActionDescriptor struct {
 	Namespace   string
 	Name        string
@@ -58,19 +63,20 @@ type ActionDescriptor struct {
 	Options     []PlaceholderDescriptor
 }
 
+// A PlaceholderDescriptor shows which in & out values a module expects and returns.
 type PlaceholderDescriptor struct {
 	Name        string
 	Description string
 	Type        string
 }
 
-// Chain
-
+// An element in a Chain
 type ChainElement struct {
 	Action  Action
 	Mapping map[string]string
 }
 
+// A user defined Chain
 type Chain struct {
 	Name        string
 	Description string
@@ -86,6 +92,7 @@ var (
 	chains  []Chain
 )
 
+// Returns the ActionDescriptor matching an action.
 func GetActionDescriptor(action *Action) ActionDescriptor {
 	mod := (*GetModule(action.Namespace))
 	for _, ac := range mod.Actions() {
@@ -97,6 +104,7 @@ func GetActionDescriptor(action *Action) ActionDescriptor {
 	return ActionDescriptor{}
 }
 
+// Returns the EventDescriptor matching an event.
 func GetEventDescriptor(event *Event) EventDescriptor {
 	mod := (*GetModule(event.Namespace))
 	for _, ev := range mod.Events() {
@@ -108,6 +116,7 @@ func GetEventDescriptor(event *Event) EventDescriptor {
 	return EventDescriptor{}
 }
 
+// Handles incoming events and executes matching Chains.
 func handleEvents() {
 	for {
 		event := <-EventsIn
