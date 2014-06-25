@@ -24,6 +24,7 @@ package modules
 import (
 	"bytes"
 	"log"
+	"strings"
 	"text/template"
 
 	"github.com/muesli/beehive/filters"
@@ -64,7 +65,20 @@ func execChains(event *Event) {
 				log.Println("\tExecuting filter:", filter.Name(), "-", filter.Description())
 				for _, opt := range el.Filter.Options {
 					log.Println("\t\tOptions:", opt)
-					if filter.Passes(m[opt.Name], opt.Value) == opt.Inverse {
+					origVal := m[opt.Name]
+					cleanVal := opt.Value
+					if opt.CaseInsensitive {
+						switch v := origVal.(type) {
+							case string:
+								origVal = strings.ToLower(v)
+						}
+						switch v := cleanVal.(type) {
+							case string:
+								cleanVal = strings.ToLower(v)
+						}
+					}
+
+					if filter.Passes(origVal, cleanVal) == opt.Inverse {
 						log.Println("\t\tDid not pass filter!")
 						passes = false
 						break
