@@ -31,8 +31,8 @@ func (mod *HelloBee) Actions() []modules.ActionDescriptor {
 func (mod *HelloBee) Run(MyChannel chan modules.Event) {
 	hello_event := modules.Event{
 		Namespace: mod.Name(),
-		Name:    "Say Hello",
-		Options: []modules.Placeholder{},
+		Name:      "Say Hello",
+		Options:   []modules.Placeholder{},
 	}
 
 	MyChannel <- hello_event

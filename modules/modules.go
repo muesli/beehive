@@ -26,23 +26,23 @@ type ModuleInterface interface {
 
 // An Event
 type Event struct {
-	Namespace   string
-	Name        string
-	Options     []Placeholder
+	Namespace string
+	Name      string
+	Options   []Placeholder
 }
 
 // An Action
 type Action struct {
-	Namespace   string
-	Name        string
-	Options     []Placeholder
+	Namespace string
+	Name      string
+	Options   []Placeholder
 }
 
 // A Placeholder used by ins & outs of a module.
 type Placeholder struct {
-	Name        string
-	Type        string
-	Value       interface{}
+	Name  string
+	Type  string
+	Value interface{}
 }
 
 // Descriptors
@@ -87,9 +87,9 @@ type Chain struct {
 var (
 	config = "./beehive.conf"
 
-	EventsIn = make(chan Event)
-	modules map[string]*ModuleInterface = make(map[string]*ModuleInterface)
-	chains  []Chain
+	EventsIn                             = make(chan Event)
+	modules  map[string]*ModuleInterface = make(map[string]*ModuleInterface)
+	chains   []Chain
 )
 
 // Returns the ActionDescriptor matching an action.
@@ -116,6 +116,37 @@ func GetEventDescriptor(event *Event) EventDescriptor {
 	return EventDescriptor{}
 }
 
+func execChains(event *Event) {
+	for _, c := range chains {
+		if c.Event.Name != event.Name || c.Event.Namespace != event.Namespace {
+			continue
+		}
+
+		log.Println("Executing chain:", c.Name, "-", c.Description)
+		for _, el := range c.Elements {
+			action := el.Action
+			for k, v := range el.Mapping {
+				for _, ov := range event.Options {
+					if ov.Name == k {
+						opt := Placeholder{
+							Name:  v,
+							Type:  ov.Type,
+							Value: ov.Value,
+						}
+						action.Options = append(action.Options, opt)
+					}
+				}
+			}
+
+			log.Println("\tExecuting action:", action.Namespace, "/", action.Name, "-", GetActionDescriptor(&action).Description)
+			for _, v := range action.Options {
+				log.Println("\t\tOptions:", v)
+			}
+			(*GetModule(action.Namespace)).Action(action)
+		}
+	}
+}
+
 // Handles incoming events and executes matching Chains.
 func handleEvents() {
 	for {
@@ -127,34 +158,7 @@ func handleEvents() {
 			log.Println("\tOptions:", v)
 		}
 
-		for _, c := range chains {
-			if c.Event.Name != event.Name || c.Event.Namespace != event.Namespace {
-				continue
-			}
-
-			log.Println("Executing chain:", c.Name, "-", c.Description)
-			for _, el := range c.Elements {
-				action := el.Action
-				for k, v := range el.Mapping {
-					for _, ov := range event.Options {
-						if ov.Name == k {
-							opt := Placeholder{
-								Name:  v,
-								Type:  ov.Type,
-								Value: ov.Value,
-							}
-							action.Options = append(action.Options, opt)
-						}
-					}
-				}
-
-				log.Println("\tExecuting action:", action.Namespace, "/", action.Name, "-", GetActionDescriptor(&action).Description)
-				for _, v := range action.Options {
-					log.Println("\t\tOptions:", v)
-				}
-				(*GetModule(action.Namespace)).Action(action)
-			}
-		}
+		execChains(&event)
 	}
 }
 
@@ -216,7 +220,7 @@ func StartModules() {
 	}
 
 	LoadChains()
-//	SaveChains()
+	//	SaveChains()
 }
 
 func init() {
