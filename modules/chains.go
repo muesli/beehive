@@ -67,6 +67,16 @@ func execChains(event *Event) {
 					log.Println("\t\tOptions:", opt)
 					origVal := m[opt.Name]
 					cleanVal := opt.Value
+					if opt.Trimmed {
+						switch v := origVal.(type) {
+							case string:
+								origVal = strings.TrimSpace(v)
+						}
+						switch v := cleanVal.(type) {
+							case string:
+								cleanVal = strings.TrimSpace(v)
+						}
+					}
 					if opt.CaseInsensitive {
 						switch v := origVal.(type) {
 							case string:

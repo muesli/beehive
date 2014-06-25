@@ -68,6 +68,7 @@ type FilterOption struct {
 	Type  string
 	Inverse bool
 	CaseInsensitive bool
+	Trimmed bool
 	Value interface{}
 }
 
