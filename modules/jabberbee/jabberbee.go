@@ -23,73 +23,34 @@ package jabberbee
 
 import (
 	"github.com/mattn/go-xmpp"
-	"github.com/muesli/beehive/app"
 	"github.com/muesli/beehive/modules"
 	"log"
 	"strings"
 )
 
 type JabberBee struct {
+	name string
+	namespace string
+	description string
+
 	client *xmpp.Client
 
 	server   string
-	username string
+	user     string
 	password string
 	notls    bool
 }
 
 func (mod *JabberBee) Name() string {
-	return "jabberbee"
+	return mod.name
+}
+
+func (mod *JabberBee) Namespace() string {
+	return mod.namespace
 }
 
 func (mod *JabberBee) Description() string {
-	return "A Jabber module for beehive"
-}
-
-func (mod *JabberBee) Events() []modules.EventDescriptor {
-	events := []modules.EventDescriptor{
-		modules.EventDescriptor{
-			Namespace:   mod.Name(),
-			Name:        "message",
-			Description: "A message was received over Jabber",
-			Options: []modules.PlaceholderDescriptor{
-				modules.PlaceholderDescriptor{
-					Name:        "text",
-					Description: "The message that was received",
-					Type:        "string",
-				},
-				modules.PlaceholderDescriptor{
-					Name:        "user",
-					Description: "The user that sent the message",
-					Type:        "string",
-				},
-			},
-		},
-	}
-	return events
-}
-
-func (mod *JabberBee) Actions() []modules.ActionDescriptor {
-	actions := []modules.ActionDescriptor{
-		modules.ActionDescriptor{
-			Namespace:   mod.Name(),
-			Name:        "send",
-			Description: "Sends a message to a remote",
-			Options: []modules.PlaceholderDescriptor{
-				modules.PlaceholderDescriptor{
-					Name:        "user",
-					Description: "Which remote to send the message to",
-					Type:        "string",
-				},
-				modules.PlaceholderDescriptor{
-					Name:        "text",
-					Description: "Content of the message",
-					Type:        "string",
-				},
-			},
-		},
-	}
-	return actions
+	return mod.description
 }
 
 func (mod *JabberBee) Action(action modules.Action) []modules.Placeholder {
@@ -106,7 +67,7 @@ func (mod *JabberBee) Run(eventChan chan modules.Event) {
 
 	options := xmpp.Options{
 		Host: mod.server,
-		User:     mod.username,
+		User:     mod.user,
 		Password: mod.password,
 		NoTLS:    mod.notls,
 		Debug:    false,
@@ -128,7 +89,7 @@ func (mod *JabberBee) Run(eventChan chan modules.Event) {
 					text := strings.TrimSpace(v.Text)
 
 					ev := modules.Event{
-						Namespace: mod.Name(),
+						Bee: mod.Name(),
 						Name:      "message",
 						Options: []modules.Placeholder{
 							modules.Placeholder{
@@ -151,17 +112,4 @@ func (mod *JabberBee) Run(eventChan chan modules.Event) {
 			}
 		}
 	}()
-}
-
-func init() {
-	jabber := JabberBee{}
-
-	app.AddFlags([]app.CliFlag{
-		app.CliFlag{&jabber.server, "jabberhost", "", "Hostname of Jabber server, eg: talk.google.com:443"},
-		app.CliFlag{&jabber.username, "jabberuser", "beehive", "Username to authenticate with Jabber server"},
-		app.CliFlag{&jabber.password, "jabberpassword", "", "Password to use to connect to Jabber server"},
-		app.CliFlag{&jabber.notls, "jabbernotls", false, "If you don't want to connect with TLS"},
-	})
-
-	modules.RegisterModule(&jabber)
 }

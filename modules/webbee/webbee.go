@@ -29,70 +29,30 @@ import (
 	"log"
 )
 
-var (
-	eventChan chan modules.Event
-)
-
 type WebBee struct {
+	name string
+	namespace string
+	description string
 	addr string
+
+	eventChan chan modules.Event
 }
 
 func (mod *WebBee) Name() string {
-	return "webbee"
+	return mod.name
+}
+
+func (mod *WebBee) Namespace() string {
+	return mod.namespace
 }
 
 func (mod *WebBee) Description() string {
-	return "A RESTful HTTP module for beehive"
+	return mod.description
 }
 
 func (mod *WebBee) Run(cin chan modules.Event) {
-	eventChan = cin
+	mod.eventChan = cin
 	go web.Run(mod.addr)
-}
-
-func (mod *WebBee) Events() []modules.EventDescriptor {
-	events := []modules.EventDescriptor{
-		modules.EventDescriptor{
-			Namespace:   mod.Name(),
-			Name:        "post",
-			Description: "A POST call was received by the HTTP server",
-			Options: []modules.PlaceholderDescriptor{
-				modules.PlaceholderDescriptor{
-					Name:        "json",
-					Description: "JSON map received from caller",
-					Type:        "map",
-				},
-				modules.PlaceholderDescriptor{
-					Name:        "ip",
-					Description: "IP of the caller",
-					Type:        "string",
-				},
-			},
-		},
-		modules.EventDescriptor{
-			Namespace:   mod.Name(),
-			Name:        "get",
-			Description: "A GET call was received by the HTTP server",
-			Options: []modules.PlaceholderDescriptor{
-				modules.PlaceholderDescriptor{
-					Name:        "query_params",
-					Description: "Map of query parameters received from caller",
-					Type:        "map",
-				},
-				modules.PlaceholderDescriptor{
-					Name:        "ip",
-					Description: "IP of the caller",
-					Type:        "string",
-				},
-			},
-		},
-	}
-	return events
-}
-
-func (mod *WebBee) Actions() []modules.ActionDescriptor {
-	actions := []modules.ActionDescriptor{}
-	return actions
 }
 
 func (mod *WebBee) Action(action modules.Action) []modules.Placeholder {
@@ -100,11 +60,11 @@ func (mod *WebBee) Action(action modules.Action) []modules.Placeholder {
 	return outs
 }
 
-func GetRequest(ctx *web.Context) {
+func (mod *WebBee) GetRequest(ctx *web.Context) {
 	//FIXME
 	ms := make(map[string]string)
 	ev := modules.Event{
-		Namespace: "webbee",
+		Bee: mod.Name(),
 		Name:      "get",
 		Options: []modules.Placeholder{
 			modules.Placeholder{
@@ -119,10 +79,10 @@ func GetRequest(ctx *web.Context) {
 			},
 		},
 	}
-	eventChan <- ev
+	mod.eventChan <- ev
 }
 
-func PostRequest(ctx *web.Context) {
+func (mod *WebBee) PostRequest(ctx *web.Context) {
 	b, err := ioutil.ReadAll(ctx.Request.Body)
 	if err != nil {
 		log.Println("Error:", err)
@@ -137,7 +97,7 @@ func PostRequest(ctx *web.Context) {
 	}
 
 	ev := modules.Event{
-		Namespace: "webbee",
+		Bee: mod.Name(),
 		Name:      "post",
 		Options: []modules.Placeholder{
 			modules.Placeholder{
@@ -152,15 +112,5 @@ func PostRequest(ctx *web.Context) {
 			},
 		},
 	}
-	eventChan <- ev
-}
-
-func init() {
-	w := WebBee{
-		addr: "0.0.0.0:12345",
-	}
-	web.Get("/event", GetRequest)
-	web.Post("/event", PostRequest)
-
-	modules.RegisterModule(&w)
+	mod.eventChan <- ev
 }

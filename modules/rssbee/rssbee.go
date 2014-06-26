@@ -1,5 +1,6 @@
 /*
  *	  Copyright (C) 2014 Daniel 'grindhold' Brendle
+ *                  2014 Christian Muehlhaeuser
  *
  *	  This program is free software: you can redistribute it and/or modify
  *	  it under the terms of the GNU Affero General Public License as published
@@ -16,6 +17,7 @@
  *
  *	  Authors:
  *		Daniel 'grindhold' Brendle <grindhold@skarphed.org>
+ *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
 // RSS module for beehive
@@ -25,97 +27,33 @@ import (
 	"fmt"
 	"os"
 	"time"
-	"github.com/muesli/beehive/app"
 	"github.com/muesli/beehive/modules"
 	rss "github.com/jteeuwen/go-pkg-rss"
 )
 
-var (
-	eventChan chan modules.Event
-)
-
 type RSSBee struct {
+	name string
+	namespace string
+	description string
 	url string
+
+	eventChan chan modules.Event
 }
 
 func (mod *RSSBee) Name() string {
-	return "rssbee"
+	return mod.name
+}
+
+func (mod *RSSBee) Namespace() string {
+	return mod.namespace
 }
 
 func (mod *RSSBee) Description() string {
-	return "A bee that manages RSS-feeds"
+	return mod.description
 }
 
-func (mod *RSSBee) Events() []modules.EventDescriptor {
-	events := []modules.EventDescriptor{
-		modules.EventDescriptor{
-			Namespace: mod.Name(),
-			Name: "newitem",
-			Description: "A new item has been received through the Feed",
-			Options: []modules.PlaceholderDescriptor{
-				modules.PlaceholderDescriptor{
-					Name:			"title",
-					Description:	"Title of the Item",
-					Type:			"string",
-				},
-				modules.PlaceholderDescriptor{
-					Name:			"links",
-					Description:	"Links referenced by the Item",
-					Type:			"[]string",
-				},
-				modules.PlaceholderDescriptor{
-					Name:			"description",
-					Description:	"Description of the Item",
-					Type:			"string",
-				},
-				modules.PlaceholderDescriptor{
-					Name:			"author",
-					Description:	"The person who wrote the Item",
-					Type:			"string",
-				},
-				modules.PlaceholderDescriptor{
-					Name:			"categories",
-					Description:	"Categories that the Item belongs to",
-					Type:			"[]string",
-				},
-				modules.PlaceholderDescriptor{
-					Name:			"comments",
-					Description:	"Comments of the Item",
-					Type:			"string",
-				},
-				modules.PlaceholderDescriptor{
-					Name:			"enclosures",
-					Description:	"Enclosures related to Item",
-					Type:			"[]string",
-				},
-				modules.PlaceholderDescriptor{
-					Name:			"guid",
-					Description:	"Global unique ID attached to the Item",
-					Type:			"string",
-				},
-				modules.PlaceholderDescriptor{
-					Name:			"pubdate",
-					Description:	"Date the Item was published on",
-					Type:			"string",
-				},
-				modules.PlaceholderDescriptor{
-					Name:			"source",
-					Description:	"Source of the Item",
-					Type:			"string",
-				},
-			},
-		},
-	}
-	return events
-}
-
-func (mod *RSSBee) Actions() []modules.ActionDescriptor {
-	actions := []modules.ActionDescriptor{}
-	return actions
-}
-
-func PollFeed(uri string, timeout int) {
-	feed := rss.New(timeout, true, chanHandler, itemHandler)
+func (mod *RSSBee) PollFeed(uri string, timeout int) {
+	feed := rss.New(timeout, true, mod.chanHandler, mod.itemHandler)
 
 	for {
 			if err := feed.Fetch(uri, nil); err != nil {
@@ -127,11 +65,11 @@ func PollFeed(uri string, timeout int) {
 	}
 }
 
-func chanHandler(feed *rss.Feed, newchannels []*rss.Channel) {
+func (mod *RSSBee) chanHandler(feed *rss.Feed, newchannels []*rss.Channel) {
 	//fmt.Printf("%d new channel(s) in %s\n", len(newchannels), feed.Url)
 }
 
-func itemHandler(feed *rss.Feed, ch *rss.Channel, newitems []*rss.Item) {
+func (mod *RSSBee) itemHandler(feed *rss.Feed, ch *rss.Channel, newitems []*rss.Item) {
 	for i := range(newitems) {
 		var links []string
 		var categories []string
@@ -150,7 +88,7 @@ func itemHandler(feed *rss.Feed, ch *rss.Channel, newitems []*rss.Item) {
 		}
 
 		newitemEvent := modules.Event{
-			Namespace: "rssbee",
+			Bee: mod.Name(),
 			Name: "newitem",
 			Options: []modules.Placeholder{
 				modules.Placeholder {
@@ -205,26 +143,16 @@ func itemHandler(feed *rss.Feed, ch *rss.Channel, newitems []*rss.Item) {
 				},
 			},
 		}
-		eventChan <- newitemEvent
+		mod.eventChan <- newitemEvent
 	}
 	fmt.Printf("%d new item(s) in %s\n", len(newitems), feed.Url)
 }
 
-func (mod *RSSBee) Run(eventChan chan modules.Event) {
-	go PollFeed(mod.url, 5)
+func (mod *RSSBee) Run(cin chan modules.Event) {
+	mod.eventChan = cin
+	go mod.PollFeed(mod.url, 5)
 }
 
 func (mod *RSSBee) Action(action modules.Action) []modules.Placeholder {
 	return []modules.Placeholder{}
 }
-
-func init() {
-	rssbee := RSSBee{}
-
-	app.AddFlags([]app.CliFlag{
-		app.CliFlag{&rssbee.url, "url", "", "The URL, this bee can find the RSS-Feed at"},
-	})
-
-	modules.RegisterModule(&rssbee)
-}
-

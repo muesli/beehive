@@ -23,7 +23,6 @@ package ircbee
 
 import (
 	irc "github.com/fluffle/goirc/client"
-	"github.com/muesli/beehive/app"
 	"github.com/muesli/beehive/modules"
 	"log"
 	"strings"
@@ -31,104 +30,36 @@ import (
 )
 
 type IrcBee struct {
+	name string
+	namespace string
+	description string
+
 	// channel signaling irc connection status
 	connectedState chan bool
 
 	// setup IRC client:
 	client *irc.Conn
-
-	irchost     string
-	ircnick     string
-	ircpassword string
-	ircssl      bool
-	ircchannel  string
-
 	channels []string
+
+	Server   string
+	Nick     string
+	Password string
+	SSL      bool
+	Channel  string
 }
 
 // Interface impl
 
 func (mod *IrcBee) Name() string {
-	return "ircbee"
+	return mod.name
+}
+
+func (mod *IrcBee) Namespace() string {
+	return mod.namespace
 }
 
 func (mod *IrcBee) Description() string {
-	return "An IRC module for beehive"
-}
-
-func (mod *IrcBee) Events() []modules.EventDescriptor {
-	events := []modules.EventDescriptor{
-		modules.EventDescriptor{
-			Namespace:   mod.Name(),
-			Name:        "message",
-			Description: "A message was received over IRC, either in a channel or a private query",
-			Options: []modules.PlaceholderDescriptor{
-				modules.PlaceholderDescriptor{
-					Name:        "text",
-					Description: "The message that was received",
-					Type:        "string",
-				},
-				modules.PlaceholderDescriptor{
-					Name:        "channel",
-					Description: "The channel the message was received in",
-					Type:        "string",
-				},
-				modules.PlaceholderDescriptor{
-					Name:        "user",
-					Description: "The user that sent the message",
-					Type:        "string",
-				},
-			},
-		},
-	}
-	return events
-}
-
-func (mod *IrcBee) Actions() []modules.ActionDescriptor {
-	actions := []modules.ActionDescriptor{
-		modules.ActionDescriptor{
-			Namespace:   mod.Name(),
-			Name:        "send",
-			Description: "Sends a message to a channel or a private query",
-			Options: []modules.PlaceholderDescriptor{
-				modules.PlaceholderDescriptor{
-					Name:        "channel",
-					Description: "Which channel to send the message to",
-					Type:        "string",
-				},
-				modules.PlaceholderDescriptor{
-					Name:        "text",
-					Description: "Content of the message",
-					Type:        "string",
-				},
-			},
-		},
-		modules.ActionDescriptor{
-			Namespace:   mod.Name(),
-			Name:        "join",
-			Description: "Joins a channel",
-			Options: []modules.PlaceholderDescriptor{
-				modules.PlaceholderDescriptor{
-					Name:        "channel",
-					Description: "Channel to join",
-					Type:        "string",
-				},
-			},
-		},
-		modules.ActionDescriptor{
-			Namespace:   mod.Name(),
-			Name:        "part",
-			Description: "Parts a channel",
-			Options: []modules.PlaceholderDescriptor{
-				modules.PlaceholderDescriptor{
-					Name:        "channel",
-					Description: "Channel to part",
-					Type:        "string",
-				},
-			},
-		},
-	}
-	return actions
+	return mod.description
 }
 
 func (mod *IrcBee) Action(action modules.Action) []modules.Placeholder {
@@ -198,7 +129,7 @@ func (mod *IrcBee) Part(channel string) {
 }
 
 func (mod *IrcBee) Run(eventChan chan modules.Event) {
-	if len(mod.irchost) == 0 {
+	if len(mod.Server) == 0 {
 		return
 	}
 
@@ -206,8 +137,8 @@ func (mod *IrcBee) Run(eventChan chan modules.Event) {
 	mod.connectedState = make(chan bool)
 
 	// setup IRC client:
-	mod.client = irc.SimpleClient(mod.ircnick, "beehive", "beehive")
-	mod.client.SSL = mod.ircssl
+	mod.client = irc.SimpleClient(mod.Nick, "beehive", "beehive")
+	mod.client.SSL = mod.SSL
 
 	mod.client.AddHandler(irc.CONNECTED, func(conn *irc.Conn, line *irc.Line) {
 		mod.connectedState <- true
@@ -226,7 +157,7 @@ func (mod *IrcBee) Run(eventChan chan modules.Event) {
 		}
 
 		ev := modules.Event{
-			Namespace: mod.Name(),
+			Bee: mod.Name(),
 			Name:      "message",
 			Options: []modules.Placeholder{
 				modules.Placeholder{
@@ -252,45 +183,31 @@ func (mod *IrcBee) Run(eventChan chan modules.Event) {
 	// loop on IRC dis/connected events
 	go func() {
 		for {
-			log.Println("Connecting to IRC:", mod.irchost)
-			err := mod.client.Connect(mod.irchost, mod.ircpassword)
+			log.Println("Connecting to IRC:", mod.Server)
+			err := mod.client.Connect(mod.Server, mod.Password)
 			if err != nil {
-				log.Println("Failed to connect to IRC:", mod.irchost)
+				log.Println("Failed to connect to IRC:", mod.Server)
 				log.Println(err)
 				continue
 			}
 			for {
 				status := <-mod.connectedState
 				if status {
-					log.Println("Connected to IRC:", mod.irchost)
+					log.Println("Connected to IRC:", mod.Server)
 
 					if len(mod.channels) == 0 {
 						// join default channel
-						mod.Join(mod.ircchannel)
+						mod.Join(mod.Channel)
 					} else {
 						// we must have been disconnected, rejoin channels
 						mod.Rejoin()
 					}
 				} else {
-					log.Println("Disconnected from IRC:", mod.irchost)
+					log.Println("Disconnected from IRC:", mod.Server)
 					break
 				}
 			}
 			time.Sleep(5 * time.Second)
 		}
 	}()
-}
-
-func init() {
-	irc := IrcBee{}
-
-	app.AddFlags([]app.CliFlag{
-		app.CliFlag{&irc.irchost, "irchost", "", "Hostname of IRC server, eg: irc.example.org:6667"},
-		app.CliFlag{&irc.ircnick, "ircnick", "beehive", "Nickname to use for IRC"},
-		app.CliFlag{&irc.ircpassword, "ircpassword", "", "Password to use to connect to IRC server"},
-		app.CliFlag{&irc.ircchannel, "ircchannel", "#beehivetest", "Which channel to join"},
-		app.CliFlag{&irc.ircssl, "ircssl", false, "Use SSL for IRC connection"},
-	})
-
-	modules.RegisterModule(&irc)
 }
