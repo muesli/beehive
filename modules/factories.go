@@ -18,7 +18,6 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// beehive's central module system.
 package modules
 
 import (

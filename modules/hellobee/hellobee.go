@@ -18,7 +18,7 @@
  *      Michael Wendland <michiwend@michiwend.com>
  */
 
-// hellobee dummy module for beehive
+// hellobee dummy module for beehive.
 package hellobee
 
 import (

@@ -18,7 +18,6 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// beehive's web-module.
 package webbee
 
 import (

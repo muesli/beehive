@@ -20,7 +20,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// RSS module for beehive
+// RSS module for beehive.
 package rssbee
 
 import (
