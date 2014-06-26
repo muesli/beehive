@@ -136,13 +136,18 @@ func (mod *RSSBee) itemHandler(feed *rss.Feed, ch *rss.Channel, newitems []*rss.
 					Type:  "string",
 					Value: newitems[i].PubDate,
 				},
-				modules.Placeholder{
-					Name:  "source",
-					Type:  "string",
-					Value: newitems[i].Source.Url,
-				},
 			},
 		}
+		if newitems[i].Source != nil {
+			ph := modules.Placeholder{
+				Name:  "source",
+				Type:  "string",
+				Value: newitems[i].Source.Url,
+			}
+
+			newitemEvent.Options = append(newitemEvent.Options, ph)
+		}
+
 		mod.eventChan <- newitemEvent
 	}
 	fmt.Printf("%d new item(s) in %s\n", len(newitems), feed.Url)
