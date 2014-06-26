@@ -26,8 +26,8 @@ import (
 )
 
 type HelloBee struct {
-	name string
-	namespace string
+	name        string
+	namespace   string
 	description string
 }
 
@@ -44,13 +44,13 @@ func (mod *HelloBee) Description() string {
 }
 
 func (mod *HelloBee) Run(eventChan chan modules.Event) {
-/*	ev := modules.Event{
-		Bee: mod.Name(),
-		Name:      "hello",
-		Options:   []modules.Placeholder{},
-	}
+	/*	ev := modules.Event{
+			Bee: mod.Name(),
+			Name:      "hello",
+			Options:   []modules.Placeholder{},
+		}
 
-	eventChan <- ev*/
+		eventChan <- ev*/
 }
 
 func (mod *HelloBee) Action(action modules.Action) []modules.Placeholder {

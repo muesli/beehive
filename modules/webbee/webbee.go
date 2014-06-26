@@ -30,10 +30,10 @@ import (
 )
 
 type WebBee struct {
-	name string
-	namespace string
+	name        string
+	namespace   string
 	description string
-	addr string
+	addr        string
 
 	eventChan chan modules.Event
 }
@@ -64,8 +64,8 @@ func (mod *WebBee) GetRequest(ctx *web.Context) {
 	//FIXME
 	ms := make(map[string]string)
 	ev := modules.Event{
-		Bee: mod.Name(),
-		Name:      "get",
+		Bee:  mod.Name(),
+		Name: "get",
 		Options: []modules.Placeholder{
 			modules.Placeholder{
 				Name:  "query_params",
@@ -97,8 +97,8 @@ func (mod *WebBee) PostRequest(ctx *web.Context) {
 	}
 
 	ev := modules.Event{
-		Bee: mod.Name(),
-		Name:      "post",
+		Bee:  mod.Name(),
+		Name: "post",
 		Options: []modules.Placeholder{
 			modules.Placeholder{
 				Name:  "json",

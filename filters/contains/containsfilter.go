@@ -39,8 +39,8 @@ func (filter *ContainsFilter) Description() string {
 
 func (filter *ContainsFilter) Passes(data interface{}, value interface{}) bool {
 	switch v := data.(type) {
-		case string:
-			return strings.Contains(v, value.(string))
+	case string:
+		return strings.Contains(v, value.(string))
 		//FIXME: support maps
 	}
 

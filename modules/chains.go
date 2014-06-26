@@ -32,8 +32,8 @@ import (
 
 // An element in a Chain
 type ChainElement struct {
-	Action  Action
-	Filter	Filter
+	Action Action
+	Filter Filter
 }
 
 // A user defined Chain
@@ -69,22 +69,22 @@ func execChains(event *Event) {
 					cleanVal := opt.Value
 					if opt.Trimmed {
 						switch v := origVal.(type) {
-							case string:
-								origVal = strings.TrimSpace(v)
+						case string:
+							origVal = strings.TrimSpace(v)
 						}
 						switch v := cleanVal.(type) {
-							case string:
-								cleanVal = strings.TrimSpace(v)
+						case string:
+							cleanVal = strings.TrimSpace(v)
 						}
 					}
 					if opt.CaseInsensitive {
 						switch v := origVal.(type) {
-							case string:
-								origVal = strings.ToLower(v)
+						case string:
+							origVal = strings.ToLower(v)
 						}
 						switch v := cleanVal.(type) {
-							case string:
-								cleanVal = strings.ToLower(v)
+						case string:
+							cleanVal = strings.ToLower(v)
 						}
 					}
 
@@ -102,7 +102,7 @@ func execChains(event *Event) {
 			}
 			if el.Action.Name != "" {
 				action := Action{
-					Bee: el.Action.Bee,
+					Bee:  el.Action.Bee,
 					Name: el.Action.Name,
 				}
 

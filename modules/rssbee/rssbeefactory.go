@@ -31,9 +31,9 @@ type RSSBeeFactory struct {
 
 func (factory *RSSBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
 	bee := RSSBee{
-		name: name,
-		namespace: factory.Name(),
-		url: options.GetValue("url").(string),
+		name:        name,
+		namespace:   factory.Name(),
+		url:         options.GetValue("url").(string),
 		description: description,
 	}
 	return &bee
@@ -61,59 +61,59 @@ func (factory *RSSBeeFactory) Options() []modules.BeeOptionDescriptor {
 func (factory *RSSBeeFactory) Events() []modules.EventDescriptor {
 	events := []modules.EventDescriptor{
 		modules.EventDescriptor{
-			Namespace: factory.Name(),
-			Name: "newitem",
+			Namespace:   factory.Name(),
+			Name:        "newitem",
 			Description: "A new item has been received through the Feed",
 			Options: []modules.PlaceholderDescriptor{
 				modules.PlaceholderDescriptor{
-					Name:			"title",
-					Description:	"Title of the Item",
-					Type:			"string",
+					Name:        "title",
+					Description: "Title of the Item",
+					Type:        "string",
 				},
 				modules.PlaceholderDescriptor{
-					Name:			"links",
-					Description:	"Links referenced by the Item",
-					Type:			"[]string",
+					Name:        "links",
+					Description: "Links referenced by the Item",
+					Type:        "[]string",
 				},
 				modules.PlaceholderDescriptor{
-					Name:			"description",
-					Description:	"Description of the Item",
-					Type:			"string",
+					Name:        "description",
+					Description: "Description of the Item",
+					Type:        "string",
 				},
 				modules.PlaceholderDescriptor{
-					Name:			"author",
-					Description:	"The person who wrote the Item",
-					Type:			"string",
+					Name:        "author",
+					Description: "The person who wrote the Item",
+					Type:        "string",
 				},
 				modules.PlaceholderDescriptor{
-					Name:			"categories",
-					Description:	"Categories that the Item belongs to",
-					Type:			"[]string",
+					Name:        "categories",
+					Description: "Categories that the Item belongs to",
+					Type:        "[]string",
 				},
 				modules.PlaceholderDescriptor{
-					Name:			"comments",
-					Description:	"Comments of the Item",
-					Type:			"string",
+					Name:        "comments",
+					Description: "Comments of the Item",
+					Type:        "string",
 				},
 				modules.PlaceholderDescriptor{
-					Name:			"enclosures",
-					Description:	"Enclosures related to Item",
-					Type:			"[]string",
+					Name:        "enclosures",
+					Description: "Enclosures related to Item",
+					Type:        "[]string",
 				},
 				modules.PlaceholderDescriptor{
-					Name:			"guid",
-					Description:	"Global unique ID attached to the Item",
-					Type:			"string",
+					Name:        "guid",
+					Description: "Global unique ID attached to the Item",
+					Type:        "string",
 				},
 				modules.PlaceholderDescriptor{
-					Name:			"pubdate",
-					Description:	"Date the Item was published on",
-					Type:			"string",
+					Name:        "pubdate",
+					Description: "Date the Item was published on",
+					Type:        "string",
 				},
 				modules.PlaceholderDescriptor{
-					Name:			"source",
-					Description:	"Source of the Item",
-					Type:			"string",
+					Name:        "source",
+					Description: "Source of the Item",
+					Type:        "string",
 				},
 			},
 		},

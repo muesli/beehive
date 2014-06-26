@@ -29,8 +29,8 @@ import (
 )
 
 type JabberBee struct {
-	name string
-	namespace string
+	name        string
+	namespace   string
 	description string
 
 	client *xmpp.Client
@@ -66,7 +66,7 @@ func (mod *JabberBee) Run(eventChan chan modules.Event) {
 	var err error
 
 	options := xmpp.Options{
-		Host: mod.server,
+		Host:     mod.server,
 		User:     mod.user,
 		Password: mod.password,
 		NoTLS:    mod.notls,
@@ -89,8 +89,8 @@ func (mod *JabberBee) Run(eventChan chan modules.Event) {
 					text := strings.TrimSpace(v.Text)
 
 					ev := modules.Event{
-						Bee: mod.Name(),
-						Name:      "message",
+						Bee:  mod.Name(),
+						Name: "message",
 						Options: []modules.Placeholder{
 							modules.Placeholder{
 								Name:  "user",
@@ -108,7 +108,7 @@ func (mod *JabberBee) Run(eventChan chan modules.Event) {
 				}
 
 			case xmpp.Presence:
-//				fmt.Println(v.From, v.Show)
+				//				fmt.Println(v.From, v.Show)
 			}
 		}
 	}()

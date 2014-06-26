@@ -26,8 +26,8 @@ import (
 
 var (
 	haystack = "foobar"
-	needle = "foo"
-	fail = "bar"
+	needle   = "foo"
+	fail     = "bar"
 )
 
 func TestStartsWithFilter(t *testing.T) {

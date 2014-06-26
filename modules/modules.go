@@ -42,40 +42,40 @@ type ModuleInterface interface {
 
 // An instance of a module is called a Bee
 type Bee struct {
-	Name string
-	Class string
+	Name        string
+	Class       string
 	Description string
-	Options []BeeOption
+	Options     []BeeOption
 }
 
 // An Event
 type Event struct {
-	Bee string
-	Name      string
-	Options   []Placeholder
+	Bee     string
+	Name    string
+	Options []Placeholder
 }
 
 // An Action
 type Action struct {
-	Bee string
-	Name      string
-	Options   []Placeholder
+	Bee     string
+	Name    string
+	Options []Placeholder
 }
 
 // A Filter
 type Filter struct {
-	Name      string
-	Options   []FilterOption
+	Name    string
+	Options []FilterOption
 }
 
 // A FilterOption used by filters
 type FilterOption struct {
-	Name  string
-	Type  string
-	Inverse bool
+	Name            string
+	Type            string
+	Inverse         bool
 	CaseInsensitive bool
-	Trimmed bool
-	Value interface{}
+	Trimmed         bool
+	Value           interface{}
 }
 
 // A BeeOption is used to configure bees

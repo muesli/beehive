@@ -26,8 +26,8 @@ import (
 
 var (
 	haystack = "foobar"
-	needle = "oba"
-	fail = "abo"
+	needle   = "oba"
+	fail     = "abo"
 )
 
 func TestContainsFilter(t *testing.T) {

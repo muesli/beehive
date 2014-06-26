@@ -26,8 +26,8 @@ import (
 
 var (
 	haystack = "foobar"
-	needle = "bar"
-	fail = "foo"
+	needle   = "bar"
+	fail     = "foo"
 )
 
 func TestEndsWithFilter(t *testing.T) {

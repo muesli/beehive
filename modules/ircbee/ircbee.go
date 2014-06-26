@@ -30,15 +30,15 @@ import (
 )
 
 type IrcBee struct {
-	name string
-	namespace string
+	name        string
+	namespace   string
 	description string
 
 	// channel signaling irc connection status
 	connectedState chan bool
 
 	// setup IRC client:
-	client *irc.Conn
+	client   *irc.Conn
 	channels []string
 
 	Server   string
@@ -157,8 +157,8 @@ func (mod *IrcBee) Run(eventChan chan modules.Event) {
 		}
 
 		ev := modules.Event{
-			Bee: mod.Name(),
-			Name:      "message",
+			Bee:  mod.Name(),
+			Name: "message",
 			Options: []modules.Placeholder{
 				modules.Placeholder{
 					Name:  "channel",

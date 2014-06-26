@@ -25,17 +25,17 @@ package rssbee
 
 import (
 	"fmt"
+	rss "github.com/jteeuwen/go-pkg-rss"
+	"github.com/muesli/beehive/modules"
 	"os"
 	"time"
-	"github.com/muesli/beehive/modules"
-	rss "github.com/jteeuwen/go-pkg-rss"
 )
 
 type RSSBee struct {
-	name string
-	namespace string
+	name        string
+	namespace   string
 	description string
-	url string
+	url         string
 
 	eventChan chan modules.Event
 }
@@ -56,10 +56,10 @@ func (mod *RSSBee) PollFeed(uri string, timeout int) {
 	feed := rss.New(timeout, true, mod.chanHandler, mod.itemHandler)
 
 	for {
-			if err := feed.Fetch(uri, nil); err != nil {
-				fmt.Fprintf(os.Stderr, "[e] %s: %s", uri, err)
-				return
-			}
+		if err := feed.Fetch(uri, nil); err != nil {
+			fmt.Fprintf(os.Stderr, "[e] %s: %s", uri, err)
+			return
+		}
 
 		<-time.After(time.Duration(feed.SecondsTillUpdate() * 1e9))
 	}
@@ -70,76 +70,76 @@ func (mod *RSSBee) chanHandler(feed *rss.Feed, newchannels []*rss.Channel) {
 }
 
 func (mod *RSSBee) itemHandler(feed *rss.Feed, ch *rss.Channel, newitems []*rss.Item) {
-	for i := range(newitems) {
+	for i := range newitems {
 		var links []string
 		var categories []string
 		var enclosures []string
 
-		for j := range(newitems[i].Links) {
+		for j := range newitems[i].Links {
 			links = append(links, newitems[i].Links[j].Href)
 		}
 
-		for j := range(newitems[i].Categories) {
+		for j := range newitems[i].Categories {
 			categories = append(categories, newitems[i].Categories[j].Text)
 		}
 
-		for j := range(newitems[i].Enclosures) {
+		for j := range newitems[i].Enclosures {
 			enclosures = append(enclosures, newitems[i].Enclosures[j].Url)
 		}
 
 		newitemEvent := modules.Event{
-			Bee: mod.Name(),
+			Bee:  mod.Name(),
 			Name: "newitem",
 			Options: []modules.Placeholder{
-				modules.Placeholder {
-					Name:	"title",
-					Type:	"string",
-					Value:	newitems[i].Title,
+				modules.Placeholder{
+					Name:  "title",
+					Type:  "string",
+					Value: newitems[i].Title,
 				},
 				modules.Placeholder{
-					Name:	"links",
-					Type:	"[]string",
-					Value:	links,
+					Name:  "links",
+					Type:  "[]string",
+					Value: links,
 				},
 				modules.Placeholder{
-					Name:	"description",
-					Type:	"string",
-					Value:	newitems[i].Description,
+					Name:  "description",
+					Type:  "string",
+					Value: newitems[i].Description,
 				},
 				modules.Placeholder{
-					Name:	"author",
-					Type:	"string",
-					Value:	newitems[i].Author.Name,
+					Name:  "author",
+					Type:  "string",
+					Value: newitems[i].Author.Name,
 				},
 				modules.Placeholder{
-					Name:	"categories",
-					Type:	"[]string",
-					Value:	categories,
+					Name:  "categories",
+					Type:  "[]string",
+					Value: categories,
 				},
 				modules.Placeholder{
-					Name:	"comments",
-					Type:	"string",
-					Value:	newitems[i].Comments,
+					Name:  "comments",
+					Type:  "string",
+					Value: newitems[i].Comments,
 				},
 				modules.Placeholder{
-					Name:	"enclosures",
-					Type:	"[]string",
-					Value:	enclosures,
+					Name:  "enclosures",
+					Type:  "[]string",
+					Value: enclosures,
 				},
 				modules.Placeholder{
-					Name:	"guid",
-					Type:	"string",
-					Value:	newitems[i].Guid,
+					Name:  "guid",
+					Type:  "string",
+					Value: newitems[i].Guid,
 				},
 				modules.Placeholder{
-					Name:	"pubdate",
-					Type:	"string",
-					Value:	newitems[i].PubDate,
+					Name:  "pubdate",
+					Type:  "string",
+					Value: newitems[i].PubDate,
 				},
 				modules.Placeholder{
-					Name:	"source",
-					Type:	"string",
-					Value:	newitems[i].Source.Url,
+					Name:  "source",
+					Type:  "string",
+					Value: newitems[i].Source.Url,
 				},
 			},
 		}

@@ -39,8 +39,8 @@ func (filter *EndsWithFilter) Description() string {
 
 func (filter *EndsWithFilter) Passes(data interface{}, value interface{}) bool {
 	switch v := data.(type) {
-		case string:
-			return strings.HasSuffix(v, value.(string))
+	case string:
+		return strings.HasSuffix(v, value.(string))
 		//FIXME: support maps
 	}
 
