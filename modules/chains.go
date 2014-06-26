@@ -47,7 +47,7 @@ type Chain struct {
 // Execute chains for an event we received.
 func execChains(event *Event) {
 	for _, c := range chains {
-		if c.Event.Name != event.Name || c.Event.Namespace != event.Namespace {
+		if c.Event.Name != event.Name || c.Event.Bee != event.Bee {
 			continue
 		}
 
@@ -102,13 +102,13 @@ func execChains(event *Event) {
 			}
 			if el.Action.Name != "" {
 				action := Action{
-					Namespace: el.Action.Namespace,
+					Bee: el.Action.Bee,
 					Name: el.Action.Name,
 				}
 
 				for _, opt := range el.Action.Options {
 					var value bytes.Buffer
-					tmpl, err := template.New(el.Action.Namespace + "_" + el.Action.Name + "_" + opt.Name).Parse(opt.Value.(string))
+					tmpl, err := template.New(el.Action.Bee + "_" + el.Action.Name + "_" + opt.Name).Parse(opt.Value.(string))
 					if err == nil {
 						err = tmpl.Execute(&value, m)
 					}
@@ -124,11 +124,11 @@ func execChains(event *Event) {
 					action.Options = append(action.Options, ph)
 				}
 
-				log.Println("\tExecuting action:", action.Namespace, "/", action.Name, "-", GetActionDescriptor(&action).Description)
+				log.Println("\tExecuting action:", action.Bee, "/", action.Name, "-", GetActionDescriptor(&action).Description)
 				for _, v := range action.Options {
 					log.Println("\t\tOptions:", v)
 				}
-				(*GetModule(action.Namespace)).Action(action)
+				(*GetModule(action.Bee)).Action(action)
 			}
 		}
 	}

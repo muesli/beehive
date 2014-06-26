@@ -44,10 +44,17 @@ type PlaceholderDescriptor struct {
 	Type        string
 }
 
+// A BeeOptionDescriptor shows which config values a module expects.
+type BeeOptionDescriptor struct {
+	Name        string
+	Description string
+	Type        string
+}
+
 // Returns the ActionDescriptor matching an action.
 func GetActionDescriptor(action *Action) ActionDescriptor {
-	mod := (*GetModule(action.Namespace))
-	for _, ac := range mod.Actions() {
+	factory := (*GetFactory((*GetModule(action.Bee)).Namespace()))
+	for _, ac := range factory.Actions() {
 		if ac.Name == action.Name {
 			return ac
 		}
@@ -58,8 +65,8 @@ func GetActionDescriptor(action *Action) ActionDescriptor {
 
 // Returns the EventDescriptor matching an event.
 func GetEventDescriptor(event *Event) EventDescriptor {
-	mod := (*GetModule(event.Namespace))
-	for _, ev := range mod.Events() {
+	factory := (*GetFactory((*GetModule(event.Bee)).Namespace()))
+	for _, ev := range factory.Events() {
 		if ev.Name == event.Name {
 			return ev
 		}
