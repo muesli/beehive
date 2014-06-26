@@ -25,14 +25,9 @@ Now we can build beehive:
     cd beehive
     go build
 
-To run the application you will (currently) need to specify at least a few options,
-e.g. for using the IRC-bee module:
-
-    ./beehive -irchost="some.server:6667" -ircchannel="#beehive"
-
 Run beehive -help to see a full list of options!
 
-## Configuring your chains
+## Configuration
 
 To be written by someone! :-)
 
