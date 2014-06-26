@@ -29,12 +29,10 @@ import (
 type ModuleInterface interface {
 	// Name of the module
 	Name() string
+	// Namespace of the module
+	Namespace() string
 	// Description of the module
 	Description() string
-	// Events defined by module
-	Events() []EventDescriptor
-	// Actions supported by module
-	Actions() []ActionDescriptor
 
 	// Activates the module
 	Run(eventChannel chan Event)
@@ -42,16 +40,24 @@ type ModuleInterface interface {
 	Action(action Action) []Placeholder
 }
 
+// An instance of a module is called a Bee
+type Bee struct {
+	Name string
+	Class string
+	Description string
+	Options []BeeOption
+}
+
 // An Event
 type Event struct {
-	Namespace string
+	Bee string
 	Name      string
 	Options   []Placeholder
 }
 
 // An Action
 type Action struct {
-	Namespace string
+	Bee string
 	Name      string
 	Options   []Placeholder
 }
@@ -72,6 +78,14 @@ type FilterOption struct {
 	Value interface{}
 }
 
+// A BeeOption is used to configure bees
+type BeeOptions []BeeOption
+type BeeOption struct {
+	Name  string
+	Type  string
+	Value interface{}
+}
+
 // A Placeholder used by ins & outs of a module.
 type Placeholder struct {
 	Name  string
@@ -80,10 +94,21 @@ type Placeholder struct {
 }
 
 var (
-	eventsIn                             = make(chan Event)
-	modules  map[string]*ModuleInterface = make(map[string]*ModuleInterface)
-	chains   []Chain
+	eventsIn                              = make(chan Event)
+	modules   map[string]*ModuleInterface = make(map[string]*ModuleInterface)
+	factories map[string]*ModuleFactory   = make(map[string]*ModuleFactory)
+	chains    []Chain
 )
+
+func (opts BeeOptions) GetValue(name string) interface{} {
+	for _, opt := range opts {
+		if opt.Name == name {
+			return opt.Value
+		}
+	}
+
+	return nil
+}
 
 // Handles incoming events and executes matching Chains.
 func handleEvents() {
@@ -91,7 +116,7 @@ func handleEvents() {
 		event := <-eventsIn
 
 		log.Println()
-		log.Println("Event received:", event.Namespace, "/", event.Name, "-", GetEventDescriptor(&event).Description)
+		log.Println("Event received:", event.Bee, "/", event.Name, "-", GetEventDescriptor(&event).Description)
 		for _, v := range event.Options {
 			log.Println("\tOptions:", v)
 		}
@@ -103,20 +128,7 @@ func handleEvents() {
 // Modules need to call this method to register themselves
 func RegisterModule(mod ModuleInterface) {
 	log.Println("Worker bee ready:", mod.Name(), "-", mod.Description())
-	for _, ev := range mod.Events() {
-		log.Println("\tProvides event:", ev.Name, "-", ev.Description)
-		for _, opt := range ev.Options {
-			log.Println("\t\tPlaceholder:", opt.Name, "-", opt.Description)
-		}
-	}
-	for _, ac := range mod.Actions() {
-		log.Println("\tOffers action:", ac.Name, "-", ac.Description)
-		for _, opt := range ac.Options {
-			log.Println("\t\tPlaceholder:", opt.Name, "-", opt.Description)
-		}
-	}
 
-	log.Println()
 	modules[mod.Name()] = &mod
 }
 
@@ -131,7 +143,12 @@ func GetModule(identifier string) *ModuleInterface {
 }
 
 // Starts all registered modules
-func StartModules() {
+func StartModules(bees []Bee) {
+	for _, bee := range bees {
+		mod := (*GetFactory(bee.Class)).New(bee.Name, bee.Description, bee.Options)
+		RegisterModule(mod)
+	}
+
 	for _, mod := range modules {
 		(*mod).Run(eventsIn)
 	}
