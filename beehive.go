@@ -42,30 +42,35 @@ import (
 )
 
 var (
-	config = "./beehive.conf"
+	configFile = "./beehive.conf"
 )
 
-// Loads chains from config
-func loadConfig() []modules.Chain {
-	chains := []modules.Chain{}
+type Config struct {
+	Bees   []modules.Bee
+	Chains []modules.Chain
+}
 
-	j, err := ioutil.ReadFile(config)
+// Loads chains from config
+func loadConfig() Config {
+	config := Config{}
+
+	j, err := ioutil.ReadFile(configFile)
 	if err == nil {
-		err = json.Unmarshal(j, &chains)
+		err = json.Unmarshal(j, &config)
 	}
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return chains
+	return config
 }
 
 // Saves chains to config
-func saveConfig(chains []modules.Chain) {
-	j, err := json.MarshalIndent(chains, "", "  ")
+func saveConfig(c Config) {
+	j, err := json.MarshalIndent(c, "", "  ")
 	if err == nil {
-		err = ioutil.WriteFile(config, j, 0644)
+		err = ioutil.WriteFile(configFile, j, 0644)
 	}
 
 	if err != nil {
@@ -80,15 +85,18 @@ func main() {
 	log.Println()
 	log.Println("Beehive is buzzing...")
 
+	config := loadConfig()
+
 	// Initialize modules
-	modules.StartModules()
+	modules.StartModules(config.Bees)
 	// Load chains from config
-	modules.SetChains(loadConfig())
+	modules.SetChains(config.Chains)
 
 	// Keep app alive
 	ch := make(chan bool)
 	<-ch
 
 	// Save chains to config
-	saveConfig(modules.Chains())
+	config.Chains = modules.Chains()
+	saveConfig(config)
 }
