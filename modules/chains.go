@@ -43,6 +43,84 @@ type Chain struct {
 	Elements    []ChainElement
 }
 
+func execFilter(filter Filter, opts map[string]interface{}) bool {
+	f := *filters.GetFilter(filter.Name)
+	log.Println("\tExecuting filter:", f.Name(), "-", f.Description())
+
+	for _, opt := range filter.Options {
+		log.Println("\t\tOptions:", opt)
+		origVal := opts[opt.Name]
+		cleanVal := opt.Value
+		if opt.Trimmed {
+			switch v := origVal.(type) {
+			case string:
+				origVal = strings.TrimSpace(v)
+			}
+			switch v := cleanVal.(type) {
+			case string:
+				cleanVal = strings.TrimSpace(v)
+			}
+		}
+		if opt.CaseInsensitive {
+			switch v := origVal.(type) {
+			case string:
+				origVal = strings.ToLower(v)
+			}
+			switch v := cleanVal.(type) {
+			case string:
+				cleanVal = strings.ToLower(v)
+			}
+		}
+
+		if f.Passes(origVal, cleanVal) == opt.Inverse {
+			return false
+		}
+	}
+
+	return true
+}
+
+func execAction(action Action, opts map[string]interface{}) bool {
+	a := Action{
+		Bee:  action.Bee,
+		Name: action.Name,
+	}
+
+	for _, opt := range action.Options {
+		ph := Placeholder{
+			Name:  opt.Name,
+		}
+
+		switch opt.Value.(type) {
+			case string:
+				var value bytes.Buffer
+				tmpl, err := template.New(action.Bee + "_" + action.Name + "_" + opt.Name).Parse(opt.Value.(string))
+				if err == nil {
+					err = tmpl.Execute(&value, opts)
+				}
+				if err != nil {
+					panic(err)
+				}
+
+				ph.Type = "string" //FIXME
+				ph.Value = value.String()
+
+			default:
+				ph.Type = opt.Type
+				ph.Value = opt.Value
+		}
+		a.Options = append(a.Options, ph)
+	}
+
+	log.Println("\tExecuting action:", a.Bee, "/", a.Name, "-", GetActionDescriptor(&a).Description)
+	for _, v := range a.Options {
+		log.Println("\t\tOptions:", v)
+	}
+	(*GetModule(a.Bee)).Action(a)
+
+	return true
+}
+
 // Execute chains for an event we received.
 func execChains(event *Event) {
 	for _, c := range chains {
@@ -58,84 +136,15 @@ func execChains(event *Event) {
 			}
 
 			if el.Filter.Name != "" {
-				filter := *filters.GetFilter(el.Filter.Name)
-				passes := true
-
-				log.Println("\tExecuting filter:", filter.Name(), "-", filter.Description())
-				for _, opt := range el.Filter.Options {
-					log.Println("\t\tOptions:", opt)
-					origVal := m[opt.Name]
-					cleanVal := opt.Value
-					if opt.Trimmed {
-						switch v := origVal.(type) {
-						case string:
-							origVal = strings.TrimSpace(v)
-						}
-						switch v := cleanVal.(type) {
-						case string:
-							cleanVal = strings.TrimSpace(v)
-						}
-					}
-					if opt.CaseInsensitive {
-						switch v := origVal.(type) {
-						case string:
-							origVal = strings.ToLower(v)
-						}
-						switch v := cleanVal.(type) {
-						case string:
-							cleanVal = strings.ToLower(v)
-						}
-					}
-
-					if filter.Passes(origVal, cleanVal) == opt.Inverse {
-						log.Println("\t\tDid not pass filter!")
-						passes = false
-						break
-					}
-				}
-
-				if !passes {
+				if execFilter(el.Filter, m) {
+					log.Println("\t\tPassed filter!")
+				} else {
+					log.Println("\t\tDid not pass filter!")
 					break
 				}
-				log.Println("\t\tPassed filter!")
 			}
 			if el.Action.Name != "" {
-				action := Action{
-					Bee:  el.Action.Bee,
-					Name: el.Action.Name,
-				}
-
-				for _, opt := range el.Action.Options {
-					ph := Placeholder{
-						Name:  opt.Name,
-					}
-
-					switch opt.Value.(type) {
-						case string:
-							var value bytes.Buffer
-							tmpl, err := template.New(el.Action.Bee + "_" + el.Action.Name + "_" + opt.Name).Parse(opt.Value.(string))
-							if err == nil {
-								err = tmpl.Execute(&value, m)
-							}
-							if err != nil {
-								panic(err)
-							}
-
-							ph.Type = "string" //FIXME
-							ph.Value = value.String()
-
-						default:
-							ph.Type = opt.Type
-							ph.Value = opt.Value
-					}
-					action.Options = append(action.Options, ph)
-				}
-
-				log.Println("\tExecuting action:", action.Bee, "/", action.Name, "-", GetActionDescriptor(&action).Description)
-				for _, v := range action.Options {
-					log.Println("\t\tOptions:", v)
-				}
-				(*GetModule(action.Bee)).Action(action)
+				execAction(el.Action, m)
 			}
 		}
 	}
