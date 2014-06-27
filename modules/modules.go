@@ -150,6 +150,22 @@ func GetModule(identifier string) *ModuleInterface {
 	return nil
 }
 
+func startModule(mod *ModuleInterface, fatals int) {
+	if fatals >= 3 {
+		log.Println("Terminating evil bee", (*mod).Name(), "after", fatals, "failed tries!")
+		return
+	}
+
+	defer func(mod *ModuleInterface) {
+		if e := recover(); e != nil {
+			log.Println("Fatal bee event:", e, fatals)
+			startModule(mod, fatals + 1)
+		}
+	}(mod)
+
+	(*mod).Run(eventsIn)
+}
+
 // Starts all registered modules
 func StartModules(bees []Bee) {
 	for _, bee := range bees {
@@ -157,8 +173,10 @@ func StartModules(bees []Bee) {
 		RegisterModule(mod)
 	}
 
-	for _, mod := range modules {
-		(*mod).Run(eventsIn)
+	for _, m := range modules {
+		go func(mod *ModuleInterface) {
+			startModule(mod, 0)
+		}(m)
 	}
 }
 
@@ -174,6 +192,5 @@ func SetChains(cs []Chain) {
 
 func init() {
 	log.Println("Waking the bees...")
-
 	go handleEvents()
 }
