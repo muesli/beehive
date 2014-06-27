@@ -90,27 +90,26 @@ func execAction(action Action, opts map[string]interface{}) bool {
 
 	for _, opt := range action.Options {
 		ph := Placeholder{
-			Name:  opt.Name,
+			Name: opt.Name,
 		}
 
 		switch opt.Value.(type) {
-			case string:
-				var value bytes.Buffer
-				tmpl, err := template.New(action.Bee + "_" + action.Name + "_" + opt.Name).Parse(opt.Value.(string))
-				if err == nil {
-					err = tmpl.Execute(&value, opts)
-				}
-				if err != nil {
-					panic(err)
-				}
+		case string:
+			var value bytes.Buffer
+			tmpl, err := template.New(action.Bee + "_" + action.Name + "_" + opt.Name).Parse(opt.Value.(string))
+			if err == nil {
+				err = tmpl.Execute(&value, opts)
+			}
+			if err != nil {
+				panic(err)
+			}
 
+			ph.Type = "string"
+			ph.Value = value.String()
 
-				ph.Type = "string"
-				ph.Value = value.String()
-
-			default:
-				ph.Type = opt.Type
-				ph.Value = opt.Value
+		default:
+			ph.Type = opt.Type
+			ph.Value = opt.Value
 		}
 		a.Options = append(a.Options, ph)
 	}

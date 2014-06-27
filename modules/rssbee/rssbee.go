@@ -156,7 +156,7 @@ func (mod *RSSBee) itemHandler(feed *rss.Feed, ch *rss.Channel, newitems []*rss.
 func (mod *RSSBee) Run(cin chan modules.Event) {
 	mod.eventChan = cin
 
-	go func(){
+	go func() {
 		time.Sleep(10 * time.Second)
 		mod.PollFeed(mod.url, 5)
 	}()

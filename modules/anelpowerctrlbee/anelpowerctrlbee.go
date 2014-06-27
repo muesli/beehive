@@ -22,11 +22,11 @@
 package anelpowerctrlbee
 
 import (
+	"github.com/muesli/beehive/modules"
 	"log"
 	"net"
 	"strconv"
 	"time"
-	"github.com/muesli/beehive/modules"
 )
 
 type AnelPowerCtrlBee struct {
@@ -34,9 +34,9 @@ type AnelPowerCtrlBee struct {
 	namespace   string
 	description string
 
-	addr        string
-	user        string
-	password    string
+	addr     string
+	user     string
+	password string
 }
 
 func (mod *AnelPowerCtrlBee) Name() string {
@@ -61,7 +61,7 @@ func (mod *AnelPowerCtrlBee) anelSwitch(socket int, state bool) bool {
 	}
 	conn.SetDeadline(time.Now().Add(3 * time.Second))
 
-	addr, err := net.ResolveUDPAddr("udp", mod.addr + ":75")
+	addr, err := net.ResolveUDPAddr("udp", mod.addr+":75")
 	if err != nil {
 		log.Fatal(err)
 	}
