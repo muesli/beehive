@@ -104,7 +104,8 @@ func execAction(action Action, opts map[string]interface{}) bool {
 					panic(err)
 				}
 
-				ph.Type = "string" //FIXME
+
+				ph.Type = "string"
 				ph.Value = value.String()
 
 			default:
