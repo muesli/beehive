@@ -35,6 +35,7 @@ type RSSBee struct {
 	name        string
 	namespace   string
 	description string
+
 	url         string
 
 	eventChan chan modules.Event

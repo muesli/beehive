@@ -33,6 +33,7 @@ type WebBee struct {
 	name        string
 	namespace   string
 	description string
+
 	addr        string
 
 	eventChan chan modules.Event
