@@ -43,6 +43,7 @@ type Chain struct {
 	Elements    []ChainElement
 }
 
+// Execute a filter. Returns whether the filter passed or not.
 func execFilter(filter Filter, opts map[string]interface{}) bool {
 	f := *filters.GetFilter(filter.Name)
 	log.Println("\tExecuting filter:", f.Name(), "-", f.Description())
@@ -80,6 +81,7 @@ func execFilter(filter Filter, opts map[string]interface{}) bool {
 	return true
 }
 
+// Execute an action and map its ins & outs.
 func execAction(action Action, opts map[string]interface{}) bool {
 	a := Action{
 		Bee:  action.Bee,
