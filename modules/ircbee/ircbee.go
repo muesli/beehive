@@ -64,11 +64,12 @@ func (mod *IrcBee) Description() string {
 
 func (mod *IrcBee) Action(action modules.Action) []modules.Placeholder {
 	outs := []modules.Placeholder{}
-	tos := []string{}
-	text := ""
 
 	switch action.Name {
 	case "send":
+		tos := []string{}
+		text := ""
+
 		for _, opt := range action.Options {
 			if opt.Name == "channel" {
 				tos = append(tos, opt.Value.(string))
@@ -77,6 +78,23 @@ func (mod *IrcBee) Action(action modules.Action) []modules.Placeholder {
 				text = opt.Value.(string)
 			}
 		}
+
+		for _, recv := range tos {
+			if recv == "*" {
+				// special: send to all joined channels
+				for _, to := range mod.channels {
+					mod.client.Privmsg(to, text)
+				}
+			} else {
+				// needs stripping hostname when sending to user!host
+				if strings.Index(recv, "!") > 0 {
+					recv = recv[0:strings.Index(recv, "!")]
+				}
+
+				mod.client.Privmsg(recv, text)
+			}
+		}
+
 	case "join":
 		for _, opt := range action.Options {
 			if opt.Name == "channel" {
@@ -92,22 +110,6 @@ func (mod *IrcBee) Action(action modules.Action) []modules.Placeholder {
 	default:
 		// unknown action
 		return outs
-	}
-
-	for _, recv := range tos {
-		if recv == "*" {
-			// special: send to all joined channels
-			for _, to := range mod.channels {
-				mod.client.Privmsg(to, text)
-			}
-		} else {
-			// needs stripping hostname when sending to user!host
-			if strings.Index(recv, "!") > 0 {
-				recv = recv[0:strings.Index(recv, "!")]
-			}
-
-			mod.client.Privmsg(recv, text)
-		}
 	}
 
 	return outs
