@@ -121,7 +121,15 @@ func handleEvents() {
 			log.Println("\tOptions:", v)
 		}
 
-		execChains(&event)
+		go func() {
+			defer func() {
+				if e := recover(); e != nil {
+					log.Println("Fatal chain event:", e)
+				}
+			}()
+
+			execChains(&event)
+		}()
 	}
 }
 
