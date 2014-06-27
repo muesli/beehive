@@ -54,16 +54,34 @@ func (mod *JabberBee) Description() string {
 }
 
 func (mod *JabberBee) Action(action modules.Action) []modules.Placeholder {
-	return []modules.Placeholder{}
+	outs := []modules.Placeholder{}
+
+	switch action.Name {
+	case "send":
+		chat := xmpp.Chat{Type: "chat"}
+		for _, opt := range action.Options {
+			if opt.Name == "user" {
+				chat.Remote = opt.Value.(string)
+			}
+			if opt.Name == "text" {
+				chat.Text = opt.Value.(string)
+			}
+		}
+
+		mod.client.Send(chat)
+
+	default:
+		// unknown action
+		return outs
+	}
+
+	return outs
 }
 
 func (mod *JabberBee) Run(eventChan chan modules.Event) {
 	if len(mod.server) == 0 {
 		return
 	}
-
-	var talk *xmpp.Client
-	var err error
 
 	options := xmpp.Options{
 		Host:     mod.server,
@@ -72,14 +90,15 @@ func (mod *JabberBee) Run(eventChan chan modules.Event) {
 		NoTLS:    mod.notls,
 		Debug:    false,
 	}
-	talk, err = options.NewClient()
+	var err error
+	mod.client, err = options.NewClient()
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	go func() {
 		for {
-			chat, err := talk.Recv()
+			chat, err := mod.client.Recv()
 			if err != nil {
 				log.Fatal(err)
 			}
