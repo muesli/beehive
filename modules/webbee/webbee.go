@@ -53,7 +53,7 @@ func (mod *WebBee) Description() string {
 
 func (mod *WebBee) Run(cin chan modules.Event) {
 	mod.eventChan = cin
-	go web.Run(mod.addr)
+	web.Run(mod.addr)
 }
 
 func (mod *WebBee) Action(action modules.Action) []modules.Placeholder {

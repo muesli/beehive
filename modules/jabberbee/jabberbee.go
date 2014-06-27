@@ -83,6 +83,7 @@ func (mod *JabberBee) Run(eventChan chan modules.Event) {
 		return
 	}
 
+	var err error
 	options := xmpp.Options{
 		Host:     mod.server,
 		User:     mod.user,
@@ -90,45 +91,43 @@ func (mod *JabberBee) Run(eventChan chan modules.Event) {
 		NoTLS:    mod.notls,
 		Debug:    false,
 	}
-	var err error
+
 	mod.client, err = options.NewClient()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	go func() {
-		for {
-			chat, err := mod.client.Recv()
-			if err != nil {
-				log.Fatal(err)
-			}
-			switch v := chat.(type) {
-			case xmpp.Chat:
-				if len(v.Text) > 0 {
-					text := strings.TrimSpace(v.Text)
-
-					ev := modules.Event{
-						Bee:  mod.Name(),
-						Name: "message",
-						Options: []modules.Placeholder{
-							modules.Placeholder{
-								Name:  "user",
-								Type:  "string",
-								Value: v.Remote,
-							},
-							modules.Placeholder{
-								Name:  "text",
-								Type:  "string",
-								Value: text,
-							},
-						},
-					}
-					eventChan <- ev
-				}
-
-			case xmpp.Presence:
-				//				fmt.Println(v.From, v.Show)
-			}
+	for {
+		chat, err := mod.client.Recv()
+		if err != nil {
+			log.Fatal(err)
 		}
-	}()
+		switch v := chat.(type) {
+		case xmpp.Chat:
+			if len(v.Text) > 0 {
+				text := strings.TrimSpace(v.Text)
+
+				ev := modules.Event{
+					Bee:  mod.Name(),
+					Name: "message",
+					Options: []modules.Placeholder{
+						modules.Placeholder{
+							Name:  "user",
+							Type:  "string",
+							Value: v.Remote,
+						},
+						modules.Placeholder{
+							Name:  "text",
+							Type:  "string",
+							Value: text,
+						},
+					},
+				}
+				eventChan <- ev
+			}
+
+		case xmpp.Presence:
+			//				fmt.Println(v.From, v.Show)
+		}
+	}
 }

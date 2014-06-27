@@ -107,6 +107,7 @@ func (mod *IrcBee) Action(action modules.Action) []modules.Placeholder {
 				mod.Part(opt.Value.(string))
 			}
 		}
+
 	default:
 		// unknown action
 		return outs
@@ -195,15 +196,13 @@ func (mod *IrcBee) Run(eventChan chan modules.Event) {
 	})
 
 	// loop on IRC dis/connected events
-	go func() {
-		for {
-			log.Println("Connecting to IRC:", mod.Server)
-			err := mod.client.Connect(mod.Server, mod.Password)
-			if err != nil {
-				log.Println("Failed to connect to IRC:", mod.Server)
-				log.Println(err)
-				continue
-			}
+	for {
+		log.Println("Connecting to IRC:", mod.Server)
+		err := mod.client.Connect(mod.Server, mod.Password)
+		if err != nil {
+			log.Println("Failed to connect to IRC:", mod.Server)
+			log.Println(err)
+		} else {
 			for {
 				status := <-mod.connectedState
 				if status {
@@ -221,7 +220,7 @@ func (mod *IrcBee) Run(eventChan chan modules.Event) {
 					break
 				}
 			}
-			time.Sleep(5 * time.Second)
 		}
-	}()
+		time.Sleep(5 * time.Second)
+	}
 }
