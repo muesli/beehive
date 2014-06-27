@@ -96,7 +96,17 @@ func execAction(action Action, opts map[string]interface{}) bool {
 		switch opt.Value.(type) {
 		case string:
 			var value bytes.Buffer
-			tmpl, err := template.New(action.Bee + "_" + action.Name + "_" + opt.Name).Parse(opt.Value.(string))
+
+			funcMap := template.FuncMap{
+				"Left": func(values...interface{}) string {
+					return values[0].(string)[:values[1].(int)]
+				},
+				"Right": func(values...interface{}) string {
+					return values[0].(string)[values[1].(int):]
+				},
+			}
+
+			tmpl, err := template.New(action.Bee + "_" + action.Name + "_" + opt.Name).Funcs(funcMap).Parse(opt.Value.(string))
 			if err == nil {
 				err = tmpl.Execute(&value, opts)
 			}
