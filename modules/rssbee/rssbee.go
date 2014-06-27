@@ -154,9 +154,12 @@ func (mod *RSSBee) itemHandler(feed *rss.Feed, ch *rss.Channel, newitems []*rss.
 }
 
 func (mod *RSSBee) Run(cin chan modules.Event) {
-	time.Sleep(10 * time.Second)
 	mod.eventChan = cin
-	go mod.PollFeed(mod.url, 5)
+
+	go func(){
+		time.Sleep(10 * time.Second)
+		mod.PollFeed(mod.url, 5)
+	}()
 }
 
 func (mod *RSSBee) Action(action modules.Action) []modules.Placeholder {
