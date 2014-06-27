@@ -53,7 +53,7 @@ func (mod *RSSBee) Description() string {
 	return mod.description
 }
 
-func (mod *RSSBee) PollFeed(uri string, timeout int) {
+func (mod *RSSBee) pollFeed(uri string, timeout int) {
 	feed := rss.New(timeout, true, mod.chanHandler, mod.itemHandler)
 
 	for {
@@ -158,7 +158,7 @@ func (mod *RSSBee) Run(cin chan modules.Event) {
 	mod.eventChan = cin
 
 	time.Sleep(10 * time.Second)
-	mod.PollFeed(mod.url, 5)
+	mod.pollFeed(mod.url, 5)
 }
 
 func (mod *RSSBee) Action(action modules.Action) []modules.Placeholder {
