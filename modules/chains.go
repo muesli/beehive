@@ -106,19 +106,27 @@ func execChains(event *Event) {
 				}
 
 				for _, opt := range el.Action.Options {
-					var value bytes.Buffer
-					tmpl, err := template.New(el.Action.Bee + "_" + el.Action.Name + "_" + opt.Name).Parse(opt.Value.(string))
-					if err == nil {
-						err = tmpl.Execute(&value, m)
-					}
-					if err != nil {
-						panic(err)
-					}
-
 					ph := Placeholder{
 						Name:  opt.Name,
-						Type:  "string", //FIXME
-						Value: value.String(),
+					}
+
+					switch opt.Value.(type) {
+						case string:
+							var value bytes.Buffer
+							tmpl, err := template.New(el.Action.Bee + "_" + el.Action.Name + "_" + opt.Name).Parse(opt.Value.(string))
+							if err == nil {
+								err = tmpl.Execute(&value, m)
+							}
+							if err != nil {
+								panic(err)
+							}
+
+							ph.Type = "string" //FIXME
+							ph.Value = value.String()
+
+						default:
+							ph.Type = opt.Type
+							ph.Value = opt.Value
 					}
 					action.Options = append(action.Options, ph)
 				}
