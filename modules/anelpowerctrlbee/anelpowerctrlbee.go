@@ -22,6 +22,10 @@
 package anelpowerctrlbee
 
 import (
+	"log"
+	"net"
+	"strconv"
+	"time"
 	"github.com/muesli/beehive/modules"
 )
 
@@ -33,8 +37,6 @@ type AnelPowerCtrlBee struct {
 	addr        string
 	user        string
 	password    string
-
-	eventChan chan modules.Event
 }
 
 func (mod *AnelPowerCtrlBee) Name() string {
@@ -50,10 +52,57 @@ func (mod *AnelPowerCtrlBee) Description() string {
 }
 
 func (mod *AnelPowerCtrlBee) Run(cin chan modules.Event) {
-	mod.eventChan = cin
+}
+
+func (mod *AnelPowerCtrlBee) anelSwitch(socket int, state bool) bool {
+	conn, err := net.ListenUDP("udp", &net.UDPAddr{Port: 0})
+	if err != nil {
+		log.Fatal(err)
+	}
+	conn.SetDeadline(time.Now().Add(3 * time.Second))
+
+	addr, err := net.ResolveUDPAddr("udp", mod.addr + ":75")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	stateToken := "off"
+	if state {
+		stateToken = "on"
+	}
+	b := "Sw_" + stateToken + strconv.Itoa(socket) + mod.user + mod.password
+
+	_, err = conn.WriteToUDP([]byte(b), addr)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return true
 }
 
 func (mod *AnelPowerCtrlBee) Action(action modules.Action) []modules.Placeholder {
 	outs := []modules.Placeholder{}
+
+	switch action.Name {
+	case "switch":
+		socket := 0
+		state := false
+
+		for _, opt := range action.Options {
+			if opt.Name == "socket" {
+				socket = int(opt.Value.(float64))
+			}
+			if opt.Name == "state" {
+				state = opt.Value.(bool)
+			}
+		}
+
+		mod.anelSwitch(socket, state)
+
+	default:
+		// unknown action
+		return outs
+	}
+
 	return outs
 }

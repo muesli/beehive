@@ -75,7 +75,25 @@ func (factory *AnelPowerCtrlBeeFactory) Events() []modules.EventDescriptor {
 }
 
 func (factory *AnelPowerCtrlBeeFactory) Actions() []modules.ActionDescriptor {
-	actions := []modules.ActionDescriptor{}
+	actions := []modules.ActionDescriptor{
+		modules.ActionDescriptor{
+			Namespace:   factory.Name(),
+			Name:        "switch",
+			Description: "Switches a socket on or off",
+			Options: []modules.PlaceholderDescriptor{
+				modules.PlaceholderDescriptor{
+					Name:        "socket",
+					Description: "Which socket to switch",
+					Type:        "int",
+				},
+				modules.PlaceholderDescriptor{
+					Name:        "state",
+					Description: "True to activate the socket, false to cut the power",
+					Type:        "bool",
+				},
+			},
+		},
+	}
 	return actions
 }
 
