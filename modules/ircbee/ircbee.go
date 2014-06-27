@@ -77,6 +77,18 @@ func (mod *IrcBee) Action(action modules.Action) []modules.Placeholder {
 				text = opt.Value.(string)
 			}
 		}
+	case "join":
+		for _, opt := range action.Options {
+			if opt.Name == "channel" {
+				mod.Join(opt.Value.(string))
+			}
+		}
+	case "part":
+		for _, opt := range action.Options {
+			if opt.Name == "channel" {
+				mod.Part(opt.Value.(string))
+			}
+		}
 	default:
 		// unknown action
 		return outs
