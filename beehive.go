@@ -38,6 +38,7 @@ import (
 	_ "github.com/muesli/beehive/modules/anelpowerctrlbee"
 	_ "github.com/muesli/beehive/modules/ircbee"
 	_ "github.com/muesli/beehive/modules/jabberbee"
+    _ "github.com/muesli/beehive/modules/jenkinsbee"
 	_ "github.com/muesli/beehive/modules/nagiosbee"
 	_ "github.com/muesli/beehive/modules/rssbee"
 	_ "github.com/muesli/beehive/modules/webbee"
