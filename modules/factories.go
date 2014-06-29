@@ -24,6 +24,24 @@ import (
 	"log"
 )
 
+type Module struct {
+	ModName        string
+	ModNamespace   string
+	ModDescription string
+}
+
+func (mod *Module) Name() string {
+	return mod.ModName
+}
+
+func (mod *Module) Namespace() string {
+	return mod.ModNamespace
+}
+
+func (mod *Module) Description() string {
+	return mod.ModDescription
+}
+
 type ModuleFactory interface {
 	// Name of the module
 	Name() string

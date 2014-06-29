@@ -31,11 +31,10 @@ type RSSBeeFactory struct {
 
 func (factory *RSSBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
 	bee := RSSBee{
-		name:        name,
-		namespace:   factory.Name(),
 		url:         options.GetValue("url").(string),
-		description: description,
 	}
+
+	bee.Module = modules.Module{name, factory.Name(), description}
 	return &bee
 }
 

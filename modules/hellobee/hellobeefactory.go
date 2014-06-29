@@ -30,11 +30,7 @@ type HelloBeeFactory struct {
 // Interface impl
 
 func (factory *HelloBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
-	bee := HelloBee{
-		name:        name,
-		namespace:   factory.Name(),
-		description: description,
-	}
+	bee := HelloBee{modules.Module{name, factory.Name(), description}}
 	return &bee
 }
 

@@ -26,21 +26,7 @@ import (
 )
 
 type HelloBee struct {
-	name        string
-	namespace   string
-	description string
-}
-
-func (mod *HelloBee) Name() string {
-	return mod.name
-}
-
-func (mod *HelloBee) Namespace() string {
-	return mod.namespace
-}
-
-func (mod *HelloBee) Description() string {
-	return mod.description
+	modules.Module
 }
 
 func (mod *HelloBee) Run(eventChan chan modules.Event) {

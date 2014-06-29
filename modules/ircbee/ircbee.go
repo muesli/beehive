@@ -30,9 +30,7 @@ import (
 )
 
 type IrcBee struct {
-	name        string
-	namespace   string
-	description string
+	modules.Module
 
 	// channel signaling irc connection status
 	connectedState chan bool
@@ -49,18 +47,6 @@ type IrcBee struct {
 }
 
 // Interface impl
-
-func (mod *IrcBee) Name() string {
-	return mod.name
-}
-
-func (mod *IrcBee) Namespace() string {
-	return mod.namespace
-}
-
-func (mod *IrcBee) Description() string {
-	return mod.description
-}
 
 func (mod *IrcBee) Action(action modules.Action) []modules.Placeholder {
 	outs := []modules.Placeholder{}

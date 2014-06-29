@@ -31,15 +31,14 @@ type IrcBeeFactory struct {
 
 func (factory *IrcBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
 	bee := IrcBee{
-		name:        name,
-		namespace:   factory.Name(),
-		description: description,
 		Server:      options.GetValue("server").(string),
 		Nick:        options.GetValue("nick").(string),
 		//		Password: options.GetValue("password").(string),
 		Channel: options.GetValue("channel").(string),
 		//		SSL: options.GetValue("ssl").(bool),
 	}
+
+	bee.Module = modules.Module{name, factory.Name(), description}
 	return &bee
 }
 

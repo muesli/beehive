@@ -31,14 +31,13 @@ type JabberBeeFactory struct {
 
 func (factory *JabberBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
 	bee := JabberBee{
-		name:        name,
-		namespace:   factory.Name(),
-		description: description,
 		server:      options.GetValue("server").(string),
 		user:        options.GetValue("user").(string),
 		password:    options.GetValue("password").(string),
 		notls:       options.GetValue("notls").(bool),
 	}
+
+	bee.Module = modules.Module{name, factory.Name(), description}
 	return &bee
 }
 

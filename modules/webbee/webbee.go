@@ -30,25 +30,11 @@ import (
 )
 
 type WebBee struct {
-	name        string
-	namespace   string
-	description string
+	modules.Module
 
 	addr        string
 
 	eventChan chan modules.Event
-}
-
-func (mod *WebBee) Name() string {
-	return mod.name
-}
-
-func (mod *WebBee) Namespace() string {
-	return mod.namespace
-}
-
-func (mod *WebBee) Description() string {
-	return mod.description
 }
 
 func (mod *WebBee) Run(cin chan modules.Event) {

@@ -29,9 +29,7 @@ import (
 )
 
 type JabberBee struct {
-	name        string
-	namespace   string
-	description string
+	modules.Module
 
 	client *xmpp.Client
 
@@ -39,18 +37,6 @@ type JabberBee struct {
 	user     string
 	password string
 	notls    bool
-}
-
-func (mod *JabberBee) Name() string {
-	return mod.name
-}
-
-func (mod *JabberBee) Namespace() string {
-	return mod.namespace
-}
-
-func (mod *JabberBee) Description() string {
-	return mod.description
 }
 
 func (mod *JabberBee) Action(action modules.Action) []modules.Placeholder {

@@ -32,25 +32,11 @@ import (
 )
 
 type RSSBee struct {
-	name        string
-	namespace   string
-	description string
+	modules.Module
 
 	url         string
 
 	eventChan chan modules.Event
-}
-
-func (mod *RSSBee) Name() string {
-	return mod.name
-}
-
-func (mod *RSSBee) Namespace() string {
-	return mod.namespace
-}
-
-func (mod *RSSBee) Description() string {
-	return mod.description
 }
 
 func (mod *RSSBee) pollFeed(uri string, timeout int) {
