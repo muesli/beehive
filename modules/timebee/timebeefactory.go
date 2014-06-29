@@ -22,14 +22,13 @@ package timebee
 
 import (
 	"github.com/muesli/beehive/modules"
-	"time"
 )
 
 type TimeBeeFactory struct {}
 
 func (factory *TimeBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
 	bee := TimeBee{
-		time: time.Parse(options.GetValue("beeTime").(string))
+		time: options.GetValue("beeTime").(string),
 	}
 	bee.Module = modules.Module{name, factory.Name(), description}
 	return &bee
@@ -46,10 +45,10 @@ func (factory *TimeBeeFactory) Description() string {
 func (factory *TimeBeeFactory) Options() []modules.BeeOptionDescriptor {
 	opts := []modules.BeeOptionDescriptor{
 		modules.BeeOptionDescriptor{
-			Name:		"beetime",
-			Description:	"The time when the event triggers"
-			Type:		"string"
-		}
+			Name:		"beeTime",
+			Description:	"The time when the event triggers",
+			Type:		"string",
+		},
 	}
 	return opts
 }
@@ -57,18 +56,18 @@ func (factory *TimeBeeFactory) Options() []modules.BeeOptionDescriptor {
 func (factory *TimeBeeFactory) Events() []modules.EventDescriptor {
 	events := []modules.EventDescriptor{
 		modules.EventDescriptor{
-			Namespace:	factory.Name()
+			Namespace:	factory.Name(),
 			Name:		"time_event",
 			Description:	"The time has come ...",
-			Options: []modules.PlaceholderDescriptor{}
-			}
+			Options: []modules.PlaceholderDescriptor{},
+			},
 		}
 	return events
 }
 
 func (factory *TimeBeeFactory) Actions() []modules.ActionDescriptor {
-	actions := []modules.ActionDescriptor{}
-	return actions
+        actions := []modules.ActionDescriptor{}
+        return actions
 }
 
 func init() {

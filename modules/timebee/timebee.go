@@ -25,31 +25,47 @@ package timebee
 import (
 	"github.com/muesli/beehive/modules"
 	"time"
+	"fmt"
 )
 
 type TimeBee struct {
 	modules.Module
 
-	time Time
-
+	time string
+	parsedtime time.Time
+	parsererror error
 	eventChan chan modules.Event
 }
 
 func (mod *TimeBee) Timer() {
-	t := time.Now()
-	if t == mod.time {
+	/*t := time.Now()
+	if t == mod.parsedtime {
 		event := modules.Event{
-			Bee: mod.Name()
+			Bee: mod.Name(),
 			Name: "time_event",
-			Options: []modules.Placeholder{}
 		}
 		mod.eventChan <- event
+	}*/
+	event := modules.Event{
+		Bee: mod.Name(),
+		Name: "time_event",
 	}
+	mod.eventChan <- event
+	fmt.Println("event triggered")
 }
 
+func (mod *TimeBee) Action(action modules.Action) []modules.Placeholder {
+        return []modules.Placeholder{}
+}
+
+
 func (mod *TimeBee) Run(eventChan chan modules.Event) {
+	mod.eventChan = eventChan
+	const longForm = "Jan 2, 2006 at 3:04pm (MST)"
+	mod.parsedtime, mod.parsererror = time.Parse(longForm, mod.time)
+	mod.parsedtime = time.Now()
 	for {
-		mod.Timer(t)
-		time.Sleep(1 * time.Second)
+		mod.Timer()
+		time.Sleep(10 * time.Second)
 	}
-)
+}
