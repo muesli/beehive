@@ -28,13 +28,11 @@ type NagiosBeeFactory struct{}
 
 func (factory *NagiosBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
 	bee := NagiosBee{
-		name:        name,
-		namespace:   factory.Name(),
 		url:         options.GetValue("url").(string),
 		user:        options.GetValue("user").(string),
 		password:    options.GetValue("password").(string),
-		description: description,
 	}
+    bee.Module = modules.Module{name, factory.Name(), description}
 	return &bee
 }
 
@@ -75,7 +73,7 @@ func (factory *NagiosBeeFactory) Events() []modules.EventDescriptor {
 			Description: "The status of a Service has changed",
 			Options: []modules.PlaceholderDescriptor{
 				modules.PlaceholderDescriptor{
-					Name:        "server",
+					Name:        "host",
 					Description: "Name of the system the changed server resides on",
 					Type:        "string",
 				},

@@ -40,10 +40,7 @@ import (
 )
 
 type NagiosBee struct {
-	name        string
-	namespace   string
-	description string
-
+    modules.Module
 	url      string
 	user     string
 	password string
@@ -64,9 +61,6 @@ type service struct {
 	plugin_output       string
 }
 
-func (mod *NagiosBee) Name() string {
-	return mod.name
-}
 
 func (mod *NagiosBee) Action(action modules.Action) []modules.Placeholder {
 	return []modules.Placeholder{}
@@ -86,7 +80,33 @@ func (mod *NagiosBee) Run(cin chan modules.Event) {
 
 				if s.current_state != oldService.current_state {
 					fmt.Println("statuschange")
-
+                    event := modules.Event{
+                        Bee: mod.Name(),
+                        Name: "statuschange",
+                        Options: []modules.Placeholder {
+                            modules.Placeholder{
+                                Name:   "host",
+                                Type:   "string",
+                                Value:  s.host_name,
+                            },
+                            modules.Placeholder{
+                                Name:   "service",
+                                Type:   "string",
+                                Value:  s.service_description,
+                            },
+                            modules.Placeholder{
+                                Name:   "message",
+                                Type:   "string",
+                                Value:  s.plugin_output,
+                            },
+                            modules.Placeholder{
+                                Name:  "status",
+                                Type:   "string",
+                                Value:  s.current_state,
+                            },
+                        },
+                    }
+                    mod.eventChan <- event
 				}
 				if s.current_state != s.last_hard_state {
 					fmt.Println("hardstate_changed")
@@ -97,12 +117,4 @@ func (mod *NagiosBee) Run(cin chan modules.Event) {
 		}
 	}
 	return
-}
-
-func (mod *NagiosBee) Namespace() string {
-	return mod.namespace
-}
-
-func (mod *NagiosBee) Description() string {
-	return mod.description
 }
