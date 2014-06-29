@@ -33,14 +33,15 @@ package nagiosbee
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/muesli/beehive/modules"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"time"
 )
 
 type NagiosBee struct {
-    modules.Module
+	modules.Module
 	url      string
 	user     string
 	password string
@@ -50,71 +51,107 @@ type NagiosBee struct {
 }
 
 type report struct {
-	services map[string]map[string]service // services[hostname][servicename]
+	Services map[string]map[string]service `json:"services"` // services[hostname][servicename]
 }
 
 type service struct {
-	host_name           string
-	service_description string
-	current_state       string
-	last_hard_state     string
-	plugin_output       string
+	Host_name           string `json:"host_name"`
+	Service_description string `json:"service_description"`
+	Current_state       string `json:"current_state"`
+	Last_hard_state     string `json:"last_hard_state"`
+	Plugin_output       string `json:"plugin_output"`
 }
-
 
 func (mod *NagiosBee) Action(action modules.Action) []modules.Placeholder {
 	return []modules.Placeholder{}
 }
 
+func (mod *NagiosBee) announceStatuschange(s service) {
+	event := modules.Event{
+		Bee:  mod.Name(),
+		Name: "statuschange",
+		Options: []modules.Placeholder{
+			modules.Placeholder{
+				Name:  "host",
+				Type:  "string",
+				Value: s.Host_name,
+			},
+			modules.Placeholder{
+				Name:  "service",
+				Type:  "string",
+				Value: s.Service_description,
+			},
+			modules.Placeholder{
+				Name:  "message",
+				Type:  "string",
+				Value: s.Plugin_output,
+			},
+			modules.Placeholder{
+				Name:  "status",
+				Type:  "string",
+				Value: s.Current_state,
+			},
+		},
+	}
+	mod.eventChan <- event
+}
+
 func (mod *NagiosBee) Run(cin chan modules.Event) {
+    mod.eventChan = cin
+	client := &http.Client{}
 	for {
-		resp, _ := http.Get(mod.url)
-		body, _ := ioutil.ReadAll(resp.Body)
-		rep := new(report)
-		json.Unmarshal(body, report{})
-
-		var oldService service
-		for hn, mp := range rep.services {
-			for sn, s := range mp {
-				oldService = mod.services[hn][sn]
-
-				if s.current_state != oldService.current_state {
-					fmt.Println("statuschange")
-                    event := modules.Event{
-                        Bee: mod.Name(),
-                        Name: "statuschange",
-                        Options: []modules.Placeholder {
-                            modules.Placeholder{
-                                Name:   "host",
-                                Type:   "string",
-                                Value:  s.host_name,
-                            },
-                            modules.Placeholder{
-                                Name:   "service",
-                                Type:   "string",
-                                Value:  s.service_description,
-                            },
-                            modules.Placeholder{
-                                Name:   "message",
-                                Type:   "string",
-                                Value:  s.plugin_output,
-                            },
-                            modules.Placeholder{
-                                Name:  "status",
-                                Type:   "string",
-                                Value:  s.current_state,
-                            },
-                        },
-                    }
-                    mod.eventChan <- event
-				}
-				if s.current_state != s.last_hard_state {
-					fmt.Println("hardstate_changed")
-					//TODO: Evaluate if good enough
-				}
-				mod.services[hn][sn] = rep.services[hn][sn]
-			}
+		request, err := http.NewRequest("GET", mod.url, nil)
+		if err != nil {
+			log.Println("Could not build request")
+			break
 		}
+		request.SetBasicAuth(mod.user, mod.password)
+		resp, err := client.Do(request)
+		if err != nil {
+            log.Println("Couldn't find status-JSON at "+mod.url)
+			time.Sleep(5 * time.Second)
+			continue
+		}
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+            log.Println("Could not read data from URL")
+			time.Sleep(5 * time.Second)
+			continue
+		}
+		log.Println(string(body))
+		rep := new(report)
+		err = json.Unmarshal(body, &rep)
+		if err != nil {
+			log.Println("Failed to unmarshal JSON")
+			time.Sleep(5 * time.Second)
+			continue
+		}
+
+		log.Println("Start crawling map", len(rep.Services))
+		var oldService service
+        var ok bool
+        for hn, mp := range rep.Services {
+            snmap := make(map[string]service)
+            for sn, s := range mp {
+                log.Println(s)
+                if oldService, ok = mod.services[hn][sn] ; !ok {
+                    log.Println("jedesmaldarein")
+                    mod.announceStatuschange(s)
+                } else {
+                    if s.Current_state != oldService.Current_state {
+                        log.Println("statuschange")
+                        mod.announceStatuschange(s)
+                    }
+                }
+                if s.Current_state != s.Last_hard_state {
+                    log.Println("hardstate_changed")
+                    //TODO: Evaluate if good enough
+                }
+                snmap[sn] = rep.Services[hn][sn]
+            }
+            mod.services[hn] = snmap
+        }
+		time.Sleep(5 * time.Second)
 	}
 	return
 }
