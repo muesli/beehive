@@ -32,7 +32,11 @@
 package nagiosbee
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/muesli/beehive/modules"
+	"io/ioutil"
+	"net/http"
 )
 
 type NagiosBee struct {
@@ -43,15 +47,21 @@ type NagiosBee struct {
 	url      string
 	user     string
 	password string
-	services []Service
+	services map[string]map[string]service // services[hostname][servicename]
 
 	eventChan chan modules.Event
 }
 
-type Service struct {
-	Name      string
-	Status    int
-	LastEvent int
+type report struct {
+	services map[string]map[string]service // services[hostname][servicename]
+}
+
+type service struct {
+	host_name           string
+	service_description string
+	current_state       string
+	last_hard_state     string
+	plugin_output       string
 }
 
 func (mod *NagiosBee) Name() string {
@@ -63,6 +73,29 @@ func (mod *NagiosBee) Action(action modules.Action) []modules.Placeholder {
 }
 
 func (mod *NagiosBee) Run(cin chan modules.Event) {
+	for {
+		resp, _ := http.Get(mod.url)
+		body, _ := ioutil.ReadAll(resp.Body)
+		rep := new(report)
+		json.Unmarshal(body, report{})
+
+		var oldService service
+		for hn, mp := range rep.services {
+			for sn, s := range mp {
+				oldService = mod.services[hn][sn]
+
+				if s.current_state != oldService.current_state {
+					fmt.Println("statuschange")
+
+				}
+				if s.current_state != s.last_hard_state {
+					fmt.Println("hardstate_changed")
+					//TODO: Evaluate if good enough
+				}
+				mod.services[hn][sn] = rep.services[hn][sn]
+			}
+		}
+	}
 	return
 }
 
