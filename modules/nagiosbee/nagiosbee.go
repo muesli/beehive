@@ -97,7 +97,7 @@ func (mod *NagiosBee) announceStatuschange(s service) {
 }
 
 func (mod *NagiosBee) Run(cin chan modules.Event) {
-    mod.eventChan = cin
+	mod.eventChan = cin
 	client := &http.Client{}
 	for {
 		request, err := http.NewRequest("GET", mod.url, nil)
@@ -108,13 +108,13 @@ func (mod *NagiosBee) Run(cin chan modules.Event) {
 		request.SetBasicAuth(mod.user, mod.password)
 		resp, err := client.Do(request)
 		if err != nil {
-            log.Println("Couldn't find status-JSON at "+mod.url)
+			log.Println("Couldn't find status-JSON at " + mod.url)
 			time.Sleep(5 * time.Second)
 			continue
 		}
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-            log.Println("Could not read data from URL")
+			log.Println("Could not read data from URL")
 			time.Sleep(5 * time.Second)
 			continue
 		}
@@ -129,28 +129,28 @@ func (mod *NagiosBee) Run(cin chan modules.Event) {
 
 		log.Println("Start crawling map", len(rep.Services))
 		var oldService service
-        var ok bool
-        for hn, mp := range rep.Services {
-            snmap := make(map[string]service)
-            for sn, s := range mp {
-                log.Println(s)
-                if oldService, ok = mod.services[hn][sn] ; !ok {
-                    log.Println("jedesmaldarein")
-                    mod.announceStatuschange(s)
-                } else {
-                    if s.Current_state != oldService.Current_state {
-                        log.Println("statuschange")
-                        mod.announceStatuschange(s)
-                    }
-                }
-                if s.Current_state != s.Last_hard_state {
-                    log.Println("hardstate_changed")
-                    //TODO: Evaluate if good enough
-                }
-                snmap[sn] = rep.Services[hn][sn]
-            }
-            mod.services[hn] = snmap
-        }
+		var ok bool
+		for hn, mp := range rep.Services {
+			snmap := make(map[string]service)
+			for sn, s := range mp {
+				log.Println(s)
+				if oldService, ok = mod.services[hn][sn]; !ok {
+					log.Println("jedesmaldarein")
+					mod.announceStatuschange(s)
+				} else {
+					if s.Current_state != oldService.Current_state {
+						log.Println("statuschange")
+						mod.announceStatuschange(s)
+					}
+				}
+				if s.Current_state != s.Last_hard_state {
+					log.Println("hardstate_changed")
+					//TODO: Evaluate if good enough
+				}
+				snmap[sn] = rep.Services[hn][sn]
+			}
+			mod.services[hn] = snmap
+		}
 		time.Sleep(5 * time.Second)
 	}
 	return
