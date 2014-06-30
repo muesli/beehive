@@ -61,8 +61,7 @@ func (mod *TimeBee) Action(action modules.Action) []modules.Placeholder {
 
 func (mod *TimeBee) Run(eventChan chan modules.Event) {
 	mod.eventChan = eventChan
-	const longForm = "Jan 2, 2006 at 3:04pm (MST)"
-	mod.parsedtime, mod.parsererror = time.Parse(longForm, mod.time)
+	mod.parsedtime, mod.parsererror = time.Parse(time.RFC1123, mod.time)
 	mod.parsedtime = time.Now()
 	for {
 		mod.Timer()

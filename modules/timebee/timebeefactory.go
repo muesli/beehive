@@ -24,7 +24,9 @@ import (
 	"github.com/muesli/beehive/modules"
 )
 
-type TimeBeeFactory struct {}
+type TimeBeeFactory struct {
+	modules.ModuleFactory
+}
 
 func (factory *TimeBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
 	bee := TimeBee{
@@ -64,11 +66,15 @@ func (factory *TimeBeeFactory) Events() []modules.EventDescriptor {
 		}
 	return events
 }
-
+/*
 func (factory *TimeBeeFactory) Actions() []modules.ActionDescriptor {
         actions := []modules.ActionDescriptor{}
         return actions
 }
+
+func (factory *TimeBeeFactory) Image() string {
+	return ""
+}*/
 
 func init() {
 	f := TimeBeeFactory{}
