@@ -56,7 +56,7 @@ func (factory *NotificationBeeFactory) Actions() []modules.ActionDescriptor {
 				},
 				modules.PlaceholderDescriptor{
 					Name:        "urgency",
-					Description: "The urgencylevel to display the notification with",
+					Description: "The urgencylevel to display the notification with. Can be ('low', 'normal' or 'critical'.",
 					Type:        "string",
 				},
 			},

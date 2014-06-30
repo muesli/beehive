@@ -26,6 +26,21 @@ import (
 	"log"
 )
 
+const (
+	URGENCY_LOW      = uint32(iota)
+	URGENCY_NORMAL   = uint32(iota)
+	URGENCY_CRITICAL = uint32(iota)
+)
+
+var (
+	urgency_map map[string]uint32 = map[string]uint32{
+		"":         URGENCY_NORMAL,
+		"normal":   URGENCY_NORMAL,
+		"low":      URGENCY_LOW,
+		"critical": URGENCY_CRITICAL,
+	}
+)
+
 type NotificationBee struct {
 	modules.Module
 	conn     *dbus.Conn
@@ -46,19 +61,19 @@ func (mod *NotificationBee) Action(action modules.Action) []modules.Placeholder 
 	switch action.Name {
 	case "notify":
 		text := ""
-		urgency := ""
+		urgency := URGENCY_NORMAL
 		for _, opt := range action.Options {
 			if opt.Name == "text" {
 				text = opt.Value.(string)
 			}
 			if opt.Name == "urgency" {
-				urgency = opt.Value.(string)
+				urgency, _ = urgency_map[opt.Value.(string)]
 			}
-			call := mod.notifier.Call("org.freedesktop.Notifications.Notify", 1, "", uint32(0),
+			call := mod.notifier.Call("org.freedesktop.Notifications.Notify", 0, "", uint32(0),
 				"", "Beehive", text, []string{},
-				map[string]dbus.Variant{}, int32(5000))
+				map[string]dbus.Variant{"urgency": dbus.MakeVariant(urgency)}, int32(5000))
 			if call.Err != nil {
-				log.Println("(" + urgency + ") Failed to print message: " + text)
+				log.Println("(" + string(urgency) + ") Failed to print message: " + text)
 			}
 		}
 	default:
