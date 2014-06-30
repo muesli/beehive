@@ -30,33 +30,33 @@ import (
 
 type TimeBee struct {
 	modules.Module
-
-	second string
-	minute string
-	dayofweek string
-	dayofmonth string
-	month string
-	year string
-	parsedtime time.Time
-	parsererror error
+	sched_time, cur_Time MyTime
 	eventChan chan modules.Event
 }
 
+type MyTime struct {
+	second, minute, hour, dayofweek, dayofmonth, month, year int
+}
+
 func (mod *TimeBee) Timer() {
-	/*t := time.Now()
-	if t == mod.parsedtime {
-		event := modules.Event{
-			Bee: mod.Name(),
-			Name: "time_event",
-		}
-		mod.eventChan <- event
-	}*/
-	event := modules.Event{
+	/*event := modules.Event{
 		Bee: mod.Name(),
 		Name: "time_event",
 	}
 	mod.eventChan <- event
-	fmt.Println("event triggered")
+	*/
+	mod.cur_time.second = int(time.Now().Second())
+	mod.cur_time.minute = int(time.Now().Minute())
+	mod.cur_time.hour = int(time.Now().Hour())
+	mod.cur_time.dayofweek = int(time.Now().Weekday())
+	mod.cur_time.dayofmonth = int(time.Now().Day())
+	mod.cur_time.month = int(time.Now().Month())
+	mod.cur_time.year = int(time.Now().Year())
+	if mod.second > 59 || mod.minute > 59 || mod.dayofweek > 6 || mod.dayofmonth > 31 || mod.month > 12 || mod.year > 9999 {
+		fmt.Println("Error: Date is invalid")
+		return
+	}
+	if 
 }
 
 func (mod *TimeBee) Action(action modules.Action) []modules.Placeholder {
@@ -66,10 +66,10 @@ func (mod *TimeBee) Action(action modules.Action) []modules.Placeholder {
 
 func (mod *TimeBee) Run(eventChan chan modules.Event) {
 	mod.eventChan = eventChan
-	mod.parsedtime, mod.parsererror = time.Parse(time.RFC1123, mod.time)
-	mod.parsedtime = time.Now()
+	//mod.parsedtime, mod.parsererror = time.Parse(time.RFC1123, mod.time)
+	//mod.parsedtime = time.Now()
 	for {
 		mod.Timer()
-		time.Sleep(10 * time.Second)
+		time.Sleep(0.5 * time.Second)
 	}
 }

@@ -30,12 +30,13 @@ type TimeBeeFactory struct {
 
 func (factory *TimeBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
 	bee := TimeBee{
-		second: options.GetValue("Second").(string),
-		minute: options.GetValue("Minute").(string),
-		dayofweek: options.GetValue("DayOfWeek").(string),
-		dayofmonth: options.GetValue("DayOfMonth").(string),
-		month: options.GetValue("Month").(string),
-		year: options.GetValue("Year").(string),
+		MyTime.second: options.GetValue("Second").(int),
+		MyTime.minute: options.GetValue("Minute").(int),
+		MyTime.hour: options.GetValue("Hour").(int),
+		MyTime.dayofweek: options.GetValue("DayOfWeek").(int),
+		MyTime.dayofmonth: options.GetValue("DayOfMonth").(int),
+		MyTime.month: options.GetValue("Month").(int),
+		MyTime.year: options.GetValue("Year").(int),
 	}
 	bee.Module = modules.Module{name, factory.Name(), description}
 	return &bee
@@ -53,33 +54,38 @@ func (factory *TimeBeeFactory) Options() []modules.BeeOptionDescriptor {
 	opts := []modules.BeeOptionDescriptor{
 		modules.BeeOptionDescriptor{
 			Name:		"Second",
-			Description:	"00-59 for a specific time or * for ignore",
-			Type:		"string",
+			Description:	"00-59 for a specific time; -1 for ignore",
+			Type:		"int",
 		},
 		modules.BeeOptionDescriptor{
 			Name:		"Minute",
-			Description:	"00-59 for a specific time or * for ignore",
-			Type:		"string",
+			Description:	"00-59 for a specific time; -1 for ignore",
+			Type:		"int",
+		},
+		modules.BeeOptionDescriptor{
+			Name:		"Hour",
+			Description:	"00-23 for a specific time; -1 for ignore",
+			Type:		"int",
 		},
 		modules.BeeOptionDescriptor{
 			Name:		"DayOfWeek",
-			Descripton:	"0-6 0 = Monday 6 = Sunday, * for ignore";
-			Type:		"string"
+			Description:	"0-6 0 = Sunday 6 = Saturday; -1 for ignore",
+			Type:		"int",
 		},
 		modules.BeeOptionDescriptor{
 			Name:		"DayOfMonth",
-			Description:	"01-31 for a specific time or * for ignore)",
-			Type:		"string",
+			Description:	"01-31 for a specific time; -1 for ignore)",
+			Type:		"int",
 		},
 		modules.BeeOptionDescriptor{
 			Name:		"Month",
-			Description:	"01 - 12 for a specific time or * for ignore)",
-			Type:		"string",
+			Description:	"01 - 12 for a specific time; -1 for ignore)",
+			Type:		"int",
 		},
 		modules.BeeOptionDescriptor{
 			Name:		"Year",
-			Description:	"2014 - 9999 for specific time (non-reoccuring) or * for ignore (recommended)",
-			Type:		"string",
+			Description:	"2014 - 9999 for specific time (non-reoccuring); -1 for ignore (recommended)",
+			Type:		"int",
 		},
 	}
 	return opts
