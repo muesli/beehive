@@ -25,6 +25,7 @@ import (
 )
 
 type JenkinsBeeFactory struct {
+	modules.ModuleFactory
 }
 
 func (factory *JenkinsBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {

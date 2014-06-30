@@ -25,6 +25,7 @@ import (
 )
 
 type IrcBeeFactory struct {
+	modules.ModuleFactory
 }
 
 // Interface impl

@@ -25,6 +25,7 @@ import (
 )
 
 type NotificationBeeFactory struct {
+	modules.ModuleFactory
 }
 
 func (factory *NotificationBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
@@ -39,16 +40,6 @@ func (factory *NotificationBeeFactory) Name() string {
 
 func (factory *NotificationBeeFactory) Description() string {
 	return "A bee that shows desktop-notifications"
-}
-
-func (factory *NotificationBeeFactory) Options() []modules.BeeOptionDescriptor {
-	opts := []modules.BeeOptionDescriptor{}
-	return opts
-}
-
-func (factory *NotificationBeeFactory) Events() []modules.EventDescriptor {
-	events := []modules.EventDescriptor{}
-	return events
 }
 
 func (factory *NotificationBeeFactory) Actions() []modules.ActionDescriptor {
