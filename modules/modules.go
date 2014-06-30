@@ -94,9 +94,9 @@ type Placeholder struct {
 }
 
 var (
-	eventsIn                              = make(chan Event)
-	modules   map[string]*ModuleInterface = make(map[string]*ModuleInterface)
-	factories map[string]*ModuleFactory   = make(map[string]*ModuleFactory)
+	eventsIn                                     = make(chan Event)
+	modules   map[string]*ModuleInterface        = make(map[string]*ModuleInterface)
+	factories map[string]*ModuleFactoryInterface = make(map[string]*ModuleFactoryInterface)
 	chains    []Chain
 )
 
@@ -159,7 +159,7 @@ func startModule(mod *ModuleInterface, fatals int) {
 	defer func(mod *ModuleInterface) {
 		if e := recover(); e != nil {
 			log.Println("Fatal bee event:", e, fatals)
-			startModule(mod, fatals + 1)
+			startModule(mod, fatals+1)
 		}
 	}(mod)
 
