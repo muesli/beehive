@@ -30,7 +30,12 @@ type TimeBeeFactory struct {
 
 func (factory *TimeBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
 	bee := TimeBee{
-		time: options.GetValue("beeTime").(string),
+		second: options.GetValue("Second").(string),
+		minute: options.GetValue("Minute").(string),
+		dayofweek: options.GetValue("DayOfWeek").(string),
+		dayofmonth: options.GetValue("DayOfMonth").(string),
+		month: options.GetValue("Month").(string),
+		year: options.GetValue("Year").(string),
 	}
 	bee.Module = modules.Module{name, factory.Name(), description}
 	return &bee
@@ -47,8 +52,33 @@ func (factory *TimeBeeFactory) Description() string {
 func (factory *TimeBeeFactory) Options() []modules.BeeOptionDescriptor {
 	opts := []modules.BeeOptionDescriptor{
 		modules.BeeOptionDescriptor{
-			Name:		"beeTime",
-			Description:	"The time when the event triggers",
+			Name:		"Second",
+			Description:	"00-59 for a specific time or * for ignore",
+			Type:		"string",
+		},
+		modules.BeeOptionDescriptor{
+			Name:		"Minute",
+			Description:	"00-59 for a specific time or * for ignore",
+			Type:		"string",
+		},
+		modules.BeeOptionDescriptor{
+			Name:		"DayOfWeek",
+			Descripton:	"0-6 0 = Monday 6 = Sunday, * for ignore";
+			Type:		"string"
+		},
+		modules.BeeOptionDescriptor{
+			Name:		"DayOfMonth",
+			Description:	"01-31 for a specific time or * for ignore)",
+			Type:		"string",
+		},
+		modules.BeeOptionDescriptor{
+			Name:		"Month",
+			Description:	"01 - 12 for a specific time or * for ignore)",
+			Type:		"string",
+		},
+		modules.BeeOptionDescriptor{
+			Name:		"Year",
+			Description:	"2014 - 9999 for specific time (non-reoccuring) or * for ignore (recommended)",
 			Type:		"string",
 		},
 	}

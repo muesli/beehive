@@ -31,7 +31,12 @@ import (
 type TimeBee struct {
 	modules.Module
 
-	time string
+	second string
+	minute string
+	dayofweek string
+	dayofmonth string
+	month string
+	year string
 	parsedtime time.Time
 	parsererror error
 	eventChan chan modules.Event
