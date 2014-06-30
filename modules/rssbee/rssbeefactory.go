@@ -25,6 +25,7 @@ import (
 )
 
 type RSSBeeFactory struct {
+	modules.ModuleFactory
 }
 
 // Interface impl
@@ -118,11 +119,6 @@ func (factory *RSSBeeFactory) Events() []modules.EventDescriptor {
 		},
 	}
 	return events
-}
-
-func (factory *RSSBeeFactory) Actions() []modules.ActionDescriptor {
-	actions := []modules.ActionDescriptor{}
-	return actions
 }
 
 func init() {

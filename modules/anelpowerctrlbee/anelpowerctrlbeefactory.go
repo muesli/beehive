@@ -25,6 +25,7 @@ import (
 )
 
 type AnelPowerCtrlBeeFactory struct {
+	modules.ModuleFactory
 }
 
 // Interface impl
@@ -68,10 +69,6 @@ func (factory *AnelPowerCtrlBeeFactory) Options() []modules.BeeOptionDescriptor 
 		},
 	}
 	return opts
-}
-
-func (factory *AnelPowerCtrlBeeFactory) Events() []modules.EventDescriptor {
-	return []modules.EventDescriptor{}
 }
 
 func (factory *AnelPowerCtrlBeeFactory) Actions() []modules.ActionDescriptor {

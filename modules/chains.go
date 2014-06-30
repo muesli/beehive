@@ -98,18 +98,18 @@ func execAction(action Action, opts map[string]interface{}) bool {
 			var value bytes.Buffer
 
 			funcMap := template.FuncMap{
-				"Left": func(values...interface{}) string {
+				"Left": func(values ...interface{}) string {
 					return values[0].(string)[:values[1].(int)]
 				},
-				"Mid": func(values...interface{}) string {
+				"Mid": func(values ...interface{}) string {
 					if len(values) > 2 {
 						return values[0].(string)[values[1].(int):values[2].(int)]
 					} else {
 						return values[0].(string)[values[1].(int):]
 					}
 				},
-				"Right": func(values...interface{}) string {
-					return values[0].(string)[len(values[0].(string)) - values[1].(int):]
+				"Right": func(values ...interface{}) string {
+					return values[0].(string)[len(values[0].(string))-values[1].(int):]
 				},
 			}
 

@@ -42,11 +42,32 @@ func (mod *Module) Description() string {
 	return mod.ModDescription
 }
 
-type ModuleFactory interface {
+type ModuleFactory struct {
+}
+
+func (factory *ModuleFactory) Image() string {
+	return ""
+}
+
+func (factory *ModuleFactory) Options() []BeeOptionDescriptor {
+	return []BeeOptionDescriptor{}
+}
+
+func (factory *ModuleFactory) Events() []EventDescriptor {
+	return []EventDescriptor{}
+}
+
+func (factory *ModuleFactory) Actions() []ActionDescriptor {
+	return []ActionDescriptor{}
+}
+
+type ModuleFactoryInterface interface {
 	// Name of the module
 	Name() string
 	// Description of the module
 	Description() string
+	// An image url for the module
+	Image() string
 
 	// Options supported by module
 	Options() []BeeOptionDescriptor
@@ -59,7 +80,7 @@ type ModuleFactory interface {
 }
 
 // ModuleFactories need to call this method to register themselves
-func RegisterFactory(factory ModuleFactory) {
+func RegisterFactory(factory ModuleFactoryInterface) {
 	log.Println("Bee Factory ready:", factory.Name(), "-", factory.Description())
 	for _, ev := range factory.Events() {
 		log.Println("\tProvides event:", ev.Name, "-", ev.Description)
@@ -79,7 +100,7 @@ func RegisterFactory(factory ModuleFactory) {
 }
 
 // Returns factory with this name
-func GetFactory(identifier string) *ModuleFactory {
+func GetFactory(identifier string) *ModuleFactoryInterface {
 	factory, ok := factories[identifier]
 	if ok {
 		return factory

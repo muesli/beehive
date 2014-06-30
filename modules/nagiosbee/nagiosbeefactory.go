@@ -24,7 +24,9 @@ import (
 	"github.com/muesli/beehive/modules"
 )
 
-type NagiosBeeFactory struct{}
+type NagiosBeeFactory struct{
+	modules.ModuleFactory
+}
 
 func (factory *NagiosBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
 	bee := NagiosBee{
@@ -97,11 +99,6 @@ func (factory *NagiosBeeFactory) Events() []modules.EventDescriptor {
 		},
 	}
 	return events
-}
-
-func (factory *NagiosBeeFactory) Actions() []modules.ActionDescriptor {
-	actions := []modules.ActionDescriptor{}
-	return actions
 }
 
 func init() {

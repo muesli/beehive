@@ -26,6 +26,7 @@ import (
 )
 
 type WebBeeFactory struct {
+	modules.ModuleFactory
 }
 
 // Interface impl
@@ -48,10 +49,6 @@ func (factory *WebBeeFactory) Name() string {
 
 func (factory *WebBeeFactory) Description() string {
 	return "A RESTful HTTP module for beehive"
-}
-
-func (factory *WebBeeFactory) Options() []modules.BeeOptionDescriptor {
-	return []modules.BeeOptionDescriptor{}
 }
 
 func (factory *WebBeeFactory) Events() []modules.EventDescriptor {
@@ -92,11 +89,6 @@ func (factory *WebBeeFactory) Events() []modules.EventDescriptor {
 		},
 	}
 	return events
-}
-
-func (factory *WebBeeFactory) Actions() []modules.ActionDescriptor {
-	actions := []modules.ActionDescriptor{}
-	return actions
 }
 
 func init() {

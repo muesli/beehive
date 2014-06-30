@@ -25,6 +25,7 @@ import (
 )
 
 type HelloBeeFactory struct {
+	modules.ModuleFactory
 }
 
 // Interface impl
@@ -40,20 +41,6 @@ func (factory *HelloBeeFactory) Name() string {
 
 func (factory *HelloBeeFactory) Description() string {
 	return "A 'Hello World' module for beehive"
-}
-
-func (factory *HelloBeeFactory) Options() []modules.BeeOptionDescriptor {
-	return []modules.BeeOptionDescriptor{}
-}
-
-func (factory *HelloBeeFactory) Events() []modules.EventDescriptor {
-	events := []modules.EventDescriptor{}
-	return events
-}
-
-func (factory *HelloBeeFactory) Actions() []modules.ActionDescriptor {
-	actions := []modules.ActionDescriptor{}
-	return actions
 }
 
 func init() {

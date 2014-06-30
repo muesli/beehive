@@ -25,6 +25,7 @@ import (
 )
 
 type JabberBeeFactory struct {
+	modules.ModuleFactory
 }
 
 // Interface impl
