@@ -30,7 +30,8 @@ import (
 
 type TimeBee struct {
 	modules.Module
-	sched_time, cur_Time MyTime
+	cur_time, last_event MyTime
+	second, minute, hour, dayofweek, dayofmonth, month, year int
 	eventChan chan modules.Event
 }
 
@@ -39,12 +40,7 @@ type MyTime struct {
 }
 
 func (mod *TimeBee) Timer() {
-	/*event := modules.Event{
-		Bee: mod.Name(),
-		Name: "time_event",
-	}
-	mod.eventChan <- event
-	*/
+	fail := false
 	mod.cur_time.second = int(time.Now().Second())
 	mod.cur_time.minute = int(time.Now().Minute())
 	mod.cur_time.hour = int(time.Now().Hour())
@@ -56,7 +52,40 @@ func (mod *TimeBee) Timer() {
 		fmt.Println("Error: Date is invalid")
 		return
 	}
-	if 
+	if mod.cur_time.second != mod.second && mod.second != -1{
+		fail = true
+	}
+	if mod.cur_time.minute != mod.minute && mod.minute != -1{
+		fail = true
+	}
+	if mod.cur_time.hour != mod.hour && mod.hour != -1{
+		fail = true
+	}
+	if mod.cur_time.dayofweek != mod.dayofweek && mod.dayofweek != -1{
+		fail = true
+	}
+	if mod.cur_time.dayofmonth != mod.dayofmonth && mod.dayofmonth != -1{
+		fail = true
+	}
+	if mod.cur_time.month != mod.month && mod.month != -1{
+		fail = true
+	}
+	if mod.cur_time.year != mod.year && mod.year != -1{
+		fail = true
+	}
+
+	if fail == true || mod.cur_time == mod.last_event{
+		return
+	}else{
+		mod.last_event = mod.cur_time
+		event := modules.Event{
+			Bee: mod.Name(),
+			Name: "time_event",
+		}
+		mod.eventChan <- event
+		return
+	}
+			
 }
 
 func (mod *TimeBee) Action(action modules.Action) []modules.Placeholder {
@@ -66,10 +95,8 @@ func (mod *TimeBee) Action(action modules.Action) []modules.Placeholder {
 
 func (mod *TimeBee) Run(eventChan chan modules.Event) {
 	mod.eventChan = eventChan
-	//mod.parsedtime, mod.parsererror = time.Parse(time.RFC1123, mod.time)
-	//mod.parsedtime = time.Now()
 	for {
 		mod.Timer()
-		time.Sleep(0.5 * time.Second)
+		time.Sleep(500 * time.Millisecond)
 	}
 }
