@@ -33,7 +33,23 @@ type FilterInterface interface {
 	Description() string
 
 	// Execute the filter
-	Passes(data interface{}, value interface{}) bool
+	Passes(data map[string]interface{}) bool
+
+    // Handle FilterOptions
+    SetOptions(options []FilterOption)
+    GetOptions() []FilterOption
+}
+
+// A FilterOption used by filters
+type FilterOption struct {
+	Name            string
+    Type            string
+	Value           interface{}
+}
+
+type Filter struct {
+    Name    string
+    Options []FilterOption
 }
 
 var (

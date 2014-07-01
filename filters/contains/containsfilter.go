@@ -23,10 +23,12 @@ package containsfilter
 
 import (
 	"github.com/muesli/beehive/filters"
+	_"github.com/muesli/beehive/modules"
 	"strings"
 )
 
 type ContainsFilter struct {
+    filters.Filter
 }
 
 func (filter *ContainsFilter) Name() string {
@@ -37,8 +39,28 @@ func (filter *ContainsFilter) Description() string {
 	return "This filter passes when a placeholder contains a specific thing"
 }
 
-func (filter *ContainsFilter) Passes(data interface{}, value interface{}) bool {
-	switch v := data.(type) {
+func (filter *ContainsFilter) SetOptions(options []filters.FilterOption){
+    filter.Options = options
+}
+
+func (filter *ContainsFilter) GetOptions() []filters.FilterOption {
+    return filter.Options
+}
+
+func (filter *ContainsFilter) Passes(data map[string]interface{}) bool {
+    var attribute string
+    var value interface{}
+    for i := range(filter.GetOptions()){
+        if filter.GetOptions()[i].Name == "attribute" {
+            attribute = filter.GetOptions()[i].Value.(string)
+        }
+        if filter.GetOptions()[i].Name == "value" {
+            value = filter.GetOptions()[i].Value.(string)
+        }
+    }
+    x := data[attribute]
+
+    switch v := x.(type) {
 	case string:
 		return strings.Contains(v, value.(string))
 		//FIXME: support maps

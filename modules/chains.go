@@ -23,7 +23,7 @@ package modules
 import (
 	"bytes"
 	"log"
-	"strings"
+	_"strings"
 	"text/template"
 
 	"github.com/muesli/beehive/filters"
@@ -44,13 +44,16 @@ type Chain struct {
 }
 
 // Execute a filter. Returns whether the filter passed or not.
-func execFilter(filter Filter, opts map[string]interface{}) bool {
+func execFilter(filter Filter, event map[string]interface{}) bool {
 	f := *filters.GetFilter(filter.Name)
 	log.Println("\tExecuting filter:", f.Name(), "-", f.Description())
+    f.SetOptions( filter.Options)
 
-	for _, opt := range filter.Options {
+    return f.Passes(event)
+
+	/*for _, opt := range filter.Options {
 		log.Println("\t\tOptions:", opt)
-		origVal := opts[opt.Name]
+		origVal := event[opt.Name]
 		cleanVal := opt.Value
 		if opt.Trimmed {
 			switch v := origVal.(type) {
@@ -73,12 +76,12 @@ func execFilter(filter Filter, opts map[string]interface{}) bool {
 			}
 		}
 
-		if f.Passes(origVal, cleanVal) == opt.Inverse {
+		if f.Passes(origVal) == opt.Inverse {
 			return false
 		}
 	}
 
-	return true
+	return true*/
 }
 
 // Execute an action and map its ins & outs.

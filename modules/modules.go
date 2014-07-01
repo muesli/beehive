@@ -23,6 +23,7 @@ package modules
 
 import (
 	"log"
+    "github.com/muesli/beehive/filters"
 )
 
 // Interface which all modules need to implement
@@ -65,18 +66,9 @@ type Action struct {
 // A Filter
 type Filter struct {
 	Name    string
-	Options []FilterOption
+	Options []filters.FilterOption
 }
 
-// A FilterOption used by filters
-type FilterOption struct {
-	Name            string
-	Type            string
-	Inverse         bool
-	CaseInsensitive bool
-	Trimmed         bool
-	Value           interface{}
-}
 
 // A BeeOption is used to configure bees
 type BeeOptions []BeeOption
