@@ -63,7 +63,7 @@ func (filter *BooleanFilter) Description() string {
 	return "This filter allows boolean operations on 1 (NOT) or more (AND, OR, XOR) filters"
 }
 
-func (filter *BooleanFilter) unmarshalFilterOption (d map[string]interface{}) filters.FilterOption {
+func (filter *BooleanFilter) unmarshalFilterOption(d map[string]interface{}) filters.FilterOption {
     fo := filters.FilterOption{
                 Name: d["Name"].(string),
                 Type: d["Type"].(string),
@@ -75,8 +75,10 @@ func (filter *BooleanFilter) unmarshalFilterOption (d map[string]interface{}) fi
 func (filter *BooleanFilter) unmarshalFilter(d map[string]interface{}) filters.Filter{
     var options []filters.FilterOption
 
-    for _, y := range(d["Options"].([]map[string]interface{})){
-        options = append(options, filter.unmarshalFilterOption(y.(map[string]interface{})))
+    for _, y := range(d["Options"].([]interface{})){
+        cy := y.(map[string]interface{})
+        log.Println("fooes2:", cy)
+        options = append(options, filter.unmarshalFilterOption(cy))
     }
 
     f := filters.Filter{
@@ -86,10 +88,12 @@ func (filter *BooleanFilter) unmarshalFilter(d map[string]interface{}) filters.F
     return f
 }
 
-func (filter *BooleanFilter) unmarshalFilters(d []map[string]interface{}) []filters.Filter{
+func (filter *BooleanFilter) unmarshalFilters(d []interface{}) []filters.Filter{
     var filters []filters.Filter
-    for x := range(d){
-        filters = append(filters, filter.unmarshalFilter(d[x]))
+    for _, v := range(d){
+        cv := v.(map[string]interface{})
+        log.Println("fooes:", cv)
+        filters = append(filters, filter.unmarshalFilter(cv))
     }
     return filters
 }
@@ -102,7 +106,9 @@ func (filter *BooleanFilter) Passes(data map[string]interface{}) bool {
     }
     log.Println("here")
     log.Println(fopt.Value)
-    rfl := filter.unmarshalFilters(fopt.Value.([]map[string]interface{}))
+
+//    panic: interface conversion: interface is []interface {}, not []map[string]interface {}
+    rfl := filter.unmarshalFilters(fopt.Value.([]interface{}))
     log.Println("there")
     if len(rfl) < 1 {
         log.Println("No filters added -> Returning false")
