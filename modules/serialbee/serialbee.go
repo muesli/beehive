@@ -22,12 +22,13 @@
 package serialbee
 
 import (
+	"bytes"
+	"encoding/binary"
 	"github.com/huin/goserial"
 	"github.com/muesli/beehive/modules"
 	"io"
 	"log"
-	"bytes"
-	"encoding/binary"
+	"strings"
 	"time"
 )
 
@@ -37,7 +38,7 @@ type SerialBee struct {
 	conn io.ReadWriteCloser
 
 	device   string
-	baudrate     int
+	baudrate int
 }
 
 func (mod *SerialBee) Action(action modules.Action) []modules.Placeholder {
@@ -58,11 +59,9 @@ func (mod *SerialBee) Action(action modules.Action) []modules.Placeholder {
 			panic(err)
 		}
 
-		for _, v := range [][]byte{bufOut.Bytes()} {
-			_, err = mod.conn.Write(v)
-			if err != nil {
-				panic(err)
-			}
+		_, err = mod.conn.Write(bufOut.Bytes())
+		if err != nil {
+			panic(err)
 		}
 
 	default:
@@ -87,27 +86,41 @@ func (mod *SerialBee) Run(eventChan chan modules.Event) {
 	time.Sleep(1 * time.Second)
 
 	for {
-/*			if len(v.Text) > 0 {
-				text := strings.TrimSpace(v.Text)
+		text := ""
+		c := []byte{0}
+		for {
+			_, err := mod.conn.Read(c)
+			if err != nil {
+				panic(err)
+			}
+			if c[0] == 10 || c[0] == 13 {
+				break
+			}
 
-				ev := modules.Event{
-					Bee:  mod.Name(),
-					Name: "message",
-					Options: []modules.Placeholder{
-						modules.Placeholder{
-							Name:  "user",
-							Type:  "string",
-							Value: v.Remote,
-						},
-						modules.Placeholder{
-							Name:  "text",
-							Type:  "string",
-							Value: text,
-						},
+			text += string(c[0])
+		}
+
+		if len(text) > 0 {
+			text = strings.TrimSpace(text)
+
+			ev := modules.Event{
+				Bee:  mod.Name(),
+				Name: "message",
+				Options: []modules.Placeholder{
+					modules.Placeholder{
+						Name:  "port",
+						Type:  "string",
+						Value: mod.device,
 					},
-				}
-				eventChan <- ev
-			}*/
-			time.Sleep(1 * time.Second)
+					modules.Placeholder{
+						Name:  "text",
+						Type:  "string",
+						Value: text,
+					},
+				},
+			}
+			eventChan <- ev
+		}
+		time.Sleep(1 * time.Second)
 	}
 }

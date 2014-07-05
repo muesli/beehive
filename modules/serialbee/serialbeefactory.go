@@ -32,8 +32,8 @@ type SerialBeeFactory struct {
 
 func (factory *SerialBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
 	bee := SerialBee{
-		device:      options.GetValue("device").(string),
-		baudrate:        int(options.GetValue("baudrate").(float64)),
+		device:   options.GetValue("device").(string),
+		baudrate: int(options.GetValue("baudrate").(float64)),
 	}
 
 	bee.Module = modules.Module{name, factory.Name(), description}
