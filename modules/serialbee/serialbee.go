@@ -53,7 +53,7 @@ func (mod *SerialBee) Action(action modules.Action) []modules.Placeholder {
 		}
 
 		bufOut := new(bytes.Buffer)
-		err := binary.Write(bufOut, binary.LittleEndian, text)
+		err := binary.Write(bufOut, binary.LittleEndian, []byte(text))
 		if err != nil {
 			panic(err)
 		}
