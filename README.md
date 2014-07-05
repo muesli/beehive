@@ -18,7 +18,7 @@ list so the main executable can depend on our sub-packages:
     go get github.com/jteeuwen/go-pkg-rss
     go get github.com/guelfey/go.dbus
     go get github.com/hoisie/web
-    go get github.com/huin/serialgo
+    go get github.com/huin/goserial
     go get github.com/muesli/beehive
 
 Now we can build beehive:
