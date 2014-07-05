@@ -58,9 +58,11 @@ func (mod *SerialBee) Action(action modules.Action) []modules.Placeholder {
 			panic(err)
 		}
 
-		_, err = mod.conn.Write(bufOut.Bytes())
-		if err != nil {
-			panic(err)
+		for _, v := range [][]byte{bufOut.Bytes()} {
+			_, err = mod.conn.Write(v)
+			if err != nil {
+				panic(err)
+			}
 		}
 
 	default:
