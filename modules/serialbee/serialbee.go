@@ -91,7 +91,8 @@ func (mod *SerialBee) Run(eventChan chan modules.Event) {
 		for {
 			_, err := mod.conn.Read(c)
 			if err != nil {
-				panic(err)
+				time.Sleep(1 * time.Second)
+				continue
 			}
 			if c[0] == 10 || c[0] == 13 {
 				break
