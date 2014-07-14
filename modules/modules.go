@@ -169,7 +169,11 @@ func startModule(mod *ModuleInterface, fatals int) {
 // Starts all registered modules
 func StartModules(bees []Bee) {
 	for _, bee := range bees {
-		mod := (*GetFactory(bee.Class)).New(bee.Name, bee.Description, bee.Options)
+		factory := GetFactory(bee.Class)
+		if factory == nil {
+			panic("Unknown bee-class in config file: " + bee.Class)
+		}
+		mod := (*factory).New(bee.Name, bee.Description, bee.Options)
 		RegisterModule(mod)
 	}
 
