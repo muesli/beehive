@@ -21,7 +21,6 @@
 package webbee
 
 import (
-	"github.com/hoisie/web"
 	"github.com/muesli/beehive/modules"
 )
 
@@ -34,10 +33,8 @@ type WebBeeFactory struct {
 func (factory *WebBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
 	bee := WebBee{
 		addr:        "0.0.0.0:12345",
+		path:        options.GetValue("path").(string),
 	}
-
-	web.Get("/event", bee.GetRequest)
-	web.Post("/event", bee.PostRequest)
 
 	bee.Module = modules.Module{name, factory.Name(), description}
 	return &bee
@@ -49,6 +46,22 @@ func (factory *WebBeeFactory) Name() string {
 
 func (factory *WebBeeFactory) Description() string {
 	return "A RESTful HTTP module for beehive"
+}
+
+func (factory *WebBeeFactory) Options() []modules.BeeOptionDescriptor {
+	opts := []modules.BeeOptionDescriptor{
+		modules.BeeOptionDescriptor{
+			Name:        "addr",
+			Description: "Which addr to listen on, eg: 0.0.0.0:12345",
+			Type:        "string",
+		},
+		modules.BeeOptionDescriptor{
+			Name:        "path",
+			Description: "Which path to expect GET/POST requests on, eg: /foobar",
+			Type:        "string",
+		},
+	}
+	return opts
 }
 
 func (factory *WebBeeFactory) Events() []modules.EventDescriptor {

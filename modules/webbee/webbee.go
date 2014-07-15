@@ -33,12 +33,17 @@ type WebBee struct {
 	modules.Module
 
 	addr        string
+	path		string
 
 	eventChan chan modules.Event
 }
 
 func (mod *WebBee) Run(cin chan modules.Event) {
 	mod.eventChan = cin
+
+	web.Get(mod.path, mod.GetRequest)
+	web.Post(mod.path, mod.PostRequest)
+
 	web.Run(mod.addr)
 }
 
