@@ -48,17 +48,10 @@ func (mod *WebBee) Action(action modules.Action) []modules.Placeholder {
 }
 
 func (mod *WebBee) GetRequest(ctx *web.Context) {
-	//FIXME
-	ms := make(map[string]string)
 	ev := modules.Event{
 		Bee:  mod.Name(),
 		Name: "get",
 		Options: []modules.Placeholder{
-			modules.Placeholder{
-				Name:  "query_params",
-				Type:  "map",
-				Value: ms,
-			},
 			modules.Placeholder{
 				Name:  "ip",
 				Type:  "string",
@@ -66,6 +59,18 @@ func (mod *WebBee) GetRequest(ctx *web.Context) {
 			},
 		},
 	}
+
+	for k, v := range ctx.Params {
+		log.Println("GET param:", k, "=", v)
+
+		ph := modules.Placeholder{
+			Name: k,
+			Type: "string",
+			Value: v,
+		}
+		ev.Options = append(ev.Options, ph)
+	}
+
 	mod.eventChan <- ev
 }
 
