@@ -18,6 +18,7 @@
  *    Authors:
  *      Christian Muehlhaeuser <muesli@gmail.com>
  *      Michael Wendland <michiwend@michiwend.com>
+ *      Johannes Fürmann <johannes@weltraumpflege.org>
  */
 
 package main
@@ -45,6 +46,7 @@ import (
 	_ "github.com/muesli/beehive/modules/webbee"
 	_ "github.com/muesli/beehive/modules/timebee"
 	_ "github.com/muesli/beehive/modules/serialbee"
+	_ "github.com/muesli/beehive/modules/spaceapibee"
 )
 
 var (
