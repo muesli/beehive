@@ -18,6 +18,7 @@
  *    Authors:
  *      Christian Muehlhaeuser <muesli@gmail.com>
  *      Michael Wendland <michiwend@michiwend.com>
+ *      Johannes Fürmann <johannes@weltraumpflege.org>
  */
 
 package main

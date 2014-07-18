@@ -38,6 +38,9 @@ func (factory *SpaceApiBeeFactory) New(name, description string, options modules
 		description: description,
 		url:         options.GetValue("url").(string),
 	}
+
+	bee.Module = modules.Module{name, factory.Name(), description}
+
 	return &bee
 }
 
