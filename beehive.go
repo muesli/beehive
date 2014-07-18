@@ -50,7 +50,7 @@ import (
 )
 
 var (
-	configFile = "./beehive.conf"
+	configFile string
 )
 
 type Config struct {
@@ -87,6 +87,10 @@ func saveConfig(c Config) {
 }
 
 func main() {
+	app.AddFlags([]app.CliFlag{
+    	app.CliFlag{&configFile, "config", "./beehive.conf", "Config-file to use"},
+	})
+
 	// Parse command-line args for all registered modules
 	app.Run()
 
