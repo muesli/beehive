@@ -30,25 +30,11 @@ import (
 )
 
 type SpaceApiBee struct {
-	name        string
-	namespace   string
-	description string
+	modules.Module
 
 	url string
 
 	evchan chan modules.Event
-}
-
-func (mod *SpaceApiBee) Name() string {
-	return mod.name
-}
-
-func (mod *SpaceApiBee) Namespace() string {
-	return mod.namespace
-}
-
-func (mod *SpaceApiBee) Description() string {
-	return mod.description
 }
 
 func (mod *SpaceApiBee) Action(action modules.Action) []modules.Placeholder {
