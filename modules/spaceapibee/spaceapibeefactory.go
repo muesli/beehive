@@ -33,9 +33,6 @@ type SpaceApiBeeFactory struct {
 
 func (factory *SpaceApiBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
 	bee := SpaceApiBee{
-		name:        name,
-		namespace:   factory.Name(),
-		description: description,
 		url:         options.GetValue("url").(string),
 	}
 
