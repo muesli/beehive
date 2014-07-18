@@ -30,25 +30,11 @@ import (
 )
 
 type AnelPowerCtrlBee struct {
-	name        string
-	namespace   string
-	description string
+	modules.Module
 
 	addr     string
 	user     string
 	password string
-}
-
-func (mod *AnelPowerCtrlBee) Name() string {
-	return mod.name
-}
-
-func (mod *AnelPowerCtrlBee) Namespace() string {
-	return mod.namespace
-}
-
-func (mod *AnelPowerCtrlBee) Description() string {
-	return mod.description
 }
 
 func (mod *AnelPowerCtrlBee) Run(cin chan modules.Event) {
