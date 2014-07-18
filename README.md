@@ -6,6 +6,8 @@ chains and filters. It is modular and easy to extend - for anyone. It can be
 your IRC bot, it can activate your heating system or make you a cup of coffee.
 Yes, finally!
 
+![beehive's Logo](/assets/logo.png?raw=true)
+
 ## Installation
 
 Make sure you have a working Go environment. See the [install instructions](http://golang.org/doc/install.html).
