@@ -76,7 +76,7 @@ func (mod *SpaceApiBee) Action(action modules.Action) []modules.Placeholder {
 				},
 				modules.Placeholder{
 					Name:  "text",
-					Type:  "bool",
+					Type:  "string",
 					Value: text,
 				},
 			},
