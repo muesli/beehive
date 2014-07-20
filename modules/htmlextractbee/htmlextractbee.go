@@ -96,8 +96,7 @@ func (mod *HtmlExtractBee) Action(action modules.Action) []modules.Placeholder {
 		}
 
 	default:
-		// unknown action
-		return outs
+		panic("Unknown action triggered in " +mod.Name()+": "+action.Name)
 	}
 
 	return outs

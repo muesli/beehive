@@ -57,8 +57,7 @@ func (mod *JabberBee) Action(action modules.Action) []modules.Placeholder {
 		mod.client.Send(chat)
 
 	default:
-		// unknown action
-		return outs
+		panic("Unknown action triggered in " +mod.Name()+": "+action.Name)
 	}
 
 	return outs

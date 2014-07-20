@@ -86,7 +86,7 @@ func (mod *NotificationBee) Action(action modules.Action) []modules.Placeholder 
 		}
 
 	default:
-		return outs
+		panic("Unknown action triggered in " +mod.Name()+": "+action.Name)
 	}
 	return outs
 }

@@ -86,8 +86,7 @@ func (mod *AnelPowerCtrlBee) Action(action modules.Action) []modules.Placeholder
 		mod.anelSwitch(socket, state)
 
 	default:
-		// unknown action
-		return outs
+		panic("Unknown action triggered in " +mod.Name()+": "+action.Name)
 	}
 
 	return outs

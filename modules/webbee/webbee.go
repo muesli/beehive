@@ -48,8 +48,7 @@ func (mod *WebBee) Run(cin chan modules.Event) {
 }
 
 func (mod *WebBee) Action(action modules.Action) []modules.Placeholder {
-	outs := []modules.Placeholder{}
-	return outs
+	return []modules.Placeholder{}
 }
 
 func (mod *WebBee) GetRequest(ctx *web.Context) {

@@ -132,8 +132,9 @@ func (mod *JenkinsBee) Action(action modules.Action) []modules.Placeholder {
 			}
 		}
 		mod.triggerBuild(jobname)
+
 	default:
-		return outs
+		panic("Unknown action triggered in " +mod.Name()+": "+action.Name)
 	}
 	return outs
 }
