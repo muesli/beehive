@@ -31,6 +31,7 @@ import (
 	"github.com/muesli/beehive/app"
 	_ "github.com/muesli/beehive/filters"
 	_ "github.com/muesli/beehive/filters/contains"
+	_ "github.com/muesli/beehive/filters/equals"
 	_ "github.com/muesli/beehive/filters/endswith"
 	_ "github.com/muesli/beehive/filters/startswith"
 
