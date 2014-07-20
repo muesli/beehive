@@ -112,7 +112,7 @@ func (mod *JabberBee) Run(eventChan chan modules.Event) {
 			}
 
 		case xmpp.Presence:
-			//				fmt.Println(v.From, v.Show)
+			//fmt.Println(v.From, v.Show)
 		}
 	}
 }

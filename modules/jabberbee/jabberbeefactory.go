@@ -35,7 +35,10 @@ func (factory *JabberBeeFactory) New(name, description string, options modules.B
 		server:      options.GetValue("server").(string),
 		user:        options.GetValue("user").(string),
 		password:    options.GetValue("password").(string),
-		notls:       options.GetValue("notls").(bool),
+	}
+
+	if options.GetValue("notls") != nil {
+		bee.notls = options.GetValue("notls").(bool)
 	}
 
 	bee.Module = modules.Module{name, factory.Name(), description}
