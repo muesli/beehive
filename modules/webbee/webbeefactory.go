@@ -32,7 +32,7 @@ type WebBeeFactory struct {
 
 func (factory *WebBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
 	bee := WebBee{
-		addr:        "0.0.0.0:12345",
+		addr:        options.GetValue("addr").(string),
 		path:        options.GetValue("path").(string),
 	}
 
