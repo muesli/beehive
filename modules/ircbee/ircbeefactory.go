@@ -34,12 +34,18 @@ func (factory *IrcBeeFactory) New(name, description string, options modules.BeeO
 	bee := IrcBee{
 		server:      options.GetValue("server").(string),
 		nick:        options.GetValue("nick").(string),
-		//		Password: options.GetValue("password").(string),
-		//		SSL: options.GetValue("ssl").(bool),
 	}
 
 	for _, channel := range options.GetValue("channels").([]interface{}) {
 		bee.channels = append(bee.channels, channel.(string))
+	}
+
+	// optional parameters
+	if options.GetValue("password") != nil {
+		bee.password = options.GetValue("password").(string)
+	}
+	if options.GetValue("ssl") != nil {
+		bee.ssl = options.GetValue("ssl").(bool)
 	}
 
 	bee.Module = modules.Module{name, factory.Name(), description}
