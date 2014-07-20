@@ -54,11 +54,13 @@ func (factory *WebBeeFactory) Options() []modules.BeeOptionDescriptor {
 			Name:        "addr",
 			Description: "Which addr to listen on, eg: 0.0.0.0:12345",
 			Type:        "string",
+			Mandatory:   true,
 		},
 		modules.BeeOptionDescriptor{
 			Name:        "path",
 			Description: "Which path to expect GET/POST requests on, eg: /foobar",
 			Type:        "string",
+			Mandatory:   true,
 		},
 	}
 	return opts

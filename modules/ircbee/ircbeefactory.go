@@ -66,11 +66,13 @@ func (factory *IrcBeeFactory) Options() []modules.BeeOptionDescriptor {
 			Name:        "server",
 			Description: "Hostname of IRC server, eg: irc.example.org:6667",
 			Type:        "string",
+			Mandatory:   true,
 		},
 		modules.BeeOptionDescriptor{
 			Name:        "nick",
 			Description: "Nickname to use for IRC",
 			Type:        "string",
+			Mandatory:   true,
 		},
 		modules.BeeOptionDescriptor{
 			Name:        "password",
@@ -81,6 +83,7 @@ func (factory *IrcBeeFactory) Options() []modules.BeeOptionDescriptor {
 			Name:        "channels",
 			Description: "Which channels to join",
 			Type:        "[]string",
+			Mandatory:   true,
 		},
 		modules.BeeOptionDescriptor{
 			Name:        "ssl",

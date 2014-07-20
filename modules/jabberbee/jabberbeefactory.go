@@ -56,16 +56,19 @@ func (factory *JabberBeeFactory) Options() []modules.BeeOptionDescriptor {
 			Name:        "server",
 			Description: "Hostname of Jabber server, eg: talk.google.com:443",
 			Type:        "string",
+			Mandatory:   true,
 		},
 		modules.BeeOptionDescriptor{
 			Name:        "user",
 			Description: "Username to authenticate with Jabber server",
 			Type:        "string",
+			Mandatory:   true,
 		},
 		modules.BeeOptionDescriptor{
 			Name:        "password",
 			Description: "Password to use to connect to Jabber server",
 			Type:        "string",
+			Mandatory:   true,
 		},
 		modules.BeeOptionDescriptor{
 			Name:        "notls",

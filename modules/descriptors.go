@@ -48,6 +48,7 @@ type BeeOptionDescriptor struct {
 	Name        string
 	Description string
 	Type        string
+	Mandatory	bool
 }
 
 // Returns the ActionDescriptor matching an action.

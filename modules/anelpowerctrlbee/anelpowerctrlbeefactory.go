@@ -55,16 +55,19 @@ func (factory *AnelPowerCtrlBeeFactory) Options() []modules.BeeOptionDescriptor 
 			Name:        "server",
 			Description: "Hostname of Anel PowerCtrl device, eg: 192.168.0.2",
 			Type:        "string",
+			Mandatory:   true,
 		},
 		modules.BeeOptionDescriptor{
 			Name:        "user",
 			Description: "Username to authenticate with Anel PowerCtrl",
 			Type:        "string",
+			Mandatory:   true,
 		},
 		modules.BeeOptionDescriptor{
 			Name:        "password",
 			Description: "Password to use to connect to Anel PowerCtrl",
 			Type:        "string",
+			Mandatory:   true,
 		},
 	}
 	return opts
