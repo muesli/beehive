@@ -32,11 +32,14 @@ type IrcBeeFactory struct {
 
 func (factory *IrcBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
 	bee := IrcBee{
-		Server:      options.GetValue("server").(string),
-		Nick:        options.GetValue("nick").(string),
+		server:      options.GetValue("server").(string),
+		nick:        options.GetValue("nick").(string),
 		//		Password: options.GetValue("password").(string),
-		Channel: options.GetValue("channel").(string),
 		//		SSL: options.GetValue("ssl").(bool),
+	}
+
+	for _, channel := range options.GetValue("channels").([]interface{}) {
+		bee.channels = append(bee.channels, channel.(string))
 	}
 
 	bee.Module = modules.Module{name, factory.Name(), description}
@@ -69,9 +72,9 @@ func (factory *IrcBeeFactory) Options() []modules.BeeOptionDescriptor {
 			Type:        "string",
 		},
 		modules.BeeOptionDescriptor{
-			Name:        "channel",
-			Description: "Which channel to join",
-			Type:        "string",
+			Name:        "channels",
+			Description: "Which channels to join",
+			Type:        "[]string",
 		},
 		modules.BeeOptionDescriptor{
 			Name:        "ssl",

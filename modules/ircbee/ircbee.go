@@ -39,11 +39,10 @@ type IrcBee struct {
 	client   *irc.Conn
 	channels []string
 
-	Server   string
-	Nick     string
-	Password string
-	SSL      bool
-	Channel  string
+	server   string
+	nick     string
+	password string
+	ssl      bool
 }
 
 // Interface impl
@@ -130,7 +129,7 @@ func (mod *IrcBee) Part(channel string) {
 }
 
 func (mod *IrcBee) Run(eventChan chan modules.Event) {
-	if len(mod.Server) == 0 {
+	if len(mod.server) == 0 {
 		return
 	}
 
@@ -138,8 +137,8 @@ func (mod *IrcBee) Run(eventChan chan modules.Event) {
 	mod.connectedState = make(chan bool)
 
 	// setup IRC client:
-	mod.client = irc.SimpleClient(mod.Nick, "beehive", "beehive")
-	mod.client.SSL = mod.SSL
+	mod.client = irc.SimpleClient(mod.nick, "beehive", "beehive")
+	mod.client.SSL = mod.ssl
 
 	mod.client.AddHandler(irc.CONNECTED, func(conn *irc.Conn, line *irc.Line) {
 		mod.connectedState <- true
@@ -183,26 +182,19 @@ func (mod *IrcBee) Run(eventChan chan modules.Event) {
 
 	// loop on IRC dis/connected events
 	for {
-		log.Println("Connecting to IRC:", mod.Server)
-		err := mod.client.Connect(mod.Server, mod.Password)
+		log.Println("Connecting to IRC:", mod.server)
+		err := mod.client.Connect(mod.server, mod.password)
 		if err != nil {
-			log.Println("Failed to connect to IRC:", mod.Server)
+			log.Println("Failed to connect to IRC:", mod.server)
 			log.Println(err)
 		} else {
 			for {
 				status := <-mod.connectedState
 				if status {
-					log.Println("Connected to IRC:", mod.Server)
-
-					if len(mod.channels) == 0 {
-						// join default channel
-						mod.Join(mod.Channel)
-					} else {
-						// we must have been disconnected, rejoin channels
-						mod.Rejoin()
-					}
+					log.Println("Connected to IRC:", mod.server)
+					mod.Rejoin()
 				} else {
-					log.Println("Disconnected from IRC:", mod.Server)
+					log.Println("Disconnected from IRC:", mod.server)
 					break
 				}
 			}
