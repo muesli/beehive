@@ -50,6 +50,7 @@ func (factory *JenkinsBeeFactory) Options() []modules.BeeOptionDescriptor {
 			Name:        "url",
 			Description: "The url the jenkins-installation is reachable at",
 			Type:        "string",
+			Mandatory:   true,
 		},
 	}
 	return opts

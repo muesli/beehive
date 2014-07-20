@@ -54,11 +54,13 @@ func (factory *SerialBeeFactory) Options() []modules.BeeOptionDescriptor {
 			Name:        "device",
 			Description: "Serial device to use",
 			Type:        "string",
+			Mandatory:   true,
 		},
 		modules.BeeOptionDescriptor{
 			Name:        "baudrate",
 			Description: "The baudrate you want to use",
 			Type:        "int",
+			Mandatory:   true,
 		},
 	}
 	return opts
