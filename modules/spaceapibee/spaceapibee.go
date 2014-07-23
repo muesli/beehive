@@ -54,6 +54,7 @@ func (mod *SpaceApiBee) Action(action modules.Action) []modules.Placeholder {
 		if err != nil {
 			text = "Error: SpaceAPI instance @ " + mod.url + " not reachable"
 		} else {
+			defer resp.Body.Close()
 			body, _ := ioutil.ReadAll(resp.Body)
 
 			err = json.Unmarshal(body, api_state)

@@ -98,24 +98,27 @@ func (mod *NagiosBee) announceStatuschange(s service) {
 
 func (mod *NagiosBee) Run(cin chan modules.Event) {
 	mod.eventChan = cin
-	client := &http.Client{}
 	for {
+		time.Sleep(10 * time.Second)
+
 		request, err := http.NewRequest("GET", mod.url, nil)
 		if err != nil {
 			log.Println("Could not build request")
 			break
 		}
 		request.SetBasicAuth(mod.user, mod.password)
+
+		client := http.Client{}
 		resp, err := client.Do(request)
 		if err != nil {
 			log.Println("Couldn't find status-JSON at " + mod.url)
-			time.Sleep(5 * time.Second)
 			continue
 		}
+
+		defer resp.Body.Close()
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
 			log.Println("Could not read data from URL")
-			time.Sleep(5 * time.Second)
 			continue
 		}
 		log.Println(string(body))
@@ -123,7 +126,6 @@ func (mod *NagiosBee) Run(cin chan modules.Event) {
 		err = json.Unmarshal(body, &rep)
 		if err != nil {
 			log.Println("Failed to unmarshal JSON")
-			time.Sleep(5 * time.Second)
 			continue
 		}
 
@@ -151,7 +153,5 @@ func (mod *NagiosBee) Run(cin chan modules.Event) {
 			}
 			mod.services[hn] = snmap
 		}
-		time.Sleep(5 * time.Second)
 	}
-	return
 }
