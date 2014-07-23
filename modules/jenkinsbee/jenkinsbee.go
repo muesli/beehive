@@ -33,6 +33,9 @@ type JenkinsBee struct {
 	modules.Module
 
 	url       string
+	user     string
+	password string
+
 	Jobs      map[string]Job `json:"jobs"`
 	eventChan chan modules.Event
 }
@@ -75,23 +78,32 @@ func (mod *JenkinsBee) announceStatusChange(j Job) {
 func (mod *JenkinsBee) Run(cin chan modules.Event) {
 	mod.eventChan = cin
 	for {
-		resp, err := http.Get(mod.url + "/api/json")
+		time.Sleep(10 * time.Second)
+
+		request, err := http.NewRequest("GET", mod.url + "/api/json", nil)
 		if err != nil {
-			log.Println("Could not call API on " + mod.url + "/api/json")
-			time.Sleep(5 * time.Second)
+			log.Println("Could not build request")
+			break
+		}
+		request.SetBasicAuth(mod.user, mod.password)
+
+		client := http.Client{}
+		resp, err := client.Do(request)
+		if err != nil {
+			log.Println("Could not call API on " + mod.url + "/api/json", err)
 			continue
 		}
+
+		defer resp.Body.Close()
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
 			log.Println("Could not read data of API-Call")
-			time.Sleep(5 * time.Second)
 			continue
 		}
 		rep := new(report)
 		err = json.Unmarshal(body, &rep)
 		if err != nil {
 			log.Println("Failed to unmarshal JSON")
-			time.Sleep(5 * time.Second)
 			continue
 		}
 
@@ -110,15 +122,20 @@ func (mod *JenkinsBee) Run(cin chan modules.Event) {
 			jobmap[rep.Jobs[job].Name] = rep.Jobs[job]
 		}
 		mod.Jobs = jobmap
-		time.Sleep(5 * time.Second)
 	}
 }
 
 func (mod *JenkinsBee) triggerBuild(jobname string) {
-	if _, err := http.Get(mod.url + "/job/" + jobname + "/build"); err != nil {
+	client := http.Client{}
+	request, err := http.NewRequest("GET", mod.url + "/job/" + jobname + "/build", nil)
+	if err != nil {
+		log.Println("Could not build request")
+		return
+	}
+	request.SetBasicAuth(mod.user, mod.password)
+	if _, err := client.Do(request); err != nil {
 		log.Println("Could not trigger build")
 	}
-	return
 }
 
 func (mod *JenkinsBee) Action(action modules.Action) []modules.Placeholder {

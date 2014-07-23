@@ -31,6 +31,8 @@ type JenkinsBeeFactory struct {
 func (factory *JenkinsBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
 	bee := JenkinsBee{
 		url: options.GetValue("url").(string),
+		user:     options.GetValue("user").(string),
+		password: options.GetValue("password").(string),
 	}
 	bee.Module = modules.Module{name, factory.Name(), description}
 	return &bee
@@ -51,6 +53,16 @@ func (factory *JenkinsBeeFactory) Options() []modules.BeeOptionDescriptor {
 			Description: "The url the jenkins-installation is reachable at",
 			Type:        "string",
 			Mandatory:   true,
+		},
+		modules.BeeOptionDescriptor{
+			Name:        "user",
+			Description: "HTTP auth username",
+			Type:        "string",
+		},
+		modules.BeeOptionDescriptor{
+			Name:        "password",
+			Description: "HTTP auth password",
+			Type:        "string",
 		},
 	}
 	return opts
