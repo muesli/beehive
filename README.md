@@ -21,7 +21,7 @@ Now we need to get the required dependencies:
 
     go get -v
 
-Now we can build beehive:
+Let's build beehive:
 
     go build
 
