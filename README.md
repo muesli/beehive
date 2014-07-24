@@ -33,7 +33,7 @@ To be written by someone! :-)
 
 Until then you can find a [few chain recipes here](https://github.com/muesli/beehive/tree/master/recipes).
 Pick one, edit it to your needs and store it as 'beehive.conf'. beehive looks for this
-configuration file in its current working directory.
+configuration file in its current working directory. Alternatively, you can specify a different config file using the -config option.
 
 ## Development
 
