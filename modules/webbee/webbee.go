@@ -48,7 +48,25 @@ func (mod *WebBee) Run(cin chan modules.Event) {
 }
 
 func (mod *WebBee) Action(action modules.Action) []modules.Placeholder {
-	return []modules.Placeholder{}
+	outs := []modules.Placeholder{}
+
+	switch action.Name {
+	case "post":
+/*		json := ""
+
+		for _, opt := range action.Options {
+			if opt.Name == "json" {
+				json = opt.Value.(string)
+			}
+		}*/
+
+		//FIXME: do stuff
+
+	default:
+		panic("Unknown action triggered in " +mod.Name()+": "+action.Name)
+	}
+
+	return outs
 }
 
 func (mod *WebBee) GetRequest(ctx *web.Context) {
@@ -108,5 +126,29 @@ func (mod *WebBee) PostRequest(ctx *web.Context) {
 			},
 		},
 	}
+
+	j := make(map[string]interface{})
+	body, err := ioutil.ReadAll(ctx.Request.Body)
+	if err != nil {
+		log.Println("Error:", err)
+	  return
+	}
+	err = json.Unmarshal(body, &j)
+	if err != nil {
+		log.Println("Error:", err)
+	  return
+	}
+
+	for k, v := range j {
+		log.Printf("POST JSON param: %s = %+v\n", k, v)
+
+		ph := modules.Placeholder{
+			Name: k,
+			Type: "string",
+			Value: v,
+		}
+		ev.Options = append(ev.Options, ph)
+	}
+
 	mod.eventChan <- ev
 }

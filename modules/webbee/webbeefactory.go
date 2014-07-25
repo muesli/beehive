@@ -106,6 +106,29 @@ func (factory *WebBeeFactory) Events() []modules.EventDescriptor {
 	return events
 }
 
+func (factory *WebBeeFactory) Actions() []modules.ActionDescriptor {
+	actions := []modules.ActionDescriptor{
+		modules.ActionDescriptor{
+			Namespace:   factory.Name(),
+			Name:        "post",
+			Description: "Does a POST request",
+			Options: []modules.PlaceholderDescriptor{
+				modules.PlaceholderDescriptor{
+					Name:        "json",
+					Description: "Data to send",
+					Type:        "string",
+				},
+				modules.PlaceholderDescriptor{
+					Name:        "url",
+					Description: "Where to connect to",
+					Type:        "string",
+				},
+			},
+		},
+	}
+	return actions
+}
+
 func init() {
 	f := WebBeeFactory{}
 	modules.RegisterFactory(&f)
