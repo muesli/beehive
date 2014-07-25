@@ -27,6 +27,8 @@ import (
 	"github.com/muesli/beehive/modules"
 	"io/ioutil"
 	"log"
+	"net/http"
+	"strings"
 )
 
 type WebBee struct {
@@ -52,15 +54,24 @@ func (mod *WebBee) Action(action modules.Action) []modules.Placeholder {
 
 	switch action.Name {
 	case "post":
-/*		json := ""
+		url := ""
+		j := ""
 
 		for _, opt := range action.Options {
-			if opt.Name == "json" {
-				json = opt.Value.(string)
+			if opt.Name == "url" {
+				url = opt.Value.(string)
 			}
-		}*/
+			if opt.Name == "json" {
+				j = opt.Value.(string)
+			}
+		}
 
-		//FIXME: do stuff
+		b := strings.NewReader(j)
+		_, err := http.Post(url, "application/json", b)
+		if err != nil {
+			log.Println("Error:", err)
+			return outs
+		}
 
 	default:
 		panic("Unknown action triggered in " +mod.Name()+": "+action.Name)
