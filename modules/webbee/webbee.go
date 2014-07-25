@@ -128,12 +128,7 @@ func (mod *WebBee) PostRequest(ctx *web.Context) {
 	}
 
 	j := make(map[string]interface{})
-	body, err := ioutil.ReadAll(ctx.Request.Body)
-	if err != nil {
-		log.Println("Error:", err)
-	  return
-	}
-	err = json.Unmarshal(body, &j)
+	err = json.Unmarshal(b, &j)
 	if err != nil {
 		log.Println("Error:", err)
 	  return
