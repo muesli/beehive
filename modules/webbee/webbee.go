@@ -40,6 +40,52 @@ type WebBee struct {
 	eventChan chan modules.Event
 }
 
+func (mod *WebBee) triggerJsonEvent(resp *[]byte) {
+	var payload interface{}
+	err := json.Unmarshal(*resp, &payload)
+	if err != nil {
+		log.Println("Error:", err)
+		return
+	}
+
+	ev := modules.Event{
+		Bee:  mod.Name(),
+		Name: "post",
+		Options: []modules.Placeholder{
+			modules.Placeholder{
+				Name:  "json",
+				Type:  "map",
+				Value: payload,
+			},
+			modules.Placeholder{
+				Name:  "ip",
+				Type:  "string",
+				Value: "tbd",
+			},
+		},
+	}
+
+	j := make(map[string]interface{})
+	err = json.Unmarshal(*resp, &j)
+	if err != nil {
+		log.Println("Error:", err)
+	  return
+	}
+
+	for k, v := range j {
+		log.Printf("POST JSON param: %s = %+v\n", k, v)
+
+		ph := modules.Placeholder{
+			Name: k,
+			Type: "string",
+			Value: v,
+		}
+		ev.Options = append(ev.Options, ph)
+	}
+
+	mod.eventChan <- ev
+}
+
 func (mod *WebBee) Run(cin chan modules.Event) {
 	mod.eventChan = cin
 
@@ -66,12 +112,21 @@ func (mod *WebBee) Action(action modules.Action) []modules.Placeholder {
 			}
 		}
 
-		b := strings.NewReader(j)
-		_, err := http.Post(url, "application/json", b)
+		buf := strings.NewReader(j)
+		resp, err := http.Post(url, "application/json", buf)
 		if err != nil {
 			log.Println("Error:", err)
 			return outs
 		}
+
+		b, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			log.Println("Error:", err)
+			return outs
+		}
+
+		log.Printf("Response: %+v\n", b)
+		mod.triggerJsonEvent(&b)
 
 	default:
 		panic("Unknown action triggered in " +mod.Name()+": "+action.Name)
@@ -114,47 +169,5 @@ func (mod *WebBee) PostRequest(ctx *web.Context) {
 		return
 	}
 
-	var payload interface{}
-	err = json.Unmarshal(b, &payload)
-	if err != nil {
-		log.Println("Error:", err)
-		return
-	}
-
-	ev := modules.Event{
-		Bee:  mod.Name(),
-		Name: "post",
-		Options: []modules.Placeholder{
-			modules.Placeholder{
-				Name:  "json",
-				Type:  "map",
-				Value: payload,
-			},
-			modules.Placeholder{
-				Name:  "ip",
-				Type:  "string",
-				Value: "tbd",
-			},
-		},
-	}
-
-	j := make(map[string]interface{})
-	err = json.Unmarshal(b, &j)
-	if err != nil {
-		log.Println("Error:", err)
-	  return
-	}
-
-	for k, v := range j {
-		log.Printf("POST JSON param: %s = %+v\n", k, v)
-
-		ph := modules.Placeholder{
-			Name: k,
-			Type: "string",
-			Value: v,
-		}
-		ev.Options = append(ev.Options, ph)
-	}
-
-	mod.eventChan <- ev
+	mod.triggerJsonEvent(&b)
 }
