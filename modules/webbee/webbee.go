@@ -125,7 +125,6 @@ func (mod *WebBee) Action(action modules.Action) []modules.Placeholder {
 			return outs
 		}
 
-		log.Printf("Response: %+v\n", b)
 		mod.triggerJsonEvent(&b)
 
 	default:
