@@ -23,7 +23,6 @@ package twitterbee
 
 import (
 	"github.com/muesli/beehive/modules"
-	
 )
 
 type TwitterBeeFactory struct {
@@ -34,10 +33,10 @@ type TwitterBeeFactory struct {
 
 func (factory *TwitterBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
 	bee := TwitterBee{
-		consumer_key:         options.GetValue("consumer_key").(string),
-		consumer_secret:      options.GetValue("consumer_secret").(string),
-		access_token:         options.GetValue("access_token").(string),
-		access_token_secret:  options.GetValue("access_token_secret").(string),
+		consumer_key:        options.GetValue("consumer_key").(string),
+		consumer_secret:     options.GetValue("consumer_secret").(string),
+		access_token:        options.GetValue("access_token").(string),
+		access_token_secret: options.GetValue("access_token_secret").(string),
 	}
 
 	bee.Module = modules.Module{name, factory.Name(), description}
@@ -85,11 +84,11 @@ func (factory *TwitterBeeFactory) Actions() []modules.ActionDescriptor {
 			Namespace:   factory.Name(),
 			Name:        "tweet",
 			Description: "Update your status according to twitter",
-			Options:     []modules.PlaceholderDescriptor{
-				modules.PlaceholderDescriptor {
-					Name: "status",
+			Options: []modules.PlaceholderDescriptor{
+				modules.PlaceholderDescriptor{
+					Name:        "status",
 					Description: "Text of the Status to tweet, may be no longer than 140 characters",
-					Type: "String",
+					Type:        "String",
 				},
 			},
 		},
@@ -105,9 +104,26 @@ func (factory *TwitterBeeFactory) Events() []modules.EventDescriptor {
 			Description: "is triggered as soon as the API call has been executed",
 			Options: []modules.PlaceholderDescriptor{
 				modules.PlaceholderDescriptor{
-					Name: "success",
+					Name:        "success",
 					Description: "Result of the API call",
-					Type: "bool",
+					Type:        "bool",
+				},
+			},
+		},
+		modules.EventDescriptor{
+			Namespace:   factory.Name(),
+			Name:        "mention",
+			Description: "is triggered as soon as the API call has been executed",
+			Options: []modules.PlaceholderDescriptor{
+				modules.PlaceholderDescriptor{
+					Name:        "username",
+					Description: "Twitter handle of the mention's author",
+					Type:        "string",
+				},
+				modules.PlaceholderDescriptor{
+					Name:        "text",
+					Description: "text content of the mention",
+					Type:        "string",
 				},
 			},
 		},

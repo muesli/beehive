@@ -23,31 +23,66 @@
 package twitterbee
 
 import (
-	"github.com/muesli/beehive/modules"
 	"github.com/ChimeraCoder/anaconda"
+	"github.com/muesli/beehive/modules"
+	"log"
 	"net/url"
+	"time"
 )
 
 type TwitterBee struct {
 	modules.Module
 
-	consumer_key string
-	consumer_secret string
-	access_token string
+	consumer_key        string
+	consumer_secret     string
+	access_token        string
 	access_token_secret string
-	
-	twitter_api *anaconda.TwitterApi
+
+	twitter_api      *anaconda.TwitterApi
 	twitter_mentions []anaconda.Tweet
 
 	evchan chan modules.Event
+}
+
+func handle_anaconda_error(err error, msg string) {
+	if err != nil {
+		is_rate_limit_error, next_window := err.(*anaconda.ApiError).RateLimitCheck()
+		if is_rate_limit_error {
+			log.Println("Oops, I exceeded the API rate limit!")
+			wait_period := next_window.Sub(time.Now())
+			log.Printf("waiting %f seconds to next window!\n", wait_period.Seconds())
+			time.Sleep(wait_period)
+		} else {
+			if msg != "" {
+				panic(msg)
+			}
+		}
+	}
 }
 
 func (mod *TwitterBee) Action(action modules.Action) []modules.Placeholder {
 	outs := []modules.Placeholder{}
 	switch action.Name {
 	case "tweet":
-		
+		status := ""
+		for _, opt := range action.Options {
+			if opt.Name == "status" {
+				status = opt.Value.(string)
+			}
+		}
 
+		posted_tweet := false
+		for !posted_tweet {
+			v := url.Values{}
+			log.Printf("Attempting to paste \"%s\" to Twitter", status)
+			_, err := mod.twitter_api.PostTweet(status, v)
+			if err != nil {
+				log.Printf("Error posting to twitter %v", err)
+				handle_anaconda_error(err, "")
+			} else {
+				posted_tweet = true
+			}
+		}
 
 		ev := modules.Event{
 			Bee:  mod.Name(),
@@ -61,33 +96,91 @@ func (mod *TwitterBee) Action(action modules.Action) []modules.Placeholder {
 			},
 		}
 		mod.evchan <- ev
-		
+
 	default:
-		panic("Unknown action triggered in " +mod.Name()+": "+action.Name)
+		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
 	}
-	
+
 	return outs
 }
 
 func (mod *TwitterBee) Run(eventChan chan modules.Event) {
 	mod.evchan = eventChan
-	
+
 	anaconda.SetConsumerKey(mod.consumer_key)
 	anaconda.SetConsumerSecret(mod.consumer_secret)
 	mod.twitter_api = anaconda.NewTwitterApi(mod.access_token, mod.access_token_secret)
-	
+	mod.twitter_api.ReturnRateLimitError(true)
+
 	// Test the credentials on startup
-	_, err := mod.twitter_api.VerifyCredentials()
-	if err != nil {
-		panic("The credentials you provided in your conf are invalid. Failing :(")
+	credentials_verified := false
+	for !credentials_verified {
+		ok, err := mod.twitter_api.VerifyCredentials()
+		handle_anaconda_error(err, "Could not verify Twitter API Credentials")
+		credentials_verified = ok
 	}
 
 	// populate mentions initially
-	v := url.Values{}
-	v.Set("count", "30")
-	mentions, err := mod.twitter_api.GetMentionsTimeline(v)
-	if err != nil {
-		panic("Could not populate Twitter mentions")
+	mentions_populated := false
+	for !mentions_populated {
+		v := url.Values{}
+		v.Set("count", "30")
+
+		log.Println("Populating Mentions...")
+		mentions, err := mod.twitter_api.GetMentionsTimeline(v)
+		handle_anaconda_error(err, "Could not populate mentions initially")
+		if err == nil {
+			mentions_populated = true
+		}
+		mod.twitter_mentions = mentions
 	}
-	mod.twitter_mentions = mentions
+
+	// check twitter mentions every 60 seconds
+	for {
+		log.Println("Checking for new mentions...")
+		v := url.Values{}
+		v.Set("count", "30")
+		new_mentions, err := mod.twitter_api.GetMentionsTimeline(v)
+		if err != nil {
+			panic("Error: Could not get mentions")
+		}
+
+		// check if newest new mention is newer than newest old
+		newest_new_time, _ := new_mentions[0].CreatedAtTime()
+		newest_old_time, _ := mod.twitter_mentions[0].CreatedAtTime()
+
+		if newest_new_time.After(newest_old_time) {
+			log.Println("New mentions found!")
+			for i := 0; ; i++ {
+				tmp_mention := new_mentions[i]
+				tmp_mention_time, _ := tmp_mention.CreatedAtTime()
+				if tmp_mention_time.After(newest_old_time) {
+					ev := modules.Event{
+						Bee:  mod.Name(),
+						Name: "mention",
+						Options: []modules.Placeholder{
+							modules.Placeholder{
+								Name:  "username",
+								Type:  "string",
+								Value: tmp_mention.User.ScreenName,
+							},
+							modules.Placeholder{
+								Name:  "text",
+								Type:  "string",
+								Value: tmp_mention.Text,
+							},
+						},
+					}
+
+					mod.evchan <- ev
+
+				} else {
+					break
+				}
+			}
+			mod.twitter_mentions = new_mentions
+		}
+
+		time.Sleep(60 * time.Second)
+	}
 }
