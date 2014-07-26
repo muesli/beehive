@@ -25,6 +25,7 @@ package twitterbee
 import (
 	"github.com/muesli/beehive/modules"
 	"github.com/ChimeraCoder/anaconda"
+	"net/url"
 )
 
 type TwitterBee struct {
@@ -36,6 +37,7 @@ type TwitterBee struct {
 	access_token_secret string
 	
 	twitter_api *anaconda.TwitterApi
+	twitter_mentions []anaconda.Tweet
 
 	evchan chan modules.Event
 }
@@ -73,4 +75,19 @@ func (mod *TwitterBee) Run(eventChan chan modules.Event) {
 	anaconda.SetConsumerKey(mod.consumer_key)
 	anaconda.SetConsumerSecret(mod.consumer_secret)
 	mod.twitter_api = anaconda.NewTwitterApi(mod.access_token, mod.access_token_secret)
+	
+	// Test the credentials on startup
+	_, err := mod.twitter_api.VerifyCredentials()
+	if err != nil {
+		panic("The credentials you provided in your conf are invalid. Failing :(")
+	}
+
+	// populate mentions initially
+	v := url.Values{}
+	v.Set("count", "30")
+	mentions, err := mod.twitter_api.GetMentionsTimeline(v)
+	if err != nil {
+		panic("Could not populate Twitter mentions")
+	}
+	mod.twitter_mentions = mentions
 }
