@@ -19,7 +19,7 @@
  *      Johannes Fürmann <johannes@weltraumpflege.org>
  */
 
-// beehive's SpaceAPI module.
+// beehive's Twitter module.
 package twitterbee
 
 import (
@@ -27,6 +27,7 @@ import (
 	"github.com/muesli/beehive/modules"
 	"log"
 	"net/url"
+	"strings"
 	"time"
 )
 
@@ -74,6 +75,17 @@ func (mod *TwitterBee) Action(action modules.Action) []modules.Placeholder {
 		posted_tweet := false
 		for !posted_tweet {
 			v := url.Values{}
+
+			for _, mention := range mod.twitter_mentions {
+				tmp_mention_time, _ := mention.CreatedAtTime()
+				if strings.Contains(status, "@"+mention.User.ScreenName) && time.Now().Sub(tmp_mention_time).Hours() < 2 {
+					log.Printf("This might be a reply to " + mention.User.ScreenName)
+					v.Set("in_reply_to_status_id", mention.IdStr)
+					break
+				}
+			}
+			posted_tweet = true
+
 			log.Printf("Attempting to paste \"%s\" to Twitter", status)
 			_, err := mod.twitter_api.PostTweet(status, v)
 			if err != nil {
