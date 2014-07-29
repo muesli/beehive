@@ -49,8 +49,9 @@ import (
 	_ "github.com/muesli/beehive/modules/serialbee"
 	_ "github.com/muesli/beehive/modules/spaceapibee"
 	_ "github.com/muesli/beehive/modules/htmlextractbee"
-	_ "github.com/muesli/beehive/modules/efabee"
+	//_ "github.com/muesli/beehive/modules/efabee"
 	_ "github.com/muesli/beehive/modules/twitterbee"
+	_ "github.com/muesli/beehive/modules/cronbee"
 )
 
 var (
