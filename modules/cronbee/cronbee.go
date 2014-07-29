@@ -47,6 +47,13 @@ func (mod *CronBee) Run(eventChan chan modules.Event) {
 		event := modules.Event{
 			Bee: mod.Name(),
 			Name: "time_event",
+			Options: []modules.Placeholder{
+				modules.Placeholder{
+					Name:  "timestamp", // Will be handy in future versions
+					Type:  "string",
+					Value: timer.CalculatedTime.String(),
+				},
+			},
 		}
 		mod.eventChan <- event
 	}

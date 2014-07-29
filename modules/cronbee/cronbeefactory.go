@@ -90,9 +90,15 @@ func (factory *CronBeeFactory) Events() []modules.EventDescriptor {
 			Namespace:	factory.Name(),
 			Name:		"time_event",
 			Description:	"The time has come ...",
-			Options: []modules.PlaceholderDescriptor{},
+			Options: []modules.PlaceholderDescriptor{ 
+				modules.PlaceholderDescriptor{
+					Name:			"timestamp", // For the lulz & future
+					Description:	"Timestamp of the next event",
+					Type:			"string",
+				},
 			},
-		}
+		},
+	}
 	return events
 }
 
