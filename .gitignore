@@ -28,3 +28,5 @@ beehive.conf
 
 # Texteditor-specific stuff
 .*.sw*
+*.sublime-project
+*.sublime-workspace
