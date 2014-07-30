@@ -287,7 +287,7 @@ func check_syntax(insane string) bool {
 		return false
 	}
 }
-
+// TODO: Rewrite and check for impossible cases like 30.02. 
 func check_values(a []int, i int) bool {
 	for j := 0; j != len(a); j++{
 		switch i{

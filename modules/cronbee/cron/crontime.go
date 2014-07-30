@@ -30,6 +30,7 @@ import (
 	"time"
 //	"sort"
 	"log"
+	"container/list"
 )
 
 type crontime struct {
@@ -40,12 +41,47 @@ type crontime struct {
 	dom    []int //Day of Month
 	month  []int
 	CalculatedTime time.Time
+	calculationInProgress bool
+	eventList list.List
 }
 
-// This functions returns a time.Duration until the next Event based
-// upon the parsed input.
-func (c *crontime) NextEvent() time.Duration{
-	c.CalculatedTime = time.Now() // Ignore all Events in the Past & initial 'result'
+func (c *crontime) NextEvent() time.Duration {
+	if !c.calculationInProgress && c.eventList.Len() == 0{
+		r := c.CalculateEvent(time.Now())
+		go c.fillList()
+		return r.Sub(time.Now())
+	} else if c.calculationInProgress && c.eventList.Len() == 0{
+		// shit just got real 
+		panic("Shit")
+
+	} else if c.eventList.Len() > 0 {
+		e := c.eventList.Front()
+		r := e.Value.(time.Time)
+		c.eventList.Remove(e)
+		return r.Sub(time.Now())
+	}
+	panic("shit 2")
+}
+
+func (c *crontime) fillList() {
+	if c.eventList.Len() == 0 {
+		c.eventList.PushBack(c.CalculateEvent(time.Now()))
+	}
+	for ; c.eventList.Len() < 5; {
+		c.eventList.PushBack(c.CalculateEvent(c.eventList.Front().Value.(time.Time)))
+	}
+}
+
+func (c *crontime) setCalculationInProgress(set bool) {
+	c.calculationInProgress = set
+}
+
+
+// This functions calculates the next event
+func (c *crontime) CalculateEvent(baseTime time.Time) time.Time{
+	c.calculationInProgress = true
+	defer c.setCalculationInProgress(false)
+	c.CalculatedTime = baseTime // Ignore all Events in the Past & initial 'result'
 	c.CalculatedTime = setNanoecond(c.CalculatedTime, 10000)
 	c.nextValidMonth()
 	c.nextValidDay()
@@ -53,7 +89,7 @@ func (c *crontime) NextEvent() time.Duration{
 	c.nextValidMinute()
 	c.nextValidSecond()
 	log.Println("Cronbee has found the next time stamp: ", c.CalculatedTime)
-	return c.CalculatedTime.Sub(time.Now())
+	return c.CalculatedTime
 }
 
 // Calculates the next valid Month based upon the previous results.
@@ -200,29 +236,29 @@ func monthHasDow(dow, dom, month, year int) bool{
 func isLeapYear(year int) bool{
 	return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)
 }
-
+//
 func setMonth(tstamp time.Time, month int) time.Time {
-	if month >= 12 { panic("ERROR") }
+	if month > 12 || month < 1 { panic("ERROR Month") }
 	return tstamp.AddDate(0, -absolute(int(tstamp.Month()), month), 0)
 }
 
 func setDay(tstamp time.Time, day int) time.Time {
-	if day >= 31 { panic("ERROR") }
+	if day > 31 || day < 1{ panic("ERROR Day") }
 	return tstamp.AddDate(0, 0, -absolute(tstamp.Day(), day))
 }
 
 func setHour(tstamp time.Time, hour int) time.Time {
-	if hour >= 24 { panic("ERROR") }
+	if hour >= 24 || hour < 0 { panic("ERROR Hour") }
 	return tstamp.Add(time.Duration(-absolute(tstamp.Hour(), hour)) * time.Hour)
 }
 
 func setMinute(tstamp time.Time, minute int) time.Time {
-	if minute >= 60 { panic("ERROR") }
+	if minute >= 60 || minute < 0{ panic("ERROR Minute") }
 	return tstamp.Add(time.Duration(-absolute(tstamp.Minute(), minute)) * time.Minute)
 }
 
 func setSecond(tstamp time.Time, second int) time.Time {
-	if second >= 60 { panic("ERROR") }
+	if second >= 60 || second < 0 { panic("ERROR Second") }
 	return tstamp.Add(time.Duration(-absolute(tstamp.Second(), second)) * time.Second)
 }
 
