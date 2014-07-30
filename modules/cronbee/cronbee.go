@@ -51,7 +51,7 @@ func (mod *CronBee) Run(eventChan chan modules.Event) {
 				modules.Placeholder{
 					Name:  "timestamp",
 					Type:  "string",
-					Value: timer.NextEvent(),
+					Value: timer.GetNextEvent(),
 				},
 			},
 		}

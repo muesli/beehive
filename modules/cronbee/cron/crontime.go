@@ -46,10 +46,14 @@ type crontime struct {
 }
 
 func (c *crontime) DurationUntilNextEvent() time.Duration {
-	return c.NextEvent().Sub(time.Now())
+	return c.nextEvent().Sub(time.Now())
 }
 
-func (c *crontime) NextEvent() time.Time {
+func (c *crontime) GetNextEvent() time.Time {
+	return c.eventList.Front().Value.(time.Time)
+}
+
+func (c *crontime) nextEvent() time.Time {
 	if !c.calculationInProgress && c.eventList.Len() == 0{
 		r := c.CalculateEvent(time.Now())
 		go c.fillList(r)
