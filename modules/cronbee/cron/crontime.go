@@ -45,20 +45,25 @@ type crontime struct {
 	eventList list.List
 }
 
-func (c *crontime) NextEvent() time.Duration {
+func (c *crontime) DurationUntilNextEvent() time.Duration {
+	return c.NextEvent().Sub(time.Now())
+}
+
+func (c *crontime) NextEvent() time.Time {
 	if !c.calculationInProgress && c.eventList.Len() == 0{
 		r := c.CalculateEvent(time.Now())
 		go c.fillList(r)
-		return r.Sub(time.Now())
+		return r
 	} else if c.calculationInProgress && c.eventList.Len() == 0{
-		// shit just got real 
+		// shit just got real aka TODO
 		panic("Shit")
 
 	} else if c.eventList.Len() > 0 {
 		e := c.eventList.Front()
 		r := e.Value.(time.Time)
 		c.eventList.Remove(e)
-		return r.Sub(time.Now())
+		go c.fillList(c.eventList.Back().Value.(time.Time))
+		return r
 	}
 	panic("shit 2")
 }

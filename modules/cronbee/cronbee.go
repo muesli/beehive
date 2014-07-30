@@ -43,15 +43,15 @@ func (mod *CronBee) Run(eventChan chan modules.Event) {
 	timer := cron.ParseInput(mod.input)
 	for {
 		//fmt.Println(timer.NextEvent())
-		time.Sleep(timer.NextEvent())
+		time.Sleep(timer.DurationUntilNextEvent())
 		event := modules.Event{
 			Bee: mod.Name(),
 			Name: "time_event",
 			Options: []modules.Placeholder{
 				modules.Placeholder{
-					Name:  "timestamp", // Will be handy in future versions
+					Name:  "timestamp",
 					Type:  "string",
-					Value: timer.CalculatedTime.String(),
+					Value: timer.NextEvent(),
 				},
 			},
 		}
