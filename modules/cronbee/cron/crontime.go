@@ -48,7 +48,7 @@ type crontime struct {
 func (c *crontime) NextEvent() time.Duration {
 	if !c.calculationInProgress && c.eventList.Len() == 0{
 		r := c.CalculateEvent(time.Now())
-		go c.fillList()
+		go c.fillList(r)
 		return r.Sub(time.Now())
 	} else if c.calculationInProgress && c.eventList.Len() == 0{
 		// shit just got real 
@@ -63,12 +63,12 @@ func (c *crontime) NextEvent() time.Duration {
 	panic("shit 2")
 }
 
-func (c *crontime) fillList() {
+func (c *crontime) fillList(baseTime time.Time) {
 	if c.eventList.Len() == 0 {
-		c.eventList.PushBack(c.CalculateEvent(time.Now()))
+		c.eventList.PushBack(c.CalculateEvent(baseTime))
 	}
 	for ; c.eventList.Len() < 5; {
-		c.eventList.PushBack(c.CalculateEvent(c.eventList.Front().Value.(time.Time)))
+		c.eventList.PushBack(c.CalculateEvent(c.eventList.Back().Value.(time.Time)))
 	}
 }
 
@@ -83,19 +83,19 @@ func (c *crontime) CalculateEvent(baseTime time.Time) time.Time{
 	defer c.setCalculationInProgress(false)
 	c.CalculatedTime = baseTime // Ignore all Events in the Past & initial 'result'
 	c.CalculatedTime = setNanoecond(c.CalculatedTime, 10000)
-	c.nextValidMonth()
-	c.nextValidDay()
-	c.nextValidHour()
-	c.nextValidMinute()
-	c.nextValidSecond()
-	log.Println("Cronbee has found the next time stamp: ", c.CalculatedTime)
+	c.nextValidMonth(baseTime)
+	c.nextValidDay(baseTime)
+	c.nextValidHour(baseTime)
+	c.nextValidMinute(baseTime)
+	c.nextValidSecond(baseTime)
+	log.Println("Cronbee has found a time stamp: ", c.CalculatedTime)
 	return c.CalculatedTime
 }
 
 // Calculates the next valid Month based upon the previous results.
-func (c *crontime) nextValidMonth() {
+func (c *crontime) nextValidMonth(baseTime time.Time) {
 	for _, mon := range c.month {
-		if time.Now().Year() == c.CalculatedTime.Year() {
+		if baseTime.Year() == c.CalculatedTime.Year() {
 			if !hasPassed(mon, int(c.CalculatedTime.Month())) {
 				c.CalculatedTime = setMonth(c.CalculatedTime, mon)
 				return
@@ -106,14 +106,14 @@ func (c *crontime) nextValidMonth() {
 		}
 	}
 	// If no result was found try it again in the following year
-	c.CalculatedTime = c.CalculatedTime.AddDate(1, 0, 0)
-	c.nextValidMonth()
+	c.CalculatedTime = baseTime.AddDate(1, 0, 0)
+	c.nextValidMonth(baseTime)
 }
 
 // Calculates the next valid Day based upon the previous results.
-func (c *crontime) nextValidDay() {
+func (c *crontime) nextValidDay(baseTime time.Time) {
 	for _, dom := range c.dom {
-		if c.CalculatedTime.Month() == time.Now().Month() {
+		if c.CalculatedTime.Month() == baseTime.Month() {
 			if !hasPassed(dom, c.CalculatedTime.Day()) {
 				for _, dow := range c.dow {
 					if monthHasDow(dow, dom, int(c.CalculatedTime.Month()), c.CalculatedTime.Year()){
@@ -132,15 +132,15 @@ func (c *crontime) nextValidDay() {
 		}
 	}
 	// If no result was found try it again in the following month.
-	c.CalculatedTime = c.CalculatedTime.AddDate(0, 1, 0)
-	c.nextValidMonth()
-	c.nextValidDay()
+	c.CalculatedTime = baseTime.AddDate(0, 1, 0)
+	c.nextValidMonth(baseTime)
+	c.nextValidDay(baseTime)
 }
 
 // Calculates the next valid Hour based upon the previous results.
-func (c *crontime) nextValidHour() {
+func (c *crontime) nextValidHour(baseTime time.Time) {
 	for _, hour := range c.hour {
-		if c.CalculatedTime.Day() == time.Now().Day() {
+		if c.CalculatedTime.Day() == baseTime.Day() {
 			if !hasPassed(hour, c.CalculatedTime.Hour()) {
 				c.CalculatedTime = setHour(c.CalculatedTime, hour)
 				return
@@ -151,15 +151,15 @@ func (c *crontime) nextValidHour() {
 		}
 	}
 	// If no result was found try it again in the following day.
-	c.CalculatedTime = c.CalculatedTime.AddDate(0, 0, 1)
-	c.nextValidDay()
-	c.nextValidHour()
+	c.CalculatedTime = baseTime.AddDate(0, 0, 1)
+	c.nextValidDay(baseTime)
+	c.nextValidHour(baseTime)
 }
 
 // Calculates the next valid Minute based upon the previous results.
-func (c *crontime) nextValidMinute() {
+func (c *crontime) nextValidMinute(baseTime time.Time) {
 	for _, min := range c.minute {
-		if c.CalculatedTime.Hour() == time.Now().Hour() {
+		if c.CalculatedTime.Hour() == baseTime.Hour() {
 			if !hasPassed(min, c.CalculatedTime.Minute()) {
 				c.CalculatedTime = setMinute(c.CalculatedTime, min)
 				return
@@ -169,15 +169,15 @@ func (c *crontime) nextValidMinute() {
 			return
 		}
 	}
-	c.CalculatedTime = c.CalculatedTime.Add(1 * time.Hour)
-	c.nextValidHour()
-	c.nextValidMinute()
+	c.CalculatedTime = baseTime.Add(1 * time.Hour)
+	c.nextValidHour(baseTime)
+	c.nextValidMinute(baseTime)
 }
 
 // Calculates the next valid Second based upon the previous results.
-func (c *crontime) nextValidSecond() {
+func (c *crontime) nextValidSecond(baseTime time.Time) {
 	for _, sec := range c.second {
-		if c.CalculatedTime.Minute() == time.Now().Minute() {
+		if c.CalculatedTime.Minute() == baseTime.Minute() {
 			// check if sec is in the past. <= prevents triggering the same event twice
 			if !(sec <= c.CalculatedTime.Second()){
 				c.CalculatedTime = setSecond(c.CalculatedTime, sec)
@@ -188,9 +188,9 @@ func (c *crontime) nextValidSecond() {
 			return
 		}
 	}
-	c.CalculatedTime = c.CalculatedTime.Add(1 * time.Minute)
-	c.nextValidMinute()
-	c.nextValidSecond()
+	c.CalculatedTime = baseTime.Add(1 * time.Minute)
+	c.nextValidMinute(baseTime)
+	c.nextValidSecond(baseTime)
 }
 
 func hasPassed(value, tstamp int) bool{
