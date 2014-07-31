@@ -25,6 +25,7 @@ import (
 	"strings"
 	"time"
 	"sort"
+	"log"
 )
 
 //Reads the input and returns a pointer to the generated datastructure.
@@ -92,12 +93,8 @@ func ParseInput(input [6]string) *crontime {
 		}
 	}
 	// Do a sanity check, eg. there is no 32th Day in any Month
-	if !check_values(result.second, 0) { panic("rndpanic") }
-	if !check_values(result.minute, 1) { panic("rndpanic") }
-	if !check_values(result.hour, 2) { panic("rndpanic") }
-	if !check_values(result.dow, 3) { panic("rndpanic") }
-	if !check_values(result.dom, 4) { panic("rndpanic") }
-	if !check_values(result.month, 5) { panic("rndpanic") }
+	result.check_values()
+	
 	// Makes timestamp generation easier
 	sort.Ints(result.second)
 	sort.Ints(result.minute)
@@ -287,19 +284,44 @@ func check_syntax(insane string) bool {
 		return false
 	}
 }
-// TODO: Rewrite and check for impossible cases like 30.02. 
-func check_values(a []int, i int) bool {
-	for j := 0; j != len(a); j++{
-		switch i{
-			case 0: if a[j] < 0 || a[j] > 59 { return false }
-			case 1: if a[j] < 0 || a[j] > 59 { return false }
-			case 2: if a[j] < 0 || a[j] > 23 { return false }
-			case 3: if a[j] < 0 || a[j] > 6 { return false }
-			case 4: if a[j] < 1 || a[j] > 31 { return false }
-			case 5: if a[j] < 1 || a[j] > 12 { return false }
+
+// Look for obvious nonsense in the config.
+func (c *crontime) check_values() {
+	for _, sec := range c.second {
+		if sec >= 60 || sec < 0 {
+			log.Panicln("Cronbee: Your config seems messed up. Check the range of \"Second\".")
 		}
 	}
-	return true
+
+	for _, min := range c.second {
+		if min >= 60 || min < 0 {
+			log.Panicln("Cronbee: Your config seems messed up. Check the range of \"Minute\".")
+		}
+	}
+
+	for _, hour := range c.hour {
+		if hour >= 24 ||  hour < 0 {
+			log.Panicln("Cronbee: Your config seems messed up. Check the range of \"Hour\".")
+		}
+	}
+
+	for _, dow := range c.dow {
+		if dow >= 7 || dow < 0 {
+			log.Panicln("Cronbee: Your config seems messed up. Check the range of \"DayOfWeek\".")
+		}
+	}
+
+	for _, dom := range c.dom {
+		if dom >= 32 || dom < 1 {
+			log.Panicln("Cronbee: Your config seems messed up. Check the range of \"DayOfMonth\".")
+		}
+	}
+
+	for _, month := range c.month {
+		if month >= 13 || month < 1 {
+			log.Panicln("Cronbee: Your config seems messed up. Check the range of \"Month\".")
+		}
+	}
 }
 
 // Add two values and ignore the carry (for calculations in the Sexagesimal 
