@@ -30,8 +30,8 @@ type Module struct {
 	ModNamespace   string
 	ModDescription string
 
-	SigChan		chan bool
-	waitGroup	*sync.WaitGroup
+	SigChan   chan bool
+	waitGroup *sync.WaitGroup
 }
 
 func (mod *Module) Name() string {

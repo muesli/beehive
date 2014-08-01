@@ -100,7 +100,7 @@ type Placeholder struct {
 }
 
 var (
-	eventsIn  									 = make(chan Event)
+	eventsIn                                     = make(chan Event)
 	modules   map[string]*ModuleInterface        = make(map[string]*ModuleInterface)
 	factories map[string]*ModuleFactoryInterface = make(map[string]*ModuleFactoryInterface)
 	chains    []Chain
@@ -216,11 +216,11 @@ func RestartModules(bees []Bee) {
 
 func NewBee(name, factoryName, description string) Module {
 	b := Module{
-		ModName: name,
-		ModNamespace: factoryName,
+		ModName:        name,
+		ModNamespace:   factoryName,
 		ModDescription: description,
-		SigChan: make(chan bool),
-		waitGroup: &sync.WaitGroup{},
+		SigChan:        make(chan bool),
+		waitGroup:      &sync.WaitGroup{},
 	}
 	b.waitGroup.Add(1)
 

@@ -95,7 +95,7 @@ func saveConfig(c Config) {
 
 func main() {
 	app.AddFlags([]app.CliFlag{
-    	app.CliFlag{&configFile, "config", "./beehive.conf", "Config-file to use"},
+		app.CliFlag{&configFile, "config", "./beehive.conf", "Config-file to use"},
 	})
 
 	// Parse command-line args for all registered modules
@@ -119,15 +119,15 @@ func main() {
 		log.Println("Got signal:", s)
 
 		switch s {
-			case syscall.SIGHUP:
-				modules.RestartModules(config.Bees)
+		case syscall.SIGHUP:
+			modules.RestartModules(config.Bees)
 
-			case syscall.SIGTERM:
-				fallthrough
-			case syscall.SIGKILL:
-				fallthrough
-			case syscall.SIGINT:
-				return
+		case syscall.SIGTERM:
+			fallthrough
+		case syscall.SIGKILL:
+			fallthrough
+		case syscall.SIGINT:
+			return
 		}
 	}
 
