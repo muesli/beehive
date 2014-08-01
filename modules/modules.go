@@ -23,6 +23,7 @@ package modules
 
 import (
 	"log"
+	"sync"
 )
 
 // Interface which all modules need to implement
@@ -36,6 +37,11 @@ type ModuleInterface interface {
 
 	// Activates the module
 	Run(eventChannel chan Event)
+	// Stop the module
+	Stop()
+
+	WaitGroup() *sync.WaitGroup
+
 	// Handles an action
 	Action(action Action) []Placeholder
 }
@@ -113,7 +119,12 @@ func (opts BeeOptions) GetValue(name string) interface{} {
 // Handles incoming events and executes matching Chains.
 func handleEvents() {
 	for {
-		event := <-eventsIn
+		event, ok := <-eventsIn
+		if !ok {
+			log.Println()
+			log.Println("Stopped event handler!")
+			break
+		}
 
 		log.Println()
 		log.Println("Event received:", event.Bee, "/", event.Name, "-", GetEventDescriptor(&event).Description)
@@ -163,11 +174,15 @@ func startModule(mod *ModuleInterface, fatals int) {
 		}
 	}(mod)
 
+	defer (*mod).WaitGroup().Done()
 	(*mod).Run(eventsIn)
 }
 
 // Starts all registered modules
 func StartModules(bees []Bee) {
+	eventsIn = make(chan Event)
+	go handleEvents()
+
 	for _, bee := range bees {
 		factory := GetFactory(bee.Class)
 		if factory == nil {
@@ -184,6 +199,34 @@ func StartModules(bees []Bee) {
 	}
 }
 
+func StopModules() {
+	for _, bee := range modules {
+		log.Println("Stopping bee:", (*bee).Name())
+		(*bee).Stop()
+	}
+
+	close(eventsIn)
+	modules = make(map[string]*ModuleInterface)
+}
+
+func RestartModules(bees []Bee) {
+	StopModules()
+	StartModules(bees)
+}
+
+func NewBee(name, factoryName, description string) Module {
+	b := Module{
+		ModName: name,
+		ModNamespace: factoryName,
+		ModDescription: description,
+		SigChan: make(chan bool),
+		waitGroup: &sync.WaitGroup{},
+	}
+	b.waitGroup.Add(1)
+
+	return b
+}
+
 // Getter for chains
 func Chains() []Chain {
 	return chains
@@ -196,5 +239,4 @@ func SetChains(cs []Chain) {
 
 func init() {
 	log.Println("Waking the bees...")
-	go handleEvents()
 }

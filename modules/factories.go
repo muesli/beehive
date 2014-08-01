@@ -22,12 +22,16 @@ package modules
 
 import (
 	"log"
+	"sync"
 )
 
 type Module struct {
 	ModName        string
 	ModNamespace   string
 	ModDescription string
+
+	SigChan		chan bool
+	waitGroup	*sync.WaitGroup
 }
 
 func (mod *Module) Name() string {
@@ -40,6 +44,19 @@ func (mod *Module) Namespace() string {
 
 func (mod *Module) Description() string {
 	return mod.ModDescription
+}
+
+func (mod *Module) WaitGroup() *sync.WaitGroup {
+	return mod.waitGroup
+}
+
+func (mod *Module) Run(chan Event) {
+}
+
+func (mod *Module) Stop() {
+	close(mod.SigChan)
+	mod.waitGroup.Wait()
+	log.Println(mod.Name(), "stopped gracefully!")
 }
 
 type ModuleFactory struct {
