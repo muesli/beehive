@@ -83,6 +83,14 @@ func (mod *JabberBee) Run(eventChan chan modules.Event) {
 	}
 
 	for {
+		select {
+			case <-mod.Module.SigChan:
+				mod.client.Close()
+				return
+
+			default:
+		}
+
 		chat, err := mod.client.Recv()
 		if err != nil {
 			log.Fatal(err)

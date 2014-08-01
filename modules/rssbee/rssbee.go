@@ -43,6 +43,13 @@ func (mod *RSSBee) pollFeed(uri string, timeout int) {
 	feed := rss.New(timeout, true, mod.chanHandler, mod.itemHandler)
 
 	for {
+		select {
+			case <-mod.SigChan:
+				return
+
+			default:
+		}
+
 		if err := feed.Fetch(uri, nil); err != nil {
 			fmt.Fprintf(os.Stderr, "[e] %s: %s", uri, err)
 			return

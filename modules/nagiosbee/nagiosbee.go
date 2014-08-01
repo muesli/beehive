@@ -100,6 +100,12 @@ func (mod *NagiosBee) announceStatuschange(s service) {
 func (mod *NagiosBee) Run(cin chan modules.Event) {
 	mod.eventChan = cin
 	for {
+		select {
+			case <-mod.SigChan:
+				return
+
+			default:
+		}
 		time.Sleep(10 * time.Second)
 
 		request, err := http.NewRequest("GET", mod.url, nil)

@@ -149,6 +149,15 @@ func (mod *TwitterBee) Run(eventChan chan modules.Event) {
 
 	// check twitter mentions every 60 seconds
 	for {
+		//FIXME: don't block
+		select {
+			case <-mod.SigChan:
+				return
+
+			default:
+		}
+		time.Sleep(60 * time.Second)
+
 		log.Println("Checking for new mentions...")
 		v := url.Values{}
 		v.Set("count", "30")
@@ -192,7 +201,5 @@ func (mod *TwitterBee) Run(eventChan chan modules.Event) {
 			}
 			mod.twitter_mentions = new_mentions
 		}
-
-		time.Sleep(60 * time.Second)
 	}
 }

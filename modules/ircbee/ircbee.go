@@ -188,16 +188,25 @@ func (mod *IrcBee) Run(eventChan chan modules.Event) {
 			log.Println(err)
 		} else {
 			for {
-				status := <-mod.connectedState
-				if status {
-					log.Println("Connected to IRC:", mod.server)
-					mod.Rejoin()
-				} else {
-					log.Println("Disconnected from IRC:", mod.server)
-					break
+				select {
+					case <-mod.SigChan:
+						mod.client.Quit()
+						return
+
+					case status := <-mod.connectedState:
+						if status {
+							log.Println("Connected to IRC:", mod.server)
+							mod.Rejoin()
+						} else {
+							log.Println("Disconnected from IRC:", mod.server)
+							break
+						}
+
+					default:
 				}
 			}
 		}
+
 		time.Sleep(5 * time.Second)
 	}
 }

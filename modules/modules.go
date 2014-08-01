@@ -100,7 +100,7 @@ type Placeholder struct {
 }
 
 var (
-	eventsIn                                     = make(chan Event)
+	eventsIn  									 = make(chan Event)
 	modules   map[string]*ModuleInterface        = make(map[string]*ModuleInterface)
 	factories map[string]*ModuleFactoryInterface = make(map[string]*ModuleFactoryInterface)
 	chains    []Chain

@@ -85,6 +85,14 @@ func (mod *SerialBee) Run(eventChan chan modules.Event) {
 	time.Sleep(1 * time.Second)
 
 	for {
+		//FIXME: don't block
+		select {
+			case <-mod.SigChan:
+				return
+
+			default:
+		}
+
 		text := ""
 		c := []byte{0}
 		for {

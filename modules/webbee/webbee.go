@@ -93,6 +93,16 @@ func (mod *WebBee) Run(cin chan modules.Event) {
 	web.Post(mod.path, mod.PostRequest)
 
 	web.Run(mod.addr)
+
+	for {
+		select {
+			case <-mod.SigChan:
+				web.Close()
+				return
+
+			default:
+		}
+	}
 }
 
 func (mod *WebBee) Action(action modules.Action) []modules.Placeholder {

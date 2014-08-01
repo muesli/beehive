@@ -1,5 +1,5 @@
 /*
- *        Copyright (C) 2014 Stefan 'glaxx' Luecke 
+ *        Copyright (C) 2014 Stefan 'glaxx' Luecke
  *
  *        This program is free software: you can redistribute it and/or modify
  *        it under the terms of the GNU Affero General Public License as published
@@ -18,7 +18,7 @@
  *		Stefan Luecke <glaxx@glaxx.net>
  */
 
-// 
+//
 
 package timebee
 
@@ -85,17 +85,23 @@ func (mod *TimeBee) Timer() {
 		mod.eventChan <- event
 		return
 	}
-			
+
 }
 
 func (mod *TimeBee) Action(action modules.Action) []modules.Placeholder {
         return []modules.Placeholder{}
 }
 
-
 func (mod *TimeBee) Run(eventChan chan modules.Event) {
 	mod.eventChan = eventChan
 	for {
+		select {
+			case <-mod.SigChan:
+				return
+
+			default:
+		}
+
 		mod.Timer()
 		time.Sleep(500 * time.Millisecond)
 	}

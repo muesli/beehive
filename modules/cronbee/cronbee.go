@@ -42,6 +42,14 @@ func (mod *CronBee) Run(eventChan chan modules.Event) {
 	mod.eventChan = eventChan
 	timer := cron.ParseInput(mod.input)
 	for {
+		//FIXME: don't block
+		select {
+			case <-mod.SigChan:
+				return
+
+			default:
+		}
+
 		//fmt.Println(timer.NextEvent())
 		time.Sleep(timer.DurationUntilNextEvent())
 		event := modules.Event{
