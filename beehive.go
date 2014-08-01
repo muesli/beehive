@@ -34,26 +34,26 @@ import (
 	"github.com/muesli/beehive/app"
 	_ "github.com/muesli/beehive/filters"
 	_ "github.com/muesli/beehive/filters/contains"
-	_ "github.com/muesli/beehive/filters/equals"
 	_ "github.com/muesli/beehive/filters/endswith"
+	_ "github.com/muesli/beehive/filters/equals"
 	_ "github.com/muesli/beehive/filters/startswith"
 
-	"github.com/muesli/beehive/modules"
-	_ "github.com/muesli/beehive/modules/anelpowerctrlbee"
-	_ "github.com/muesli/beehive/modules/ircbee"
-	_ "github.com/muesli/beehive/modules/jabberbee"
-	_ "github.com/muesli/beehive/modules/jenkinsbee"
-	_ "github.com/muesli/beehive/modules/nagiosbee"
-	_ "github.com/muesli/beehive/modules/notificationbee"
-	_ "github.com/muesli/beehive/modules/rssbee"
-	_ "github.com/muesli/beehive/modules/webbee"
-	_ "github.com/muesli/beehive/modules/timebee"
-	_ "github.com/muesli/beehive/modules/serialbee"
-	_ "github.com/muesli/beehive/modules/spaceapibee"
-	_ "github.com/muesli/beehive/modules/htmlextractbee"
-	//_ "github.com/muesli/beehive/modules/efabee"
-	_ "github.com/muesli/beehive/modules/twitterbee"
-	_ "github.com/muesli/beehive/modules/cronbee"
+	"github.com/muesli/beehive/bees"
+	_ "github.com/muesli/beehive/bees/anelpowerctrlbee"
+	_ "github.com/muesli/beehive/bees/htmlextractbee"
+	_ "github.com/muesli/beehive/bees/ircbee"
+	_ "github.com/muesli/beehive/bees/jabberbee"
+	_ "github.com/muesli/beehive/bees/jenkinsbee"
+	_ "github.com/muesli/beehive/bees/nagiosbee"
+	_ "github.com/muesli/beehive/bees/notificationbee"
+	_ "github.com/muesli/beehive/bees/rssbee"
+	_ "github.com/muesli/beehive/bees/serialbee"
+	_ "github.com/muesli/beehive/bees/spaceapibee"
+	_ "github.com/muesli/beehive/bees/timebee"
+	_ "github.com/muesli/beehive/bees/webbee"
+	_ "github.com/muesli/beehive/bees/efabee"
+	_ "github.com/muesli/beehive/bees/cronbee"
+	_ "github.com/muesli/beehive/bees/twitterbee"
 )
 
 var (
@@ -61,8 +61,8 @@ var (
 )
 
 type Config struct {
-	Bees   []modules.Bee
-	Chains []modules.Chain
+	Bees   []bees.Bee
+	Chains []bees.Chain
 }
 
 // Loads chains from config
@@ -107,9 +107,9 @@ func main() {
 	config := loadConfig()
 
 	// Initialize modules
-	modules.StartModules(config.Bees)
+	bees.StartModules(config.Bees)
 	// Load chains from config
-	modules.SetChains(config.Chains)
+	bees.SetChains(config.Chains)
 
 	// Wait for signals
 	ch := make(chan os.Signal, 1)
@@ -121,8 +121,8 @@ func main() {
 		switch s {
 		case syscall.SIGHUP:
 			config = loadConfig()
-			modules.RestartModules(config.Bees)
-			modules.SetChains(config.Chains)
+			bees.RestartModules(config.Bees)
+			bees.SetChains(config.Chains)
 
 		case syscall.SIGTERM:
 			fallthrough
@@ -134,6 +134,6 @@ func main() {
 	}
 
 	// Save chains to config
-	/*config.Chains = modules.Chains()
+	/*config.Chains = bees.Chains()
 	saveConfig(config)*/
 }
