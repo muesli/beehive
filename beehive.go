@@ -120,7 +120,9 @@ func main() {
 
 		switch s {
 		case syscall.SIGHUP:
+			config = loadConfig()
 			modules.RestartModules(config.Bees)
+			modules.SetChains(config.Chains)
 
 		case syscall.SIGTERM:
 			fallthrough
