@@ -32,6 +32,7 @@ type JabberBeeFactory struct {
 
 func (factory *JabberBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
 	bee := JabberBee{
+		Module: modules.NewBee(name, factory.Name(), description),
 		server:      options.GetValue("server").(string),
 		user:        options.GetValue("user").(string),
 		password:    options.GetValue("password").(string),
@@ -41,7 +42,6 @@ func (factory *JabberBeeFactory) New(name, description string, options modules.B
 		bee.notls = options.GetValue("notls").(bool)
 	}
 
-	bee.Module = modules.Module{name, factory.Name(), description}
 	return &bee
 }
 

@@ -33,13 +33,12 @@ type TwitterBeeFactory struct {
 
 func (factory *TwitterBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
 	bee := TwitterBee{
+		Module: modules.NewBee(name, factory.Name(), description),
 		consumer_key:        options.GetValue("consumer_key").(string),
 		consumer_secret:     options.GetValue("consumer_secret").(string),
 		access_token:        options.GetValue("access_token").(string),
 		access_token_secret: options.GetValue("access_token_secret").(string),
 	}
-
-	bee.Module = modules.Module{name, factory.Name(), description}
 
 	return &bee
 }

@@ -37,9 +37,6 @@ type AnelPowerCtrlBee struct {
 	password string
 }
 
-func (mod *AnelPowerCtrlBee) Run(cin chan modules.Event) {
-}
-
 func (mod *AnelPowerCtrlBee) anelSwitch(socket int, state bool) bool {
 	conn, err := net.ListenUDP("udp", &net.UDPAddr{Port: 0})
 	if err != nil {

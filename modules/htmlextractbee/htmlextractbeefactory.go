@@ -32,9 +32,8 @@ type HtmlExtractBeeFactory struct {
 
 func (factory *HtmlExtractBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
 	bee := HtmlExtractBee{
+		Module: modules.NewBee(name, factory.Name(), description),
 	}
-
-	bee.Module = modules.Module{name, factory.Name(), description}
 
 	return &bee
 }

@@ -32,10 +32,10 @@ type RSSBeeFactory struct {
 
 func (factory *RSSBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
 	bee := RSSBee{
+		Module: modules.NewBee(name, factory.Name(), description),
 		url:         options.GetValue("url").(string),
 	}
 
-	bee.Module = modules.Module{name, factory.Name(), description}
 	return &bee
 }
 

@@ -32,11 +32,11 @@ type WebBeeFactory struct {
 
 func (factory *WebBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
 	bee := WebBee{
+		Module: modules.NewBee(name, factory.Name(), description),
 		addr:        options.GetValue("addr").(string),
 		path:        options.GetValue("path").(string),
 	}
 
-	bee.Module = modules.Module{name, factory.Name(), description}
 	return &bee
 }
 

@@ -29,14 +29,15 @@ type CronBeeFactory struct {
 }
 
 func (factory *CronBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
-	bee := CronBee{}
+	bee := CronBee{
+		Module: modules.NewBee(name, factory.Name(), description),
+	}
 	bee.input[0] = options.GetValue("Second").(string)
 	bee.input[1] = options.GetValue("Minute").(string)
 	bee.input[2] = options.GetValue("Hour").(string)
 	bee.input[3] = options.GetValue("DayOfWeek").(string)
 	bee.input[4] = options.GetValue("DayOfMonth").(string)
 	bee.input[5] = options.GetValue("Month").(string)
-	bee.Module = modules.Module{name, factory.Name(), description}
 	return &bee
 }
 
@@ -90,7 +91,7 @@ func (factory *CronBeeFactory) Events() []modules.EventDescriptor {
 			Namespace:	factory.Name(),
 			Name:		"time_event",
 			Description:	"The time has come ...",
-			Options: []modules.PlaceholderDescriptor{ 
+			Options: []modules.PlaceholderDescriptor{
 				modules.PlaceholderDescriptor{
 					Name:			"timestamp", // For the lulz & future
 					Description:	"Timestamp of the next event",

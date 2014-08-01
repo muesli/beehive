@@ -32,12 +32,12 @@ type AnelPowerCtrlBeeFactory struct {
 
 func (factory *AnelPowerCtrlBeeFactory) New(name, description string, options modules.BeeOptions) modules.ModuleInterface {
 	bee := AnelPowerCtrlBee{
+		Module: modules.NewBee(name, factory.Name(), description),
 		addr:        options.GetValue("server").(string),
 		user:        options.GetValue("user").(string),
 		password:    options.GetValue("password").(string),
 	}
 
-	bee.Module = modules.Module{name, factory.Name(), description}
 	return &bee
 }
 

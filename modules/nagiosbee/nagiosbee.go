@@ -42,6 +42,7 @@ import (
 
 type NagiosBee struct {
 	modules.Module
+
 	url      string
 	user     string
 	password string
