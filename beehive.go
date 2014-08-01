@@ -27,6 +27,9 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/muesli/beehive/app"
 	_ "github.com/muesli/beehive/filters"
@@ -36,7 +39,6 @@ import (
 	_ "github.com/muesli/beehive/filters/startswith"
 
 	"github.com/muesli/beehive/modules"
-	//_ "github.com/muesli/beehive/modules/hellobee"
 	_ "github.com/muesli/beehive/modules/anelpowerctrlbee"
 	_ "github.com/muesli/beehive/modules/ircbee"
 	_ "github.com/muesli/beehive/modules/jabberbee"
@@ -109,11 +111,27 @@ func main() {
 	// Load chains from config
 	modules.SetChains(config.Chains)
 
-	// Keep app alive
-	ch := make(chan bool)
-	<-ch
+	// Wait for signals
+	ch := make(chan os.Signal, 1)
+	signal.Notify(ch, syscall.SIGHUP, syscall.SIGTERM, syscall.SIGINT, syscall.SIGKILL)
+
+	for s := range ch {
+		log.Println("Got signal:", s)
+
+		switch s {
+			case syscall.SIGHUP:
+				modules.RestartModules(config.Bees)
+
+			case syscall.SIGTERM:
+				fallthrough
+			case syscall.SIGKILL:
+				fallthrough
+			case syscall.SIGINT:
+				return
+		}
+	}
 
 	// Save chains to config
-	config.Chains = modules.Chains()
-	saveConfig(config)
+	/*config.Chains = modules.Chains()
+	saveConfig(config)*/
 }
