@@ -105,21 +105,15 @@ func (c *crontime) calculateEvent(baseTime time.Time) time.Time{
 // Calculates the next valid Month based upon the previous results.
 func (c *crontime) nextValidMonth(baseTime time.Time) {
 	for _, mon := range c.month {
-		if baseTime.Year() == c.calculatedTime.Year() {
-			if !hasPassed(mon, int(c.calculatedTime.Month())) {
-				c.calculatedTime = setMonth(c.calculatedTime, mon)
-				return
-			}
-		} else {
-			if mon < int(c.calculatedTime.Month()) {
-				c.calculatedTime = c.calculatedTime.AddDate(1, 0, 0)
-			}
+		if mon >= int(c.calculatedTime.Month()) {
 			c.calculatedTime = setMonth(c.calculatedTime, mon)
 			return
 		}
 	}
 	// If no result was found try it again in the following year
 	c.calculatedTime = c.calculatedTime.AddDate(1, 0, 0)
+	c.calculatedTime = setMonth(c.calculatedTime, c.month[0])
+	log.Println(c.calculatedTime)
 	c.nextValidMonth(baseTime)
 }
 

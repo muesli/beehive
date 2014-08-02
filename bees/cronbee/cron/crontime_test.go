@@ -118,6 +118,19 @@ func Test_calculateEventE(t *testing.T) {
 	}
 }
 
+func Test_calculateEventF(t *testing.T) {
+	ipstr := [6]string{"00", "00", "00", "*", "29", "02"}
+	baseTime :=     time.Date(2016, time.Month(3), 29, 0, 0, 0, 0, time.Local)
+	expectedTime := time.Date(2020, time.Month(2), 29, 0, 0, 0, 10000, time.Local)
+	cr := ParseInput(ipstr)
+	if cr.calculateEvent(baseTime) != expectedTime {
+		fmt.Println(cr.calculatedTime, expectedTime)
+		t.Error("crontime: calculateEvent failed, 6")
+	} else {
+		t.Log("crontime: calculateEvent passed")
+	}
+}
+
 func Benchmark_calculateEventA(b *testing.B) {
 	var ipstr [6]string
 	ipstr = [6]string{"*/30", "*", "*", "*", "*", "*"}
