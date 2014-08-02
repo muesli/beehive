@@ -40,7 +40,7 @@ func ParseInput(input [6]string) *crontime {
 	// Check the syntax of the input
 	for i := 0; i != len(input); i++ {
 		if check_syntax(input[i]) == false {
-			panic("Invalid Config") // TODO be more helpful
+			log.Panicln("Invalid config at Line", i) // TODO be more helpful
 		}
 	}
 	// Parse Input like 23-05
