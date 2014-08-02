@@ -32,8 +32,8 @@ import (
 type EFABee struct {
 	bees.Bee
 
-	baseURL   string
-	efa       *goefa.EFA
+	Provider  string
+	efa       goefa.EFAProvider
 
 	eventChan chan bees.Event
 }
@@ -54,7 +54,7 @@ func (mod *EFABee) Action(action bees.Action) []bees.Placeholder {
 		}
 
 		//FIXME get departures
-		station, err := mod.efa.FindStation(stop)
+		station, err := mod.efa.FindStop(stop)
         if err != nil {
                 log.Println("Stop does not exist or name is not unique!")
                 return outs
@@ -109,7 +109,5 @@ func (mod *EFABee) Action(action bees.Action) []bees.Placeholder {
 func (mod *EFABee) Run(eventChan chan bees.Event) {
 	mod.eventChan = eventChan
 
-	mod.efa = &goefa.EFA{
-		BaseURL: mod.baseURL,
-	}
+	mod.efa = goefa.Providers[mod.Provider]
 }
