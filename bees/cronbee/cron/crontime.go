@@ -55,7 +55,7 @@ func (c *crontime) GetNextEvent() time.Time {
 
 func (c *crontime) nextEvent() time.Time {
 	if !c.calculationInProgress && c.eventList.Len() == 0{
-		r := c.CalculateEvent(time.Now())
+		r := c.calculateEvent(time.Now())
 		go c.fillList(r)
 		return r
 	} else if c.calculationInProgress && c.eventList.Len() == 0{
@@ -74,10 +74,10 @@ func (c *crontime) nextEvent() time.Time {
 
 func (c *crontime) fillList(baseTime time.Time) {
 	if c.eventList.Len() == 0 {
-		c.eventList.PushBack(c.CalculateEvent(baseTime))
+		c.eventList.PushBack(c.calculateEvent(baseTime))
 	}
 	for ; c.eventList.Len() < 5; {
-		c.eventList.PushBack(c.CalculateEvent(c.eventList.Back().Value.(time.Time)))
+		c.eventList.PushBack(c.calculateEvent(c.eventList.Back().Value.(time.Time)))
 	}
 }
 
@@ -87,7 +87,7 @@ func (c *crontime) setCalculationInProgress(set bool) {
 
 
 // This functions calculates the next event
-func (c *crontime) CalculateEvent(baseTime time.Time) time.Time{
+func (c *crontime) calculateEvent(baseTime time.Time) time.Time{
 	c.calculationInProgress = true
 	defer c.setCalculationInProgress(false)
 	baseTime = setNanoecond(baseTime, 10000)
