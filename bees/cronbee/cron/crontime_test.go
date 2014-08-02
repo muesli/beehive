@@ -57,7 +57,7 @@ func Benchmark_NextEventA(b *testing.B) {
 	ipstr = [6]string{"*/30", "*", "*", "*", "*", "*"}
 	cr := ParseInput(ipstr)
 	for i := 0; i < b.N; i++{
-		cr.NextEvent()
+		cr.nextEvent()
 	}
 }
 
@@ -66,7 +66,7 @@ func Benchmark_NextEventB(b *testing.B) {
 	ipstr = [6]string{"*", "*", "*", "*", "*", "07"}
 	cr := ParseInput(ipstr)
 	for i := 0; i < b.N; i++{
-		cr.NextEvent()
+		cr.nextEvent()
 	}
 }
 
@@ -75,7 +75,7 @@ func Benchmark_NextEventC(b *testing.B) {
 	ipstr = [6]string{"*/30", "*", "*", "*", "*", "01-12"}
 	cr := ParseInput(ipstr)
 	for i := 0; i < b.N; i++{
-		cr.NextEvent()
+		cr.nextEvent()
 	}
 }
 
@@ -84,7 +84,7 @@ func Benchmark_NextEventD(b *testing.B) {
 	ipstr = [6]string{"*", "*", "*", "*", "*", "*"}
 	cr := ParseInput(ipstr)
 	for i := 0; i < b.N; i++{
-		cr.NextEvent()
+		cr.nextEvent()
 	}
 }
 
@@ -93,7 +93,7 @@ func Benchmark_NextEventE(b *testing.B) {
 	ipstr = [6]string{"*", "*", "*", "02", "*", "01-04"}
 	cr := ParseInput(ipstr)
 	for i := 0; i < b.N; i++{
-		cr.NextEvent()
+		cr.nextEvent()
 	}
 }
 
