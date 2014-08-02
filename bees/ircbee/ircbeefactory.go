@@ -120,6 +120,11 @@ func (factory *IrcBeeFactory) Events() []bees.EventDescriptor {
 					Description: "The user that sent the message",
 					Type:        "string",
 				},
+				bees.PlaceholderDescriptor{
+					Name:        "hostmask",
+					Description: "Hostmask of the user that sent the message",
+					Type:        "string",
+				},
 			},
 		},
 	}

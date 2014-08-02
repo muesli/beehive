@@ -154,6 +154,8 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 		if len(line.Args) > 1 {
 			msg = line.Args[1]
 		}
+		user := line.Src[:strings.Index(line.Src, "!")]
+		hostmask := line.Src[strings.Index(line.Src, "!") + 2:]
 
 		ev := bees.Event{
 			Bee:  mod.Name(),
@@ -167,7 +169,12 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 				bees.Placeholder{
 					Name:  "user",
 					Type:  "string",
-					Value: line.Src,
+					Value: user,
+				},
+				bees.Placeholder{
+					Name:  "hostmask",
+					Type:  "string",
+					Value: hostmask,
 				},
 				bees.Placeholder{
 					Name:  "text",
