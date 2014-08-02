@@ -22,6 +22,7 @@ package cron
 import (
 	"testing"
 //	"fmt"
+	"time"
 )
 /*
 func Test_NextEvent(t *testing.T) {
@@ -52,48 +53,48 @@ func Test_IsLeapYear(t *testing.T) {
 	}
 }
 
-func Benchmark_NextEventA(b *testing.B) {
+func Benchmark_calculateEventA(b *testing.B) {
 	var ipstr [6]string
 	ipstr = [6]string{"*/30", "*", "*", "*", "*", "*"}
 	cr := ParseInput(ipstr)
 	for i := 0; i < b.N; i++{
-		cr.nextEvent()
+		cr.calculateEvent(time.Now())
 	}
 }
 
-func Benchmark_NextEventB(b *testing.B) {
+func Benchmark_calculateEventB(b *testing.B) {
 	var ipstr [6]string
 	ipstr = [6]string{"*", "*", "*", "*", "*", "07"}
 	cr := ParseInput(ipstr)
 	for i := 0; i < b.N; i++{
-		cr.nextEvent()
+		cr.calculateEvent(time.Now())
 	}
 }
 
-func Benchmark_NextEventC(b *testing.B) {
+func Benchmark_calculateEventC(b *testing.B) {
 	var ipstr [6]string
 	ipstr = [6]string{"*/30", "*", "*", "*", "*", "01-12"}
 	cr := ParseInput(ipstr)
 	for i := 0; i < b.N; i++{
-		cr.nextEvent()
+		cr.calculateEvent(time.Now())
 	}
 }
 
-func Benchmark_NextEventD(b *testing.B) {
+func Benchmark_calculateEventD(b *testing.B) {
 	var ipstr [6]string
 	ipstr = [6]string{"*", "*", "*", "*", "*", "*"}
 	cr := ParseInput(ipstr)
 	for i := 0; i < b.N; i++{
-		cr.nextEvent()
+		cr.calculateEvent(time.Now())
 	}
 }
 
-func Benchmark_NextEventE(b *testing.B) {
+func Benchmark_calculateEventE(b *testing.B) {
 	var ipstr [6]string
 	ipstr = [6]string{"*", "*", "*", "02", "*", "01-04"}
 	cr := ParseInput(ipstr)
 	for i := 0; i < b.N; i++{
-		cr.nextEvent()
+		cr.calculateEvent(time.Now())
 	}
 }
 
