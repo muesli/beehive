@@ -27,40 +27,43 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/muesli/beehive/app"
 	_ "github.com/muesli/beehive/filters"
 	_ "github.com/muesli/beehive/filters/contains"
-	_ "github.com/muesli/beehive/filters/equals"
 	_ "github.com/muesli/beehive/filters/endswith"
+	_ "github.com/muesli/beehive/filters/equals"
 	_ "github.com/muesli/beehive/filters/startswith"
 
-	"github.com/muesli/beehive/modules"
-	//_ "github.com/muesli/beehive/modules/hellobee"
-	_ "github.com/muesli/beehive/modules/anelpowerctrlbee"
-	_ "github.com/muesli/beehive/modules/ircbee"
-	_ "github.com/muesli/beehive/modules/jabberbee"
-	_ "github.com/muesli/beehive/modules/jenkinsbee"
-	_ "github.com/muesli/beehive/modules/nagiosbee"
-	_ "github.com/muesli/beehive/modules/notificationbee"
-	_ "github.com/muesli/beehive/modules/rssbee"
-	_ "github.com/muesli/beehive/modules/webbee"
-	_ "github.com/muesli/beehive/modules/timebee"
-	_ "github.com/muesli/beehive/modules/serialbee"
-	_ "github.com/muesli/beehive/modules/spaceapibee"
-	_ "github.com/muesli/beehive/modules/htmlextractbee"
-	//_ "github.com/muesli/beehive/modules/efabee"
-	_ "github.com/muesli/beehive/modules/twitterbee"
-	_ "github.com/muesli/beehive/modules/cronbee"
+	"github.com/muesli/beehive/bees"
+	_ "github.com/muesli/beehive/bees/anelpowerctrlbee"
+	_ "github.com/muesli/beehive/bees/htmlextractbee"
+	_ "github.com/muesli/beehive/bees/ircbee"
+	_ "github.com/muesli/beehive/bees/jabberbee"
+	_ "github.com/muesli/beehive/bees/jenkinsbee"
+	_ "github.com/muesli/beehive/bees/nagiosbee"
+	_ "github.com/muesli/beehive/bees/notificationbee"
+	_ "github.com/muesli/beehive/bees/rssbee"
+	_ "github.com/muesli/beehive/bees/serialbee"
+	_ "github.com/muesli/beehive/bees/spaceapibee"
+	_ "github.com/muesli/beehive/bees/timebee"
+	_ "github.com/muesli/beehive/bees/webbee"
+	_ "github.com/muesli/beehive/bees/efabee"
+	_ "github.com/muesli/beehive/bees/cronbee"
+	_ "github.com/muesli/beehive/bees/twitterbee"
 )
 
 var (
 	configFile string
 )
 
+// This is where we unmarshal our beehive.conf into
 type Config struct {
-	Bees   []modules.Bee
-	Chains []modules.Chain
+	Bees   []bees.BeeInstance
+	Chains []bees.Chain
 }
 
 // Loads chains from config
@@ -93,10 +96,10 @@ func saveConfig(c Config) {
 
 func main() {
 	app.AddFlags([]app.CliFlag{
-    	app.CliFlag{&configFile, "config", "./beehive.conf", "Config-file to use"},
+		app.CliFlag{&configFile, "config", "./beehive.conf", "Config-file to use"},
 	})
 
-	// Parse command-line args for all registered modules
+	// Parse command-line args for all registered bees
 	app.Run()
 
 	log.Println()
@@ -104,16 +107,34 @@ func main() {
 
 	config := loadConfig()
 
-	// Initialize modules
-	modules.StartModules(config.Bees)
+	// Initialize bees
+	bees.StartBees(config.Bees)
 	// Load chains from config
-	modules.SetChains(config.Chains)
+	bees.SetChains(config.Chains)
 
-	// Keep app alive
-	ch := make(chan bool)
-	<-ch
+	// Wait for signals
+	ch := make(chan os.Signal, 1)
+	signal.Notify(ch, syscall.SIGHUP, syscall.SIGTERM, syscall.SIGINT, syscall.SIGKILL)
+
+	for s := range ch {
+		log.Println("Got signal:", s)
+
+		switch s {
+		case syscall.SIGHUP:
+			config = loadConfig()
+			bees.RestartBees(config.Bees)
+			bees.SetChains(config.Chains)
+
+		case syscall.SIGTERM:
+			fallthrough
+		case syscall.SIGKILL:
+			fallthrough
+		case syscall.SIGINT:
+			return
+		}
+	}
 
 	// Save chains to config
-	config.Chains = modules.Chains()
-	saveConfig(config)
+	/*config.Chains = bees.Chains()
+	saveConfig(config)*/
 }

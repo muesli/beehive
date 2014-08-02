@@ -1,0 +1,13 @@
+[Unit]
+Description=beehive Event daemon
+After=network.target
+
+[Service]
+ExecStart=$GOPATH/bin/beehive -config=${config}
+User=beehive
+Group=users
+RestartSec=5
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
