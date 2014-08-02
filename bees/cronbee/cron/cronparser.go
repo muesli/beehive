@@ -23,7 +23,7 @@ import (
 //	"fmt"
 	"strconv"
 	"strings"
-	"time"
+//	"time"
 	"sort"
 	"log"
 )
@@ -40,7 +40,7 @@ func ParseInput(input [6]string) *crontime {
 	// Check the syntax of the input
 	for i := 0; i != len(input); i++ {
 		if check_syntax(input[i]) == false {
-			panic("Invalid Config") // TODO be more helpful
+			log.Panicln("Invalid config at Line", i) // TODO be more helpful
 		}
 	}
 	// Parse Input like 23-05
@@ -114,23 +114,17 @@ func (c *crontime) parsePeriodic(input string, i int) {
 	temp := int(temp64)
 	switch i {
 	case 0:
-		cur := int(time.Now().Second())
-		c.second = periodic(temp, cur, 60)
+		c.second = periodic(temp, 0, 60)
 	case 1:
-		cur := int(time.Now().Minute())
-		c.minute = periodic(temp, cur, 60)
+		c.minute = periodic(temp, 0, 60)
 	case 2:
-		cur := int(time.Now().Hour())
-		c.hour = periodic(temp, cur, 24)
+		c.hour = periodic(temp, 0, 24)
 	case 3:
-		cur := int(time.Now().Weekday())
-		c.dow = periodic(temp, cur, 7)
+		c.dow = periodic(temp, 0, 7)
 	case 4:
-		cur := int(time.Now().Day())
-		c.dom = periodic(temp, cur, 31)
+		c.dom = periodic(temp, 0, 32)
 	case 5:
-		cur := int(time.Now().Month())
-		c.dom = periodic(temp, cur, 12)
+		c.dom = periodic(temp, 0, 13)
 	}
 }
 

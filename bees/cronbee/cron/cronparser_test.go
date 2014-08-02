@@ -74,7 +74,7 @@ func Test_periodic(t *testing.T) {
 		t.Error("crontime: periodic()-Test failed, 2")
 	} else if !IntsEquals(periodic(23, 0, 24), []int{0, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1}){
 		t.Error("crontime: periodic()-Test failed, 3")
-	} else if !IntsEquals(periodic(10, 15, 60), []int{15, 25, 35, 45, 55, 5}){
+	} else if !IntsEquals(periodic(10, 0, 60), []int{0, 10, 20, 30, 40, 50}){
 		t.Error("crontime: periodic()-Test failed, 4")
 	} else if !IntsEquals(periodic(10, 0, 60), []int{0, 10, 20, 30, 40, 50}){
 		t.Error("crontime: periodic()-Test failed, 5")
