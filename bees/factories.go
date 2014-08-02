@@ -25,35 +25,35 @@ import (
 	"sync"
 )
 
-type Module struct {
-	ModName        string
-	ModNamespace   string
-	ModDescription string
+type Bee struct {
+	BeeName        string
+	BeeNamespace   string
+	BeeDescription string
 
 	SigChan   chan bool
 	waitGroup *sync.WaitGroup
 }
 
-func (mod *Module) Name() string {
-	return mod.ModName
+func (mod *Bee) Name() string {
+	return mod.BeeName
 }
 
-func (mod *Module) Namespace() string {
-	return mod.ModNamespace
+func (mod *Bee) Namespace() string {
+	return mod.BeeNamespace
 }
 
-func (mod *Module) Description() string {
-	return mod.ModDescription
+func (mod *Bee) Description() string {
+	return mod.BeeDescription
 }
 
-func (mod *Module) WaitGroup() *sync.WaitGroup {
+func (mod *Bee) WaitGroup() *sync.WaitGroup {
 	return mod.waitGroup
 }
 
-func (mod *Module) Run(chan Event) {
+func (mod *Bee) Run(chan Event) {
 }
 
-func (mod *Module) Stop() {
+func (mod *Bee) Stop() {
 	close(mod.SigChan)
 	mod.waitGroup.Wait()
 	log.Println(mod.Name(), "stopped gracefully!")

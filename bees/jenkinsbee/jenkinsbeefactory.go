@@ -30,7 +30,7 @@ type JenkinsBeeFactory struct {
 
 func (factory *JenkinsBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := JenkinsBee{
-		Module: bees.NewBee(name, factory.Name(), description),
+		Bee: bees.NewBee(name, factory.Name(), description),
 		url: options.GetValue("url").(string),
 		user:     options.GetValue("user").(string),
 		password: options.GetValue("password").(string),

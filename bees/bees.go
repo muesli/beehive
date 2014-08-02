@@ -46,8 +46,8 @@ type BeeInterface interface {
 	Action(action Action) []Placeholder
 }
 
-// An instance of a module is called a Bee
-type Bee struct {
+// An instance of a bee
+type BeeInstance struct {
 	Name        string
 	Class       string
 	Description string
@@ -181,7 +181,7 @@ func startBee(mod *BeeInterface, fatals int) {
 }
 
 // Starts all registered bees
-func StartBees(beeList []Bee) {
+func StartBees(beeList []BeeInstance) {
 	eventsIn = make(chan Event)
 	go handleEvents()
 
@@ -213,17 +213,17 @@ func StopBees() {
 }
 
 // Stops all running bees and restarts a new set of bees
-func RestartBees(bees []Bee) {
+func RestartBees(bees []BeeInstance) {
 	StopBees()
 	StartBees(bees)
 }
 
 // Returns a new Module and sets up sig-channel & waitGroup
-func NewBee(name, factoryName, description string) Module {
-	b := Module{
-		ModName:        name,
-		ModNamespace:   factoryName,
-		ModDescription: description,
+func NewBee(name, factoryName, description string) Bee {
+	b := Bee{
+		BeeName:        name,
+		BeeNamespace:   factoryName,
+		BeeDescription: description,
 		SigChan:        make(chan bool),
 		waitGroup:      &sync.WaitGroup{},
 	}

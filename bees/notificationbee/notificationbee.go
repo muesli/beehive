@@ -44,7 +44,7 @@ var (
 )
 
 type NotificationBee struct {
-	bees.Module
+	bees.Bee
 	conn     *dbus.Conn
 	notifier *dbus.Object
 }

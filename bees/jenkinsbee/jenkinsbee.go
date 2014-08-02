@@ -30,7 +30,7 @@ import (
 )
 
 type JenkinsBee struct {
-	bees.Module
+	bees.Bee
 
 	url       string
 	user     string

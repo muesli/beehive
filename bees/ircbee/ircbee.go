@@ -30,7 +30,7 @@ import (
 )
 
 type IrcBee struct {
-	bees.Module
+	bees.Bee
 
 	// channel signaling irc connection status
 	connectedState chan bool

@@ -33,7 +33,7 @@ import (
 )
 
 type SerialBee struct {
-	bees.Module
+	bees.Bee
 
 	conn io.ReadWriteCloser
 

@@ -41,7 +41,7 @@ import (
 )
 
 type NagiosBee struct {
-	bees.Module
+	bees.Bee
 
 	url      string
 	user     string

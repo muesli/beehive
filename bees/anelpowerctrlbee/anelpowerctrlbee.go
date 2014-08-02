@@ -30,7 +30,7 @@ import (
 )
 
 type AnelPowerCtrlBee struct {
-	bees.Module
+	bees.Bee
 
 	addr     string
 	user     string

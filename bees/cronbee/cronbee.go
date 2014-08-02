@@ -29,7 +29,7 @@ import (
 )
 
 type CronBee struct {
-	bees.Module
+	bees.Bee
 	input [6]string
 	eventChan chan bees.Event
 }

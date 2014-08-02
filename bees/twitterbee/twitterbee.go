@@ -32,7 +32,7 @@ import (
 )
 
 type TwitterBee struct {
-	bees.Module
+	bees.Bee
 
 	consumer_key        string
 	consumer_secret     string

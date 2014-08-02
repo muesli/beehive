@@ -30,7 +30,7 @@ type CronBeeFactory struct {
 
 func (factory *CronBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := CronBee{
-		Module: bees.NewBee(name, factory.Name(), description),
+		Bee: bees.NewBee(name, factory.Name(), description),
 	}
 	bee.input[0] = options.GetValue("Second").(string)
 	bee.input[1] = options.GetValue("Minute").(string)

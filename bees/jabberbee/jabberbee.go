@@ -29,7 +29,7 @@ import (
 )
 
 type JabberBee struct {
-	bees.Module
+	bees.Bee
 
 	client *xmpp.Client
 
@@ -84,7 +84,7 @@ func (mod *JabberBee) Run(eventChan chan bees.Event) {
 
 	for {
 		select {
-			case <-mod.Module.SigChan:
+			case <-mod.SigChan:
 				mod.client.Close()
 				return
 

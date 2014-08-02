@@ -26,7 +26,7 @@ import (
 )
 
 type HelloBee struct {
-	bees.Module
+	bees.Bee
 }
 
 func (mod *HelloBee) Run(eventChan chan bees.Event) {

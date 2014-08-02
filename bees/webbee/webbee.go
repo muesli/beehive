@@ -32,7 +32,7 @@ import (
 )
 
 type WebBee struct {
-	bees.Module
+	bees.Bee
 
 	addr        string
 	path		string

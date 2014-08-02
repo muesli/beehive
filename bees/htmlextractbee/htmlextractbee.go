@@ -28,7 +28,7 @@ import (
 )
 
 type HtmlExtractBee struct {
-	bees.Module
+	bees.Bee
 
 	url string
 

@@ -51,7 +51,7 @@ import (
 	_ "github.com/muesli/beehive/bees/spaceapibee"
 	_ "github.com/muesli/beehive/bees/timebee"
 	_ "github.com/muesli/beehive/bees/webbee"
-	_ "github.com/muesli/beehive/bees/efabee"
+	// _ "github.com/muesli/beehive/bees/efabee"
 	_ "github.com/muesli/beehive/bees/cronbee"
 	_ "github.com/muesli/beehive/bees/twitterbee"
 )
@@ -62,7 +62,7 @@ var (
 
 // This is where we unmarshal our beehive.conf into
 type Config struct {
-	Bees   []bees.Bee
+	Bees   []bees.BeeInstance
 	Chains []bees.Chain
 }
 

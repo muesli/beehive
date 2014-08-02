@@ -30,7 +30,7 @@ import (
 )
 
 type SpaceApiBee struct {
-	bees.Module
+	bees.Bee
 
 	url string
 

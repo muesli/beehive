@@ -30,7 +30,7 @@ type NotificationBeeFactory struct {
 
 func (factory *NotificationBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := NotificationBee{
-		Module: bees.NewBee(name, factory.Name(), description),
+		Bee: bees.NewBee(name, factory.Name(), description),
 	}
 	return &bee
 }

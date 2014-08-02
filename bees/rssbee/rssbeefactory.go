@@ -32,7 +32,7 @@ type RSSBeeFactory struct {
 
 func (factory *RSSBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := RSSBee{
-		Module: bees.NewBee(name, factory.Name(), description),
+		Bee: bees.NewBee(name, factory.Name(), description),
 		url:         options.GetValue("url").(string),
 	}
 

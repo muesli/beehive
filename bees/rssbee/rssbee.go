@@ -32,7 +32,7 @@ import (
 )
 
 type RSSBee struct {
-	bees.Module
+	bees.Bee
 
 	url         string
 

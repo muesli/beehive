@@ -29,7 +29,7 @@ import (
 )
 
 type TimeBee struct {
-	bees.Module
+	bees.Bee
 	cur_time, last_event MyTime
 	second, minute, hour, dayofweek, dayofmonth, month, year int
 	eventChan chan bees.Event

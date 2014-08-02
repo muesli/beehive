@@ -30,7 +30,7 @@ import (
 )
 
 type EFABee struct {
-	bees.Module
+	bees.Bee
 
 	baseURL   string
 	efa       *goefa.EFA
