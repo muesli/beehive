@@ -69,7 +69,7 @@ func (factory *IrcBeeFactory) Options() []bees.BeeOptionDescriptor {
 		bees.BeeOptionDescriptor{
 			Name:        "server",
 			Description: "Hostname of IRC server, eg: irc.example.org:6667",
-			Type:        "string",
+			Type:        "url",
 			Mandatory:   true,
 		},
 		bees.BeeOptionDescriptor{
