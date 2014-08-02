@@ -111,6 +111,9 @@ func (c *crontime) nextValidMonth(baseTime time.Time) {
 				return
 			}
 		} else {
+			if mon < int(c.calculatedTime.Month()) {
+				c.calculatedTime = c.calculatedTime.AddDate(1, 0, 0)
+			}
 			c.calculatedTime = setMonth(c.calculatedTime, mon)
 			return
 		}
@@ -224,8 +227,32 @@ func hasPassed(value, tstamp int) bool{
 	return value < tstamp
 }
 
+func monthHasDom(dom, month, year int) bool {
+	switch month{
+		case 1:	return dom <= 31
+		case 2:	
+			if isLeapYear(year) {
+				return dom <= 29
+			} else {
+				return dom <= 28
+			}
+		case 3: return dom <= 31
+		case 4: return dom <= 30
+		case 5: return dom <= 31
+		case 6: return dom <= 30
+		case 7: return dom <= 31
+		case 8: return dom <= 31
+		case 9: return dom <= 30
+		case 10: return dom <= 31
+		case 11: return dom <= 30
+		case 12: return dom <= 31
+		default: panic("strange thingys are happening!")
+	}
+}
+
 // Check if the combination of day(of month), month and year is the weekday dow.
 func monthHasDow(dow, dom, month, year int) bool{
+	if !monthHasDom(dom, month, year) {return false}
 	Nday := dom % 7
 	var Nmonth int
 	switch month{

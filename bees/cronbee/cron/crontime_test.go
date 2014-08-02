@@ -21,7 +21,7 @@ package cron
 
 import (
 	"testing"
-//	"fmt"
+	"fmt"
 	"time"
 )
 /*
@@ -50,6 +50,71 @@ func Test_IsLeapYear(t *testing.T) {
 		t.Error("crontime: isLeapYear failed, 6")
 	} else {
 		t.Log("crontime: isLeapYear passed")
+	}
+}
+
+func Test_calculateEventA(t *testing.T) {
+	ipstr := [6]string{"*/30", "*", "*", "*", "*", "*"}
+	baseTime := time.Date(2014, time.Month(1), 1, 0, 0, 0, 0, time.Local)
+	expectedTime := time.Date(2014, time.Month(1), 1, 0, 0, 30, 10000, time.Local)
+	cr := ParseInput(ipstr)
+	if cr.calculateEvent(baseTime) != expectedTime {
+		fmt.Println(cr.calculatedTime, expectedTime)
+		t.Error("crontime: calculateEvent failed, 1")
+	} else {
+		t.Log("crontime: calculateEvent passed")
+	}
+}
+
+func Test_calculateEventB(t *testing.T) {
+	ipstr := [6]string{"*", "*", "*", "*", "*", "*"}
+	baseTime := time.Date(2014, time.Month(1), 1, 0, 0, 0, 0, time.Local)
+	expectedTime := time.Date(2014, time.Month(1), 1, 0, 0, 1, 10000, time.Local)
+	cr := ParseInput(ipstr)
+	if cr.calculateEvent(baseTime) != expectedTime {
+		fmt.Println(cr.calculatedTime, expectedTime)
+		t.Error("crontime: calculateEvent failed, 2")
+	} else {
+		t.Log("crontime: calculateEvent passed")
+	}
+}
+
+func Test_calculateEventC(t *testing.T) {
+	ipstr := [6]string{"*", "*", "*", "*", "29", "02"}
+	baseTime := time.Date(2014, time.Month(1), 1, 0, 0, 0, 0, time.Local)
+	expectedTime := time.Date(2016, time.Month(2), 29, 0, 0, 0, 10000, time.Local)
+	cr := ParseInput(ipstr)
+	if cr.calculateEvent(baseTime) != expectedTime {
+		fmt.Println(cr.calculatedTime, expectedTime)
+		t.Error("crontime: calculateEvent failed, 3")
+	} else {
+		t.Log("crontime: calculateEvent passed")
+	}
+}
+
+func Test_calculateEventD(t *testing.T) {
+	ipstr := [6]string{"*", "*", "03", "*", "*", "*"}
+	baseTime :=     time.Date(2014, time.Month(1), 1, 4, 0, 0, 0, time.Local)
+	expectedTime := time.Date(2014, time.Month(1), 2, 3, 0, 0, 10000, time.Local)
+	cr := ParseInput(ipstr)
+	if cr.calculateEvent(baseTime) != expectedTime {
+		fmt.Println(cr.calculatedTime, expectedTime)
+		t.Error("crontime: calculateEvent failed, 4")
+	} else {
+		t.Log("crontime: calculateEvent passed")
+	}
+}
+
+func Test_calculateEventE(t *testing.T) {
+	ipstr := [6]string{"*", "*", "*", "02", "*", "*"}
+	baseTime :=     time.Date(2014, time.Month(1), 1, 0, 0, 0, 0, time.Local)
+	expectedTime := time.Date(2014, time.Month(1), 7, 0, 0, 0, 10000, time.Local)
+	cr := ParseInput(ipstr)
+	if cr.calculateEvent(baseTime) != expectedTime {
+		fmt.Println(cr.calculatedTime, expectedTime)
+		t.Error("crontime: calculateEvent failed, 5")
+	} else {
+		t.Log("crontime: calculateEvent passed")
 	}
 }
 
