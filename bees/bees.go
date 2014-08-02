@@ -106,6 +106,7 @@ var (
 	chains    []Chain
 )
 
+// Retrieve a value from an BeeOptions struct
 func (opts BeeOptions) GetValue(name string) interface{} {
 	for _, opt := range opts {
 		if opt.Name == name {
@@ -161,6 +162,7 @@ func GetBee(identifier string) *BeeInterface {
 	return nil
 }
 
+// Starts a bee and recovers from panics
 func startBee(mod *BeeInterface, fatals int) {
 	if fatals >= 3 {
 		log.Println("Terminating evil bee", (*mod).Name(), "after", fatals, "failed tries!")
@@ -199,6 +201,7 @@ func StartBees(beeList []Bee) {
 	}
 }
 
+// Stops all bees gracefully
 func StopBees() {
 	for _, bee := range bees {
 		log.Println("Stopping bee:", (*bee).Name())
@@ -209,11 +212,13 @@ func StopBees() {
 	bees = make(map[string]*BeeInterface)
 }
 
+// Stops all running bees and restarts a new set of bees
 func RestartBees(bees []Bee) {
 	StopBees()
 	StartBees(bees)
 }
 
+// Returns a new Module and sets up sig-channel & waitGroup
 func NewBee(name, factoryName, description string) Module {
 	b := Module{
 		ModName:        name,

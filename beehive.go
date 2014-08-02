@@ -60,6 +60,7 @@ var (
 	configFile string
 )
 
+// This is where we unmarshal our beehive.conf into
 type Config struct {
 	Bees   []bees.Bee
 	Chains []bees.Chain
