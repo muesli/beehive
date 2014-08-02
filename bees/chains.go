@@ -73,7 +73,21 @@ func execFilter(filter Filter, opts map[string]interface{}) bool {
 			}
 		}
 
-		if f.Passes(origVal, cleanVal) == opt.Inverse {
+		// if value is an array, iterate over it and pass if any of its values pass
+		passes := false
+		switch v := cleanVal.(type) {
+			case []interface{}:
+				for _, vi := range v {
+					if f.Passes(origVal, vi) {
+						passes = true
+						break
+					}
+				}
+
+			default:
+				passes = f.Passes(origVal, cleanVal)
+		}
+		if passes == opt.Inverse {
 			return false
 		}
 	}
