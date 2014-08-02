@@ -25,40 +25,6 @@ import (
 	"sync"
 )
 
-type Bee struct {
-	BeeName        string
-	BeeNamespace   string
-	BeeDescription string
-
-	SigChan   chan bool
-	waitGroup *sync.WaitGroup
-}
-
-func (bee *Bee) Name() string {
-	return bee.BeeName
-}
-
-func (bee *Bee) Namespace() string {
-	return bee.BeeNamespace
-}
-
-func (bee *Bee) Description() string {
-	return bee.BeeDescription
-}
-
-func (bee *Bee) WaitGroup() *sync.WaitGroup {
-	return bee.waitGroup
-}
-
-func (bee *Bee) Run(chan Event) {
-}
-
-func (bee *Bee) Stop() {
-	close(bee.SigChan)
-	bee.waitGroup.Wait()
-	log.Println(bee.Name(), "stopped gracefully!")
-}
-
 type BeeFactory struct {
 }
 
@@ -124,4 +90,29 @@ func GetFactory(identifier string) *BeeFactoryInterface {
 	}
 
 	return nil
+}
+
+func (bee *Bee) Name() string {
+	return bee.BeeName
+}
+
+func (bee *Bee) Namespace() string {
+	return bee.BeeNamespace
+}
+
+func (bee *Bee) Description() string {
+	return bee.BeeDescription
+}
+
+func (bee *Bee) WaitGroup() *sync.WaitGroup {
+	return bee.waitGroup
+}
+
+func (bee *Bee) Run(chan Event) {
+}
+
+func (bee *Bee) Stop() {
+	close(bee.SigChan)
+	bee.waitGroup.Wait()
+	log.Println(bee.Name(), "stopped gracefully!")
 }
