@@ -146,10 +146,10 @@ func handleEvents() {
 }
 
 // Bees need to call this method to register themselves
-func RegisterBee(mod BeeInterface) {
-	log.Println("Worker bee ready:", mod.Name(), "-", mod.Description())
+func RegisterBee(bee BeeInterface) {
+	log.Println("Worker bee ready:", bee.Name(), "-", bee.Description())
 
-	bees[mod.Name()] = &mod
+	bees[bee.Name()] = &bee
 }
 
 // Returns module with this name
@@ -163,21 +163,21 @@ func GetBee(identifier string) *BeeInterface {
 }
 
 // Starts a bee and recovers from panics
-func startBee(mod *BeeInterface, fatals int) {
+func startBee(bee *BeeInterface, fatals int) {
 	if fatals >= 3 {
-		log.Println("Terminating evil bee", (*mod).Name(), "after", fatals, "failed tries!")
+		log.Println("Terminating evil bee", (*bee).Name(), "after", fatals, "failed tries!")
 		return
 	}
 
-	defer func(mod *BeeInterface) {
+	defer func(bee *BeeInterface) {
 		if e := recover(); e != nil {
 			log.Println("Fatal bee event:", e, fatals)
-			startBee(mod, fatals+1)
+			startBee(bee, fatals+1)
 		}
-	}(mod)
+	}(bee)
 
-	defer (*mod).WaitGroup().Done()
-	(*mod).Run(eventsIn)
+	defer (*bee).WaitGroup().Done()
+	(*bee).Run(eventsIn)
 }
 
 // Starts all registered bees
@@ -218,7 +218,7 @@ func RestartBees(bees []BeeInstance) {
 	StartBees(bees)
 }
 
-// Returns a new Module and sets up sig-channel & waitGroup
+// Returns a new bee and sets up sig-channel & waitGroup
 func NewBee(name, factoryName, description string) Bee {
 	b := Bee{
 		BeeName:        name,

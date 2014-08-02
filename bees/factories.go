@@ -34,29 +34,29 @@ type Bee struct {
 	waitGroup *sync.WaitGroup
 }
 
-func (mod *Bee) Name() string {
-	return mod.BeeName
+func (bee *Bee) Name() string {
+	return bee.BeeName
 }
 
-func (mod *Bee) Namespace() string {
-	return mod.BeeNamespace
+func (bee *Bee) Namespace() string {
+	return bee.BeeNamespace
 }
 
-func (mod *Bee) Description() string {
-	return mod.BeeDescription
+func (bee *Bee) Description() string {
+	return bee.BeeDescription
 }
 
-func (mod *Bee) WaitGroup() *sync.WaitGroup {
-	return mod.waitGroup
+func (bee *Bee) WaitGroup() *sync.WaitGroup {
+	return bee.waitGroup
 }
 
-func (mod *Bee) Run(chan Event) {
+func (bee *Bee) Run(chan Event) {
 }
 
-func (mod *Bee) Stop() {
-	close(mod.SigChan)
-	mod.waitGroup.Wait()
-	log.Println(mod.Name(), "stopped gracefully!")
+func (bee *Bee) Stop() {
+	close(bee.SigChan)
+	bee.waitGroup.Wait()
+	log.Println(bee.Name(), "stopped gracefully!")
 }
 
 type BeeFactory struct {
