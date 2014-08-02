@@ -46,6 +46,10 @@ func (factory *JenkinsBeeFactory) Description() string {
 	return "A bee that triggers and reads info from Jenkins-Builds"
 }
 
+func (factory *JenkinsBeeFactory) Image() string {
+	return factory.Name() + ".png"
+}
+
 func (factory *JenkinsBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		bees.BeeOptionDescriptor{

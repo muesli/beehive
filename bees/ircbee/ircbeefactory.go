@@ -60,6 +60,10 @@ func (factory *IrcBeeFactory) Description() string {
 	return "An IRC module for beehive"
 }
 
+func (factory *IrcBeeFactory) Image() string {
+	return factory.Name() + ".png"
+}
+
 func (factory *IrcBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		bees.BeeOptionDescriptor{

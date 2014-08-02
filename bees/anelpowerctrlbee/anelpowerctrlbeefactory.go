@@ -49,6 +49,10 @@ func (factory *AnelPowerCtrlBeeFactory) Description() string {
 	return "A bee that controls Anel's PowerCtrl"
 }
 
+func (factory *AnelPowerCtrlBeeFactory) Image() string {
+	return factory.Name() + ".png"
+}
+
 func (factory *AnelPowerCtrlBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		bees.BeeOptionDescriptor{

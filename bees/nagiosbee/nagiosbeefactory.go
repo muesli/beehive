@@ -47,6 +47,10 @@ func (factory *NagiosBeeFactory) Description() string {
 	return "A bee that fetches status changes from nagios-monitors."
 }
 
+func (factory *NagiosBeeFactory) Image() string {
+	return factory.Name() + ".png"
+}
+
 func (factory *NagiosBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		bees.BeeOptionDescriptor{

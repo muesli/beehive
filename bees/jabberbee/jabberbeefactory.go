@@ -53,6 +53,10 @@ func (factory *JabberBeeFactory) Description() string {
 	return "A Jabber module for beehive"
 }
 
+func (factory *JabberBeeFactory) Image() string {
+	return factory.Name() + ".png"
+}
+
 func (factory *JabberBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		bees.BeeOptionDescriptor{

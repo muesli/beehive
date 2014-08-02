@@ -48,6 +48,10 @@ func (factory *SpaceApiBeeFactory) Description() string {
 	return "A bee that echoes the status of a SpaceAPI instance"
 }
 
+func (factory *SpaceApiBeeFactory) Image() string {
+	return factory.Name() + ".png"
+}
+
 func (factory *SpaceApiBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		bees.BeeOptionDescriptor{

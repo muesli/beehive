@@ -47,6 +47,10 @@ func (factory *RSSBeeFactory) Description() string {
 	return "A bee that manages RSS-feeds"
 }
 
+func (factory *RSSBeeFactory) Image() string {
+	return factory.Name() + ".png"
+}
+
 func (factory *RSSBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		bees.BeeOptionDescriptor{

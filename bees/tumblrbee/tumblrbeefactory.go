@@ -52,6 +52,10 @@ func (factory *TumblrBeeFactory) Description() string {
 	return "An Tumblr module for beehive"
 }
 
+func (factory *TumblrBeeFactory) Image() string {
+	return factory.Name() + ".png"
+}
+
 func (factory *TumblrBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		bees.BeeOptionDescriptor{

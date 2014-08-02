@@ -51,6 +51,10 @@ func (factory *TwitterBeeFactory) Description() string {
 	return "Tweet and receive Tweets."
 }
 
+func (factory *TwitterBeeFactory) Image() string {
+	return factory.Name() + ".png"
+}
+
 func (factory *TwitterBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		bees.BeeOptionDescriptor{
