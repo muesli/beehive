@@ -53,6 +53,7 @@ import (
 	_ "github.com/muesli/beehive/bees/webbee"
 	_ "github.com/muesli/beehive/bees/efabee"
 	_ "github.com/muesli/beehive/bees/cronbee"
+	_ "github.com/muesli/beehive/bees/tumblrbee"
 	_ "github.com/muesli/beehive/bees/twitterbee"
 )
 
