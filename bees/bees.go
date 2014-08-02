@@ -46,6 +46,16 @@ type BeeInterface interface {
 	Action(action Action) []Placeholder
 }
 
+// Base-struct to be embedded by bee implementations
+type Bee struct {
+	BeeName        string
+	BeeNamespace   string
+	BeeDescription string
+
+	SigChan   chan bool
+	waitGroup *sync.WaitGroup
+}
+
 // An instance of a bee
 type BeeInstance struct {
 	Name        string
@@ -74,24 +84,6 @@ type Filter struct {
 	Options []FilterOption
 }
 
-// A FilterOption used by filters
-type FilterOption struct {
-	Name            string
-	Type            string
-	Inverse         bool
-	CaseInsensitive bool
-	Trimmed         bool
-	Value           interface{}
-}
-
-// A BeeOption is used to configure bees
-type BeeOptions []BeeOption
-type BeeOption struct {
-	Name  string
-	Type  string
-	Value interface{}
-}
-
 // A Placeholder used by ins & outs of a module.
 type Placeholder struct {
 	Name  string
@@ -100,22 +92,11 @@ type Placeholder struct {
 }
 
 var (
-	eventsIn                                     = make(chan Event)
-	bees   map[string]*BeeInterface        = make(map[string]*BeeInterface)
+	eventsIn                                  = make(chan Event)
+	bees      map[string]*BeeInterface        = make(map[string]*BeeInterface)
 	factories map[string]*BeeFactoryInterface = make(map[string]*BeeFactoryInterface)
 	chains    []Chain
 )
-
-// Retrieve a value from an BeeOptions struct
-func (opts BeeOptions) GetValue(name string) interface{} {
-	for _, opt := range opts {
-		if opt.Name == name {
-			return opt.Value
-		}
-	}
-
-	return nil
-}
 
 // Handles incoming events and executes matching Chains.
 func handleEvents() {
