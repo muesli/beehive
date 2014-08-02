@@ -51,7 +51,7 @@ import (
 	_ "github.com/muesli/beehive/bees/spaceapibee"
 	_ "github.com/muesli/beehive/bees/timebee"
 	_ "github.com/muesli/beehive/bees/webbee"
-	// _ "github.com/muesli/beehive/bees/efabee"
+	_ "github.com/muesli/beehive/bees/efabee"
 	_ "github.com/muesli/beehive/bees/cronbee"
 	_ "github.com/muesli/beehive/bees/twitterbee"
 )
