@@ -25,12 +25,12 @@ import (
 )
 
 type RSSBeeFactory struct {
-	bees.ModuleFactory
+	bees.BeeFactory
 }
 
 // Interface impl
 
-func (factory *RSSBeeFactory) New(name, description string, options bees.BeeOptions) bees.ModuleInterface {
+func (factory *RSSBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := RSSBee{
 		Module: bees.NewBee(name, factory.Name(), description),
 		url:         options.GetValue("url").(string),

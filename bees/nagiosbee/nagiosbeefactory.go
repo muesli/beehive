@@ -25,10 +25,10 @@ import (
 )
 
 type NagiosBeeFactory struct{
-	bees.ModuleFactory
+	bees.BeeFactory
 }
 
-func (factory *NagiosBeeFactory) New(name, description string, options bees.BeeOptions) bees.ModuleInterface {
+func (factory *NagiosBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := NagiosBee{
 		Module: bees.NewBee(name, factory.Name(), description),
 		url:      options.GetValue("url").(string),

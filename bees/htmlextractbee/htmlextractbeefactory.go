@@ -25,12 +25,12 @@ import (
 )
 
 type HtmlExtractBeeFactory struct {
-	bees.ModuleFactory
+	bees.BeeFactory
 }
 
 // Interface impl
 
-func (factory *HtmlExtractBeeFactory) New(name, description string, options bees.BeeOptions) bees.ModuleInterface {
+func (factory *HtmlExtractBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := HtmlExtractBee{
 		Module: bees.NewBee(name, factory.Name(), description),
 	}

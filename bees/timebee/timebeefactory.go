@@ -25,10 +25,10 @@ import (
 )
 
 type TimeBeeFactory struct {
-	bees.ModuleFactory
+	bees.BeeFactory
 }
 
-func (factory *TimeBeeFactory) New(name, description string, options bees.BeeOptions) bees.ModuleInterface {
+func (factory *TimeBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := TimeBee{
 		Module: bees.NewBee(name, factory.Name(), description),
 		second: int(options.GetValue("Second").(float64)),

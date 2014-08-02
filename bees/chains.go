@@ -135,7 +135,7 @@ func execAction(action Action, opts map[string]interface{}) bool {
 	for _, v := range a.Options {
 		log.Println("\t\tOptions:", v)
 	}
-	(*GetModule(a.Bee)).Action(a)
+	(*GetBee(a.Bee)).Action(a)
 
 	return true
 }

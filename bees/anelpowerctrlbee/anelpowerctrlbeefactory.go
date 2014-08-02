@@ -25,12 +25,12 @@ import (
 )
 
 type AnelPowerCtrlBeeFactory struct {
-	bees.ModuleFactory
+	bees.BeeFactory
 }
 
 // Interface impl
 
-func (factory *AnelPowerCtrlBeeFactory) New(name, description string, options bees.BeeOptions) bees.ModuleInterface {
+func (factory *AnelPowerCtrlBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := AnelPowerCtrlBee{
 		Module: bees.NewBee(name, factory.Name(), description),
 		addr:        options.GetValue("server").(string),

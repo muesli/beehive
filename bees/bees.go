@@ -27,7 +27,7 @@ import (
 )
 
 // Interface which all modules need to implement
-type ModuleInterface interface {
+type BeeInterface interface {
 	// Name of the module
 	Name() string
 	// Namespace of the module
@@ -101,8 +101,8 @@ type Placeholder struct {
 
 var (
 	eventsIn                                     = make(chan Event)
-	modules   map[string]*ModuleInterface        = make(map[string]*ModuleInterface)
-	factories map[string]*ModuleFactoryInterface = make(map[string]*ModuleFactoryInterface)
+	bees   map[string]*BeeInterface        = make(map[string]*BeeInterface)
+	factories map[string]*BeeFactoryInterface = make(map[string]*BeeFactoryInterface)
 	chains    []Chain
 )
 
@@ -144,33 +144,33 @@ func handleEvents() {
 	}
 }
 
-// Modules need to call this method to register themselves
-func RegisterModule(mod ModuleInterface) {
+// Bees need to call this method to register themselves
+func RegisterBee(mod BeeInterface) {
 	log.Println("Worker bee ready:", mod.Name(), "-", mod.Description())
 
-	modules[mod.Name()] = &mod
+	bees[mod.Name()] = &mod
 }
 
 // Returns module with this name
-func GetModule(identifier string) *ModuleInterface {
-	mod, ok := modules[identifier]
+func GetBee(identifier string) *BeeInterface {
+	bee, ok := bees[identifier]
 	if ok {
-		return mod
+		return bee
 	}
 
 	return nil
 }
 
-func startModule(mod *ModuleInterface, fatals int) {
+func startBee(mod *BeeInterface, fatals int) {
 	if fatals >= 3 {
 		log.Println("Terminating evil bee", (*mod).Name(), "after", fatals, "failed tries!")
 		return
 	}
 
-	defer func(mod *ModuleInterface) {
+	defer func(mod *BeeInterface) {
 		if e := recover(); e != nil {
 			log.Println("Fatal bee event:", e, fatals)
-			startModule(mod, fatals+1)
+			startBee(mod, fatals+1)
 		}
 	}(mod)
 
@@ -178,40 +178,40 @@ func startModule(mod *ModuleInterface, fatals int) {
 	(*mod).Run(eventsIn)
 }
 
-// Starts all registered modules
-func StartModules(bees []Bee) {
+// Starts all registered bees
+func StartBees(beeList []Bee) {
 	eventsIn = make(chan Event)
 	go handleEvents()
 
-	for _, bee := range bees {
+	for _, bee := range beeList {
 		factory := GetFactory(bee.Class)
 		if factory == nil {
 			panic("Unknown bee-class in config file: " + bee.Class)
 		}
 		mod := (*factory).New(bee.Name, bee.Description, bee.Options)
-		RegisterModule(mod)
+		RegisterBee(mod)
 	}
 
-	for _, m := range modules {
-		go func(mod *ModuleInterface) {
-			startModule(mod, 0)
+	for _, m := range bees {
+		go func(mod *BeeInterface) {
+			startBee(mod, 0)
 		}(m)
 	}
 }
 
-func StopModules() {
-	for _, bee := range modules {
+func StopBees() {
+	for _, bee := range bees {
 		log.Println("Stopping bee:", (*bee).Name())
 		(*bee).Stop()
 	}
 
 	close(eventsIn)
-	modules = make(map[string]*ModuleInterface)
+	bees = make(map[string]*BeeInterface)
 }
 
-func RestartModules(bees []Bee) {
-	StopModules()
-	StartModules(bees)
+func RestartBees(bees []Bee) {
+	StopBees()
+	StartBees(bees)
 }
 
 func NewBee(name, factoryName, description string) Module {

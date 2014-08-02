@@ -59,26 +59,26 @@ func (mod *Module) Stop() {
 	log.Println(mod.Name(), "stopped gracefully!")
 }
 
-type ModuleFactory struct {
+type BeeFactory struct {
 }
 
-func (factory *ModuleFactory) Image() string {
+func (factory *BeeFactory) Image() string {
 	return ""
 }
 
-func (factory *ModuleFactory) Options() []BeeOptionDescriptor {
+func (factory *BeeFactory) Options() []BeeOptionDescriptor {
 	return []BeeOptionDescriptor{}
 }
 
-func (factory *ModuleFactory) Events() []EventDescriptor {
+func (factory *BeeFactory) Events() []EventDescriptor {
 	return []EventDescriptor{}
 }
 
-func (factory *ModuleFactory) Actions() []ActionDescriptor {
+func (factory *BeeFactory) Actions() []ActionDescriptor {
 	return []ActionDescriptor{}
 }
 
-type ModuleFactoryInterface interface {
+type BeeFactoryInterface interface {
 	// Name of the module
 	Name() string
 	// Description of the module
@@ -93,11 +93,11 @@ type ModuleFactoryInterface interface {
 	// Actions supported by module
 	Actions() []ActionDescriptor
 
-	New(name, description string, options BeeOptions) ModuleInterface
+	New(name, description string, options BeeOptions) BeeInterface
 }
 
 // ModuleFactories need to call this method to register themselves
-func RegisterFactory(factory ModuleFactoryInterface) {
+func RegisterFactory(factory BeeFactoryInterface) {
 	log.Println("Bee Factory ready:", factory.Name(), "-", factory.Description())
 	for _, ev := range factory.Events() {
 		log.Println("\tProvides event:", ev.Name, "-", ev.Description)
@@ -117,7 +117,7 @@ func RegisterFactory(factory ModuleFactoryInterface) {
 }
 
 // Returns factory with this name
-func GetFactory(identifier string) *ModuleFactoryInterface {
+func GetFactory(identifier string) *BeeFactoryInterface {
 	factory, ok := factories[identifier]
 	if ok {
 		return factory

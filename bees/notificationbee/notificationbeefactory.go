@@ -25,10 +25,10 @@ import (
 )
 
 type NotificationBeeFactory struct {
-	bees.ModuleFactory
+	bees.BeeFactory
 }
 
-func (factory *NotificationBeeFactory) New(name, description string, options bees.BeeOptions) bees.ModuleInterface {
+func (factory *NotificationBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := NotificationBee{
 		Module: bees.NewBee(name, factory.Name(), description),
 	}

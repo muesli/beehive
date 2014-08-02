@@ -98,7 +98,7 @@ func main() {
 		app.CliFlag{&configFile, "config", "./beehive.conf", "Config-file to use"},
 	})
 
-	// Parse command-line args for all registered modules
+	// Parse command-line args for all registered bees
 	app.Run()
 
 	log.Println()
@@ -106,8 +106,8 @@ func main() {
 
 	config := loadConfig()
 
-	// Initialize modules
-	bees.StartModules(config.Bees)
+	// Initialize bees
+	bees.StartBees(config.Bees)
 	// Load chains from config
 	bees.SetChains(config.Chains)
 
@@ -121,7 +121,7 @@ func main() {
 		switch s {
 		case syscall.SIGHUP:
 			config = loadConfig()
-			bees.RestartModules(config.Bees)
+			bees.RestartBees(config.Bees)
 			bees.SetChains(config.Chains)
 
 		case syscall.SIGTERM:

@@ -26,12 +26,12 @@ import (
 )
 
 type TwitterBeeFactory struct {
-	bees.ModuleFactory
+	bees.BeeFactory
 }
 
 // Interface impl
 
-func (factory *TwitterBeeFactory) New(name, description string, options bees.BeeOptions) bees.ModuleInterface {
+func (factory *TwitterBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := TwitterBee{
 		Module: bees.NewBee(name, factory.Name(), description),
 		consumer_key:        options.GetValue("consumer_key").(string),
