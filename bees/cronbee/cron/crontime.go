@@ -106,40 +106,44 @@ func (c *crontime) calculateEvent(baseTime time.Time) time.Time{
 func (c *crontime) nextValidMonth(baseTime time.Time) {
 	for _, mon := range c.month {
 		if mon >= int(c.calculatedTime.Month()) {
+			//log.Print("Inside Month", mon, c.calculatedTime)
 			c.calculatedTime = setMonth(c.calculatedTime, mon)
+			//log.Println(" :: and out", c.calculatedTime)
 			return
 		}
 	}
 	// If no result was found try it again in the following year
 	c.calculatedTime = c.calculatedTime.AddDate(1, 0, 0)
 	c.calculatedTime = setMonth(c.calculatedTime, c.month[0])
-	log.Println(c.calculatedTime)
+	//log.Println("Cronbee: Month", c.calculatedTime, baseTime, c.month)
 	c.nextValidMonth(baseTime)
 }
 
 // Calculates the next valid Day based upon the previous results.
 func (c *crontime) nextValidDay(baseTime time.Time) {
 	for _, dom := range c.dom {
-		if c.calculatedTime.Month() == baseTime.Month() {
-			if !hasPassed(dom, c.calculatedTime.Day()) {
-				for _, dow := range c.dow {
-					if monthHasDow(dow, dom, int(c.calculatedTime.Month()), c.calculatedTime.Year()){
-						c.calculatedTime = setDay(c.calculatedTime, dom)
-						return
-					}
-				}
-			}
-		} else {
+		if dom >= c.calculatedTime.Day() {
 			for _, dow := range c.dow {
 				if monthHasDow(dow, dom, int(c.calculatedTime.Month()), c.calculatedTime.Year()){
 					c.calculatedTime = setDay(c.calculatedTime, dom)
+					//log.Println("Cronbee: Day-INS-1:", c.calculatedTime)
 					return
 				}
 			}
 		}
-	}
+	}/* else {
+		for _, dow := range c.dow {
+			if monthHasDow(dow, dom, int(c.calculatedTime.Month()), c.calculatedTime.Year()){
+				c.calculatedTime = setDay(c.calculatedTime, dom)
+				log.Println("Cronbee: Day-INS-2:", c.calculatedTime)
+				return
+			}
+		}
+	}*/
 	// If no result was found try it again in the following month.
 	c.calculatedTime = c.calculatedTime.AddDate(0, 1, 0)
+	c.calculatedTime = setDay(c.calculatedTime, c.dom[0])
+	//log.Println("Cronbee: Day", c.calculatedTime, baseTime)
 	c.nextValidMonth(baseTime)
 	c.nextValidDay(baseTime)
 }
@@ -158,7 +162,10 @@ func (c *crontime) nextValidHour(baseTime time.Time) {
 		}
 	}
 	// If no result was found try it again in the following day.
-	c.calculatedTime = c.calculatedTime.AddDate(0, 0, 1)
+	c.calculatedTime = c.calculatedTime.AddDate(0, 0, 1)     // <-|
+	c.calculatedTime = setHour(c.calculatedTime, c.hour[0])  //   |
+	//log.Println("Cronbee: Hour", c.calculatedTime, baseTime) // |
+	c.nextValidMonth(baseTime) // May trigger a new month --------|
 	c.nextValidDay(baseTime)
 	c.nextValidHour(baseTime)
 }
@@ -177,6 +184,8 @@ func (c *crontime) nextValidMinute(baseTime time.Time) {
 		}
 	}
 	c.calculatedTime = c.calculatedTime.Add(1 * time.Hour)
+	c.calculatedTime = setMinute(c.calculatedTime, c.minute[0])
+	//log.Println("Cronbee: Minute", c.calculatedTime, baseTime)
 	c.nextValidHour(baseTime)
 	c.nextValidMinute(baseTime)
 }
@@ -197,6 +206,7 @@ func (c *crontime) nextValidSecond(baseTime time.Time) {
 	}
 	c.calculatedTime = c.calculatedTime.Add(1 * time.Minute)
 	c.calculatedTime = setSecond(c.calculatedTime, 0)
+	//log.Println("Cronbee: Second", c.calculatedTime, baseTime)
 	c.nextValidMinute(baseTime)
 	c.nextValidSecond(baseTime)
 }
