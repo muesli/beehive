@@ -194,7 +194,11 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 			log.Println("Failed to connect to IRC:", mod.server)
 			log.Println(err)
 		} else {
+			disconnected := false
 			for {
+				if disconnected {
+					break
+				}
 				select {
 					case <-mod.SigChan:
 						mod.client.Quit()
@@ -206,6 +210,7 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 							mod.Rejoin()
 						} else {
 							log.Println("Disconnected from IRC:", mod.server)
+							disconnected = true
 							break
 						}
 
