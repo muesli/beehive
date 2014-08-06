@@ -23,6 +23,7 @@
  * - Test
  */
 
+// This package allows you to schedule events
 package cron
 
 import (
@@ -45,6 +46,7 @@ type crontime struct {
 	eventList list.List
 }
 
+// Returns the time.Duration until the next event.
 func (c *crontime) DurationUntilNextEvent() time.Duration {
 	return c.nextEvent().Sub(time.Now())
 }
