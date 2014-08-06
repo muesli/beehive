@@ -44,7 +44,7 @@ func (mod *HtmlExtractBee) Action(action bees.Action) []bees.Placeholder {
 		for _, opt := range action.Options {
 			if opt.Name == "url" {
 				url = opt.Value.(string)
-				if start := strings.Index(url, "http://"); start >= 0 {
+				if start := strings.Index(url, "http"); start >= 0 {
 					url = url[start:]
 					if end := strings.Index(url, " "); end >= 0 {
 						url = url[:end]
