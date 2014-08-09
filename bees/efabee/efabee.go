@@ -22,11 +22,10 @@
 package efabee
 
 import (
-	"github.com/muesli/goefa"
+	"github.com/michiwend/goefa"
 	"github.com/muesli/beehive/bees"
 	"log"
-	_ "strings"
-	_ "time"
+	"time"
 )
 
 type EFABee struct {
@@ -54,16 +53,15 @@ func (mod *EFABee) Action(action bees.Action) []bees.Placeholder {
 		}
 
 		//FIXME get departures
-		station, err := mod.efa.FindStop(stop)
+		_, station, err := mod.efa.FindStop(stop)
         if err != nil {
                 log.Println("Stop does not exist or name is not unique!")
                 return outs
         }
         log.Printf("Selected stop: %s (%d)\n\n",
-                station.IdfdStop.StopName,
-                station.IdfdStop.StopID)
+                station[0].Name)
 
-        departures, err := mod.efa.Departures(station, 3)
+        departures, err := station[0].Departures(time.Now(), 3)
         if err != nil {
                 log.Println("Could not retrieve departure times!")
                 return outs
