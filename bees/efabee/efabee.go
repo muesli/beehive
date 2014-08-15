@@ -32,7 +32,7 @@ type EFABee struct {
 	bees.Bee
 
 	Provider  string
-	efa       goefa.EFAProvider
+	efa       *goefa.EFAProvider
 
 	eventChan chan bees.Event
 }
@@ -107,5 +107,5 @@ func (mod *EFABee) Action(action bees.Action) []bees.Placeholder {
 func (mod *EFABee) Run(eventChan chan bees.Event) {
 	mod.eventChan = eventChan
 
-	mod.efa = goefa.Providers[mod.Provider]
+	mod.efa, _ = goefa.ProviderFromJson(mod.Provider)
 }
