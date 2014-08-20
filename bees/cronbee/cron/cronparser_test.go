@@ -120,7 +120,9 @@ func Test_check_syntax(t *testing.T) {
 		t.Error("crontime: check_syntax()-Test failed, 15")
 	} else if check_syntax("*/5") {
 		t.Error("crontime: check_syntax()-Test failed, 16")
-	} else {
+	} else if check_syntax("æſ»„ł@¶²¼½öäüµ") {
+        t.Error("crontime: check_syntax()-Test failed, 17")
+    } else {
 		t.Log("crontime: check_syntax()-Test passed")
 	}
 }
