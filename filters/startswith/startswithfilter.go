@@ -38,9 +38,12 @@ func (filter *StartsWithFilter) Description() string {
 }
 
 func (filter *StartsWithFilter) Passes(data interface{}, value interface{}) bool {
-	switch v := data.(type) {
+	switch d := data.(type) {
 	case string:
-		return strings.HasPrefix(v, value.(string))
+		switch v := value.(type) {
+			case string:
+				return strings.HasPrefix(d, v)
+		}
 		//FIXME: support maps
 	}
 
