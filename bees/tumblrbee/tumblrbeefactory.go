@@ -32,13 +32,13 @@ type TumblrBeeFactory struct {
 
 func (factory *TumblrBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := TumblrBee{
-		Bee: bees.NewBee(name, factory.Name(), description),
-		blogname: options.GetValue("blogname").(string),
-		callbackUrl: options.GetValue("callback_url").(string),
-		consumerKey: options.GetValue("consumer_key").(string),
+		Bee:            bees.NewBee(name, factory.Name(), description),
+		blogname:       options.GetValue("blogname").(string),
+		callbackUrl:    options.GetValue("callback_url").(string),
+		consumerKey:    options.GetValue("consumer_key").(string),
 		consumerSecret: options.GetValue("consumer_secret").(string),
-		token: options.GetValue("token").(string),
-		tokenSecret: options.GetValue("token_secret").(string),
+		token:          options.GetValue("token").(string),
+		tokenSecret:    options.GetValue("token_secret").(string),
 	}
 
 	return &bee
@@ -113,6 +113,21 @@ func (factory *TumblrBeeFactory) Actions() []bees.ActionDescriptor {
 				bees.PlaceholderDescriptor{
 					Name:        "text",
 					Description: "Content of the Tumblr post",
+					Type:        "string",
+				},
+			},
+			Namespace:   factory.Name(),
+			Name:        "postQuote",
+			Description: "Posts a quote on Tumblr",
+			Options: []bees.PlaceholderDescriptor{
+				bees.PlaceholderDescriptor{
+					Name:        "quote",
+					Description: "Content of the Tumblr quote",
+					Type:        "string",
+				},
+				bees.PlaceholderDescriptor{
+					Name:        "source",
+					Description: "Optional source of the Tumblr quote",
 					Type:        "string",
 				},
 			},

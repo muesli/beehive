@@ -22,9 +22,10 @@
 package tumblrbee
 
 import (
-	"github.com/muesli/beehive/bees"
-	"github.com/MariaTerzieva/gotumblr"
 	_ "log"
+
+	"github.com/MariaTerzieva/gotumblr"
+	"github.com/muesli/beehive/bees"
 )
 
 type TumblrBee struct {
@@ -34,11 +35,11 @@ type TumblrBee struct {
 
 	blogname string
 
-	callbackUrl string
-	consumerKey string
+	callbackUrl    string
+	consumerKey    string
 	consumerSecret string
-	token string
-	tokenSecret string
+	token          string
+	tokenSecret    string
 }
 
 // Interface impl
@@ -59,15 +60,33 @@ func (mod *TumblrBee) Action(action bees.Action) []bees.Placeholder {
 		state := "published"
 		mod.client.CreateText(mod.blogname, map[string]string{"body": text, "state": state})
 
+	case "postQuote":
+		quote := ""
+		source := ""
+
+		for _, opt := range action.Options {
+
+			switch opt.Name {
+			case "quote":
+				quote = opt.Value.(string)
+			case "source":
+				source = opt.Value(string)
+			}
+
+		}
+
+		state := "published"
+		mod.client.CreateText(mod.blogname, map[string]string{"text": qoute, "source": source, "state": state})
+
 	default:
-		panic("Unknown action triggered in " +mod.Name()+": "+action.Name)
+		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
 	}
 
 	return outs
 }
 
 func (mod *TumblrBee) Run(eventChan chan bees.Event) {
-    mod.client = gotumblr.NewTumblrRestClient(mod.consumerKey, mod.consumerSecret,
-											  mod.token, mod.tokenSecret,
-											  mod.callbackUrl, "http://api.tumblr.com")
+	mod.client = gotumblr.NewTumblrRestClient(mod.consumerKey, mod.consumerSecret,
+		mod.token, mod.tokenSecret,
+		mod.callbackUrl, "http://api.tumblr.com")
 }
