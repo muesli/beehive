@@ -116,6 +116,8 @@ func (factory *TumblrBeeFactory) Actions() []bees.ActionDescriptor {
 					Type:        "string",
 				},
 			},
+		},
+		bees.ActionDescriptor{
 			Namespace:   factory.Name(),
 			Name:        "postQuote",
 			Description: "Posts a quote on Tumblr",

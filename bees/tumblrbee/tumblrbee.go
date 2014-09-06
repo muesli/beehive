@@ -70,13 +70,13 @@ func (mod *TumblrBee) Action(action bees.Action) []bees.Placeholder {
 			case "quote":
 				quote = opt.Value.(string)
 			case "source":
-				source = opt.Value(string)
+				source = opt.Value.(string)
 			}
 
 		}
 
 		state := "published"
-		mod.client.CreateText(mod.blogname, map[string]string{"text": qoute, "source": source, "state": state})
+		mod.client.CreateText(mod.blogname, map[string]string{"text": quote, "source": source, "state": state})
 
 	default:
 		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
