@@ -58,7 +58,9 @@ func (mod *TumblrBee) Action(action bees.Action) []bees.Placeholder {
 		}
 
 		state := "published"
-		mod.client.CreateText(mod.blogname, map[string]string{"body": text, "state": state})
+		mod.client.CreateText(mod.blogname, map[string]string{
+			"body":  text,
+			"state": state})
 
 	case "postQuote":
 		quote := ""
@@ -76,7 +78,10 @@ func (mod *TumblrBee) Action(action bees.Action) []bees.Placeholder {
 		}
 
 		state := "published"
-		mod.client.CreateText(mod.blogname, map[string]string{"text": quote, "source": source, "state": state})
+		mod.client.CreateQuote(mod.blogname, map[string]string{
+			"quote":  quote,
+			"source": source,
+			"state":  state})
 
 	default:
 		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
