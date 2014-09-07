@@ -76,16 +76,16 @@ func execFilter(filter Filter, opts map[string]interface{}) bool {
 		// if value is an array, iterate over it and pass if any of its values pass
 		passes := false
 		switch v := cleanVal.(type) {
-			case []interface{}:
-				for _, vi := range v {
-					if f.Passes(origVal, vi) {
-						passes = true
-						break
-					}
+		case []interface{}:
+			for _, vi := range v {
+				if f.Passes(origVal, vi) {
+					passes = true
+					break
 				}
+			}
 
-			default:
-				passes = f.Passes(origVal, cleanVal)
+		default:
+			passes = f.Passes(origVal, cleanVal)
 		}
 		if passes == opt.Inverse {
 			return false
@@ -125,6 +125,7 @@ func execAction(action Action, opts map[string]interface{}) bool {
 				"Right": func(values ...interface{}) string {
 					return values[0].(string)[len(values[0].(string))-values[1].(int):]
 				},
+				"Split": strings.Split,
 			}
 
 			tmpl, err := template.New(action.Bee + "_" + action.Name + "_" + opt.Name).Funcs(funcMap).Parse(opt.Value.(string))
