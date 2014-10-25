@@ -34,7 +34,7 @@ type SpaceApiBeeFactory struct {
 func (factory *SpaceApiBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := SpaceApiBee{
 		Bee: bees.NewBee(name, factory.Name(), description),
-		url:         options.GetValue("url").(string),
+		url: options.GetValue("url").(string),
 	}
 
 	return &bee
@@ -83,14 +83,9 @@ func (factory *SpaceApiBeeFactory) Events() []bees.EventDescriptor {
 			Description: "is triggered as soon as the query has been executed",
 			Options: []bees.PlaceholderDescriptor{
 				bees.PlaceholderDescriptor{
-					Name:        "status",
-					Description: "status of the spaceapi instance that was queried",
+					Name:        "open",
+					Description: "open-state of the spaceapi instance that was queried",
 					Type:        "bool",
-				},
-				bees.PlaceholderDescriptor{
-					Name:        "text",
-					Description: "text of the spaceapi instance that was queried",
-					Type:        "string",
 				},
 			},
 		},

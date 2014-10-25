@@ -26,6 +26,7 @@ import (
 	"encoding/json"
 	"github.com/muesli/beehive/bees"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
@@ -43,26 +44,24 @@ func (mod *SpaceApiBee) Action(action bees.Action) []bees.Placeholder {
 	switch action.Name {
 	case "get_status":
 		type SpaceApiResult struct {
-			Status string `json: "status"`
-			Open   bool   `json: "open"`
+			State struct {
+				Open bool `json: "open"`
+			} `json: "state"`
 		}
 		api_state := new(SpaceApiResult)
 
 		// get json data
 		resp, err := http.Get(mod.url)
-		var text string
 		if err != nil {
-			text = "Error: SpaceAPI instance @ " + mod.url + " not reachable"
+			log.Println("Error: SpaceAPI instance @ " + mod.url + " not reachable")
 		} else {
 			defer resp.Body.Close()
 			body, _ := ioutil.ReadAll(resp.Body)
 
 			err = json.Unmarshal(body, api_state)
-
 			if err != nil {
-				text = "Sorry, couldn't unmarshal the JSON data from SpaceAPI Instance @ " + mod.url
-			} else {
-				text = api_state.Status
+				log.Println("Sorry, couldn't unmarshal the JSON data from SpaceAPI Instance @ " + mod.url)
+				api_state.State.Open = false
 			}
 		}
 
@@ -71,21 +70,16 @@ func (mod *SpaceApiBee) Action(action bees.Action) []bees.Placeholder {
 			Name: "query_result",
 			Options: []bees.Placeholder{
 				bees.Placeholder{
-					Name:  "status",
+					Name:  "open",
 					Type:  "bool",
-					Value: api_state.Open,
-				},
-				bees.Placeholder{
-					Name:  "text",
-					Type:  "string",
-					Value: text,
+					Value: api_state.State.Open,
 				},
 			},
 		}
 		mod.evchan <- ev
 
 	default:
-		panic("Unknown action triggered in " +mod.Name()+": "+action.Name)
+		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
 	}
 
 	return outs
