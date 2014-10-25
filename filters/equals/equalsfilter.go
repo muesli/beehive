@@ -40,6 +40,8 @@ func (filter *EqualsFilter) Passes(data interface{}, value interface{}) bool {
 	switch v := data.(type) {
 	case string:
 		return v == value.(string)
+	case bool:
+		return v == value.(bool)
 	}
 
 	return false
