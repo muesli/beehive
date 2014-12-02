@@ -94,7 +94,7 @@ func (mod *IrcBee) Action(action bees.Action) []bees.Placeholder {
 		}
 
 	default:
-		panic("Unknown action triggered in " +mod.Name()+": "+action.Name)
+		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
 	}
 
 	return outs
@@ -136,18 +136,22 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 	mod.connectedState = make(chan bool)
 
 	// setup IRC client:
-	mod.client = irc.SimpleClient(mod.nick, "beehive", "beehive")
-	mod.client.SSL = mod.ssl
+	cfg := irc.NewConfig(mod.nick, "beehive", "beehive")
+	cfg.SSL = mod.ssl
+	cfg.Server = mod.server
+	cfg.Pass = mod.password
+	cfg.NewNick = func(n string) string { return n + "_" }
+	mod.client = irc.Client(cfg)
 
-	mod.client.AddHandler(irc.CONNECTED, func(conn *irc.Conn, line *irc.Line) {
+	mod.client.HandleFunc("connected", func(conn *irc.Conn, line *irc.Line) {
 		mod.connectedState <- true
 	})
-	mod.client.AddHandler(irc.DISCONNECTED, func(conn *irc.Conn, line *irc.Line) {
+	mod.client.HandleFunc("disconnected", func(conn *irc.Conn, line *irc.Line) {
 		mod.connectedState <- false
 	})
-	mod.client.AddHandler("PRIVMSG", func(conn *irc.Conn, line *irc.Line) {
+	mod.client.HandleFunc("PRIVMSG", func(conn *irc.Conn, line *irc.Line) {
 		channel := line.Args[0]
-		if channel == mod.client.Me.Nick {
+		if channel == mod.client.Config().Me.Nick {
 			channel = line.Src // replies go via PM too.
 		}
 		msg := ""
@@ -155,7 +159,7 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 			msg = line.Args[1]
 		}
 		user := line.Src[:strings.Index(line.Src, "!")]
-		hostmask := line.Src[strings.Index(line.Src, "!") + 2:]
+		hostmask := line.Src[strings.Index(line.Src, "!")+2:]
 
 		ev := bees.Event{
 			Bee:  mod.Name(),
@@ -189,7 +193,7 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 	// loop on IRC dis/connected events
 	for {
 		log.Println("Connecting to IRC:", mod.server)
-		err := mod.client.Connect(mod.server, mod.password)
+		err := mod.client.Connect()
 		if err != nil {
 			log.Println("Failed to connect to IRC:", mod.server)
 			log.Println(err)
@@ -200,21 +204,21 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 					break
 				}
 				select {
-					case <-mod.SigChan:
-						mod.client.Quit()
-						return
+				case <-mod.SigChan:
+					mod.client.Quit()
+					return
 
-					case status := <-mod.connectedState:
-						if status {
-							log.Println("Connected to IRC:", mod.server)
-							mod.Rejoin()
-						} else {
-							log.Println("Disconnected from IRC:", mod.server)
-							disconnected = true
-							break
-						}
+				case status := <-mod.connectedState:
+					if status {
+						log.Println("Connected to IRC:", mod.server)
+						mod.Rejoin()
+					} else {
+						log.Println("Disconnected from IRC:", mod.server)
+						disconnected = true
+						break
+					}
 
-					default:
+				default:
 				}
 			}
 		}
