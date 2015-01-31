@@ -219,10 +219,9 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 					}
 
 				default:
+					time.Sleep(1 * time.Second)
 				}
 			}
 		}
-
-		time.Sleep(5 * time.Second)
 	}
 }
