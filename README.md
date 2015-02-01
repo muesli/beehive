@@ -1,8 +1,8 @@
 beehive
 =======
 
-beehive is a flexible event system, which allows you to create your own action-
-chains and filters. It is modular and easy to extend - for anyone. It can be
+beehive is a flexible event and agent system, which allows you to create your own
+action-chains and filters. It is modular and easy to extend - for anyone. It can be
 your IRC bot, it can activate your heating system or make you a cup of coffee.
 Yes, finally!
 
