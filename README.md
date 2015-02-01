@@ -1,7 +1,7 @@
 beehive
 =======
 
-beehive is a flexible event and agent system, which allows you to create your own
+beehive is a flexible event and agent service, which allows you to create your own
 action-chains and filters. It is modular and easy to extend - for anyone. It has
 modules (we call them *bees*), so it can interface with, talk to, or retrieve
 information from Twitter, Tumblr, Email, IRC, Jabber, RSS, Jenkins, Hue - to name
@@ -9,7 +9,7 @@ just a few. Check out the full list of [available bees](https://github.com/muesl
 in our Wiki.
 
 Connecting those bees with each other let's you create immensly useful agents.
-For example you can setup Beehive to:
+For example you could setup Beehive to:
 * Re-post tweets on your Tumblr blog
 * Forward incoming chat messages to your email account
 * Turn on the heating system if the temperature drops below a certain value
