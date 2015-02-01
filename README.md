@@ -29,19 +29,19 @@ Run beehive -help to see a full list of options!
 
 ## Configuration
 
-####TL;DR
+#### TL;DR
 Take a look at a [few chain recipes here](https://github.com/muesli/beehive/tree/master/recipes).
 Pick one, edit it to your needs and store it as 'beehive.conf'. beehive looks for this
 configuration file in its current working directory. Alternatively, you can specify a different config file using the -config option.
 
-####Detailed
-The configuration file, beehive.conf by default, is a JSON file that consists of two parts: Bees and Chains
+#### Detailed
+The configuration file, beehive.conf by default, is a JSON file that consists of two parts: Bees and Chains.
 
 Bees are pieces of Go code that can communicate with some service. 
 
 * you could have a Bee that sits in your IRC channel and responds to certain commands.
-* you could have a Bee that hooks into your Instagram account and auto-tweets all of your photos
-* you could have a Bee that hooks into cron, and sends an email with the a command's status every N hours of the day
+* you could have a Bee that hooks into your Instagram account and auto-tweets all of your photos.
+* you could have a Bee that hooks into cron, and sends an email with a command's status every N hours of the day.
 
 Bees consist of four parts:
 
@@ -88,7 +88,7 @@ Chains define what your Bees do, your configuration can have one or more Chains.
 Chains consist of four parts:
 
 1. "Name"        : the name of your Chain
-2. "Description" : a decription of what this Chain does
+2. "Description" : a description of what this Chain does
 3. "Event"       : the Event to "listen" for
 4. "Elements"    : an array of Filters to apply to, and Actions to take when your Event occurs
 
@@ -141,8 +141,6 @@ If all of the Filters return true, the "send" Action is executed.
 
 Each Action specifies its own options, so it would be difficult to cover them all here.
 In this case however, the "send" action messages the user _muesli_ with the message "_{{.user}}_ in _{{.channel}}_ said: _{{.text}}_". _{{.user}}_ is replaced by the user who generated the message that contained "muesli", _{{.channel}}_ is replaced by the channel that the user was in when they generated the message, and _{{.text}}_ is replaced by the "message" that was sent.
-
-
 
 
 ## Development
