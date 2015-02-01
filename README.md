@@ -2,9 +2,20 @@ beehive
 =======
 
 beehive is a flexible event and agent system, which allows you to create your own
-action-chains and filters. It is modular and easy to extend - for anyone. It can be
-your IRC bot, it can activate your heating system or make you a cup of coffee.
-Yes, finally!
+action-chains and filters. It is modular and easy to extend - for anyone. It has
+modules (we call them *bees*), so it can interface with, talk to, or retrieve
+information from Twitter, Tumblr, Email, IRC, Jabber, RSS, Jenkins, Hue - to name
+just a few. Check out the full list of [available bees](https://github.com/muesli/beehive/wiki/Available-Bees)
+in our Wiki.
+
+Connecting those bees with each other let's you create immensly useful agents.
+For example you can setup Beehive to:
+* Re-post tweets on your Tumblr blog
+* Forward incoming chat messages to your email account
+* Turn on the heating system if the temperature drops below a certain value
+* Run your own IRC bot that let's you trigger builds on a Jenkins CI
+* Control your Hue lighting system
+* Notify you when a stock's price drops below a certain value
 
 ![beehive's Logo](/assets/logo.png?raw=true)
 
