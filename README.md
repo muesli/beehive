@@ -10,7 +10,8 @@ just a few. Check out the full list of [available bees](https://github.com/muesl
 in our Wiki.
 
 Connecting those bees with each other let's you create immensly useful agents.
-For example you could setup Beehive to:
+
+#### Here are just a few examples of things Beehive could do for you:
 * Re-post tweets on your Tumblr blog
 * Forward incoming chat messages to your email account
 * Turn on the heating system if the temperature drops below a certain value
