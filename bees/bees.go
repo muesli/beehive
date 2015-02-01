@@ -143,6 +143,26 @@ func GetBee(identifier string) *BeeInterface {
 	return nil
 }
 
+// Returns all known bees
+func GetBees() []*BeeInterface {
+	r := []*BeeInterface{}
+	for _, bee := range bees {
+		r = append(r, bee)
+	}
+
+	return r
+}
+
+// Returns all known bee factories
+func GetBeeFactories() []*BeeFactoryInterface {
+	r := []*BeeFactoryInterface{}
+	for _, factory := range factories {
+		r = append(r, factory)
+	}
+
+	return r
+}
+
 // Starts a bee and recovers from panics
 func startBee(bee *BeeInterface, fatals int) {
 	if fatals >= 3 {
