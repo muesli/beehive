@@ -32,9 +32,9 @@ type IrcBeeFactory struct {
 
 func (factory *IrcBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := IrcBee{
-		Bee: bees.NewBee(name, factory.Name(), description),
-		server:      options.GetValue("server").(string),
-		nick:        options.GetValue("nick").(string),
+		Bee:    bees.NewBee(name, factory.Name(), description),
+		server: options.GetValue("server").(string),
+		nick:   options.GetValue("nick").(string),
 	}
 
 	for _, channel := range options.GetValue("channels").([]interface{}) {
