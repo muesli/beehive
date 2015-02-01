@@ -32,6 +32,7 @@ import (
 	"syscall"
 
 	"github.com/muesli/beehive/app"
+	"github.com/muesli/beehive/api"
 	_ "github.com/muesli/beehive/filters"
 	_ "github.com/muesli/beehive/filters/contains"
 	_ "github.com/muesli/beehive/filters/endswith"
@@ -104,6 +105,7 @@ func main() {
 
 	// Parse command-line args for all registered bees
 	app.Run()
+	api.Run()
 
 	log.Println()
 	log.Println("Beehive is buzzing...")
