@@ -1,9 +1,10 @@
 beehive
 =======
 
-beehive is a flexible event and agent service, which allows you to create your own
-action-chains and filters. It is modular and easy to extend - for anyone. It has
-modules (we call them *bees*), so it can interface with, talk to, or retrieve
+beehive is an event and agent system, which allows you to create your own
+agents that perform automated taks triggered by events and filters. It is
+modular, flexible and really easy to extend - for anyone. It has modules
+(we call them *bees*), so it can interface with, talk to, or retrieve
 information from Twitter, Tumblr, Email, IRC, Jabber, RSS, Jenkins, Hue - to name
 just a few. Check out the full list of [available bees](https://github.com/muesli/beehive/wiki/Available-Bees)
 in our Wiki.
