@@ -34,8 +34,8 @@ import (
 type WebBee struct {
 	bees.Bee
 
-	addr        string
-	path		string
+	addr string
+	path string
 
 	eventChan chan bees.Event
 }
@@ -69,15 +69,15 @@ func (mod *WebBee) triggerJsonEvent(resp *[]byte) {
 	err = json.Unmarshal(*resp, &j)
 	if err != nil {
 		log.Println("Error:", err)
-	  return
+		return
 	}
 
 	for k, v := range j {
 		log.Printf("POST JSON param: %s = %+v\n", k, v)
 
 		ph := bees.Placeholder{
-			Name: k,
-			Type: "string",
+			Name:  k,
+			Type:  "string",
 			Value: v,
 		}
 		ev.Options = append(ev.Options, ph)
@@ -96,11 +96,11 @@ func (mod *WebBee) Run(cin chan bees.Event) {
 
 	for {
 		select {
-			case <-mod.SigChan:
-				web.Close()
-				return
+		case <-mod.SigChan:
+			web.Close()
+			return
 
-			default:
+		default:
 		}
 	}
 }
@@ -138,7 +138,7 @@ func (mod *WebBee) Action(action bees.Action) []bees.Placeholder {
 		mod.triggerJsonEvent(&b)
 
 	default:
-		panic("Unknown action triggered in " +mod.Name()+": "+action.Name)
+		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
 	}
 
 	return outs
@@ -161,8 +161,8 @@ func (mod *WebBee) GetRequest(ctx *web.Context) {
 		log.Println("GET param:", k, "=", v)
 
 		ph := bees.Placeholder{
-			Name: k,
-			Type: "string",
+			Name:  k,
+			Type:  "string",
 			Value: v,
 		}
 		ev.Options = append(ev.Options, ph)

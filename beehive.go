@@ -31,8 +31,8 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/muesli/beehive/app"
 	"github.com/muesli/beehive/api"
+	"github.com/muesli/beehive/app"
 	_ "github.com/muesli/beehive/filters"
 	_ "github.com/muesli/beehive/filters/contains"
 	_ "github.com/muesli/beehive/filters/endswith"
@@ -41,7 +41,11 @@ import (
 
 	"github.com/muesli/beehive/bees"
 	_ "github.com/muesli/beehive/bees/anelpowerctrlbee"
+	_ "github.com/muesli/beehive/bees/cronbee"
+	_ "github.com/muesli/beehive/bees/efabee"
+	_ "github.com/muesli/beehive/bees/emailbee"
 	_ "github.com/muesli/beehive/bees/htmlextractbee"
+	_ "github.com/muesli/beehive/bees/huebee"
 	_ "github.com/muesli/beehive/bees/ircbee"
 	_ "github.com/muesli/beehive/bees/jabberbee"
 	_ "github.com/muesli/beehive/bees/jenkinsbee"
@@ -51,13 +55,9 @@ import (
 	_ "github.com/muesli/beehive/bees/serialbee"
 	_ "github.com/muesli/beehive/bees/spaceapibee"
 	_ "github.com/muesli/beehive/bees/timebee"
-	_ "github.com/muesli/beehive/bees/webbee"
-	_ "github.com/muesli/beehive/bees/efabee"
-	_ "github.com/muesli/beehive/bees/cronbee"
 	_ "github.com/muesli/beehive/bees/tumblrbee"
 	_ "github.com/muesli/beehive/bees/twitterbee"
-	_ "github.com/muesli/beehive/bees/emailbee"
-	_ "github.com/muesli/beehive/bees/huebee"
+	_ "github.com/muesli/beehive/bees/webbee"
 )
 
 var (
