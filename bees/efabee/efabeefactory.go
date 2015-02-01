@@ -73,7 +73,7 @@ func (factory *EFABeeFactory) Events() []bees.EventDescriptor {
 				},
 				bees.PlaceholderDescriptor{
 					Name:        "eta",
-					Description: "Expected time for arrival in minutes",
+					Description: "Expected time of arrival in minutes",
 					Type:        "int",
 				},
 				bees.PlaceholderDescriptor{
