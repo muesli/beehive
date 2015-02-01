@@ -26,18 +26,18 @@ import (
 	"sync"
 )
 
-// Interface which all modules need to implement
+// Interface which all bees need to implement
 type BeeInterface interface {
-	// Name of the module
+	// Name of the bee
 	Name() string
-	// Namespace of the module
+	// Namespace of the bee
 	Namespace() string
-	// Description of the module
+	// Description of the bee
 	Description() string
 
-	// Activates the module
+	// Activates the bee
 	Run(eventChannel chan Event)
-	// Stop the module
+	// Stop the bee
 	Stop()
 
 	WaitGroup() *sync.WaitGroup
@@ -84,7 +84,7 @@ type Filter struct {
 	Options []FilterOption
 }
 
-// A Placeholder used by ins & outs of a module.
+// A Placeholder used by ins & outs of a bee.
 type Placeholder struct {
 	Name  string
 	Type  string
@@ -133,7 +133,7 @@ func RegisterBee(bee BeeInterface) {
 	bees[bee.Name()] = &bee
 }
 
-// Returns module with this name
+// Returns bee with this name
 func GetBee(identifier string) *BeeInterface {
 	bee, ok := bees[identifier]
 	if ok {
