@@ -47,6 +47,10 @@ func (factory *EFABeeFactory) Description() string {
 	return "An EFA module for beehive"
 }
 
+func (factory *EFABeeFactory) Image() string {
+	return factory.Name() + ".png"
+}
+
 func (factory *EFABeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		bees.BeeOptionDescriptor{

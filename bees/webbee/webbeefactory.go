@@ -48,6 +48,10 @@ func (factory *WebBeeFactory) Description() string {
 	return "A RESTful HTTP module for beehive"
 }
 
+func (factory *WebBeeFactory) Image() string {
+	return factory.Name() + ".png"
+}
+
 func (factory *WebBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		bees.BeeOptionDescriptor{

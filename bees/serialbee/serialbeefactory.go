@@ -48,6 +48,10 @@ func (factory *SerialBeeFactory) Description() string {
 	return "A bee that talks serially"
 }
 
+func (factory *SerialBeeFactory) Image() string {
+	return factory.Name() + ".png"
+}
+
 func (factory *SerialBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		bees.BeeOptionDescriptor{

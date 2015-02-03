@@ -46,6 +46,10 @@ func (factory *HtmlExtractBeeFactory) Description() string {
 	return "A bee that extracts information from an arbitrary web page"
 }
 
+func (factory *HtmlExtractBeeFactory) Image() string {
+	return factory.Name() + ".png"
+}
+
 func (factory *HtmlExtractBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		bees.ActionDescriptor{

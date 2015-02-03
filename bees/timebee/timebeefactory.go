@@ -50,6 +50,10 @@ func (factory *TimeBeeFactory) Description() string {
 	return "A bee that triggers an event at a given time"
 }
 
+func (factory *TimeBeeFactory) Image() string {
+	return "cronbee.png"
+}
+
 func (factory *TimeBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		bees.BeeOptionDescriptor{

@@ -43,6 +43,10 @@ func (factory *NotificationBeeFactory) Description() string {
 	return "A bee that shows desktop-notifications"
 }
 
+func (factory *NotificationBeeFactory) Image() string {
+	return factory.Name() + ".png"
+}
+
 func (factory *NotificationBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		bees.ActionDescriptor{

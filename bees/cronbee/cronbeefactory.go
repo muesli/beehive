@@ -46,7 +46,11 @@ func (factory *CronBeeFactory) Name() string {
 }
 
 func (factory *CronBeeFactory) Description() string {
-	return "A bee that triggers an event at a given time"
+	return "A bee that triggers events in given intervals"
+}
+
+func (factory *CronBeeFactory) Image() string {
+	return factory.Name() + ".png"
 }
 
 func (factory *CronBeeFactory) Options() []bees.BeeOptionDescriptor {
