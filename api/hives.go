@@ -42,12 +42,17 @@ import (
 //
 
 type Hive struct {
-	Id          string
-	Description string
-	Image       string
+	Id          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Image       string `json:"image"`
 	Options     []bees.BeeOptionDescriptor
 	Events      []bees.EventDescriptor
 	Actions     []bees.ActionDescriptor
+}
+
+type Hives struct {
+	Hives 		[]Hive
 }
 
 type HiveResource struct {
@@ -79,18 +84,19 @@ func (r HiveResource) findHives(request *restful.Request, response *restful.Resp
 		return
 	}
 
-	res := []Hive{}
+	res := Hives{}
 	for _, hive := range hives {
 		h := Hive{
 			Id:          (*hive).Name(),
+			Name:        (*hive).Name(),
 			Description: (*hive).Description(),
-			Image:       (*hive).Image(),
+			Image:       "/images/" + (*hive).Image(),
 			Options:     (*hive).Options(),
 			Events:      (*hive).Events(),
 			Actions:     (*hive).Actions(),
 		}
 
-		res = append(res, h)
+		res.Hives = append(res.Hives, h)
 	}
 	response.WriteEntity(res)
 }
