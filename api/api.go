@@ -24,24 +24,60 @@ package api
 import (
 	"log"
 	"net/http"
+	"path"
 	_ "strconv"
 
 	"github.com/emicklei/go-restful"
 	_ "github.com/emicklei/go-restful/swagger"
 )
 
+func configFromPathParam(req *restful.Request, resp *restful.Response) {
+	rootdir := "./config"
+
+	subpath := req.PathParameter("subpath")
+	if len(subpath) == 0 {
+		subpath = "index.html"
+	}
+	actual := path.Join(rootdir, subpath)
+	log.Printf("serving %s ... (from %s)\n", actual, req.PathParameter("subpath"))
+	http.ServeFile(
+		resp.ResponseWriter,
+		req.Request,
+		actual)
+}
+
+func imageFromPathParam(req *restful.Request, resp *restful.Response) {
+	rootdir := "./assets/bees"
+
+	subpath := req.PathParameter("subpath")
+	actual := path.Join(rootdir, subpath)
+	log.Printf("serving %s ... (from %s)\n", actual, req.PathParameter("subpath"))
+	http.ServeFile(
+		resp.ResponseWriter,
+		req.Request,
+		actual)
+}
+
 func Run() {
 	// to see what happens in the package, uncomment the following
 	//restful.TraceLogger(log.New(os.Stdout, "[restful] ", log.LstdFlags|log.Lshortfile))
 
 	wsContainer := restful.NewContainer()
+	wsContainer.Router(restful.CurlyRouter{})
+
+	ws := new(restful.WebService)
+	ws.Route(ws.GET("/config/").To(configFromPathParam))
+	ws.Route(ws.GET("/config/{subpath:*}").To(configFromPathParam))
+	ws.Route(ws.GET("/images/{subpath:*}").To(imageFromPathParam))
+	wsContainer.Add(ws)
+
 	b := BeeResource{}
 	b.Register(wsContainer)
 	h := HiveResource{}
 	h.Register(wsContainer)
 
-	log.Println("Starting JSON API on localhost:8080")
-	server := &http.Server{Addr: ":8080", Handler: wsContainer}
+	log.Println("Starting JSON API on localhost:8181")
+	server := &http.Server{Addr: ":8181", Handler: wsContainer}
 
 	go func() {
 		log.Fatal(server.ListenAndServe())
