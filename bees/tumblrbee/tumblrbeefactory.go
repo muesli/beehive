@@ -49,7 +49,7 @@ func (factory *TumblrBeeFactory) Name() string {
 }
 
 func (factory *TumblrBeeFactory) Description() string {
-	return "An Tumblr module for beehive"
+	return "A Tumblr module for beehive"
 }
 
 func (factory *TumblrBeeFactory) Image() string {
