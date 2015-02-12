@@ -55,6 +55,9 @@ func (mod *HtmlExtractBee) Action(action bees.Action) []bees.Placeholder {
 
 		g := goose.New()
     	article := g.ExtractFromUrl(url)
+	if strings.HasPrefix(article.TopImage, "http://data:image") {
+		article.TopImage = ""
+	}
     	if len(strings.TrimSpace(article.Title)) > 0 {
 	    	ev := bees.Event{
 				Bee:  mod.Name(),
