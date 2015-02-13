@@ -22,8 +22,8 @@
 package htmlextractbee
 
 import (
-	"github.com/muesli/beehive/bees"
 	"github.com/advancedlogic/GoOse"
+	"github.com/muesli/beehive/bees"
 	"strings"
 )
 
@@ -54,12 +54,13 @@ func (mod *HtmlExtractBee) Action(action bees.Action) []bees.Placeholder {
 		}
 
 		g := goose.New()
-    	article := g.ExtractFromUrl(url)
-	if strings.HasPrefix(article.TopImage, "http://data:image") {
-		article.TopImage = ""
-	}
-    	if len(strings.TrimSpace(article.Title)) > 0 {
-	    	ev := bees.Event{
+		article := g.ExtractFromUrl(url)
+		article.Title = strings.TrimSpace(strings.Replace(article.Title, "\n", " ", -1))
+		if strings.HasPrefix(article.TopImage, "http://data:image") {
+			article.TopImage = ""
+		}
+		if len(article.Title) > 0 {
+			ev := bees.Event{
 				Bee:  mod.Name(),
 				Name: "info_extracted",
 				Options: []bees.Placeholder{
@@ -99,7 +100,7 @@ func (mod *HtmlExtractBee) Action(action bees.Action) []bees.Placeholder {
 		}
 
 	default:
-		panic("Unknown action triggered in " +mod.Name()+": "+action.Name)
+		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
 	}
 
 	return outs
