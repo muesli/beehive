@@ -40,7 +40,6 @@ func (factory *RSSBeeFactory) New(name, description string, options bees.BeeOpti
 	bee := RSSBee{
 		Bee:             bees.NewBee(name, factory.Name(), description),
 		url:             options.GetValue("url").(string),
-		skip_first:      skip,
 		skip_next_fetch: skip,
 	}
 

@@ -33,14 +33,11 @@ import (
 type RSSBee struct {
 	bees.Bee
 
-	// options
-	url        string
-	skip_first bool
-
-	eventChan chan bees.Event
-
+	url string
 	// decides whether the next fetch should be skipped
 	skip_next_fetch bool
+
+	eventChan chan bees.Event
 }
 
 func (mod *RSSBee) pollFeed(uri string, timeout int) {
