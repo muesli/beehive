@@ -24,11 +24,9 @@
 package rssbee
 
 import (
-	"fmt"
 	rss "github.com/jteeuwen/go-pkg-rss"
 	"github.com/muesli/beehive/bees"
 	"log"
-	"os"
 	"time"
 )
 
@@ -56,15 +54,10 @@ func (mod *RSSBee) pollFeed(uri string, timeout int) {
 		default:
 		}
 
-		fmt.Println("fetch ", mod.skip_next_fetch)
 		if err := feed.Fetch(uri, nil); err != nil {
-			fmt.Fprintf(os.Stderr, "[e] %s: %s", uri, err)
+			log.Printf("[e] %s: %s", uri, err)
 			return
 		}
-
-		// reset skipping (actual skipping is done in itemhandler
-		// hope&pray there is no race condition
-		mod.skip_next_fetch = false
 
 		<-time.After(time.Duration(feed.SecondsTillUpdate() * 1e9))
 	}
@@ -75,8 +68,8 @@ func (mod *RSSBee) chanHandler(feed *rss.Feed, newchannels []*rss.Channel) {
 }
 
 func (mod *RSSBee) itemHandler(feed *rss.Feed, ch *rss.Channel, newitems []*rss.Item) {
-	log.Println("item ", mod.skip_next_fetch)
 	if mod.skip_next_fetch == true {
+		mod.skip_next_fetch = false
 		return
 	}
 	for i := range newitems {
@@ -159,7 +152,7 @@ func (mod *RSSBee) itemHandler(feed *rss.Feed, ch *rss.Channel, newitems []*rss.
 
 		mod.eventChan <- newitemEvent
 	}
-	fmt.Printf("%d new item(s) in %s\n", len(newitems), feed.Url)
+	log.Printf("%d new item(s) in %s\n", len(newitems), feed.Url)
 }
 
 func (mod *RSSBee) Run(cin chan bees.Event) {

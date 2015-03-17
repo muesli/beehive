@@ -69,7 +69,7 @@ func (factory *RSSBeeFactory) Options() []bees.BeeOptionDescriptor {
 		},
 		bees.BeeOptionDescriptor{
 			Name:        "skip_first",
-			Description: "Whether to skip the first fetch",
+			Description: "Whether to skip already existing entries",
 			Type:        "bool",
 			Mandatory:   false,
 		},
