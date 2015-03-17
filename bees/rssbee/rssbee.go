@@ -27,6 +27,7 @@ import (
 	"fmt"
 	rss "github.com/jteeuwen/go-pkg-rss"
 	"github.com/muesli/beehive/bees"
+	"log"
 	"os"
 	"time"
 )
@@ -34,9 +35,14 @@ import (
 type RSSBee struct {
 	bees.Bee
 
-	url         string
+	// options
+	url        string
+	skip_first bool
 
 	eventChan chan bees.Event
+
+	// decides whether the next fetch should be skipped
+	skip_next_fetch bool
 }
 
 func (mod *RSSBee) pollFeed(uri string, timeout int) {
@@ -44,16 +50,21 @@ func (mod *RSSBee) pollFeed(uri string, timeout int) {
 
 	for {
 		select {
-			case <-mod.SigChan:
-				return
+		case <-mod.SigChan:
+			return
 
-			default:
+		default:
 		}
 
+		fmt.Println("fetch ", mod.skip_next_fetch)
 		if err := feed.Fetch(uri, nil); err != nil {
 			fmt.Fprintf(os.Stderr, "[e] %s: %s", uri, err)
 			return
 		}
+
+		// reset skipping (actual skipping is done in itemhandler
+		// hope&pray there is no race condition
+		mod.skip_next_fetch = false
 
 		<-time.After(time.Duration(feed.SecondsTillUpdate() * 1e9))
 	}
@@ -64,6 +75,10 @@ func (mod *RSSBee) chanHandler(feed *rss.Feed, newchannels []*rss.Channel) {
 }
 
 func (mod *RSSBee) itemHandler(feed *rss.Feed, ch *rss.Channel, newitems []*rss.Item) {
+	log.Println("item ", mod.skip_next_fetch)
+	if mod.skip_next_fetch == true {
+		return
+	}
 	for i := range newitems {
 		var links []string
 		var categories []string

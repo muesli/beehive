@@ -31,9 +31,17 @@ type RSSBeeFactory struct {
 // Interface impl
 
 func (factory *RSSBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
+	var skip bool
+	if tmp := options.GetValue("skip_first"); tmp != nil {
+		skip = tmp.(bool)
+	} else {
+		skip = false
+	}
 	bee := RSSBee{
-		Bee: bees.NewBee(name, factory.Name(), description),
-		url:         options.GetValue("url").(string),
+		Bee:             bees.NewBee(name, factory.Name(), description),
+		url:             options.GetValue("url").(string),
+		skip_first:      skip,
+		skip_next_fetch: skip,
 	}
 
 	return &bee
@@ -58,6 +66,12 @@ func (factory *RSSBeeFactory) Options() []bees.BeeOptionDescriptor {
 			Description: "URL of the RSS-feed you want to monitor",
 			Type:        "string",
 			Mandatory:   true,
+		},
+		bees.BeeOptionDescriptor{
+			Name:        "skip_first",
+			Description: "Whether to skip the first fetch",
+			Type:        "bool",
+			Mandatory:   false,
 		},
 	}
 	return opts
