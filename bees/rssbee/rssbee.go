@@ -24,17 +24,18 @@
 package rssbee
 
 import (
-	"fmt"
 	rss "github.com/jteeuwen/go-pkg-rss"
 	"github.com/muesli/beehive/bees"
-	"os"
+	"log"
 	"time"
 )
 
 type RSSBee struct {
 	bees.Bee
 
-	url         string
+	url string
+	// decides whether the next fetch should be skipped
+	skip_next_fetch bool
 
 	eventChan chan bees.Event
 }
@@ -44,14 +45,14 @@ func (mod *RSSBee) pollFeed(uri string, timeout int) {
 
 	for {
 		select {
-			case <-mod.SigChan:
-				return
+		case <-mod.SigChan:
+			return
 
-			default:
+		default:
 		}
 
 		if err := feed.Fetch(uri, nil); err != nil {
-			fmt.Fprintf(os.Stderr, "[e] %s: %s", uri, err)
+			log.Printf("[e] %s: %s", uri, err)
 			return
 		}
 
@@ -64,6 +65,10 @@ func (mod *RSSBee) chanHandler(feed *rss.Feed, newchannels []*rss.Channel) {
 }
 
 func (mod *RSSBee) itemHandler(feed *rss.Feed, ch *rss.Channel, newitems []*rss.Item) {
+	if mod.skip_next_fetch == true {
+		mod.skip_next_fetch = false
+		return
+	}
 	for i := range newitems {
 		var links []string
 		var categories []string
@@ -144,7 +149,7 @@ func (mod *RSSBee) itemHandler(feed *rss.Feed, ch *rss.Channel, newitems []*rss.
 
 		mod.eventChan <- newitemEvent
 	}
-	fmt.Printf("%d new item(s) in %s\n", len(newitems), feed.Url)
+	log.Printf("%d new item(s) in %s\n", len(newitems), feed.Url)
 }
 
 func (mod *RSSBee) Run(cin chan bees.Event) {
