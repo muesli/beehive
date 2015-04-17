@@ -126,6 +126,9 @@ func execAction(action Action, opts map[string]interface{}) bool {
 					return values[0].(string)[len(values[0].(string))-values[1].(int):]
 				},
 				"Split": strings.Split,
+				"Last": func(values ...interface{}) string {
+					return values[0].([]string)[len(values[0].([]string))-1]
+				},
 			}
 
 			tmpl, err := template.New(action.Bee + "_" + action.Name + "_" + opt.Name).Funcs(funcMap).Parse(opt.Value.(string))
