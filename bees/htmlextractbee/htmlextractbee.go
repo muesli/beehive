@@ -54,7 +54,7 @@ func (mod *HtmlExtractBee) Action(action bees.Action) []bees.Placeholder {
 		}
 
 		g := goose.New()
-		article := g.ExtractFromUrl(url)
+		article, _ := g.ExtractFromURL(url)
 		article.Title = strings.TrimSpace(strings.Replace(article.Title, "\n", " ", -1))
 		if strings.HasPrefix(article.TopImage, "http://data:image") {
 			article.TopImage = ""
@@ -82,7 +82,7 @@ func (mod *HtmlExtractBee) Action(action bees.Action) []bees.Placeholder {
 					bees.Placeholder{
 						Name:  "finalurl",
 						Type:  "url",
-						Value: article.FinalUrl,
+						Value: article.FinalURL,
 					},
 					bees.Placeholder{
 						Name:  "meta_description",
