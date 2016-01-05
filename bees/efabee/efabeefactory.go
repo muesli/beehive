@@ -81,6 +81,11 @@ func (factory *EFABeeFactory) Events() []bees.EventDescriptor {
 					Type:        "int",
 				},
 				bees.PlaceholderDescriptor{
+					Name:        "etatime",
+					Description: "Expected departure time",
+					Type:        "string",
+				},
+				bees.PlaceholderDescriptor{
 					Name:        "route",
 					Description: "Route number",
 					Type:        "string",
@@ -88,6 +93,11 @@ func (factory *EFABeeFactory) Events() []bees.EventDescriptor {
 				bees.PlaceholderDescriptor{
 					Name:        "destination",
 					Description: "Destination",
+					Type:        "string",
+				},
+				bees.PlaceholderDescriptor{
+					Name:        "mottype",
+					Description: "Transportation type",
 					Type:        "string",
 				},
 			},
