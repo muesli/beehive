@@ -22,7 +22,7 @@
 package efabee
 
 import (
-	"github.com/michiwend/goefa"
+	"github.com/muesli/goefa"
 	"github.com/muesli/beehive/bees"
 	"log"
 	"time"
