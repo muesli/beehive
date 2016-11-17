@@ -53,7 +53,11 @@ type BeeOptionDescriptor struct {
 
 // Returns the ActionDescriptor matching an action.
 func GetActionDescriptor(action *Action) ActionDescriptor {
-	factory := (*GetFactory((*GetBee(action.Bee)).Namespace()))
+	bee := GetBee(action.Bee)
+	if bee == nil {
+		panic("Bee " + action.Bee + " not registered")
+	}
+	factory := (*GetFactory((*bee).Namespace()))
 	for _, ac := range factory.Actions() {
 		if ac.Name == action.Name {
 			return ac
@@ -65,7 +69,11 @@ func GetActionDescriptor(action *Action) ActionDescriptor {
 
 // Returns the EventDescriptor matching an event.
 func GetEventDescriptor(event *Event) EventDescriptor {
-	factory := (*GetFactory((*GetBee(event.Bee)).Namespace()))
+	bee := GetBee(event.Bee)
+	if bee == nil {
+		panic("Bee " + event.Bee + " not registered")
+	}
+	factory := (*GetFactory((*bee).Namespace()))
 	for _, ev := range factory.Events() {
 		if ev.Name == event.Name {
 			return ev
