@@ -55,6 +55,7 @@ import (
 	_ "github.com/muesli/beehive/bees/rssbee"
 	_ "github.com/muesli/beehive/bees/serialbee"
 	_ "github.com/muesli/beehive/bees/spaceapibee"
+	_ "github.com/muesli/beehive/bees/telegrambee"
 	_ "github.com/muesli/beehive/bees/timebee"
 	_ "github.com/muesli/beehive/bees/tumblrbee"
 	_ "github.com/muesli/beehive/bees/twitterbee"
