@@ -36,7 +36,7 @@ type TransmissionBee struct {
 func (mod *TransmissionBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 	switch action.Name {
-	case "torrent":
+	case "add-torrent":
 		torrentMsg := ""
 		commandPrefix := ""
 
@@ -59,11 +59,4 @@ func (mod *TransmissionBee) Action(action bees.Action) []bees.Placeholder {
 }
 
 func (mod *TransmissionBee) Run(eventChan chan bees.Event) {
-	/*	ev := bees.Event{
-			Bee: mod.Name(),
-			Name:      "hello",
-			Options:   []bees.Placeholder{},
-		}
-
-		eventChan <- ev*/
 }
