@@ -22,11 +22,12 @@
 package ircbee
 
 import (
-	irc "github.com/fluffle/goirc/client"
-	"github.com/muesli/beehive/bees"
 	"log"
 	"strings"
 	"time"
+
+	irc "github.com/fluffle/goirc/client"
+	"github.com/muesli/beehive/bees"
 )
 
 type IrcBee struct {
@@ -197,6 +198,7 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 		if err != nil {
 			log.Println("Failed to connect to IRC:", mod.server)
 			log.Println(err)
+			time.Sleep(10 * time.Second)
 		} else {
 			disconnected := false
 			for {
