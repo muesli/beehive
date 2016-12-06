@@ -92,6 +92,16 @@ func (mod *TelegramBee) Run(eventChan chan bees.Event) {
 					Type:  "string",
 					Value: update.Message.Text,
 				},
+				bees.Placeholder{
+					Name:  "chatID",
+					Type:  "string",
+					Value: strconv.FormatInt(update.Message.Chat.ID, 10),
+				},
+				bees.Placeholder{
+					Name:  "userID",
+					Type:  "string",
+					Value: strconv.Itoa(update.Message.From.ID),
+				},
 			},
 		}
 		eventChan <- ev
