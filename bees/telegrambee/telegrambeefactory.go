@@ -108,10 +108,20 @@ func (factory *TelegramBeeFactory) Events() []bees.EventDescriptor {
 					Name:        "text",
 					Description: "The message that was received",
 					Type:        "string",
+				}, bees.PlaceholderDescriptor{
+					Name:        "chatID",
+					Description: "Telegram's chat ID",
+					Type:        "string",
+				},
+				bees.PlaceholderDescriptor{
+					Name:        "userID",
+					Description: "User ID  sending the message",
+					Type:        "string",
 				},
 			},
 		},
 	}
+
 	return events
 }
 
