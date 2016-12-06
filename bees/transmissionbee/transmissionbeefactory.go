@@ -77,7 +77,7 @@ func (factory *TransmissionBeeFactory) Options() []bees.BeeOptionDescriptor {
 	return opts
 }
 
-func (factory *TransmissionBee) Actions() []bees.ActionDescriptor {
+func (factory *TransmissionBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{bees.ActionDescriptor{
 		Namespace:   factory.Name(),
 		Name:        "add-torrent",
