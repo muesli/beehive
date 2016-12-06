@@ -60,6 +60,7 @@ import (
 	_ "github.com/muesli/beehive/bees/tumblrbee"
 	_ "github.com/muesli/beehive/bees/twitterbee"
 	_ "github.com/muesli/beehive/bees/webbee"
+	_ "github.com/muesli/beehive/bees/slackbee"
 )
 
 var (
