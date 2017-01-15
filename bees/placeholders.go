@@ -103,6 +103,8 @@ func (ph PlaceholderSlice) Bind(name string, dst interface{}) error {
 			dst = int(vt)
 		case float64:
 			dst = int(vt)
+		case string:
+			dst, _ = strconv.Atoi(vt)
 		default:
 			panic(fmt.Sprintf("Unhandled type %+v", vt))
 		}
