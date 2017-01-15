@@ -45,31 +45,10 @@ func (mod *HueBee) Action(action bees.Action) []bees.Placeholder {
 
 	switch action.Name {
 	case "switch":
-		lightId := 0
-		state := false
-
-		for _, opt := range action.Options {
-			if opt.Name == "state" {
-				switch v := opt.Value.(type) {
-				case string:
-					if v == "true" || v == "on" || v == "yes" {
-						state = true
-					}
-				case float64:
-					state = v > 0
-				case bool:
-					state = v
-				}
-			}
-			if opt.Name == "light" {
-				switch v := opt.Value.(type) {
-				case string:
-					lightId, _ = strconv.Atoi(v)
-				case float64:
-					lightId = int(v)
-				}
-			}
-		}
+		var lightId int
+		var state bool
+		action.Options.Bind("light", &lightId)
+		action.Options.Bind("state", &state)
 
 		light, err := mod.client.FindLightById(strconv.Itoa(lightId))
 		if err != nil {
