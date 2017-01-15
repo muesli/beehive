@@ -63,7 +63,7 @@ func (filter *TemplateFilter) Passes(data interface{}, value interface{}) bool {
 				return values[0].([]string)[len(values[0].([]string))-1]
 			},
 			// strings functions
-			"Compare":      strings.Compare,
+			// "Compare":      strings.Compare, // 1.5+ only
 			"Contains":     strings.Contains,
 			"ContainsAny":  strings.ContainsAny,
 			"Count":        strings.Count,
