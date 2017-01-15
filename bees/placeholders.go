@@ -52,7 +52,7 @@ func (ph PlaceholderSlice) Bind(name string, dst interface{}) error {
 	v := ph.Value(name)
 
 	switch dst.(type) {
-	case string:
+	case *string:
 		switch vt := v.(type) {
 		case string:
 			dst = vt
@@ -66,7 +66,7 @@ func (ph PlaceholderSlice) Bind(name string, dst interface{}) error {
 			panic(fmt.Sprintf("Unhandled type %+v", vt))
 		}
 
-	case bool:
+	case *bool:
 		switch vt := v.(type) {
 		case bool:
 			dst = vt
@@ -85,7 +85,7 @@ func (ph PlaceholderSlice) Bind(name string, dst interface{}) error {
 			panic(fmt.Sprintf("Unhandled type %+v", vt))
 		}
 
-	case float64:
+	case *float64:
 		switch vt := v.(type) {
 		case float64:
 			dst = vt
@@ -95,7 +95,7 @@ func (ph PlaceholderSlice) Bind(name string, dst interface{}) error {
 			panic(fmt.Sprintf("Unhandled type %+v", vt))
 		}
 
-	case int:
+	case *int:
 		switch vt := v.(type) {
 		case int:
 			dst = vt
