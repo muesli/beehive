@@ -51,17 +51,17 @@ func (ph PlaceholderSlice) Value(name string) interface{} {
 func (ph PlaceholderSlice) Bind(name string, dst interface{}) error {
 	v := ph.Value(name)
 
-	switch dst.(type) {
+	switch d := dst.(type) {
 	case *string:
 		switch vt := v.(type) {
 		case string:
-			dst = vt
+			*d = vt
 		case bool:
-			dst = strconv.FormatBool(vt)
+			*d = strconv.FormatBool(vt)
 		case int64:
-			dst = strconv.FormatInt(vt, 10)
+			*d = strconv.FormatInt(vt, 10)
 		case int:
-			dst = strconv.FormatInt(int64(vt), 10)
+			*d = strconv.FormatInt(int64(vt), 10)
 		default:
 			panic(fmt.Sprintf("Unhandled type %+v", vt))
 		}
@@ -69,18 +69,18 @@ func (ph PlaceholderSlice) Bind(name string, dst interface{}) error {
 	case *bool:
 		switch vt := v.(type) {
 		case bool:
-			dst = vt
+			*d = vt
 		case string:
 			vt = strings.ToLower(vt)
 			if vt == "true" || vt == "on" || vt == "yes" || vt == "1" {
-				dst = true
+				*d = true
 			}
 		case int64:
-			dst = vt > 0
+			*d = vt > 0
 		case int:
-			dst = vt > 0
+			*d = vt > 0
 		case float64:
-			dst = vt > 0
+			*d = vt > 0
 		default:
 			panic(fmt.Sprintf("Unhandled type %+v", vt))
 		}
@@ -88,9 +88,10 @@ func (ph PlaceholderSlice) Bind(name string, dst interface{}) error {
 	case *float64:
 		switch vt := v.(type) {
 		case float64:
-			dst = vt
+			*d = vt
 		case string:
-			dst, _ = strconv.Atoi(vt)
+			x, _ := strconv.Atoi(vt)
+			*d = float64(x)
 		default:
 			panic(fmt.Sprintf("Unhandled type %+v", vt))
 		}
@@ -98,13 +99,13 @@ func (ph PlaceholderSlice) Bind(name string, dst interface{}) error {
 	case *int:
 		switch vt := v.(type) {
 		case int:
-			dst = vt
+			*d = vt
 		case uint:
-			dst = int(vt)
+			*d = int(vt)
 		case float64:
-			dst = int(vt)
+			*d = int(vt)
 		case string:
-			dst, _ = strconv.Atoi(vt)
+			*d, _ = strconv.Atoi(vt)
 		default:
 			panic(fmt.Sprintf("Unhandled type %+v", vt))
 		}
