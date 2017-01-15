@@ -22,10 +22,11 @@
 package huebee
 
 import (
+	_ "log"
+	"strconv"
+
 	"github.com/muesli/beehive/bees"
 	"github.com/muesli/go.hue"
-	"strconv"
-	_ "log"
 )
 
 type HueBee struct {
@@ -33,7 +34,7 @@ type HueBee struct {
 
 	client *hue.Bridge
 
-	key string
+	key    string
 	bridge string
 }
 
@@ -49,10 +50,22 @@ func (mod *HueBee) Action(action bees.Action) []bees.Placeholder {
 
 		for _, opt := range action.Options {
 			if opt.Name == "state" {
-				state = opt.Value.(bool)
+				switch v := opt.Value.(type) {
+				case string:
+					if v == "true" || v == "on" || v == "yes" {
+						state = true
+					}
+				case float64:
+					state = v > 0
+				}
 			}
 			if opt.Name == "light" {
-				lightId = int(opt.Value.(float64))
+				switch v := opt.Value.(type) {
+				case string:
+					lightId, _ = strconv.Atoi(v)
+				case float64:
+					lightId = int(v)
+				}
 			}
 		}
 
@@ -68,7 +81,7 @@ func (mod *HueBee) Action(action bees.Action) []bees.Placeholder {
 		}
 
 	default:
-		panic("Unknown action triggered in " +mod.Name()+": "+action.Name)
+		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
 	}
 
 	return outs
