@@ -160,4 +160,5 @@ In this case however, the "send" action messages the user _muesli_ with the mess
 
 API docs can be found [here](http://godoc.org/github.com/muesli/beehive).
 
-Continuous integration: [![Build Status](https://secure.travis-ci.org/muesli/beehive.png)](http://travis-ci.org/muesli/beehive)
+[![Build Status](https://secure.travis-ci.org/muesli/beehive.png)](http://travis-ci.org/muesli/beehive)
+[![Go ReportCard](http://goreportcard.com/badge/muesli/beehive)](http://goreportcard.com/report/muesli/beehive)
