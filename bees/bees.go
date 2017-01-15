@@ -68,7 +68,7 @@ type BeeInstance struct {
 type Event struct {
 	Bee     string
 	Name    string
-	Options []Placeholder
+	Options PlaceholderSlice
 }
 
 // An Action
