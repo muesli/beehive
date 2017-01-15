@@ -59,12 +59,38 @@ func (filter *TemplateFilter) Passes(data interface{}, value interface{}) bool {
 			"Right": func(values ...interface{}) string {
 				return values[0].(string)[len(values[0].(string))-values[1].(int):]
 			},
-			"Split":     strings.Split,
-			"HasPrefix": strings.HasPrefix,
-			"HasSuffix": strings.HasSuffix,
 			"Last": func(values ...interface{}) string {
 				return values[0].([]string)[len(values[0].([]string))-1]
 			},
+			// strings functions
+			"Compare":      strings.Compare,
+			"Contains":     strings.Contains,
+			"ContainsAny":  strings.ContainsAny,
+			"Count":        strings.Count,
+			"EqualFold":    strings.EqualFold,
+			"HasPrefix":    strings.HasPrefix,
+			"HasSuffix":    strings.HasSuffix,
+			"Index":        strings.Index,
+			"IndexAny":     strings.IndexAny,
+			"Join":         strings.Join,
+			"LastIndex":    strings.LastIndex,
+			"LastIndexAny": strings.LastIndexAny,
+			"Repeat":       strings.Repeat,
+			"Replace":      strings.Replace,
+			"Split":        strings.Split,
+			"SplitAfter":   strings.SplitAfter,
+			"SplitAfterN":  strings.SplitAfterN,
+			"SplitN":       strings.SplitN,
+			"Title":        strings.Title,
+			"ToLower":      strings.ToLower,
+			"ToTitle":      strings.ToTitle,
+			"ToUpper":      strings.ToUpper,
+			"Trim":         strings.Trim,
+			"TrimLeft":     strings.TrimLeft,
+			"TrimPrefix":   strings.TrimPrefix,
+			"TrimRight":    strings.TrimRight,
+			"TrimSpace":    strings.TrimSpace,
+			"TrimSuffix":   strings.TrimSuffix,
 		}
 
 		if strings.Index(v, "{{test") >= 0 {
