@@ -50,12 +50,7 @@ func (mod *TumblrBee) Action(action bees.Action) []bees.Placeholder {
 	switch action.Name {
 	case "postText":
 		text := ""
-
-		for _, opt := range action.Options {
-			if opt.Name == "text" {
-				text = opt.Value.(string)
-			}
-		}
+		action.Options.Bind("text", &text)
 
 		state := "published"
 		mod.client.CreateText(mod.blogname, map[string]string{
@@ -65,17 +60,8 @@ func (mod *TumblrBee) Action(action bees.Action) []bees.Placeholder {
 	case "postQuote":
 		quote := ""
 		source := ""
-
-		for _, opt := range action.Options {
-
-			switch opt.Name {
-			case "quote":
-				quote = opt.Value.(string)
-			case "source":
-				source = opt.Value.(string)
-			}
-
-		}
+		action.Options.Bind("quote", &quote)
+		action.Options.Bind("source", &source)
 
 		state := "published"
 		mod.client.CreateQuote(mod.blogname, map[string]string{

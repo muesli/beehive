@@ -22,11 +22,12 @@
 package anelpowerctrlbee
 
 import (
-	"github.com/muesli/beehive/bees"
 	"log"
 	"net"
 	"strconv"
 	"time"
+
+	"github.com/muesli/beehive/bees"
 )
 
 type AnelPowerCtrlBee struct {
@@ -70,20 +71,13 @@ func (mod *AnelPowerCtrlBee) Action(action bees.Action) []bees.Placeholder {
 	case "switch":
 		socket := 0
 		state := false
-
-		for _, opt := range action.Options {
-			if opt.Name == "socket" {
-				socket = int(opt.Value.(float64))
-			}
-			if opt.Name == "state" {
-				state = opt.Value.(bool)
-			}
-		}
+		action.Options.Bind("socket", &socket)
+		action.Options.Bind("state", &state)
 
 		mod.anelSwitch(socket, state)
 
 	default:
-		panic("Unknown action triggered in " +mod.Name()+": "+action.Name)
+		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
 	}
 
 	return outs

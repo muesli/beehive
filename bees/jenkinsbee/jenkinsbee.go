@@ -22,17 +22,18 @@ package jenkinsbee
 
 import (
 	"encoding/json"
-	"github.com/muesli/beehive/bees"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/muesli/beehive/bees"
 )
 
 type JenkinsBee struct {
 	bees.Bee
 
-	url       string
+	url      string
 	user     string
 	password string
 
@@ -79,14 +80,14 @@ func (mod *JenkinsBee) Run(cin chan bees.Event) {
 	mod.eventChan = cin
 	for {
 		select {
-			case <-mod.SigChan:
-				return
+		case <-mod.SigChan:
+			return
 
-			default:
+		default:
 		}
 		time.Sleep(10 * time.Second)
 
-		request, err := http.NewRequest("GET", mod.url + "/api/json", nil)
+		request, err := http.NewRequest("GET", mod.url+"/api/json", nil)
 		if err != nil {
 			log.Println("Could not build request")
 			break
@@ -96,7 +97,7 @@ func (mod *JenkinsBee) Run(cin chan bees.Event) {
 		client := http.Client{}
 		resp, err := client.Do(request)
 		if err != nil {
-			log.Println("Could not call API on " + mod.url + "/api/json", err)
+			log.Println("Could not call API on "+mod.url+"/api/json", err)
 			continue
 		}
 
@@ -133,7 +134,7 @@ func (mod *JenkinsBee) Run(cin chan bees.Event) {
 
 func (mod *JenkinsBee) triggerBuild(jobname string) {
 	client := http.Client{}
-	request, err := http.NewRequest("GET", mod.url + "/job/" + jobname + "/build", nil)
+	request, err := http.NewRequest("GET", mod.url+"/job/"+jobname+"/build", nil)
 	if err != nil {
 		log.Println("Could not build request")
 		return
@@ -149,15 +150,12 @@ func (mod *JenkinsBee) Action(action bees.Action) []bees.Placeholder {
 	switch action.Name {
 	case "trigger":
 		jobname := ""
-		for _, opt := range action.Options {
-			if opt.Name == "job" {
-				jobname = opt.Value.(string)
-			}
-		}
+		action.Options.Bind("job", &jobname)
+
 		mod.triggerBuild(jobname)
 
 	default:
-		panic("Unknown action triggered in " +mod.Name()+": "+action.Name)
+		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
 	}
 	return outs
 }

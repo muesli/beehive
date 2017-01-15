@@ -24,12 +24,13 @@ package serialbee
 import (
 	"bytes"
 	"encoding/binary"
-	"github.com/huin/goserial"
-	"github.com/muesli/beehive/bees"
 	"io"
 	"log"
 	"strings"
 	"time"
+
+	"github.com/huin/goserial"
+	"github.com/muesli/beehive/bees"
 )
 
 type SerialBee struct {
@@ -47,11 +48,7 @@ func (mod *SerialBee) Action(action bees.Action) []bees.Placeholder {
 
 	switch action.Name {
 	case "send":
-		for _, opt := range action.Options {
-			if opt.Name == "text" {
-				text = opt.Value.(string)
-			}
-		}
+		action.Options.Bind("text", &text)
 
 		bufOut := new(bytes.Buffer)
 		err := binary.Write(bufOut, binary.LittleEndian, []byte(text))
@@ -65,7 +62,7 @@ func (mod *SerialBee) Action(action bees.Action) []bees.Placeholder {
 		}
 
 	default:
-		panic("Unknown action triggered in " +mod.Name()+": "+action.Name)
+		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
 	}
 
 	return outs
@@ -87,10 +84,10 @@ func (mod *SerialBee) Run(eventChan chan bees.Event) {
 	for {
 		//FIXME: don't block
 		select {
-			case <-mod.SigChan:
-				return
+		case <-mod.SigChan:
+			return
 
-			default:
+		default:
 		}
 
 		text := ""

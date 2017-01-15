@@ -22,10 +22,11 @@
 package jabberbee
 
 import (
-	"github.com/mattn/go-xmpp"
-	"github.com/muesli/beehive/bees"
 	"log"
 	"strings"
+
+	"github.com/mattn/go-xmpp"
+	"github.com/muesli/beehive/bees"
 )
 
 type JabberBee struct {
@@ -45,19 +46,14 @@ func (mod *JabberBee) Action(action bees.Action) []bees.Placeholder {
 	switch action.Name {
 	case "send":
 		chat := xmpp.Chat{Type: "chat"}
-		for _, opt := range action.Options {
-			if opt.Name == "user" {
-				chat.Remote = opt.Value.(string)
-			}
-			if opt.Name == "text" {
-				chat.Text = opt.Value.(string)
-			}
-		}
+
+		action.Options.Bind("user", &chat.Remote)
+		action.Options.Bind("text", &chat.Text)
 
 		mod.client.Send(chat)
 
 	default:
-		panic("Unknown action triggered in " +mod.Name()+": "+action.Name)
+		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
 	}
 
 	return outs
@@ -84,11 +80,11 @@ func (mod *JabberBee) Run(eventChan chan bees.Event) {
 
 	for {
 		select {
-			case <-mod.SigChan:
-				mod.client.Close()
-				return
+		case <-mod.SigChan:
+			mod.client.Close()
+			return
 
-			default:
+		default:
 		}
 
 		chat, err := mod.client.Recv()

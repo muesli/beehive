@@ -42,6 +42,7 @@ func (mod *SlackBee) Action(action bees.Action) []bees.Placeholder {
 	case "send":
 		tos := []string{}
 		text := ""
+		action.Options.Bind("text", &text)
 
 		for _, opt := range action.Options {
 			if opt.Name == "channel" {
@@ -51,9 +52,6 @@ func (mod *SlackBee) Action(action bees.Action) []bees.Placeholder {
 				} else {
 					log.Printf("Slack: channel ID for %s not found\n", opt.Value.(string))
 				}
-			}
-			if opt.Name == "text" {
-				text = opt.Value.(string)
 			}
 		}
 

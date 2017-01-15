@@ -22,10 +22,11 @@
 package notificationbee
 
 import (
-	"github.com/guelfey/go.dbus"
-	"github.com/muesli/beehive/bees"
 	"log"
 	"strings"
+
+	"github.com/guelfey/go.dbus"
+	"github.com/muesli/beehive/bees"
 )
 
 const (
@@ -64,21 +65,18 @@ func (mod *NotificationBee) Action(action bees.Action) []bees.Placeholder {
 	switch action.Name {
 	case "notify":
 		text := ""
+		u := ""
 		urgency := URGENCY_NORMAL
 
-		for _, opt := range action.Options {
-			if opt.Name == "text" {
-				text = strings.TrimSpace(opt.Value.(string))
-			}
-			if opt.Name == "urgency" {
-				urgency, _ = urgency_map[opt.Value.(string)]
-			}
-		}
+		action.Options.Bind("text", &text)
+		action.Options.Bind("urgency", &u)
+		text = strings.TrimSpace(text)
+		urgency, _ = urgency_map[u]
 
 		if len(text) > 0 {
 			call := mod.notifier.Call("org.freedesktop.Notifications.Notify", 0, "", uint32(0),
-										"", "Beehive", text, []string{},
-										map[string]dbus.Variant{"urgency": dbus.MakeVariant(urgency)}, int32(5000))
+				"", "Beehive", text, []string{},
+				map[string]dbus.Variant{"urgency": dbus.MakeVariant(urgency)}, int32(5000))
 
 			if call.Err != nil {
 				log.Println("(" + string(urgency) + ") Failed to print message: " + text)
@@ -86,7 +84,7 @@ func (mod *NotificationBee) Action(action bees.Action) []bees.Placeholder {
 		}
 
 	default:
-		panic("Unknown action triggered in " +mod.Name()+": "+action.Name)
+		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
 	}
 	return outs
 }

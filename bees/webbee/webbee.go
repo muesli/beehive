@@ -23,12 +23,13 @@ package webbee
 
 import (
 	"encoding/json"
-	"github.com/hoisie/web"
-	"github.com/muesli/beehive/bees"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
+
+	"github.com/hoisie/web"
+	"github.com/muesli/beehive/bees"
 )
 
 type WebBee struct {
@@ -112,15 +113,8 @@ func (mod *WebBee) Action(action bees.Action) []bees.Placeholder {
 	case "post":
 		url := ""
 		j := ""
-
-		for _, opt := range action.Options {
-			if opt.Name == "url" {
-				url = opt.Value.(string)
-			}
-			if opt.Name == "json" {
-				j = opt.Value.(string)
-			}
-		}
+		action.Options.Bind("url", &url)
+		action.Options.Bind("json", &j)
 
 		buf := strings.NewReader(j)
 		resp, err := http.Post(url, "application/json", buf)

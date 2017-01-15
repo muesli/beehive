@@ -39,15 +39,8 @@ func (mod *TransmissionBee) Action(action bees.Action) []bees.Placeholder {
 	case "add-torrent":
 		torrentMsg := ""
 		commandPrefix := ""
-
-		for _, opt := range action.Options {
-			if opt.Name == "torrent" {
-				torrentMsg = opt.Value.(string)
-			}
-			if opt.Name == "commandPrefix" {
-				commandPrefix = opt.Value.(string)
-			}
-		}
+		action.Options.Bind("torrent", &torrentMsg)
+		action.Options.Bind("commandPrefix", &commandPrefix)
 
 		torrentMsg = strings.TrimSpace(strings.Replace(torrentMsg, commandPrefix, "", 1))
 		_, err := mod.client.Add(torrentMsg)

@@ -22,10 +22,11 @@
 package emailbee
 
 import (
-	"github.com/muesli/beehive/bees"
+	_ "log"
 	"net/smtp"
 	"strings"
-	_ "log"
+
+	"github.com/muesli/beehive/bees"
 )
 
 type EmailBee struct {
@@ -33,7 +34,7 @@ type EmailBee struct {
 
 	username string
 	password string
-	server string
+	server   string
 }
 
 // Interface impl
@@ -47,17 +48,9 @@ func (mod *EmailBee) Action(action bees.Action) []bees.Placeholder {
 		text := ""
 		subject := ""
 
-		for _, opt := range action.Options {
-			if opt.Name == "text" {
-				text = opt.Value.(string)
-			}
-			if opt.Name == "recipient" {
-				to = opt.Value.(string)
-			}
-			if opt.Name == "subject" {
-				subject = opt.Value.(string)
-			}
-		}
+		action.Options.Bind("recipient", &to)
+		action.Options.Bind("text", &text)
+		action.Options.Bind("subject", &subject)
 
 		text = "Subject: " + subject + "\n\n" + text
 		auth := smtp.PlainAuth("", mod.username, mod.password, mod.server[:strings.Index(mod.server, ":")])
@@ -67,7 +60,7 @@ func (mod *EmailBee) Action(action bees.Action) []bees.Placeholder {
 		}
 
 	default:
-		panic("Unknown action triggered in " +mod.Name()+": "+action.Name)
+		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
 	}
 
 	return outs

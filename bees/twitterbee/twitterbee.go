@@ -23,12 +23,13 @@
 package twitterbee
 
 import (
-	"github.com/ChimeraCoder/anaconda"
-	"github.com/muesli/beehive/bees"
 	"log"
 	"net/url"
 	"strings"
 	"time"
+
+	"github.com/ChimeraCoder/anaconda"
+	"github.com/muesli/beehive/bees"
 )
 
 type TwitterBee struct {
@@ -66,11 +67,7 @@ func (mod *TwitterBee) Action(action bees.Action) []bees.Placeholder {
 	switch action.Name {
 	case "tweet":
 		status := ""
-		for _, opt := range action.Options {
-			if opt.Name == "status" {
-				status = opt.Value.(string)
-			}
-		}
+		action.Options.Bind("status", &status)
 
 		posted_tweet := false
 		for !posted_tweet {
@@ -151,10 +148,10 @@ func (mod *TwitterBee) Run(eventChan chan bees.Event) {
 	for {
 		//FIXME: don't block
 		select {
-			case <-mod.SigChan:
-				return
+		case <-mod.SigChan:
+			return
 
-			default:
+		default:
 		}
 		time.Sleep(60 * time.Second)
 

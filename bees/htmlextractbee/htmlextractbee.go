@@ -22,9 +22,10 @@
 package htmlextractbee
 
 import (
+	"strings"
+
 	"github.com/advancedlogic/GoOse"
 	"github.com/muesli/beehive/bees"
-	"strings"
 )
 
 type HtmlExtractBee struct {
@@ -41,15 +42,11 @@ func (mod *HtmlExtractBee) Action(action bees.Action) []bees.Placeholder {
 	switch action.Name {
 	case "extract":
 		var url string
-		for _, opt := range action.Options {
-			if opt.Name == "url" {
-				url = opt.Value.(string)
-				if start := strings.Index(url, "http"); start >= 0 {
-					url = url[start:]
-					if end := strings.Index(url, " "); end >= 0 {
-						url = url[:end]
-					}
-				}
+		action.Options.Bind("url", &url)
+		if start := strings.Index(url, "http"); start >= 0 {
+			url = url[start:]
+			if end := strings.Index(url, " "); end >= 0 {
+				url = url[:end]
 			}
 		}
 

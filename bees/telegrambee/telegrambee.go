@@ -44,15 +44,8 @@ func (mod *TelegramBee) Action(action bees.Action) []bees.Placeholder {
 	case "send":
 		chatId := ""
 		text := ""
-
-		for _, opt := range action.Options {
-			if opt.Name == "chatId" {
-				chatId = opt.Value.(string)
-			}
-			if opt.Name == "text" {
-				text = opt.Value.(string)
-			}
-		}
+		action.Options.Bind("chatId", &chatId)
+		action.Options.Bind("text", &text)
 
 		cid, err := strconv.Atoi(chatId)
 		if err != nil {

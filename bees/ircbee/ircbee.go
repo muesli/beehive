@@ -55,13 +55,11 @@ func (mod *IrcBee) Action(action bees.Action) []bees.Placeholder {
 	case "send":
 		tos := []string{}
 		text := ""
+		action.Options.Bind("text", &text)
 
 		for _, opt := range action.Options {
 			if opt.Name == "channel" {
 				tos = append(tos, opt.Value.(string))
-			}
-			if opt.Name == "text" {
-				text = opt.Value.(string)
 			}
 		}
 

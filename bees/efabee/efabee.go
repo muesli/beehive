@@ -22,17 +22,18 @@
 package efabee
 
 import (
-	"github.com/muesli/goefa"
-	"github.com/muesli/beehive/bees"
 	"log"
 	"time"
+
+	"github.com/muesli/beehive/bees"
+	"github.com/muesli/goefa"
 )
 
 type EFABee struct {
 	bees.Bee
 
-	Provider  string
-	efa       *goefa.EFAProvider
+	Provider string
+	efa      *goefa.EFAProvider
 
 	eventChan chan bees.Event
 }
@@ -45,33 +46,28 @@ func (mod *EFABee) Action(action bees.Action) []bees.Placeholder {
 	switch action.Name {
 	case "departures":
 		stop := ""
-
-		for _, opt := range action.Options {
-			if opt.Name == "stop" {
-				stop = opt.Value.(string)
-			}
-		}
+		action.Options.Bind("stop", &stop)
 
 		//FIXME get departures
 		_, station, err := mod.efa.FindStop(stop)
-        if err != nil {
-                log.Println("Stop does not exist or name is not unique!")
-                return outs
-        }
-        log.Printf("Selected stop: %s (%d)\n\n",
-                station[0].Name)
+		if err != nil {
+			log.Println("Stop does not exist or name is not unique!")
+			return outs
+		}
+		log.Printf("Selected stop: %s (%d)\n\n",
+			station[0].Name)
 
-        departures, err := station[0].Departures(time.Now(), 3)
-        if err != nil {
-                log.Println("Could not retrieve departure times!")
-                return outs
-        }
-        for _, departure := range departures {
+		departures, err := station[0].Departures(time.Now(), 3)
+		if err != nil {
+			log.Println("Could not retrieve departure times!")
+			return outs
+		}
+		for _, departure := range departures {
 			log.Printf("Route %-5s due in %-2d minute%s --> %s\n",
-                        departure.ServingLine.Number,
-                        departure.Countdown,
-                        "s",
-                        departure.ServingLine.Direction)
+				departure.ServingLine.Number,
+				departure.Countdown,
+				"s",
+				departure.ServingLine.Direction)
 
 			ev := bees.Event{
 				Bee:  mod.Name(),
@@ -108,7 +104,7 @@ func (mod *EFABee) Action(action bees.Action) []bees.Placeholder {
 		}
 
 	default:
-		panic("Unknown action triggered in " +mod.Name()+": "+action.Name)
+		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
 	}
 
 	return outs
