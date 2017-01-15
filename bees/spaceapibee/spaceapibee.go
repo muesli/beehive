@@ -24,10 +24,11 @@ package spaceapibee
 
 import (
 	"encoding/json"
-	"github.com/muesli/beehive/bees"
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	"github.com/muesli/beehive/bees"
 )
 
 type SpaceApiBee struct {
@@ -45,8 +46,8 @@ func (mod *SpaceApiBee) Action(action bees.Action) []bees.Placeholder {
 	case "get_status":
 		type SpaceApiResult struct {
 			State struct {
-				Open bool `json: "open"`
-			} `json: "state"`
+				Open bool `json:"open"`
+			} `json:"state"`
 		}
 		api_state := new(SpaceApiResult)
 

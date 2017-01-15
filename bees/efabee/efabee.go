@@ -55,7 +55,7 @@ func (mod *EFABee) Action(action bees.Action) []bees.Placeholder {
 			return outs
 		}
 		log.Printf("Selected stop: %s (%d)\n\n",
-			station[0].Name)
+			station[0].Name, station[0].Id)
 
 		departures, err := station[0].Departures(time.Now(), 3)
 		if err != nil {
