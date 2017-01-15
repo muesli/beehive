@@ -32,7 +32,7 @@ type SerialBeeFactory struct {
 
 func (factory *SerialBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := SerialBee{
-		Bee: bees.NewBee(name, factory.Name(), description),
+		Bee:      bees.NewBee(name, factory.Name(), description),
 		device:   options.GetValue("device").(string),
 		baudrate: int(options.GetValue("baudrate").(float64)),
 	}
@@ -54,13 +54,13 @@ func (factory *SerialBeeFactory) Image() string {
 
 func (factory *SerialBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "device",
 			Description: "Serial device to use",
 			Type:        "string",
 			Mandatory:   true,
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "baudrate",
 			Description: "The baudrate you want to use",
 			Type:        "int",
@@ -72,17 +72,17 @@ func (factory *SerialBeeFactory) Options() []bees.BeeOptionDescriptor {
 
 func (factory *SerialBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
-		bees.EventDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "message",
 			Description: "A message was received over the serial port",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "text",
 					Description: "The message that was received",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "port",
 					Description: "The port the message was received on",
 					Type:        "int",
@@ -95,12 +95,12 @@ func (factory *SerialBeeFactory) Events() []bees.EventDescriptor {
 
 func (factory *SerialBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
-		bees.ActionDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "send",
 			Description: "Sends a message via the serial port",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "text",
 					Description: "Content of the message",
 					Type:        "string",

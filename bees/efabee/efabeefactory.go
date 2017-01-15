@@ -32,7 +32,7 @@ type EFABeeFactory struct {
 
 func (factory *EFABeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := EFABee{
-		Bee: bees.NewBee(name, factory.Name(), description),
+		Bee:      bees.NewBee(name, factory.Name(), description),
 		Provider: options.GetValue("provider").(string),
 	}
 
@@ -53,7 +53,7 @@ func (factory *EFABeeFactory) Image() string {
 
 func (factory *EFABeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "baseurl",
 			Description: "Base-url of the EFA API, e.g.: http://efa.avv-augsburg.de/avv/",
 			Type:        "string",
@@ -65,37 +65,37 @@ func (factory *EFABeeFactory) Options() []bees.BeeOptionDescriptor {
 
 func (factory *EFABeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
-		bees.EventDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "departure",
 			Description: "Departure for a stop has been retrieved",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "stop",
 					Description: "Which stop the departures are for",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "eta",
 					Description: "Expected time of arrival in minutes",
 					Type:        "int",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "etatime",
 					Description: "Expected departure time",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "route",
 					Description: "Route number",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "destination",
 					Description: "Destination",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "mottype",
 					Description: "Transportation type",
 					Type:        "string",
@@ -108,12 +108,12 @@ func (factory *EFABeeFactory) Events() []bees.EventDescriptor {
 
 func (factory *EFABeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
-		bees.ActionDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "departures",
 			Description: "Retrieves next departures from a specific stop",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "stop",
 					Description: "The stop you want departures for",
 					Type:        "string",

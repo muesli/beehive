@@ -32,10 +32,10 @@ type AnelPowerCtrlBeeFactory struct {
 
 func (factory *AnelPowerCtrlBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := AnelPowerCtrlBee{
-		Bee: bees.NewBee(name, factory.Name(), description),
-		addr:        options.GetValue("server").(string),
-		user:        options.GetValue("user").(string),
-		password:    options.GetValue("password").(string),
+		Bee:      bees.NewBee(name, factory.Name(), description),
+		addr:     options.GetValue("server").(string),
+		user:     options.GetValue("user").(string),
+		password: options.GetValue("password").(string),
 	}
 
 	return &bee
@@ -55,19 +55,19 @@ func (factory *AnelPowerCtrlBeeFactory) Image() string {
 
 func (factory *AnelPowerCtrlBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "server",
 			Description: "Hostname of Anel PowerCtrl device, eg: 192.168.0.2",
 			Type:        "string",
 			Mandatory:   true,
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "user",
 			Description: "Username to authenticate with Anel PowerCtrl",
 			Type:        "string",
 			Mandatory:   true,
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "password",
 			Description: "Password to use to connect to Anel PowerCtrl",
 			Type:        "string",
@@ -79,17 +79,17 @@ func (factory *AnelPowerCtrlBeeFactory) Options() []bees.BeeOptionDescriptor {
 
 func (factory *AnelPowerCtrlBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
-		bees.ActionDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "switch",
 			Description: "Switches a socket on or off",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "socket",
 					Description: "Which socket to switch",
 					Type:        "int",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "state",
 					Description: "True to activate the socket, false to cut the power",
 					Type:        "bool",

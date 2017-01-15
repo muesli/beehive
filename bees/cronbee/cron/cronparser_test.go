@@ -19,12 +19,12 @@
 
 package cron
 
- import (
+import (
 	"fmt"
 	"testing"
 )
 
- func Test_add(t *testing.T) {
+func Test_add(t *testing.T) {
 	if add(40, 20, 60) != 0 {
 		t.Error("crontime: add()-Test failed, 1")
 	} else if add(13, 13, 60) != 26 {
@@ -70,17 +70,17 @@ func Test_value_range(t *testing.T) {
 func Test_periodic(t *testing.T) {
 	if !IntsEquals(periodic(20, 0, 60), []int{0, 20, 40}) {
 		t.Error("crontime: periodic()-Test failed, 1")
-	} else if !IntsEquals(periodic(10, 0, 60), []int{0, 10, 20, 30, 40, 50}){
+	} else if !IntsEquals(periodic(10, 0, 60), []int{0, 10, 20, 30, 40, 50}) {
 		t.Error("crontime: periodic()-Test failed, 2")
-	} else if !IntsEquals(periodic(23, 0, 24), []int{0, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1}){
+	} else if !IntsEquals(periodic(23, 0, 24), []int{0, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1}) {
 		t.Error("crontime: periodic()-Test failed, 3")
-	} else if !IntsEquals(periodic(10, 0, 60), []int{0, 10, 20, 30, 40, 50}){
+	} else if !IntsEquals(periodic(10, 0, 60), []int{0, 10, 20, 30, 40, 50}) {
 		t.Error("crontime: periodic()-Test failed, 4")
-	} else if !IntsEquals(periodic(10, 0, 60), []int{0, 10, 20, 30, 40, 50}){
+	} else if !IntsEquals(periodic(10, 0, 60), []int{0, 10, 20, 30, 40, 50}) {
 		t.Error("crontime: periodic()-Test failed, 5")
-	} else if !IntsEquals(periodic(10, 0, 60), []int{0, 10, 20, 30, 40, 50}){
+	} else if !IntsEquals(periodic(10, 0, 60), []int{0, 10, 20, 30, 40, 50}) {
 		t.Error("crontime: periodic()-Test failed, 6")
-	} else if !IntsEquals(periodic(10, 0, 60), []int{0, 10, 20, 30, 40, 50}){
+	} else if !IntsEquals(periodic(10, 0, 60), []int{0, 10, 20, 30, 40, 50}) {
 		t.Error("crontime: periodic()-Test failed, 7")
 	} else {
 		t.Log("crontime: periodic()-Test passed")
@@ -121,8 +121,8 @@ func Test_check_syntax(t *testing.T) {
 	} else if check_syntax("*/5") {
 		t.Error("crontime: check_syntax()-Test failed, 16")
 	} else if check_syntax("æſ»„ł@¶²¼½öäüµ") {
-        t.Error("crontime: check_syntax()-Test failed, 17")
-    } else {
+		t.Error("crontime: check_syntax()-Test failed, 17")
+	} else {
 		t.Log("crontime: check_syntax()-Test passed")
 	}
 }
@@ -251,7 +251,7 @@ func Test_parseIgnore(t *testing.T) {
 
 	var monthtestA crontime
 	var monthtestB crontime
-	monthtestA.month = []int{1, 2, 3, 4, 5, 6 ,7, 8, 9, 10, 11, 12}
+	monthtestA.month = []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
 	monthtestB.parseIgnore(5)
 
 	if !CrontimeEquals(sectestA, sectestB) {

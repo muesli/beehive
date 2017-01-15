@@ -30,14 +30,14 @@ type TimeBeeFactory struct {
 
 func (factory *TimeBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := TimeBee{
-		Bee: bees.NewBee(name, factory.Name(), description),
-		second: int(options.GetValue("Second").(float64)),
-		minute: int(options.GetValue("Minute").(float64)),
-		hour: int(options.GetValue("Hour").(float64)),
-		dayofweek: int(options.GetValue("DayOfWeek").(float64)),
+		Bee:        bees.NewBee(name, factory.Name(), description),
+		second:     int(options.GetValue("Second").(float64)),
+		minute:     int(options.GetValue("Minute").(float64)),
+		hour:       int(options.GetValue("Hour").(float64)),
+		dayofweek:  int(options.GetValue("DayOfWeek").(float64)),
 		dayofmonth: int(options.GetValue("DayOfMonth").(float64)),
-		month: int(options.GetValue("Month").(float64)),
-		year: int(options.GetValue("Year").(float64)),
+		month:      int(options.GetValue("Month").(float64)),
+		year:       int(options.GetValue("Year").(float64)),
 	}
 	return &bee
 }
@@ -56,40 +56,40 @@ func (factory *TimeBeeFactory) Image() string {
 
 func (factory *TimeBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
-		bees.BeeOptionDescriptor{
-			Name:		"Second",
-			Description:	"00-59 for a specific time; -1 for ignore",
-			Type:		"int",
+		{
+			Name:        "Second",
+			Description: "00-59 for a specific time; -1 for ignore",
+			Type:        "int",
 		},
-		bees.BeeOptionDescriptor{
-			Name:		"Minute",
-			Description:	"00-59 for a specific time; -1 for ignore",
-			Type:		"int",
+		{
+			Name:        "Minute",
+			Description: "00-59 for a specific time; -1 for ignore",
+			Type:        "int",
 		},
-		bees.BeeOptionDescriptor{
-			Name:		"Hour",
-			Description:	"00-23 for a specific time; -1 for ignore",
-			Type:		"int",
+		{
+			Name:        "Hour",
+			Description: "00-23 for a specific time; -1 for ignore",
+			Type:        "int",
 		},
-		bees.BeeOptionDescriptor{
-			Name:		"DayOfWeek",
-			Description:	"0-6 0 = Sunday 6 = Saturday; -1 for ignore",
-			Type:		"int",
+		{
+			Name:        "DayOfWeek",
+			Description: "0-6 0 = Sunday 6 = Saturday; -1 for ignore",
+			Type:        "int",
 		},
-		bees.BeeOptionDescriptor{
-			Name:		"DayOfMonth",
-			Description:	"01-31 for a specific time; -1 for ignore)",
-			Type:		"int",
+		{
+			Name:        "DayOfMonth",
+			Description: "01-31 for a specific time; -1 for ignore)",
+			Type:        "int",
 		},
-		bees.BeeOptionDescriptor{
-			Name:		"Month",
-			Description:	"01 - 12 for a specific time; -1 for ignore)",
-			Type:		"int",
+		{
+			Name:        "Month",
+			Description: "01 - 12 for a specific time; -1 for ignore)",
+			Type:        "int",
 		},
-		bees.BeeOptionDescriptor{
-			Name:		"Year",
-			Description:	"2014 - 9999 for specific time (non-reoccuring); -1 for ignore (recommended)",
-			Type:		"int",
+		{
+			Name:        "Year",
+			Description: "2014 - 9999 for specific time (non-reoccuring); -1 for ignore (recommended)",
+			Type:        "int",
 		},
 	}
 	return opts
@@ -97,15 +97,16 @@ func (factory *TimeBeeFactory) Options() []bees.BeeOptionDescriptor {
 
 func (factory *TimeBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
-		bees.EventDescriptor{
-			Namespace:	factory.Name(),
-			Name:		"time_event",
-			Description:	"The time has come ...",
-			Options: []bees.PlaceholderDescriptor{},
-			},
-		}
+		{
+			Namespace:   factory.Name(),
+			Name:        "time_event",
+			Description: "The time has come ...",
+			Options:     []bees.PlaceholderDescriptor{},
+		},
+	}
 	return events
 }
+
 /*
 func (factory *TimeBeeFactory) Actions() []bees.ActionDescriptor {
         actions := []bees.ActionDescriptor{}

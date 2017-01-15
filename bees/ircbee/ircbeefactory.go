@@ -66,30 +66,30 @@ func (factory *IrcBeeFactory) Image() string {
 
 func (factory *IrcBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "server",
 			Description: "Hostname of IRC server, eg: irc.example.org:6667",
 			Type:        "url",
 			Mandatory:   true,
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "nick",
 			Description: "Nickname to use for IRC",
 			Type:        "string",
 			Mandatory:   true,
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "password",
 			Description: "Password to use to connect to IRC server",
 			Type:        "string",
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "channels",
 			Description: "Which channels to join",
 			Type:        "[]string",
 			Mandatory:   true,
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "ssl",
 			Description: "Use SSL for IRC connection",
 			Type:        "bool",
@@ -100,27 +100,27 @@ func (factory *IrcBeeFactory) Options() []bees.BeeOptionDescriptor {
 
 func (factory *IrcBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
-		bees.EventDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "message",
 			Description: "A message was received over IRC, either in a channel or a private query",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "text",
 					Description: "The message that was received",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "channel",
 					Description: "The channel the message was received in",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "user",
 					Description: "The user that sent the message",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "hostmask",
 					Description: "Hostmask of the user that sent the message",
 					Type:        "string",
@@ -133,41 +133,41 @@ func (factory *IrcBeeFactory) Events() []bees.EventDescriptor {
 
 func (factory *IrcBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
-		bees.ActionDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "send",
 			Description: "Sends a message to a channel or a private query",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "channel",
 					Description: "Which channel to send the message to",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "text",
 					Description: "Content of the message",
 					Type:        "string",
 				},
 			},
 		},
-		bees.ActionDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "join",
 			Description: "Joins a channel",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "channel",
 					Description: "Channel to join",
 					Type:        "string",
 				},
 			},
 		},
-		bees.ActionDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "part",
 			Description: "Parts a channel",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "channel",
 					Description: "Channel to part",
 					Type:        "string",

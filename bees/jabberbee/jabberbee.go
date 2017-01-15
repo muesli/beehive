@@ -100,12 +100,12 @@ func (mod *JabberBee) Run(eventChan chan bees.Event) {
 					Bee:  mod.Name(),
 					Name: "message",
 					Options: []bees.Placeholder{
-						bees.Placeholder{
+						{
 							Name:  "user",
 							Type:  "string",
 							Value: v.Remote,
 						},
-						bees.Placeholder{
+						{
 							Name:  "text",
 							Type:  "string",
 							Value: text,

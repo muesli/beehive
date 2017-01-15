@@ -52,12 +52,12 @@ func (factory *HtmlExtractBeeFactory) Image() string {
 
 func (factory *HtmlExtractBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
-		bees.ActionDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "extract",
 			Description: "Extract information from a web page",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "url",
 					Description: "The web page you want to extract information from",
 					Type:        "url",
@@ -70,37 +70,37 @@ func (factory *HtmlExtractBeeFactory) Actions() []bees.ActionDescriptor {
 
 func (factory *HtmlExtractBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
-		bees.EventDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "info_extracted",
 			Description: "Information has been extracted from the web page",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "title",
 					Description: "HTML title tag",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "domain",
 					Description: "Domain",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "topimage",
 					Description: "The top image for the page",
 					Type:        "url",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "finalurl",
 					Description: "Eventual URL after potentially being redirected",
 					Type:        "url",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "meta_description",
 					Description: "HTML meta description",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "meta_keywords",
 					Description: "HTML meta keywords",
 					Type:        "string",

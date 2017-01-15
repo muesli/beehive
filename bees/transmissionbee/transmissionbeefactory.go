@@ -55,19 +55,19 @@ func (factory *TransmissionBeeFactory) New(name, description string, options bee
 
 func (factory *TransmissionBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "serverURL",
 			Description: "Transmission server URL",
 			Type:        "url",
 			Mandatory:   true,
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "username",
 			Description: "Transmission server username",
 			Type:        "string",
 			Mandatory:   true,
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "password",
 			Description: "Transmission server password",
 			Type:        "string",
@@ -78,17 +78,17 @@ func (factory *TransmissionBeeFactory) Options() []bees.BeeOptionDescriptor {
 }
 
 func (factory *TransmissionBeeFactory) Actions() []bees.ActionDescriptor {
-	actions := []bees.ActionDescriptor{bees.ActionDescriptor{
+	actions := []bees.ActionDescriptor{{
 		Namespace:   factory.Name(),
 		Name:        "add-torrent",
 		Description: "Torrent URL or magnet",
 		Options: []bees.PlaceholderDescriptor{
-			bees.PlaceholderDescriptor{
+			{
 				Name:        "torrent",
 				Description: "Telegram chat/group to send the message to",
 				Type:        "string",
 			},
-			bees.PlaceholderDescriptor{
+			{
 				Name:        "commandPrefix",
 				Description: "String that precedes the torrent URL/magnet (will be removed)",
 				Type:        "string",

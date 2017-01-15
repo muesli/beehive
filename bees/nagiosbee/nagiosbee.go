@@ -72,22 +72,22 @@ func (mod *NagiosBee) announceStatuschange(s service) {
 		Bee:  mod.Name(),
 		Name: "statuschange",
 		Options: []bees.Placeholder{
-			bees.Placeholder{
+			{
 				Name:  "host",
 				Type:  "string",
 				Value: s.Host_name,
 			},
-			bees.Placeholder{
+			{
 				Name:  "service",
 				Type:  "string",
 				Value: s.Service_description,
 			},
-			bees.Placeholder{
+			{
 				Name:  "message",
 				Type:  "string",
 				Value: s.Plugin_output,
 			},
-			bees.Placeholder{
+			{
 				Name:  "status",
 				Type:  "string",
 				Value: s.Current_state,
@@ -101,10 +101,10 @@ func (mod *NagiosBee) Run(cin chan bees.Event) {
 	mod.eventChan = cin
 	for {
 		select {
-			case <-mod.SigChan:
-				return
+		case <-mod.SigChan:
+			return
 
-			default:
+		default:
 		}
 		time.Sleep(10 * time.Second)
 

@@ -55,6 +55,7 @@ import (
 	_ "github.com/muesli/beehive/bees/notificationbee"
 	_ "github.com/muesli/beehive/bees/rssbee"
 	_ "github.com/muesli/beehive/bees/serialbee"
+	_ "github.com/muesli/beehive/bees/slackbee"
 	_ "github.com/muesli/beehive/bees/spaceapibee"
 	_ "github.com/muesli/beehive/bees/telegrambee"
 	_ "github.com/muesli/beehive/bees/timebee"
@@ -62,7 +63,6 @@ import (
 	_ "github.com/muesli/beehive/bees/tumblrbee"
 	_ "github.com/muesli/beehive/bees/twitterbee"
 	_ "github.com/muesli/beehive/bees/webbee"
-	_ "github.com/muesli/beehive/bees/slackbee"
 )
 
 var (
@@ -105,7 +105,7 @@ func saveConfig(c Config) {
 
 func main() {
 	app.AddFlags([]app.CliFlag{
-		app.CliFlag{&configFile, "config", "./beehive.conf", "Config-file to use"},
+		{&configFile, "config", "./beehive.conf", "Config-file to use"},
 	})
 
 	// Parse command-line args for all registered bees

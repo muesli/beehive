@@ -55,35 +55,35 @@ func (factory *CronBeeFactory) Image() string {
 
 func (factory *CronBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
-		bees.BeeOptionDescriptor{
-			Name:		"Second",
-			Description:	"00-59 for a specific time; * for ignore",
-			Type:		"string",
+		{
+			Name:        "Second",
+			Description: "00-59 for a specific time; * for ignore",
+			Type:        "string",
 		},
-		bees.BeeOptionDescriptor{
-			Name:		"Minute",
-			Description:	"00-59 for a specific time; * for ignore",
-			Type:		"string",
+		{
+			Name:        "Minute",
+			Description: "00-59 for a specific time; * for ignore",
+			Type:        "string",
 		},
-		bees.BeeOptionDescriptor{
-			Name:		"Hour",
-			Description:	"00-23 for a specific time; * for ignore",
-			Type:		"string",
+		{
+			Name:        "Hour",
+			Description: "00-23 for a specific time; * for ignore",
+			Type:        "string",
 		},
-		bees.BeeOptionDescriptor{
-			Name:		"DayOfWeek",
-			Description:	"0-6 0 = Sunday 6 = Saturday; * for ignore",
-			Type:		"string",
+		{
+			Name:        "DayOfWeek",
+			Description: "0-6 0 = Sunday 6 = Saturday; * for ignore",
+			Type:        "string",
 		},
-		bees.BeeOptionDescriptor{
-			Name:		"DayOfMonth",
-			Description:	"01-31 for a specific time; * for ignore)",
-			Type:		"string",
+		{
+			Name:        "DayOfMonth",
+			Description: "01-31 for a specific time; * for ignore)",
+			Type:        "string",
 		},
-		bees.BeeOptionDescriptor{
-			Name:		"Month",
-			Description:	"01 - 12 for a specific time; * for ignore)",
-			Type:		"string",
+		{
+			Name:        "Month",
+			Description: "01 - 12 for a specific time; * for ignore)",
+			Type:        "string",
 		},
 	}
 	return opts
@@ -91,15 +91,15 @@ func (factory *CronBeeFactory) Options() []bees.BeeOptionDescriptor {
 
 func (factory *CronBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
-		bees.EventDescriptor{
-			Namespace:	factory.Name(),
-			Name:		"time_event",
-			Description:	"The time has come ...",
+		{
+			Namespace:   factory.Name(),
+			Name:        "time_event",
+			Description: "The time has come ...",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
-					Name:			"timestamp", // For the lulz & future
-					Description:	"Timestamp of the next event",
-					Type:			"string",
+				{
+					Name:        "timestamp", // For the lulz & future
+					Description: "Timestamp of the next event",
+					Type:        "string",
 				},
 			},
 		},

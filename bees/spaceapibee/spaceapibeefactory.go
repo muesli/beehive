@@ -54,7 +54,7 @@ func (factory *SpaceApiBeeFactory) Image() string {
 
 func (factory *SpaceApiBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "url",
 			Description: "URL to the SpaceAPI endpoint",
 			Type:        "string",
@@ -65,7 +65,7 @@ func (factory *SpaceApiBeeFactory) Options() []bees.BeeOptionDescriptor {
 
 func (factory *SpaceApiBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
-		bees.ActionDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "get_status",
 			Description: "Gets the Status of a LabAPI instance",
@@ -77,12 +77,12 @@ func (factory *SpaceApiBeeFactory) Actions() []bees.ActionDescriptor {
 
 func (factory *SpaceApiBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
-		bees.EventDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "query_result",
 			Description: "is triggered as soon as the query has been executed",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "open",
 					Description: "open-state of the spaceapi instance that was queried",
 					Type:        "bool",

@@ -52,7 +52,7 @@ type Hive struct {
 }
 
 type Hives struct {
-	Hives 		[]Hive
+	Hives []Hive
 }
 
 type HiveResource struct {

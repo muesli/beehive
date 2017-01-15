@@ -112,12 +112,12 @@ func (mod *SerialBee) Run(eventChan chan bees.Event) {
 				Bee:  mod.Name(),
 				Name: "message",
 				Options: []bees.Placeholder{
-					bees.Placeholder{
+					{
 						Name:  "port",
 						Type:  "string",
 						Value: mod.device,
 					},
-					bees.Placeholder{
+					{
 						Name:  "text",
 						Type:  "string",
 						Value: text,

@@ -32,9 +32,9 @@ type HueBeeFactory struct {
 
 func (factory *HueBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := HueBee{
-		Bee: bees.NewBee(name, factory.Name(), description),
+		Bee:    bees.NewBee(name, factory.Name(), description),
 		bridge: options.GetValue("bridge").(string),
-		key: options.GetValue("key").(string),
+		key:    options.GetValue("key").(string),
 	}
 
 	return &bee
@@ -54,13 +54,13 @@ func (factory *HueBeeFactory) Image() string {
 
 func (factory *HueBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "bridge",
 			Description: "Address of the Hue bridge, eg: 192.168.0.1",
 			Type:        "url",
 			Mandatory:   true,
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "key",
 			Description: "Key used for auth with the bridge",
 			Type:        "string",
@@ -77,17 +77,17 @@ func (factory *HueBeeFactory) Events() []bees.EventDescriptor {
 
 func (factory *HueBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
-		bees.ActionDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "switch",
 			Description: "Switches on/off a Hue light",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "light",
 					Description: "ID of the light you want to switch on or off",
 					Type:        "int",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "state",
 					Description: "New state of the light, true for turning it on",
 					Type:        "bool",

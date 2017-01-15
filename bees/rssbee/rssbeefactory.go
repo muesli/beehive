@@ -60,13 +60,13 @@ func (factory *RSSBeeFactory) Image() string {
 
 func (factory *RSSBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "url",
 			Description: "URL of the RSS-feed you want to monitor",
 			Type:        "string",
 			Mandatory:   true,
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "skip_first",
 			Description: "Whether to skip already existing entries",
 			Type:        "bool",
@@ -78,57 +78,57 @@ func (factory *RSSBeeFactory) Options() []bees.BeeOptionDescriptor {
 
 func (factory *RSSBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
-		bees.EventDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "newitem",
 			Description: "A new item has been received through the Feed",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "title",
 					Description: "Title of the Item",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "links",
 					Description: "Links referenced by the Item",
 					Type:        "[]string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "description",
 					Description: "Description of the Item",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "author",
 					Description: "The person who wrote the Item",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "categories",
 					Description: "Categories that the Item belongs to",
 					Type:        "[]string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "comments",
 					Description: "Comments of the Item",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "enclosures",
 					Description: "Enclosures related to Item",
 					Type:        "[]string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "guid",
 					Description: "Global unique ID attached to the Item",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "pubdate",
 					Description: "Date the Item was published on",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "source",
 					Description: "Source of the Item",
 					Type:        "string",

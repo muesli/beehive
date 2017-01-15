@@ -49,17 +49,17 @@ func (factory *NotificationBeeFactory) Image() string {
 
 func (factory *NotificationBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
-		bees.ActionDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "notify",
 			Description: "Shows the given text as notification message",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "text",
 					Description: "The content of the notification",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "urgency",
 					Description: "The urgencylevel to display the notification with. Can be ('low', 'normal' or 'critical'.",
 					Type:        "string",

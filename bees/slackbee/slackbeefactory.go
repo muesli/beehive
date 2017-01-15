@@ -91,13 +91,13 @@ func (factory *SlackBeeFactory) Image() string {
 
 func (factory *SlackBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "apiKey",
 			Description: "Slack API key",
 			Type:        "string",
 			Mandatory:   true,
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "channels",
 			Description: "Slack channels to listen on",
 			Type:        "[]string",
@@ -109,22 +109,22 @@ func (factory *SlackBeeFactory) Options() []bees.BeeOptionDescriptor {
 
 func (factory *SlackBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
-		bees.EventDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "message",
 			Description: "A message was received over Slack",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "text",
 					Description: "The message that was received",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "channel",
 					Description: "The channel the message was received in",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "user",
 					Description: "The user that sent the message",
 					Type:        "string",
@@ -137,17 +137,17 @@ func (factory *SlackBeeFactory) Events() []bees.EventDescriptor {
 
 func (factory *SlackBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
-		bees.ActionDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "send",
 			Description: "Sends a message to a channel",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "channel",
 					Description: "Which channel to send the message to",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "text",
 					Description: "Content of the message",
 					Type:        "string",

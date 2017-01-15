@@ -33,7 +33,7 @@ type TwitterBeeFactory struct {
 
 func (factory *TwitterBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := TwitterBee{
-		Bee: bees.NewBee(name, factory.Name(), description),
+		Bee:                 bees.NewBee(name, factory.Name(), description),
 		consumer_key:        options.GetValue("consumer_key").(string),
 		consumer_secret:     options.GetValue("consumer_secret").(string),
 		access_token:        options.GetValue("access_token").(string),
@@ -57,22 +57,22 @@ func (factory *TwitterBeeFactory) Image() string {
 
 func (factory *TwitterBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "consumer_key",
 			Description: "Consumer key for Twitter API",
 			Type:        "string",
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "consumer_secret",
 			Description: "Consumer secret for Twitter API",
 			Type:        "string",
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "access_token",
 			Description: "Access token Twitter API",
 			Type:        "string",
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "access_token_secret",
 			Description: "API secret for Twitter API",
 			Type:        "string",
@@ -83,12 +83,12 @@ func (factory *TwitterBeeFactory) Options() []bees.BeeOptionDescriptor {
 
 func (factory *TwitterBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
-		bees.ActionDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "tweet",
 			Description: "Update your status according to twitter",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "status",
 					Description: "Text of the Status to tweet, may be no longer than 140 characters",
 					Type:        "String",
@@ -101,29 +101,29 @@ func (factory *TwitterBeeFactory) Actions() []bees.ActionDescriptor {
 
 func (factory *TwitterBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
-		bees.EventDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "call_finished",
 			Description: "is triggered as soon as the API call has been executed",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "success",
 					Description: "Result of the API call",
 					Type:        "bool",
 				},
 			},
 		},
-		bees.EventDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "mention",
 			Description: "is triggered as soon as the API call has been executed",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "username",
 					Description: "Twitter handle of the mention's author",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "text",
 					Description: "text content of the mention",
 					Type:        "string",

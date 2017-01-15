@@ -30,8 +30,8 @@ type JenkinsBeeFactory struct {
 
 func (factory *JenkinsBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := JenkinsBee{
-		Bee: bees.NewBee(name, factory.Name(), description),
-		url: options.GetValue("url").(string),
+		Bee:      bees.NewBee(name, factory.Name(), description),
+		url:      options.GetValue("url").(string),
 		user:     options.GetValue("user").(string),
 		password: options.GetValue("password").(string),
 	}
@@ -52,18 +52,18 @@ func (factory *JenkinsBeeFactory) Image() string {
 
 func (factory *JenkinsBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "url",
 			Description: "The url the jenkins-installation is reachable at",
 			Type:        "string",
 			Mandatory:   true,
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "user",
 			Description: "HTTP auth username",
 			Type:        "string",
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "password",
 			Description: "HTTP auth password",
 			Type:        "string",
@@ -74,22 +74,22 @@ func (factory *JenkinsBeeFactory) Options() []bees.BeeOptionDescriptor {
 
 func (factory *JenkinsBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
-		bees.EventDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "statuschange",
 			Description: "the status of a job has changed",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "name",
 					Description: "Name of the job",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "status",
 					Description: "Current status of the job ('red' or 'blue')",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "url",
 					Description: "URL of the affected job",
 					Type:        "string",
@@ -102,12 +102,12 @@ func (factory *JenkinsBeeFactory) Events() []bees.EventDescriptor {
 
 func (factory *JenkinsBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
-		bees.ActionDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "trigger",
 			Description: "Trigger a build on this jenkins machine",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "job",
 					Description: "Name of the job on which to trigger a build",
 					Type:        "string",

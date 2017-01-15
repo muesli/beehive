@@ -73,27 +73,27 @@ func (mod *EFABee) Action(action bees.Action) []bees.Placeholder {
 				Bee:  mod.Name(),
 				Name: "departure",
 				Options: []bees.Placeholder{
-					bees.Placeholder{
+					{
 						Name:  "mottype",
 						Type:  "string",
 						Value: departure.ServingLine.MotType.String(),
 					},
-					bees.Placeholder{
+					{
 						Name:  "eta",
 						Type:  "int",
 						Value: departure.Countdown,
 					},
-					bees.Placeholder{
+					{
 						Name:  "etatime",
 						Type:  "string",
 						Value: departure.DateTime.Format("15:04"),
 					},
-					bees.Placeholder{
+					{
 						Name:  "route",
 						Type:  "string",
 						Value: departure.ServingLine.Number,
 					},
-					bees.Placeholder{
+					{
 						Name:  "destination",
 						Type:  "string",
 						Value: departure.ServingLine.Direction,

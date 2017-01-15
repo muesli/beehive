@@ -17,9 +17,9 @@
  *        Authors:	Stefan Luecke <glaxx@glaxx.net>
  */
 
- /*
+/*
  * TODO List:
- * - Test leap year behavior 
+ * - Test leap year behavior
  * - Test
  */
 
@@ -27,23 +27,23 @@
 package cron
 
 import (
-//	"fmt"
+	//	"fmt"
 	"time"
-//	"sort"
-	"log"
+	//	"sort"
 	"container/list"
+	"log"
 )
 
 type crontime struct {
-	second []int
-	minute []int
-	hour   []int
-	dow    []int //Day of Week
-	dom    []int //Day of Month
-	month  []int
-	calculatedTime time.Time
+	second                []int
+	minute                []int
+	hour                  []int
+	dow                   []int //Day of Week
+	dom                   []int //Day of Month
+	month                 []int
+	calculatedTime        time.Time
 	calculationInProgress bool
-	eventList list.List
+	eventList             list.List
 }
 
 // Returns the time.Duration until the next event.
@@ -56,11 +56,11 @@ func (c *crontime) GetNextEvent() time.Time {
 }
 
 func (c *crontime) nextEvent() time.Time {
-	if !c.calculationInProgress && c.eventList.Len() == 0{
+	if !c.calculationInProgress && c.eventList.Len() == 0 {
 		r := c.calculateEvent(time.Now())
 		go c.fillList(r)
 		return r
-	} else if c.calculationInProgress && c.eventList.Len() == 0{
+	} else if c.calculationInProgress && c.eventList.Len() == 0 {
 		// shit just got real aka TODO
 		panic("Shit")
 
@@ -78,7 +78,7 @@ func (c *crontime) fillList(baseTime time.Time) {
 	if c.eventList.Len() == 0 {
 		c.eventList.PushBack(c.calculateEvent(baseTime))
 	}
-	for ; c.eventList.Len() < 5; {
+	for c.eventList.Len() < 5 {
 		c.eventList.PushBack(c.calculateEvent(c.eventList.Back().Value.(time.Time)))
 	}
 }
@@ -87,9 +87,8 @@ func (c *crontime) setCalculationInProgress(set bool) {
 	c.calculationInProgress = set
 }
 
-
 // This functions calculates the next event
-func (c *crontime) calculateEvent(baseTime time.Time) time.Time{
+func (c *crontime) calculateEvent(baseTime time.Time) time.Time {
 	c.calculationInProgress = true
 	defer c.setCalculationInProgress(false)
 	baseTime = setNanoecond(baseTime, 10000)
@@ -126,14 +125,14 @@ func (c *crontime) nextValidDay(baseTime time.Time) {
 	for _, dom := range c.dom {
 		if dom >= c.calculatedTime.Day() {
 			for _, dow := range c.dow {
-				if monthHasDow(dow, dom, int(c.calculatedTime.Month()), c.calculatedTime.Year()){
+				if monthHasDow(dow, dom, int(c.calculatedTime.Month()), c.calculatedTime.Year()) {
 					c.calculatedTime = setDay(c.calculatedTime, dom)
 					//log.Println("Cronbee: Day-INS-1:", c.calculatedTime)
 					return
 				}
 			}
 		}
-	}/* else {
+	} /* else {
 		for _, dow := range c.dow {
 			if monthHasDow(dow, dom, int(c.calculatedTime.Month()), c.calculatedTime.Year()){
 				c.calculatedTime = setDay(c.calculatedTime, dom)
@@ -164,8 +163,8 @@ func (c *crontime) nextValidHour(baseTime time.Time) {
 		}
 	}
 	// If no result was found try it again in the following day.
-	c.calculatedTime = c.calculatedTime.AddDate(0, 0, 1)     // <-|
-	c.calculatedTime = setHour(c.calculatedTime, c.hour[0])  //   |
+	c.calculatedTime = c.calculatedTime.AddDate(0, 0, 1)    // <-|
+	c.calculatedTime = setHour(c.calculatedTime, c.hour[0]) //   |
 	//log.Println("Cronbee: Hour", c.calculatedTime, baseTime) // |
 	c.nextValidMonth(baseTime) // May trigger a new month --------|
 	c.nextValidDay(baseTime)
@@ -215,7 +214,7 @@ func (c *crontime) nextValidSecond(baseTime time.Time) {
 
 func (c *crontime) minuteHasPassed(baseTime time.Time) bool {
 	if c.calculatedTime.Year() > baseTime.Year() {
-		return true 
+		return true
 	} else if c.calculatedTime.Month() > baseTime.Month() {
 		return true
 	} else if c.calculatedTime.Day() > baseTime.Day() {
@@ -229,60 +228,86 @@ func (c *crontime) minuteHasPassed(baseTime time.Time) bool {
 	}
 }
 
-func hasPassed(value, tstamp int) bool{
+func hasPassed(value, tstamp int) bool {
 	return value < tstamp
 }
 
 func monthHasDom(dom, month, year int) bool {
-	switch month{
-		case 1:	return dom <= 31
-		case 2:	
-			if isLeapYear(year) {
-				return dom <= 29
-			} else {
-				return dom <= 28
-			}
-		case 3: return dom <= 31
-		case 4: return dom <= 30
-		case 5: return dom <= 31
-		case 6: return dom <= 30
-		case 7: return dom <= 31
-		case 8: return dom <= 31
-		case 9: return dom <= 30
-		case 10: return dom <= 31
-		case 11: return dom <= 30
-		case 12: return dom <= 31
-		default: panic("strange thingys are happening!")
+	switch month {
+	case 1:
+		return dom <= 31
+	case 2:
+		if isLeapYear(year) {
+			return dom <= 29
+		} else {
+			return dom <= 28
+		}
+	case 3:
+		return dom <= 31
+	case 4:
+		return dom <= 30
+	case 5:
+		return dom <= 31
+	case 6:
+		return dom <= 30
+	case 7:
+		return dom <= 31
+	case 8:
+		return dom <= 31
+	case 9:
+		return dom <= 30
+	case 10:
+		return dom <= 31
+	case 11:
+		return dom <= 30
+	case 12:
+		return dom <= 31
+	default:
+		panic("strange thingys are happening!")
 	}
 }
 
 // Check if the combination of day(of month), month and year is the weekday dow.
-func monthHasDow(dow, dom, month, year int) bool{
-	if !monthHasDom(dom, month, year) {return false}
+func monthHasDow(dow, dom, month, year int) bool {
+	if !monthHasDom(dom, month, year) {
+		return false
+	}
 	Nday := dom % 7
 	var Nmonth int
-	switch month{
-		case 1: Nmonth = 0
-		case 2: Nmonth = 3
-		case 3: Nmonth = 3
-		case 4: Nmonth = 6
-		case 5: Nmonth = 1
-		case 6: Nmonth = 4
-		case 7: Nmonth = 6
-		case 8: Nmonth = 2
-		case 9: Nmonth = 5
-		case 10: Nmonth = 0
-		case 11: Nmonth = 3
-		case 12: Nmonth = 5
+	switch month {
+	case 1:
+		Nmonth = 0
+	case 2:
+		Nmonth = 3
+	case 3:
+		Nmonth = 3
+	case 4:
+		Nmonth = 6
+	case 5:
+		Nmonth = 1
+	case 6:
+		Nmonth = 4
+	case 7:
+		Nmonth = 6
+	case 8:
+		Nmonth = 2
+	case 9:
+		Nmonth = 5
+	case 10:
+		Nmonth = 0
+	case 11:
+		Nmonth = 3
+	case 12:
+		Nmonth = 5
 	}
 	var Nyear int
 	temp := year % 100
-	if temp != 0{
-		Nyear = (temp + (temp / 4)) % 7	
+	if temp != 0 {
+		Nyear = (temp + (temp / 4)) % 7
 	} else {
 		Nyear = 0
 	}
-	Ncent := (3 - ((year / 100) %4)) * 2
+	Ncent := (3 - ((year / 100) % 4)) * 2
 	var Nsj int
 	if isLeapYear(year) {
 		Nsj = -1
@@ -293,32 +318,43 @@ func monthHasDow(dow, dom, month, year int) bool{
 	return dow == W
 }
 
-func isLeapYear(year int) bool{
-	return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)
+func isLeapYear(year int) bool {
+	return year%4 == 0 && (year%100 != 0 || year%400 == 0)
 }
+
 //
 func setMonth(tstamp time.Time, month int) time.Time {
-	if month > 12 || month < 1 { panic("ERROR Month") }
+	if month > 12 || month < 1 {
+		panic("ERROR Month")
+	}
 	return tstamp.AddDate(0, -absolute(int(tstamp.Month()), month), 0)
 }
 
 func setDay(tstamp time.Time, day int) time.Time {
-	if day > 31 || day < 1{ panic("ERROR Day") }
+	if day > 31 || day < 1 {
+		panic("ERROR Day")
+	}
 	return tstamp.AddDate(0, 0, -absolute(tstamp.Day(), day))
 }
 
 func setHour(tstamp time.Time, hour int) time.Time {
-	if hour >= 24 || hour < 0 { panic("ERROR Hour") }
+	if hour >= 24 || hour < 0 {
+		panic("ERROR Hour")
+	}
 	return tstamp.Add(time.Duration(-absolute(tstamp.Hour(), hour)) * time.Hour)
 }
 
 func setMinute(tstamp time.Time, minute int) time.Time {
-	if minute >= 60 || minute < 0{ panic("ERROR Minute") }
+	if minute >= 60 || minute < 0 {
+		panic("ERROR Minute")
+	}
 	return tstamp.Add(time.Duration(-absolute(tstamp.Minute(), minute)) * time.Minute)
 }
 
 func setSecond(tstamp time.Time, second int) time.Time {
-	if second >= 60 || second < 0 { panic("ERROR Second") }
+	if second >= 60 || second < 0 {
+		panic("ERROR Second")
+	}
 	return tstamp.Add(time.Duration(-absolute(tstamp.Second(), second)) * time.Second)
 }
 

@@ -61,32 +61,32 @@ func (mod *HtmlExtractBee) Action(action bees.Action) []bees.Placeholder {
 				Bee:  mod.Name(),
 				Name: "info_extracted",
 				Options: []bees.Placeholder{
-					bees.Placeholder{
+					{
 						Name:  "title",
 						Type:  "string",
 						Value: article.Title,
 					},
-					bees.Placeholder{
+					{
 						Name:  "domain",
 						Type:  "string",
 						Value: article.Domain,
 					},
-					bees.Placeholder{
+					{
 						Name:  "topimage",
 						Type:  "url",
 						Value: article.TopImage,
 					},
-					bees.Placeholder{
+					{
 						Name:  "finalurl",
 						Type:  "url",
 						Value: article.FinalURL,
 					},
-					bees.Placeholder{
+					{
 						Name:  "meta_description",
 						Type:  "string",
 						Value: article.MetaDescription,
 					},
-					bees.Placeholder{
+					{
 						Name:  "meta_keywords",
 						Type:  "string",
 						Value: article.MetaKeywords,

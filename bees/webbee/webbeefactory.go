@@ -54,13 +54,13 @@ func (factory *WebBeeFactory) Image() string {
 
 func (factory *WebBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "addr",
 			Description: "Which addr to listen on, eg: 0.0.0.0:12345",
 			Type:        "string",
 			Mandatory:   true,
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "path",
 			Description: "Which path to expect GET/POST requests on, eg: /foobar",
 			Type:        "string",
@@ -72,34 +72,34 @@ func (factory *WebBeeFactory) Options() []bees.BeeOptionDescriptor {
 
 func (factory *WebBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
-		bees.EventDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "post",
 			Description: "A POST call was received by the HTTP server",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "json",
 					Description: "JSON map received from caller",
 					Type:        "map",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "ip",
 					Description: "IP of the caller",
 					Type:        "string",
 				},
 			},
 		},
-		bees.EventDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "get",
 			Description: "A GET call was received by the HTTP server",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "query_params",
 					Description: "Map of query parameters received from caller",
 					Type:        "map",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "ip",
 					Description: "IP of the caller",
 					Type:        "string",
@@ -112,17 +112,17 @@ func (factory *WebBeeFactory) Events() []bees.EventDescriptor {
 
 func (factory *WebBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
-		bees.ActionDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "post",
 			Description: "Does a POST request",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "json",
 					Description: "Data to send",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "url",
 					Description: "Where to connect to",
 					Type:        "string",

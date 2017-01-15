@@ -69,7 +69,7 @@ func (mod *SpaceApiBee) Action(action bees.Action) []bees.Placeholder {
 			Bee:  mod.Name(),
 			Name: "query_result",
 			Options: []bees.Placeholder{
-				bees.Placeholder{
+				{
 					Name:  "open",
 					Type:  "bool",
 					Value: api_state.State.Open,

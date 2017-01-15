@@ -97,12 +97,12 @@ func (mod *ExecBee) Action(action bees.Action) []bees.Placeholder {
 						Bee:  mod.Name(),
 						Name: "commandResult",
 						Options: []bees.Placeholder{
-							bees.Placeholder{
+							{
 								Name:  "stdout",
 								Type:  "string",
 								Value: strings.Join(outBuffer, "\n"),
 							},
-							bees.Placeholder{
+							{
 								Name:  "stderr",
 								Type:  "string",
 								Value: strings.Join(errBuffer, "\n"),

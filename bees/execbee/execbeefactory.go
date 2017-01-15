@@ -51,17 +51,17 @@ func (factory *ExecBeeFactory) Description() string {
 
 func (factory *ExecBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
-		bees.EventDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "cmd",
 			Description: "A command was executed",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "stdout",
 					Description: "std output of the executed command",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "stderr",
 					Description: "stderr output of the executed command",
 					Type:        "string",
@@ -74,12 +74,12 @@ func (factory *ExecBeeFactory) Events() []bees.EventDescriptor {
 
 func (factory *ExecBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
-		bees.ActionDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "localCommand",
 			Description: "Executes a command on the local host",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "command",
 					Description: "command to be executed",
 					Type:        "string",

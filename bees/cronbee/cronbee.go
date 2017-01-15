@@ -24,13 +24,13 @@ import (
 	//"fmt"
 	"github.com/muesli/beehive/bees"
 	//"strings"
-	"time"
 	"github.com/muesli/beehive/bees/cronbee/cron"
+	"time"
 )
 
 type CronBee struct {
 	bees.Bee
-	input [6]string
+	input     [6]string
 	eventChan chan bees.Event
 }
 
@@ -44,19 +44,19 @@ func (mod *CronBee) Run(eventChan chan bees.Event) {
 	for {
 		//FIXME: don't block
 		select {
-			case <-mod.SigChan:
-				return
+		case <-mod.SigChan:
+			return
 
-			default:
+		default:
 		}
 
 		//fmt.Println(timer.NextEvent())
 		time.Sleep(timer.DurationUntilNextEvent())
 		event := bees.Event{
-			Bee: mod.Name(),
+			Bee:  mod.Name(),
 			Name: "time_event",
 			Options: []bees.Placeholder{
-				bees.Placeholder{
+				{
 					Name:  "timestamp",
 					Type:  "string",
 					Value: timer.GetNextEvent(),

@@ -20,12 +20,12 @@
 package cron
 
 import (
-//	"fmt"
+	//	"fmt"
 	"strconv"
 	"strings"
-//	"time"
-	"sort"
+	//	"time"
 	"log"
+	"sort"
 )
 
 //Reads the input and returns a pointer to the generated datastructure.
@@ -94,7 +94,7 @@ func ParseInput(input [6]string) *crontime {
 	}
 	// Do a sanity check, eg. there is no 32th Day in any Month
 	result.check_values()
-	
+
 	// Makes timestamp generation easier
 	sort.Ints(result.second)
 	sort.Ints(result.minute)
@@ -294,7 +294,7 @@ func (c *crontime) check_values() {
 	}
 
 	for _, hour := range c.hour {
-		if hour >= 24 ||  hour < 0 {
+		if hour >= 24 || hour < 0 {
 			log.Panicln("Cronbee: Your config seems messed up. Check the range of \"Hour\".")
 		}
 	}
@@ -318,7 +318,7 @@ func (c *crontime) check_values() {
 	}
 }
 
-// Add two values and ignore the carry (for calculations in the Sexagesimal 
+// Add two values and ignore the carry (for calculations in the Sexagesimal
 // system).
 func add(a, b, bp int) int {
 	return (a + b) % bp
@@ -360,9 +360,9 @@ func periodic(a, cur, bp int) []int {
 	i := 2
 	ret[0] = cur
 	ret[1] = add(a, cur, bp)
-	for ;; i++ {
-		ret[i] = add(a, ret[i - 1], bp)
-		if ret[i] == cur{
+	for ; ; i++ {
+		ret[i] = add(a, ret[i-1], bp)
+		if ret[i] == cur {
 			break
 		}
 	}

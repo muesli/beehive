@@ -53,12 +53,12 @@ func (mod *WebBee) triggerJsonEvent(resp *[]byte) {
 		Bee:  mod.Name(),
 		Name: "post",
 		Options: []bees.Placeholder{
-			bees.Placeholder{
+			{
 				Name:  "json",
 				Type:  "map",
 				Value: payload,
 			},
-			bees.Placeholder{
+			{
 				Name:  "ip",
 				Type:  "string",
 				Value: "tbd",
@@ -143,7 +143,7 @@ func (mod *WebBee) GetRequest(ctx *web.Context) {
 		Bee:  mod.Name(),
 		Name: "get",
 		Options: []bees.Placeholder{
-			bees.Placeholder{
+			{
 				Name:  "ip",
 				Type:  "string",
 				Value: "tbd",

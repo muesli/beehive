@@ -24,13 +24,13 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
-type NagiosBeeFactory struct{
+type NagiosBeeFactory struct {
 	bees.BeeFactory
 }
 
 func (factory *NagiosBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := NagiosBee{
-		Bee: bees.NewBee(name, factory.Name(), description),
+		Bee:      bees.NewBee(name, factory.Name(), description),
 		url:      options.GetValue("url").(string),
 		user:     options.GetValue("user").(string),
 		password: options.GetValue("password").(string),
@@ -53,17 +53,17 @@ func (factory *NagiosBeeFactory) Image() string {
 
 func (factory *NagiosBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "url",
 			Description: "URL to the statusJson.php-script typically http://domain.com/nagios3/statusJson.php",
 			Type:        "string",
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "user",
 			Description: "The username of the nagios-user",
 			Type:        "string",
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "password",
 			Description: "Password of the nagios-user's account",
 			Type:        "string",
@@ -74,27 +74,27 @@ func (factory *NagiosBeeFactory) Options() []bees.BeeOptionDescriptor {
 
 func (factory *NagiosBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
-		bees.EventDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "statuschange",
 			Description: "The status of a Service has changed",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "host",
 					Description: "Name of the system the changed server resides on",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "service",
 					Description: "Name of the service that has changed",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "message",
 					Description: "Message that the NRPE-service returned",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "status",
 					Description: "New status number",
 					Type:        "int",

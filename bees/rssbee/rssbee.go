@@ -90,47 +90,47 @@ func (mod *RSSBee) itemHandler(feed *rss.Feed, ch *rss.Channel, newitems []*rss.
 			Bee:  mod.Name(),
 			Name: "newitem",
 			Options: []bees.Placeholder{
-				bees.Placeholder{
+				{
 					Name:  "title",
 					Type:  "string",
 					Value: newitems[i].Title,
 				},
-				bees.Placeholder{
+				{
 					Name:  "links",
 					Type:  "[]string",
 					Value: links,
 				},
-				bees.Placeholder{
+				{
 					Name:  "description",
 					Type:  "string",
 					Value: newitems[i].Description,
 				},
-				bees.Placeholder{
+				{
 					Name:  "author",
 					Type:  "string",
 					Value: newitems[i].Author.Name,
 				},
-				bees.Placeholder{
+				{
 					Name:  "categories",
 					Type:  "[]string",
 					Value: categories,
 				},
-				bees.Placeholder{
+				{
 					Name:  "comments",
 					Type:  "string",
 					Value: newitems[i].Comments,
 				},
-				bees.Placeholder{
+				{
 					Name:  "enclosures",
 					Type:  "[]string",
 					Value: enclosures,
 				},
-				bees.Placeholder{
+				{
 					Name:  "guid",
 					Type:  "string",
 					Value: newitems[i].Guid,
 				},
-				bees.Placeholder{
+				{
 					Name:  "pubdate",
 					Type:  "string",
 					Value: newitems[i].PubDate,

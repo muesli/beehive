@@ -58,37 +58,37 @@ func (factory *TumblrBeeFactory) Image() string {
 
 func (factory *TumblrBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "blogname",
 			Description: "Name of the Tumblr blog",
 			Type:        "string",
 			Mandatory:   true,
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "consumer_key",
 			Description: "Consumer Key",
 			Type:        "string",
 			Mandatory:   true,
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "consumer_secret",
 			Description: "Consumer Secret",
 			Type:        "string",
 			Mandatory:   true,
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "token",
 			Description: "Token",
 			Type:        "string",
 			Mandatory:   true,
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "token_secret",
 			Description: "Token Secret",
 			Type:        "string",
 			Mandatory:   true,
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "callback_url",
 			Description: "Callback URL",
 			Type:        "url",
@@ -105,29 +105,29 @@ func (factory *TumblrBeeFactory) Events() []bees.EventDescriptor {
 
 func (factory *TumblrBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
-		bees.ActionDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "postText",
 			Description: "Posts a text on Tumblr",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "text",
 					Description: "Content of the Tumblr post",
 					Type:        "string",
 				},
 			},
 		},
-		bees.ActionDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "postQuote",
 			Description: "Posts a quote on Tumblr",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "quote",
 					Description: "Content of the Tumblr quote",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "source",
 					Description: "Optional source of the Tumblr quote",
 					Type:        "string",

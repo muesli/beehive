@@ -97,7 +97,7 @@ func (mod *TwitterBee) Action(action bees.Action) []bees.Placeholder {
 			Bee:  mod.Name(),
 			Name: "call_finished",
 			Options: []bees.Placeholder{
-				bees.Placeholder{
+				{
 					Name:  "success",
 					Type:  "bool",
 					Value: true,
@@ -177,12 +177,12 @@ func (mod *TwitterBee) Run(eventChan chan bees.Event) {
 						Bee:  mod.Name(),
 						Name: "mention",
 						Options: []bees.Placeholder{
-							bees.Placeholder{
+							{
 								Name:  "username",
 								Type:  "string",
 								Value: tmp_mention.User.ScreenName,
 							},
-							bees.Placeholder{
+							{
 								Name:  "text",
 								Type:  "string",
 								Value: tmp_mention.Text,

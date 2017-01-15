@@ -32,10 +32,10 @@ type JabberBeeFactory struct {
 
 func (factory *JabberBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := JabberBee{
-		Bee: bees.NewBee(name, factory.Name(), description),
-		server:      options.GetValue("server").(string),
-		user:        options.GetValue("user").(string),
-		password:    options.GetValue("password").(string),
+		Bee:      bees.NewBee(name, factory.Name(), description),
+		server:   options.GetValue("server").(string),
+		user:     options.GetValue("user").(string),
+		password: options.GetValue("password").(string),
 	}
 
 	if options.GetValue("notls") != nil {
@@ -59,25 +59,25 @@ func (factory *JabberBeeFactory) Image() string {
 
 func (factory *JabberBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "server",
 			Description: "Hostname of Jabber server, eg: talk.google.com:443",
 			Type:        "string",
 			Mandatory:   true,
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "user",
 			Description: "Username to authenticate with Jabber server",
 			Type:        "string",
 			Mandatory:   true,
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "password",
 			Description: "Password to use to connect to Jabber server",
 			Type:        "string",
 			Mandatory:   true,
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "notls",
 			Description: "Avoid using TLS for authentication",
 			Type:        "bool",
@@ -88,17 +88,17 @@ func (factory *JabberBeeFactory) Options() []bees.BeeOptionDescriptor {
 
 func (factory *JabberBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
-		bees.EventDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "message",
 			Description: "A message was received over Jabber",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "text",
 					Description: "The message that was received",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "user",
 					Description: "The user that sent the message",
 					Type:        "string",
@@ -111,17 +111,17 @@ func (factory *JabberBeeFactory) Events() []bees.EventDescriptor {
 
 func (factory *JabberBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
-		bees.ActionDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "send",
 			Description: "Sends a message to a remote",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "user",
 					Description: "Which remote to send the message to",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "text",
 					Description: "Content of the message",
 					Type:        "string",

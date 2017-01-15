@@ -32,10 +32,10 @@ type EmailBeeFactory struct {
 
 func (factory *EmailBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := EmailBee{
-		Bee: bees.NewBee(name, factory.Name(), description),
+		Bee:      bees.NewBee(name, factory.Name(), description),
 		username: options.GetValue("username").(string),
 		password: options.GetValue("password").(string),
-		server: options.GetValue("server").(string),
+		server:   options.GetValue("server").(string),
 	}
 
 	return &bee
@@ -55,19 +55,19 @@ func (factory *EmailBeeFactory) Image() string {
 
 func (factory *EmailBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "username",
 			Description: "Username used for SMTP auth",
 			Type:        "string",
 			Mandatory:   true,
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "password",
 			Description: "Password used for SMTP auth",
 			Type:        "string",
 			Mandatory:   true,
 		},
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "server",
 			Description: "Address of SMTP server, eg: smtp.myserver.com:587",
 			Type:        "url",
@@ -84,12 +84,12 @@ func (factory *EmailBeeFactory) Events() []bees.EventDescriptor {
 
 func (factory *EmailBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
-		bees.ActionDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "send",
 			Description: "Sends an email",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "text",
 					Description: "Content of the email",
 					Type:        "string",

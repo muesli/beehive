@@ -119,17 +119,17 @@ func sendEvent(bee string, channel string, user string, text string, eventChan c
 		Bee:  bee,
 		Name: "message",
 		Options: []bees.Placeholder{
-			bees.Placeholder{
+			{
 				Name:  "channel",
 				Type:  "string",
 				Value: channel,
 			},
-			bees.Placeholder{
+			{
 				Name:  "user",
 				Type:  "string",
 				Value: user,
 			},
-			bees.Placeholder{
+			{
 				Name:  "text",
 				Type:  "string",
 				Value: text,

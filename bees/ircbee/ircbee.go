@@ -164,22 +164,22 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 			Bee:  mod.Name(),
 			Name: "message",
 			Options: []bees.Placeholder{
-				bees.Placeholder{
+				{
 					Name:  "channel",
 					Type:  "string",
 					Value: channel,
 				},
-				bees.Placeholder{
+				{
 					Name:  "user",
 					Type:  "string",
 					Value: user,
 				},
-				bees.Placeholder{
+				{
 					Name:  "hostmask",
 					Type:  "string",
 					Value: hostmask,
 				},
-				bees.Placeholder{
+				{
 					Name:  "text",
 					Type:  "string",
 					Value: msg,

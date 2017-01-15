@@ -23,16 +23,16 @@
 package timebee
 
 import (
+	"fmt"
 	"github.com/muesli/beehive/bees"
 	"time"
-	"fmt"
 )
 
 type TimeBee struct {
 	bees.Bee
-	cur_time, last_event MyTime
+	cur_time, last_event                                     MyTime
 	second, minute, hour, dayofweek, dayofmonth, month, year int
-	eventChan chan bees.Event
+	eventChan                                                chan bees.Event
 }
 
 type MyTime struct {
@@ -52,34 +52,34 @@ func (mod *TimeBee) Timer() {
 		fmt.Println("Error: Date is invalid")
 		return
 	}
-	if mod.cur_time.second != mod.second && mod.second != -1{
+	if mod.cur_time.second != mod.second && mod.second != -1 {
 		fail = true
 	}
-	if mod.cur_time.minute != mod.minute && mod.minute != -1{
+	if mod.cur_time.minute != mod.minute && mod.minute != -1 {
 		fail = true
 	}
-	if mod.cur_time.hour != mod.hour && mod.hour != -1{
+	if mod.cur_time.hour != mod.hour && mod.hour != -1 {
 		fail = true
 	}
-	if mod.cur_time.dayofweek != mod.dayofweek && mod.dayofweek != -1{
+	if mod.cur_time.dayofweek != mod.dayofweek && mod.dayofweek != -1 {
 		fail = true
 	}
-	if mod.cur_time.dayofmonth != mod.dayofmonth && mod.dayofmonth != -1{
+	if mod.cur_time.dayofmonth != mod.dayofmonth && mod.dayofmonth != -1 {
 		fail = true
 	}
-	if mod.cur_time.month != mod.month && mod.month != -1{
+	if mod.cur_time.month != mod.month && mod.month != -1 {
 		fail = true
 	}
-	if mod.cur_time.year != mod.year && mod.year != -1{
+	if mod.cur_time.year != mod.year && mod.year != -1 {
 		fail = true
 	}
 
-	if fail == true || mod.cur_time == mod.last_event{
+	if fail == true || mod.cur_time == mod.last_event {
 		return
-	}else{
+	} else {
 		mod.last_event = mod.cur_time
 		event := bees.Event{
-			Bee: mod.Name(),
+			Bee:  mod.Name(),
 			Name: "time_event",
 		}
 		mod.eventChan <- event
@@ -89,17 +89,17 @@ func (mod *TimeBee) Timer() {
 }
 
 func (mod *TimeBee) Action(action bees.Action) []bees.Placeholder {
-        return []bees.Placeholder{}
+	return []bees.Placeholder{}
 }
 
 func (mod *TimeBee) Run(eventChan chan bees.Event) {
 	mod.eventChan = eventChan
 	for {
 		select {
-			case <-mod.SigChan:
-				return
+		case <-mod.SigChan:
+			return
 
-			default:
+		default:
 		}
 
 		mod.Timer()

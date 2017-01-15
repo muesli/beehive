@@ -56,17 +56,17 @@ func (mod *JenkinsBee) announceStatusChange(j Job) {
 		Bee:  mod.Name(),
 		Name: "statuschange",
 		Options: []bees.Placeholder{
-			bees.Placeholder{
+			{
 				Name:  "name",
 				Type:  "string",
 				Value: j.Name,
 			},
-			bees.Placeholder{
+			{
 				Name:  "url",
 				Type:  "string",
 				Value: j.Url,
 			},
-			bees.Placeholder{
+			{
 				Name:  "status",
 				Type:  "string",
 				Value: j.Color,

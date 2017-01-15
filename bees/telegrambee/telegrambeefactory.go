@@ -87,7 +87,7 @@ func (factory *TelegramBeeFactory) Image() string {
 
 func (factory *TelegramBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
-		bees.BeeOptionDescriptor{
+		{
 			Name:        "apiKey",
 			Description: "Telegram bot API key",
 			Type:        "string",
@@ -99,21 +99,21 @@ func (factory *TelegramBeeFactory) Options() []bees.BeeOptionDescriptor {
 
 func (factory *TelegramBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
-		bees.EventDescriptor{
+		{
 			Namespace:   factory.Name(),
 			Name:        "message",
 			Description: "A message received via Telegram bot",
 			Options: []bees.PlaceholderDescriptor{
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "text",
 					Description: "The message that was received",
 					Type:        "string",
-				}, bees.PlaceholderDescriptor{
+				}, {
 					Name:        "chatID",
 					Description: "Telegram's chat ID",
 					Type:        "string",
 				},
-				bees.PlaceholderDescriptor{
+				{
 					Name:        "userID",
 					Description: "User ID  sending the message",
 					Type:        "string",
@@ -126,17 +126,17 @@ func (factory *TelegramBeeFactory) Events() []bees.EventDescriptor {
 }
 
 func (factory *TelegramBeeFactory) Actions() []bees.ActionDescriptor {
-	actions := []bees.ActionDescriptor{bees.ActionDescriptor{
+	actions := []bees.ActionDescriptor{{
 		Namespace:   factory.Name(),
 		Name:        "send",
 		Description: "Sends a message to a Telegram chat or group",
 		Options: []bees.PlaceholderDescriptor{
-			bees.PlaceholderDescriptor{
+			{
 				Name:        "chatId",
 				Description: "Telegram chat/group to send the message to",
 				Type:        "string",
 			},
-			bees.PlaceholderDescriptor{
+			{
 				Name:        "text",
 				Description: "Content of the message",
 				Type:        "string",
