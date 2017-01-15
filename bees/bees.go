@@ -75,20 +75,13 @@ type Event struct {
 type Action struct {
 	Bee     string
 	Name    string
-	Options []Placeholder
+	Options PlaceholderSlice
 }
 
 // A Filter
 type Filter struct {
 	Name    string
 	Options []FilterOption
-}
-
-// A Placeholder used by ins & outs of a bee.
-type Placeholder struct {
-	Name  string
-	Type  string
-	Value interface{}
 }
 
 var (
