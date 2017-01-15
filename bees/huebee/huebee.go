@@ -57,6 +57,8 @@ func (mod *HueBee) Action(action bees.Action) []bees.Placeholder {
 					}
 				case float64:
 					state = v > 0
+				case bool:
+					state = v
 				}
 			}
 			if opt.Name == "light" {
