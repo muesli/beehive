@@ -50,43 +50,49 @@ func execFilter(filter Filter, opts map[string]interface{}) bool {
 
 	for _, opt := range filter.Options {
 		log.Println("\t\tOptions:", opt)
-		origVal := opts[opt.Name]
-		cleanVal := opt.Value
-		if opt.Trimmed {
-			switch v := origVal.(type) {
-			case string:
-				origVal = strings.TrimSpace(v)
-			}
-			switch v := cleanVal.(type) {
-			case string:
-				cleanVal = strings.TrimSpace(v)
-			}
-		}
-		if opt.CaseInsensitive {
-			switch v := origVal.(type) {
-			case string:
-				origVal = strings.ToLower(v)
-			}
-			switch v := cleanVal.(type) {
-			case string:
-				cleanVal = strings.ToLower(v)
-			}
-		}
 
-		// if value is an array, iterate over it and pass if any of its values pass
 		passes := false
-		switch v := cleanVal.(type) {
-		case []interface{}:
-			for _, vi := range v {
-				if f.Passes(origVal, vi) {
-					passes = true
-					break
+		if filter.Name == "template" {
+			passes = f.Passes(opts, opt.Value)
+		} else {
+			origVal := opts[opt.Name]
+			cleanVal := opt.Value
+			if opt.Trimmed {
+				switch v := origVal.(type) {
+				case string:
+					origVal = strings.TrimSpace(v)
+				}
+				switch v := cleanVal.(type) {
+				case string:
+					cleanVal = strings.TrimSpace(v)
+				}
+			}
+			if opt.CaseInsensitive {
+				switch v := origVal.(type) {
+				case string:
+					origVal = strings.ToLower(v)
+				}
+				switch v := cleanVal.(type) {
+				case string:
+					cleanVal = strings.ToLower(v)
 				}
 			}
 
-		default:
-			passes = f.Passes(origVal, cleanVal)
+			// if value is an array, iterate over it and pass if any of its values pass
+			switch v := cleanVal.(type) {
+			case []interface{}:
+				for _, vi := range v {
+					if f.Passes(origVal, vi) {
+						passes = true
+						break
+					}
+				}
+
+			default:
+				passes = f.Passes(origVal, cleanVal)
+			}
 		}
+
 		if passes == opt.Inverse {
 			return false
 		}

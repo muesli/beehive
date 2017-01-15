@@ -39,6 +39,7 @@ import (
 	_ "github.com/muesli/beehive/filters/equals"
 	_ "github.com/muesli/beehive/filters/matches"
 	_ "github.com/muesli/beehive/filters/startswith"
+	_ "github.com/muesli/beehive/filters/template"
 
 	"github.com/muesli/beehive/bees"
 	_ "github.com/muesli/beehive/bees/anelpowerctrlbee"
