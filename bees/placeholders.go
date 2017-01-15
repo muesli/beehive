@@ -22,6 +22,7 @@
 package bees
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -50,6 +51,9 @@ func (ph PlaceholderSlice) Value(name string) interface{} {
 // Bind a value from a Placeholder slice
 func (ph PlaceholderSlice) Bind(name string, dst interface{}) error {
 	v := ph.Value(name)
+	if v == nil {
+		return errors.New("Placeholder with name " + name + " not found")
+	}
 
 	switch d := dst.(type) {
 	case *string:

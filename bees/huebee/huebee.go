@@ -24,6 +24,7 @@ package huebee
 import (
 	_ "log"
 	"strconv"
+	"strings"
 
 	"github.com/muesli/beehive/bees"
 	"github.com/muesli/go.hue"
@@ -44,6 +45,35 @@ func (mod *HueBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 
 	switch action.Name {
+	case "setcolor":
+		var lightId int
+		var color string
+		action.Options.Bind("light", &lightId)
+		action.Options.Bind("color", &color)
+
+		light, err := mod.client.FindLightById(strconv.Itoa(lightId))
+		if err != nil {
+			panic(err)
+		}
+
+		state := hue.SetLightState{
+			On:  "true",
+			Bri: "254",
+		}
+
+		switch strings.ToLower(color) {
+		case "green":
+			state.Hue = strconv.FormatInt(182*140, 10)
+			state.Sat = strconv.FormatInt(254, 10)
+		case "red":
+			state.Hue = strconv.FormatInt(0, 10)
+			state.Sat = strconv.FormatInt(254, 10)
+		case "blue":
+			state.Hue = strconv.FormatInt(182*250, 10)
+			state.Sat = strconv.FormatInt(254, 10)
+		}
+		light.SetState(state)
+
 	case "switch":
 		var lightId int
 		var state bool
