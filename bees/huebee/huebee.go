@@ -59,18 +59,28 @@ func (mod *HueBee) Action(action bees.Action) []bees.Placeholder {
 		state := hue.SetLightState{
 			On:  "true",
 			Bri: "254",
+			Sat: "254",
 		}
 
 		switch strings.ToLower(color) {
+		case "coolwhite":
+			state.Hue = strconv.FormatInt(150, 10)
+		case "warmwhite":
+			state.Hue = strconv.FormatInt(500, 10)
 		case "green":
 			state.Hue = strconv.FormatInt(182*140, 10)
-			state.Sat = strconv.FormatInt(254, 10)
 		case "red":
 			state.Hue = strconv.FormatInt(0, 10)
-			state.Sat = strconv.FormatInt(254, 10)
 		case "blue":
 			state.Hue = strconv.FormatInt(182*250, 10)
-			state.Sat = strconv.FormatInt(254, 10)
+		case "orange":
+			state.Hue = strconv.FormatInt(182*25, 10)
+		case "yellow":
+			state.Hue = strconv.FormatInt(182*85, 10)
+		case "pink":
+			state.Hue = strconv.FormatInt(182*300, 10)
+		case "purple":
+			state.Hue = strconv.FormatInt(182*270, 10)
 		}
 		light.SetState(state)
 
