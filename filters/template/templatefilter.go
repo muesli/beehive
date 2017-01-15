@@ -61,6 +61,7 @@ func (filter *TemplateFilter) Passes(data interface{}, value interface{}) bool {
 			},
 			"Split":     strings.Split,
 			"HasPrefix": strings.HasPrefix,
+			"HasSuffix": strings.HasSuffix,
 			"Last": func(values ...interface{}) string {
 				return values[0].([]string)[len(values[0].([]string))-1]
 			},
