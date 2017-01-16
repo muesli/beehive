@@ -32,7 +32,7 @@ type EmailBeeFactory struct {
 
 func (factory *EmailBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := EmailBee{
-		Bee:      bees.NewBee(name, factory.Name(), description),
+		Bee:      bees.NewBee(name, factory.Name(), description, options),
 		username: options.GetValue("username").(string),
 		password: options.GetValue("password").(string),
 		server:   options.GetValue("server").(string),

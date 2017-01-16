@@ -129,3 +129,7 @@ func (mod *SerialBee) Run(eventChan chan bees.Event) {
 		time.Sleep(1 * time.Second)
 	}
 }
+
+func (mod *SerialBee) SetOptions(options bees.BeeOptions) {
+	//FIXME: implement this
+}

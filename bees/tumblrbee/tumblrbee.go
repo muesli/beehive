@@ -81,3 +81,7 @@ func (mod *TumblrBee) Run(eventChan chan bees.Event) {
 		mod.token, mod.tokenSecret,
 		mod.callbackUrl, "http://api.tumblr.com")
 }
+
+func (mod *TumblrBee) SetOptions(options bees.BeeOptions) {
+	//FIXME: implement this
+}

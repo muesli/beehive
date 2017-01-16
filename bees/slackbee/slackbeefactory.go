@@ -63,7 +63,7 @@ func (factory *SlackBeeFactory) New(name, description string, options bees.BeeOp
 	}
 
 	bee := SlackBee{
-		Bee:      bees.NewBee(name, factory.Name(), description),
+		Bee:      bees.NewBee(name, factory.Name(), description, options),
 		apiKey:   apiKey,
 		channels: map[string]string{},
 		client:   client,

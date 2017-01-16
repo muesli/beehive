@@ -32,7 +32,7 @@ type HelloBeeFactory struct {
 
 func (factory *HelloBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := HelloBee{
-		Bee: bees.NewBee(name, factory.Name(), description),
+		Bee: bees.NewBee(name, factory.Name(), description, options),
 	}
 	return &bee
 }

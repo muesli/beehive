@@ -32,7 +32,7 @@ type SerialBeeFactory struct {
 
 func (factory *SerialBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := SerialBee{
-		Bee:      bees.NewBee(name, factory.Name(), description),
+		Bee:      bees.NewBee(name, factory.Name(), description, options),
 		device:   options.GetValue("device").(string),
 		baudrate: int(options.GetValue("baudrate").(float64)),
 	}

@@ -46,7 +46,7 @@ func (factory *TransmissionBeeFactory) New(name, description string, options bee
 		pretty.Println(err)
 	}
 	bee := TransmissionBee{
-		Bee:    bees.NewBee(name, factory.Name(), description),
+		Bee:    bees.NewBee(name, factory.Name(), description, options),
 		client: t,
 	}
 

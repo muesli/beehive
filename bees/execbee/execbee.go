@@ -24,11 +24,12 @@ package execbee
 import (
 	"bufio"
 	"fmt"
-	"github.com/muesli/beehive/bees"
 	"log"
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/muesli/beehive/bees"
 )
 
 type ExecBee struct {
@@ -124,4 +125,8 @@ func (mod *ExecBee) Action(action bees.Action) []bees.Placeholder {
 // execbee specific impl
 func (mod *ExecBee) Run(eventChan chan bees.Event) {
 	mod.eventChan = eventChan
+}
+
+func (mod *ExecBee) SetOptions(options bees.BeeOptions) {
+	//FIXME: implement this
 }

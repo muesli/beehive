@@ -106,3 +106,7 @@ func (mod *HtmlExtractBee) Action(action bees.Action) []bees.Placeholder {
 func (mod *HtmlExtractBee) Run(eventChan chan bees.Event) {
 	mod.evchan = eventChan
 }
+
+func (mod *HtmlExtractBee) SetOptions(options bees.BeeOptions) {
+	//FIXME: implement this
+}

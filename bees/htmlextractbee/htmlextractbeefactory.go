@@ -32,7 +32,7 @@ type HtmlExtractBeeFactory struct {
 
 func (factory *HtmlExtractBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := HtmlExtractBee{
-		Bee: bees.NewBee(name, factory.Name(), description),
+		Bee: bees.NewBee(name, factory.Name(), description, options),
 	}
 
 	return &bee

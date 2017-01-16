@@ -113,3 +113,7 @@ func (mod *HueBee) Action(action bees.Action) []bees.Placeholder {
 func (mod *HueBee) Run(eventChan chan bees.Event) {
 	mod.client = hue.NewBridge(mod.bridge, mod.key)
 }
+
+func (mod *HueBee) SetOptions(options bees.BeeOptions) {
+	//FIXME: implement this
+}

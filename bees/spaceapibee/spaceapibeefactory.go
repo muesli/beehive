@@ -33,7 +33,7 @@ type SpaceApiBeeFactory struct {
 
 func (factory *SpaceApiBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := SpaceApiBee{
-		Bee: bees.NewBee(name, factory.Name(), description),
+		Bee: bees.NewBee(name, factory.Name(), description, options),
 		url: options.GetValue("url").(string),
 	}
 

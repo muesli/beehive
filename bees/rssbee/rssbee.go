@@ -24,10 +24,11 @@
 package rssbee
 
 import (
-	rss "github.com/jteeuwen/go-pkg-rss"
-	"github.com/muesli/beehive/bees"
 	"log"
 	"time"
+
+	rss "github.com/jteeuwen/go-pkg-rss"
+	"github.com/muesli/beehive/bees"
 )
 
 type RSSBee struct {
@@ -161,4 +162,8 @@ func (mod *RSSBee) Run(cin chan bees.Event) {
 
 func (mod *RSSBee) Action(action bees.Action) []bees.Placeholder {
 	return []bees.Placeholder{}
+}
+
+func (mod *RSSBee) SetOptions(options bees.BeeOptions) {
+	//FIXME: implement this
 }

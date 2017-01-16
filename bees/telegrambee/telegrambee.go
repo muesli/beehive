@@ -104,3 +104,7 @@ func (mod *TelegramBee) Run(eventChan chan bees.Event) {
 func (mod *TelegramBee) Stop() {
 	log.Println("Stopping the Telegram bee")
 }
+
+func (mod *TelegramBee) SetOptions(options bees.BeeOptions) {
+	//FIXME: implement this
+}

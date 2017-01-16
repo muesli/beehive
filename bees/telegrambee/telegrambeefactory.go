@@ -65,7 +65,7 @@ func (factory *TelegramBeeFactory) New(name, description string, options bees.Be
 	log.Printf("TELEGRAM: Authorized on account %s", bot.Self.UserName)
 
 	bee := TelegramBee{
-		Bee:    bees.NewBee(name, factory.Name(), description),
+		Bee:    bees.NewBee(name, factory.Name(), description, options),
 		apiKey: apiKey,
 		bot:    bot,
 	}

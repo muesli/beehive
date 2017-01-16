@@ -82,3 +82,9 @@ func (mod *AnelPowerCtrlBee) Action(action bees.Action) []bees.Placeholder {
 
 	return outs
 }
+
+func (mod *AnelPowerCtrlBee) SetOptions(options bees.BeeOptions) {
+	mod.addr = options.GetValue("server").(string)
+	mod.user = options.GetValue("user").(string)
+	mod.password = options.GetValue("password").(string)
+}

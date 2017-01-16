@@ -65,3 +65,7 @@ func (mod *EmailBee) Action(action bees.Action) []bees.Placeholder {
 
 	return outs
 }
+
+func (mod *EmailBee) SetOptions(options bees.BeeOptions) {
+	//FIXME: implement this
+}

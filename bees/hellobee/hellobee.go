@@ -42,3 +42,7 @@ func (mod *HelloBee) Run(eventChan chan bees.Event) {
 func (mod *HelloBee) Action(action bees.Action) []bees.Placeholder {
 	return []bees.Placeholder{}
 }
+
+func (mod *HelloBee) SetOptions(options bees.BeeOptions) {
+	//FIXME: implement this
+}

@@ -120,3 +120,7 @@ func (mod *JabberBee) Run(eventChan chan bees.Event) {
 		}
 	}
 }
+
+func (mod *JabberBee) SetOptions(options bees.BeeOptions) {
+	//FIXME: implement this
+}

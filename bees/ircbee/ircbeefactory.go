@@ -32,22 +32,9 @@ type IrcBeeFactory struct {
 
 func (factory *IrcBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := IrcBee{
-		Bee:    bees.NewBee(name, factory.Name(), description),
-		server: options.GetValue("server").(string),
-		nick:   options.GetValue("nick").(string),
+		Bee: bees.NewBee(name, factory.Name(), description, options),
 	}
-
-	for _, channel := range options.GetValue("channels").([]interface{}) {
-		bee.channels = append(bee.channels, channel.(string))
-	}
-
-	// optional parameters
-	if options.GetValue("password") != nil {
-		bee.password = options.GetValue("password").(string)
-	}
-	if options.GetValue("ssl") != nil {
-		bee.ssl = options.GetValue("ssl").(bool)
-	}
+	bee.SetOptions(options)
 
 	return &bee
 }

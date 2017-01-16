@@ -24,8 +24,9 @@ package timebee
 
 import (
 	"fmt"
-	"github.com/muesli/beehive/bees"
 	"time"
+
+	"github.com/muesli/beehive/bees"
 )
 
 type TimeBee struct {
@@ -105,4 +106,8 @@ func (mod *TimeBee) Run(eventChan chan bees.Event) {
 		mod.Timer()
 		time.Sleep(500 * time.Millisecond)
 	}
+}
+
+func (mod *TimeBee) SetOptions(options bees.BeeOptions) {
+	//FIXME: implement this
 }

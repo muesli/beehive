@@ -33,7 +33,7 @@ type TwitterBeeFactory struct {
 
 func (factory *TwitterBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := TwitterBee{
-		Bee:                 bees.NewBee(name, factory.Name(), description),
+		Bee:                 bees.NewBee(name, factory.Name(), description, options),
 		consumer_key:        options.GetValue("consumer_key").(string),
 		consumer_secret:     options.GetValue("consumer_secret").(string),
 		access_token:        options.GetValue("access_token").(string),

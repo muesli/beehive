@@ -24,8 +24,9 @@ import (
 	//"fmt"
 	"github.com/muesli/beehive/bees"
 	//"strings"
-	"github.com/muesli/beehive/bees/cronbee/cron"
 	"time"
+
+	"github.com/muesli/beehive/bees/cronbee/cron"
 )
 
 type CronBee struct {
@@ -65,4 +66,8 @@ func (mod *CronBee) Run(eventChan chan bees.Event) {
 		}
 		mod.eventChan <- event
 	}
+}
+
+func (mod *CronBee) SetOptions(options bees.BeeOptions) {
+	//FIXME: implement this
 }

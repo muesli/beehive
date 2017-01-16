@@ -32,11 +32,9 @@ type AnelPowerCtrlBeeFactory struct {
 
 func (factory *AnelPowerCtrlBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := AnelPowerCtrlBee{
-		Bee:      bees.NewBee(name, factory.Name(), description),
-		addr:     options.GetValue("server").(string),
-		user:     options.GetValue("user").(string),
-		password: options.GetValue("password").(string),
+		Bee: bees.NewBee(name, factory.Name(), description, options),
 	}
+	bee.SetOptions(options)
 
 	return &bee
 }

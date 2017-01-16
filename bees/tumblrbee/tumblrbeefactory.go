@@ -32,7 +32,7 @@ type TumblrBeeFactory struct {
 
 func (factory *TumblrBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := TumblrBee{
-		Bee:            bees.NewBee(name, factory.Name(), description),
+		Bee:            bees.NewBee(name, factory.Name(), description, options),
 		blogname:       options.GetValue("blogname").(string),
 		callbackUrl:    options.GetValue("callback_url").(string),
 		consumerKey:    options.GetValue("consumer_key").(string),

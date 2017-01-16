@@ -31,7 +31,7 @@ type ExecBeeFactory struct {
 // Interface impl
 func (factory *ExecBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := ExecBee{
-		Bee: bees.NewBee(name, factory.Name(), description),
+		Bee: bees.NewBee(name, factory.Name(), description, options),
 	}
 
 	return &bee

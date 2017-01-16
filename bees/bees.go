@@ -213,11 +213,12 @@ func RestartBees(bees []BeeInstance) {
 }
 
 // Returns a new bee and sets up sig-channel & waitGroup
-func NewBee(name, factoryName, description string) Bee {
+func NewBee(name, factoryName, description string, options []BeeOption) Bee {
 	b := Bee{
 		BeeName:        name,
 		BeeNamespace:   factoryName,
 		BeeDescription: description,
+		BeeOptions:     options,
 		SigChan:        make(chan bool),
 		waitGroup:      &sync.WaitGroup{},
 	}

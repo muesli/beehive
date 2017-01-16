@@ -159,3 +159,7 @@ func (mod *JenkinsBee) Action(action bees.Action) []bees.Placeholder {
 	}
 	return outs
 }
+
+func (mod *JenkinsBee) SetOptions(options bees.BeeOptions) {
+	//FIXME: implement this
+}

@@ -89,3 +89,7 @@ func (mod *SpaceApiBee) Action(action bees.Action) []bees.Placeholder {
 func (mod *SpaceApiBee) Run(eventChan chan bees.Event) {
 	mod.evchan = eventChan
 }
+
+func (mod *SpaceApiBee) SetOptions(options bees.BeeOptions) {
+	//FIXME: implement this
+}

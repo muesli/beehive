@@ -33,11 +33,12 @@ package nagiosbee
 
 import (
 	"encoding/json"
-	"github.com/muesli/beehive/bees"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/muesli/beehive/bees"
 )
 
 type NagiosBee struct {
@@ -161,4 +162,8 @@ func (mod *NagiosBee) Run(cin chan bees.Event) {
 			mod.services[hn] = snmap
 		}
 	}
+}
+
+func (mod *NagiosBee) SetOptions(options bees.BeeOptions) {
+	//FIXME: implement this
 }
