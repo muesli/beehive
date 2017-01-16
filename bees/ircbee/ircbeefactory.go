@@ -63,6 +63,7 @@ func (factory *IrcBeeFactory) Options() []bees.BeeOptionDescriptor {
 			Name:        "nick",
 			Description: "Nickname to use for IRC",
 			Type:        "string",
+			Default:     "beehive",
 			Mandatory:   true,
 		},
 		{
@@ -79,6 +80,7 @@ func (factory *IrcBeeFactory) Options() []bees.BeeOptionDescriptor {
 		{
 			Name:        "ssl",
 			Description: "Use SSL for IRC connection",
+			Default:     false,
 			Type:        "bool",
 		},
 	}
