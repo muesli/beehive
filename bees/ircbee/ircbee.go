@@ -190,38 +190,66 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 	})
 
 	// loop on IRC dis/connected events
+	connecting := false
+	disconnected := true
+	waitForDisconnect := false
 	for {
-		log.Println("Connecting to IRC:", mod.server)
-		err := mod.client.Connect()
-		if err != nil {
-			log.Println("Failed to connect to IRC:", mod.server)
-			log.Println(err)
-			time.Sleep(10 * time.Second)
-		} else {
-			disconnected := false
-			for {
-				if disconnected {
-					break
-				}
-				select {
-				case <-mod.SigChan:
-					mod.client.Quit()
-					return
+		if disconnected {
+			if waitForDisconnect {
+				return
+			}
 
-				case status := <-mod.connectedState:
-					if status {
-						log.Println("Connected to IRC:", mod.server)
-						mod.Rejoin()
-					} else {
-						log.Println("Disconnected from IRC:", mod.server)
-						disconnected = true
-						break
-					}
-
-				default:
-					time.Sleep(1 * time.Second)
+			if !connecting {
+				connecting = true
+				log.Println("Connecting to IRC:", mod.server)
+				err := mod.client.Connect()
+				if err != nil {
+					log.Println("Failed to connect to IRC:", mod.server)
+					log.Println(err)
 				}
 			}
 		}
+		select {
+		case status := <-mod.connectedState:
+			if status {
+				log.Println("Connected to IRC:", mod.server)
+				connecting = false
+				disconnected = false
+				mod.Rejoin()
+			} else {
+				log.Println("Disconnected from IRC:", mod.server)
+				connecting = false
+				disconnected = true
+				break
+			}
+
+		case <-mod.SigChan:
+			if !waitForDisconnect {
+				mod.client.Quit()
+			}
+			waitForDisconnect = true
+
+		default:
+			time.Sleep(1 * time.Second)
+		}
+	}
+}
+
+func (mod *IrcBee) SetOptions(options bees.BeeOptions) {
+	mod.BeeOptions = options
+
+	mod.server = options.GetValue("server").(string)
+	mod.nick = options.GetValue("nick").(string)
+
+	for _, channel := range options.GetValue("channels").([]interface{}) {
+		mod.channels = append(mod.channels, channel.(string))
+	}
+
+	// optional parameters
+	if options.GetValue("password") != nil {
+		mod.password = options.GetValue("password").(string)
+	}
+	if options.GetValue("ssl") != nil {
+		mod.ssl = options.GetValue("ssl").(bool)
 	}
 }
