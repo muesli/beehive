@@ -244,6 +244,19 @@ func StopBees() {
 	bees = make(map[string]*BeeInterface)
 }
 
+func RestartBee(bee *BeeInterface) {
+	if (*bee).IsRunning() {
+		(*bee).Stop()
+	}
+
+	(*bee).SetSigChan(make(chan bool))
+	(*bee).WaitGroup().Add(1)
+	(*bee).Start()
+	go func(mod *BeeInterface) {
+		startBee(mod, 0)
+	}(bee)
+}
+
 // Stops all running bees and restarts a new set of bees
 func RestartBees(bees []BeeInstance) {
 	StopBees()
