@@ -29,6 +29,10 @@ import (
 
 	"github.com/emicklei/go-restful"
 	_ "github.com/emicklei/go-restful/swagger"
+	"github.com/muesli/beehive/api/context"
+	"github.com/muesli/beehive/api/resources/bees"
+	"github.com/muesli/beehive/api/resources/hives"
+	"github.com/muesli/smolder"
 )
 
 func configFromPathParam(req *restful.Request, resp *restful.Response) {
@@ -59,27 +63,57 @@ func imageFromPathParam(req *restful.Request, resp *restful.Response) {
 }
 
 func Run() {
-	// to see what happens in the package, uncomment the following
-	//restful.TraceLogger(log.New(os.Stdout, "[restful] ", log.LstdFlags|log.Lshortfile))
+	context := &context.APIContext{}
 
-	wsContainer := restful.NewContainer()
+	// Setup web-service
+	smolderConfig := smolder.APIConfig{
+		BaseURL:    "http://localhost:8181",
+		PathPrefix: "v1/",
+	}
+
+	wsContainer := smolder.NewSmolderContainer(smolderConfig, nil, nil)
 	wsContainer.Router(restful.CurlyRouter{})
-
 	ws := new(restful.WebService)
 	ws.Route(ws.GET("/config/").To(configFromPathParam))
 	ws.Route(ws.GET("/config/{subpath:*}").To(configFromPathParam))
 	ws.Route(ws.GET("/images/{subpath:*}").To(imageFromPathParam))
 	wsContainer.Add(ws)
 
-	b := BeeResource{}
-	b.Register(wsContainer)
-	h := HiveResource{}
-	h.Register(wsContainer)
+	func(resources ...smolder.APIResource) {
+		for _, r := range resources {
+			r.Register(wsContainer, smolderConfig, context)
+		}
+	}(
+		&hives.HiveResource{},
+		&bees.BeeResource{},
+	)
 
-	log.Println("Starting JSON API on localhost:8181")
 	server := &http.Server{Addr: ":8181", Handler: wsContainer}
-
 	go func() {
 		log.Fatal(server.ListenAndServe())
 	}()
+
+	// to see what happens in the package, uncomment the following
+	//restful.TraceLogger(log.New(os.Stdout, "[restful] ", log.LstdFlags|log.Lshortfile))
+
+	/*	wsContainer := restful.NewContainer()
+		wsContainer.Router(restful.CurlyRouter{})
+
+		ws := new(restful.WebService)
+		ws.Route(ws.GET("/config/").To(configFromPathParam))
+		ws.Route(ws.GET("/config/{subpath:*}").To(configFromPathParam))
+		ws.Route(ws.GET("/images/{subpath:*}").To(imageFromPathParam))
+		wsContainer.Add(ws)
+
+		b := BeeResource{}
+		b.Register(wsContainer)
+		h := HiveResource{}
+		h.Register(wsContainer)
+
+		log.Println("Starting JSON API on localhost:8181")
+		server := &http.Server{Addr: ":8181", Handler: wsContainer}
+
+		go func() {
+			log.Fatal(server.ListenAndServe())
+		}()*/
 }
