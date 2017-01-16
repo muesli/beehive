@@ -111,8 +111,33 @@ func (bee *Bee) WaitGroup() *sync.WaitGroup {
 func (bee *Bee) Run(chan Event) {
 }
 
+func (bee *Bee) IsRunning() bool {
+	return bee.Running
+}
+
+func (bee *Bee) Start() {
+	bee.Running = true
+}
+
 func (bee *Bee) Stop() {
 	close(bee.SigChan)
 	bee.waitGroup.Wait()
+	bee.Running = false
 	log.Println(bee.Name(), "stopped gracefully!")
+}
+
+func (bee *Bee) LastEvent() time.Time {
+	return bee.lastEvent
+}
+
+func (bee *Bee) LastAction() time.Time {
+	return bee.lastAction
+}
+
+func (bee *Bee) LogEvent() {
+	bee.lastEvent = time.Now()
+}
+
+func (bee *Bee) LogAction() {
+	bee.lastAction = time.Now()
 }

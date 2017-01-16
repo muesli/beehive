@@ -155,11 +155,22 @@ func execAction(action Action, opts map[string]interface{}) bool {
 		a.Options = append(a.Options, ph)
 	}
 
-	log.Println("\tExecuting action:", a.Bee, "/", a.Name, "-", GetActionDescriptor(&a).Description)
-	for _, v := range a.Options {
-		log.Println("\t\tOptions:", v)
+	bee := GetBee(a.Bee)
+	if (*bee).IsRunning() {
+		(*bee).LogAction()
+
+		log.Println("\tExecuting action:", a.Bee, "/", a.Name, "-", GetActionDescriptor(&a).Description)
+		for _, v := range a.Options {
+			log.Println("\t\tOptions:", v)
+		}
+
+		(*bee).Action(a)
+	} else {
+		log.Println("\tNot executing action on stopped bee:", a.Bee, "/", a.Name, "-", GetActionDescriptor(&a).Description)
+		for _, v := range a.Options {
+			log.Println("\t\tOptions:", v)
+		}
 	}
-	(*GetBee(a.Bee)).Action(a)
 
 	return true
 }

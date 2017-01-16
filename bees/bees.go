@@ -51,7 +51,12 @@ type Bee struct {
 	BeeName        string
 	BeeNamespace   string
 	BeeDescription string
+	BeeOptions     BeeOptions
 
+	lastEvent  time.Time
+	lastAction time.Time
+
+	Running   bool
 	SigChan   chan bool
 	waitGroup *sync.WaitGroup
 }
@@ -100,6 +105,9 @@ func handleEvents() {
 			log.Println("Stopped event handler!")
 			break
 		}
+
+		bee := GetBee(event.Bee)
+		(*bee).LogEvent()
 
 		log.Println()
 		log.Println("Event received:", event.Bee, "/", event.Name, "-", GetEventDescriptor(&event).Description)
