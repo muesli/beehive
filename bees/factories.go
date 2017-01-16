@@ -23,6 +23,7 @@ package bees
 import (
 	"log"
 	"sync"
+	"time"
 )
 
 type BeeFactory struct {
@@ -102,6 +103,18 @@ func (bee *Bee) Namespace() string {
 
 func (bee *Bee) Description() string {
 	return bee.BeeDescription
+}
+
+func (bee *Bee) SetDescription(s string) {
+	bee.BeeDescription = s
+}
+
+func (bee *Bee) Options() BeeOptions {
+	return bee.BeeOptions
+}
+
+func (bee *Bee) SetSigChan(c chan bool) {
+	bee.SigChan = c
 }
 
 func (bee *Bee) WaitGroup() *sync.WaitGroup {

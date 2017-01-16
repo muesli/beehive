@@ -24,6 +24,7 @@ package bees
 import (
 	"log"
 	"sync"
+	"time"
 )
 
 // Interface which all bees need to implement
@@ -32,14 +33,32 @@ type BeeInterface interface {
 	Name() string
 	// Namespace of the bee
 	Namespace() string
+
 	// Description of the bee
 	Description() string
+	// SetDescription sets a description
+	SetDescription(s string)
+
+	// Options of the bee
+	Options() BeeOptions
+	// SetOptions to configure the bee
+	SetOptions(options BeeOptions)
 
 	// Activates the bee
 	Run(eventChannel chan Event)
+	// Running returns the current state of the bee
+	IsRunning() bool
+	// Start the bee
+	Start()
 	// Stop the bee
 	Stop()
 
+	LastEvent() time.Time
+	LogEvent()
+	LastAction() time.Time
+	LogAction()
+
+	SetSigChan(c chan bool)
 	WaitGroup() *sync.WaitGroup
 
 	// Handles an action
@@ -197,6 +216,7 @@ func StartBees(beeList []BeeInstance) {
 	}
 
 	for _, m := range bees {
+		(*m).Start()
 		go func(mod *BeeInterface) {
 			startBee(mod, 0)
 		}(m)
