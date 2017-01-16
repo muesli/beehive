@@ -174,6 +174,16 @@ func GetBees() []*BeeInterface {
 }
 
 // Returns all known bee factories
+func GetBeeFactory(identifier string) *BeeFactoryInterface {
+	f, ok := factories[identifier]
+	if ok {
+		return f
+	}
+
+	return nil
+}
+
+// Returns all known bee factories
 func GetBeeFactories() []*BeeFactoryInterface {
 	r := []*BeeFactoryInterface{}
 	for _, factory := range factories {
