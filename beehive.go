@@ -130,6 +130,7 @@ func main() {
 	for s := range ch {
 		log.Println("Got signal:", s)
 
+		abort := false
 		switch s {
 		case syscall.SIGHUP:
 			config = loadConfig()
@@ -141,11 +142,17 @@ func main() {
 		case syscall.SIGKILL:
 			fallthrough
 		case syscall.SIGINT:
-			return
+			abort = true
+			break
+		}
+
+		if abort {
+			break
 		}
 	}
 
 	// Save chains to config
-	/*config.Chains = bees.Chains()
-	saveConfig(config)*/
+	log.Println("Storing config...")
+	config.Chains = bees.Chains()
+	saveConfig(config)
 }
