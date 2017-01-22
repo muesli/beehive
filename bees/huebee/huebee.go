@@ -66,9 +66,11 @@ func (mod *HueBee) Action(action bees.Action) []bees.Placeholder {
 
 		switch strings.ToLower(color) {
 		case "coolwhite":
-			state.Hue = strconv.FormatInt(150, 10)
+			state.Ct = strconv.FormatInt(150, 10)
+			state.Sat = ""
 		case "warmwhite":
-			state.Hue = strconv.FormatInt(500, 10)
+			state.Ct = strconv.FormatInt(500, 10)
+			state.Sat = ""
 		case "green":
 			state.Hue = strconv.FormatInt(182*140, 10)
 		case "red":
