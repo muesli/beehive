@@ -54,8 +54,8 @@ func (factory *EFABeeFactory) Image() string {
 func (factory *EFABeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
-			Name:        "baseurl",
-			Description: "Base-url of the EFA API, e.g.: http://efa.avv-augsburg.de/avv/",
+			Name:        "provider",
+			Description: "Provider-ID for the EFA API, e.g. 'avv'",
 			Type:        "string",
 			Mandatory:   true,
 		},
