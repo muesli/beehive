@@ -56,7 +56,7 @@ func (r *HiveResource) GetByIDs(ctx smolder.APIContext, request *restful.Request
 	resp.Init(ctx)
 
 	for _, id := range ids {
-		hive := bees.GetBeeFactory(id)
+		hive := bees.GetFactory(id)
 		if hive == nil {
 			r.NotFound(request, response)
 			return
@@ -71,7 +71,7 @@ func (r *HiveResource) GetByIDs(ctx smolder.APIContext, request *restful.Request
 // Get sends out items matching the query parameters
 func (r *HiveResource) Get(ctx smolder.APIContext, request *restful.Request, response *restful.Response, params map[string][]string) {
 	//	ctxapi := ctx.(*context.APIContext)
-	hives := bees.GetBeeFactories()
+	hives := bees.GetFactories()
 	if len(hives) == 0 { // err != nil {
 		r.NotFound(request, response)
 		return
