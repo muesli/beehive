@@ -72,7 +72,7 @@ type BeeFactoryInterface interface {
 // ModuleFactories need to call this method to register themselves
 func RegisterFactory(factory BeeFactoryInterface) {
 	log.Println("Bee Factory ready:", factory.Name(), "-", factory.Description())
-	for _, ev := range factory.Events() {
+	/* for _, ev := range factory.Events() {
 		log.Println("\tProvides event:", ev.Name, "-", ev.Description)
 		for _, opt := range ev.Options {
 			log.Println("\t\tPlaceholder:", opt.Name, "-", opt.Description)
@@ -84,7 +84,7 @@ func RegisterFactory(factory BeeFactoryInterface) {
 			log.Println("\t\tPlaceholder:", opt.Name, "-", opt.Description)
 		}
 	}
-	log.Println()
+	log.Println() */
 
 	factories[factory.Name()] = &factory
 }
