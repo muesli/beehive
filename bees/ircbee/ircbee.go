@@ -206,6 +206,7 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 				if err != nil {
 					log.Println("Failed to connect to IRC:", mod.server)
 					log.Println(err)
+					connecting = false
 				}
 			}
 		}
