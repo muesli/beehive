@@ -21,8 +21,6 @@
 package chains
 
 import (
-	"net/http"
-
 	"github.com/emicklei/go-restful"
 	"github.com/muesli/beehive/bees"
 	"github.com/muesli/smolder"
@@ -63,7 +61,7 @@ func (r *ChainResource) Post(context smolder.APIContext, request *restful.Reques
 	err := request.ReadEntity(&pps)
 	if err != nil {
 		smolder.ErrorResponseHandler(request, response, smolder.NewErrorResponse(
-			http.StatusUnprocessableEntity,
+			422, // Go 1.7+: http.StatusUnprocessableEntity,
 			false,
 			"Can't parse POST data",
 			"ChainResource POST"))
@@ -73,7 +71,7 @@ func (r *ChainResource) Post(context smolder.APIContext, request *restful.Reques
 	dupe := bees.GetChain(pps.Chain.Name)
 	if dupe != nil {
 		smolder.ErrorResponseHandler(request, response, smolder.NewErrorResponse(
-			http.StatusUnprocessableEntity,
+			422, // Go 1.7+: http.StatusUnprocessableEntity,
 			false,
 			"A Chain with that name exists already",
 			"ChainResource POST"))
