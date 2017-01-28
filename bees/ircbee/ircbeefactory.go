@@ -34,7 +34,7 @@ func (factory *IrcBeeFactory) New(name, description string, options bees.BeeOpti
 	bee := IrcBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
 	}
-	bee.SetOptions(options)
+	bee.ReloadOptions(options)
 
 	return &bee
 }
