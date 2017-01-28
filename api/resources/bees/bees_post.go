@@ -28,57 +28,55 @@ import (
 	"github.com/muesli/smolder"
 )
 
-// BeePutStruct holds all values of an incoming PUT request
-type BeePutStruct struct {
-	BeePostStruct
+// BeePostStruct holds all values of an incoming POST request
+type BeePostStruct struct {
+	Bee struct {
+		Name        string          `json:"name"`
+		Namespace   string          `json:"namespace"`
+		Description string          `json:"description"`
+		Active      bool            `json:"active"`
+		Options     bees.BeeOptions `json:"options"`
+	} `json:"bee"`
 }
 
-// PutAuthRequired returns true because all requests need authentication
-func (r *BeeResource) PutAuthRequired() bool {
+// PostAuthRequired returns true because all requests need authentication
+func (r *BeeResource) PostAuthRequired() bool {
 	return false
 }
 
-// PutDoc returns the description of this API endpoint
-func (r *BeeResource) PutDoc() string {
-	return "update an existing bee"
+// PostDoc returns the description of this API endpoint
+func (r *BeeResource) PostDoc() string {
+	return "create a new bee"
 }
 
-// PutParams returns the parameters supported by this API endpoint
-func (r *BeeResource) PutParams() []*restful.Parameter {
+// PostParams returns the parameters supported by this API endpoint
+func (r *BeeResource) PostParams() []*restful.Parameter {
 	return nil
 }
 
-// Put processes an incoming PUT (update) request
-func (r *BeeResource) Put(context smolder.APIContext, request *restful.Request, response *restful.Response) {
+// Post processes an incoming POST (create) request
+func (r *BeeResource) Post(context smolder.APIContext, request *restful.Request, response *restful.Response) {
 	resp := BeeResponse{}
 	resp.Init(context)
 
-	pps := BeePutStruct{}
+	pps := BeePostStruct{}
 	err := request.ReadEntity(&pps)
 	if err != nil {
 		smolder.ErrorResponseHandler(request, response, smolder.NewErrorResponse(
 			http.StatusBadRequest,
 			false,
-			"Can't parse PUT data",
-			"BeeResource PUT"))
+			"Can't parse POST data",
+			"BeeResource POST"))
 		return
 	}
 
-	id := request.PathParameter("bee-id")
-	bee := bees.GetBee(id)
-	if bee == nil {
-		r.NotFound(request, response)
-		return
+	bi := bees.BeeConfig{
+		Class:       pps.Bee.Namespace,
+		Name:        pps.Bee.Name,
+		Description: pps.Bee.Description,
+		Options:     pps.Bee.Options,
 	}
-
-	(*bee).SetDescription(pps.Bee.Description)
-	(*bee).SetOptions(pps.Bee.Options)
-
-	if pps.Bee.Active {
-		bees.RestartBee(bee)
-	} else {
-		(*bee).Stop()
-	}
+	bee := bees.StartBee(bi)
 
 	resp.AddBee(bee)
 	resp.Send(response)

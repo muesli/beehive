@@ -45,8 +45,6 @@ type beeInfoResponse struct {
 	LastEvent   time.Time        `json:"lastevent"`
 	Active      bool             `json:"active"`
 	Options     []bees.BeeOption `json:"options"`
-	Events      []bees.EventDescriptor
-	Actions     []bees.ActionDescriptor
 }
 
 // Init a new response

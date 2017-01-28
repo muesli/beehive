@@ -22,31 +22,40 @@ package bees
 
 import (
 	"github.com/emicklei/go-restful"
+	"github.com/muesli/beehive/bees"
 	"github.com/muesli/smolder"
 )
 
-// BeeResource is the resource responsible for /bees
-type BeeResource struct {
-	smolder.Resource
+// DeleteAuthRequired returns true because all requests need authentication
+func (r *BeeResource) DeleteAuthRequired() bool {
+	return false
 }
 
-var (
-	_ smolder.GetIDSupported  = &BeeResource{}
-	_ smolder.GetSupported    = &BeeResource{}
-	_ smolder.PostSupported   = &BeeResource{}
-	_ smolder.PutSupported    = &BeeResource{}
-	_ smolder.DeleteSupported = &BeeResource{}
-)
+// DeleteDoc returns the description of this API endpoint
+func (r *BeeResource) DeleteDoc() string {
+	return "delete a bee"
+}
 
-// Register this resource with the container to setup all the routes
-func (r *BeeResource) Register(container *restful.Container, config smolder.APIConfig, context smolder.APIContextFactory) {
-	r.Name = "BeeResource"
-	r.TypeName = "bee"
-	r.Endpoint = "bees"
-	r.Doc = "Manage bees"
+// DeleteParams returns the parameters supported by this API endpoint
+func (r *BeeResource) DeleteParams() []*restful.Parameter {
+	return nil
+}
 
-	r.Config = config
-	r.Context = context
+// Delete processes an incoming DELETE request
+func (r *BeeResource) Delete(context smolder.APIContext, request *restful.Request, response *restful.Response) {
+	resp := BeeResponse{}
+	resp.Init(context)
 
-	r.Init(container, r)
+	id := request.PathParameter("bee-id")
+	bee := bees.GetBee(id)
+	if bee == nil {
+		r.NotFound(request, response)
+		return
+	}
+
+	go func() {
+		bees.DeleteBee(bee)
+	}()
+
+	resp.Send(response)
 }
