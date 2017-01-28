@@ -82,7 +82,7 @@ func loadConfig() Config {
 	}
 
 	if err != nil {
-		log.Fatal(err)
+		// log.Fatal(err)
 	}
 
 	return config
