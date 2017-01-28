@@ -41,10 +41,15 @@ type BeeInterface interface {
 	// SetDescription sets a description
 	SetDescription(s string)
 
+	// Config returns this bees config
+	Config() BeeConfig
 	// Options of the bee
 	Options() BeeOptions
 	// SetOptions to configure the bee
 	SetOptions(options BeeOptions)
+
+	// ReloadOptions gets called after a bee's options get updated
+	ReloadOptions(options BeeOptions)
 
 	// Activates the bee
 	Run(eventChannel chan Event)
