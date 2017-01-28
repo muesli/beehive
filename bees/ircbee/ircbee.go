@@ -235,9 +235,8 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 	}
 }
 
-func (mod *IrcBee) SetOptions(options bees.BeeOptions) {
-	mod.BeeOptions = options
-
+func (mod *IrcBee) ReloadOptions(options bees.BeeOptions) {
+	mod.SetOptions(options)
 	mod.server = options.GetValue("server").(string)
 	mod.nick = options.GetValue("nick").(string)
 

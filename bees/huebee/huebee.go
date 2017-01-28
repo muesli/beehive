@@ -116,6 +116,7 @@ func (mod *HueBee) Run(eventChan chan bees.Event) {
 	mod.client = hue.NewBridge(mod.bridge, mod.key)
 }
 
-func (mod *HueBee) SetOptions(options bees.BeeOptions) {
+func (mod *HueBee) ReloadOptions(options bees.BeeOptions) {
 	//FIXME: implement this
+	mod.SetOptions(options)
 }

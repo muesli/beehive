@@ -116,6 +116,7 @@ func (mod *EFABee) Run(eventChan chan bees.Event) {
 	mod.efa, _ = goefa.ProviderFromJson(mod.Provider)
 }
 
-func (mod *EFABee) SetOptions(options bees.BeeOptions) {
+func (mod *EFABee) ReloadOptions(options bees.BeeOptions) {
 	//FIXME: implement this
+	mod.SetOptions(options)
 }

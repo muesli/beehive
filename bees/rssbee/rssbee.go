@@ -164,6 +164,7 @@ func (mod *RSSBee) Action(action bees.Action) []bees.Placeholder {
 	return []bees.Placeholder{}
 }
 
-func (mod *RSSBee) SetOptions(options bees.BeeOptions) {
+func (mod *RSSBee) ReloadOptions(options bees.BeeOptions) {
 	//FIXME: implement this
+	mod.SetOptions(options)
 }

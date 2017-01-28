@@ -121,6 +121,7 @@ func (mod *JabberBee) Run(eventChan chan bees.Event) {
 	}
 }
 
-func (mod *JabberBee) SetOptions(options bees.BeeOptions) {
+func (mod *JabberBee) ReloadOptions(options bees.BeeOptions) {
 	//FIXME: implement this
+	mod.SetOptions(options)
 }

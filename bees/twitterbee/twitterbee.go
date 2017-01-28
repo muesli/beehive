@@ -201,6 +201,7 @@ func (mod *TwitterBee) Run(eventChan chan bees.Event) {
 	}
 }
 
-func (mod *TwitterBee) SetOptions(options bees.BeeOptions) {
+func (mod *TwitterBee) ReloadOptions(options bees.BeeOptions) {
 	//FIXME: implement this
+	mod.SetOptions(options)
 }

@@ -182,6 +182,7 @@ Loop:
 	}
 }
 
-func (mod *SlackBee) SetOptions(options bees.BeeOptions) {
+func (mod *SlackBee) ReloadOptions(options bees.BeeOptions) {
 	//FIXME: implement this
+	mod.SetOptions(options)
 }

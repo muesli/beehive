@@ -54,6 +54,7 @@ func (mod *TransmissionBee) Action(action bees.Action) []bees.Placeholder {
 func (mod *TransmissionBee) Run(eventChan chan bees.Event) {
 }
 
-func (mod *TransmissionBee) SetOptions(options bees.BeeOptions) {
+func (mod *TransmissionBee) ReloadOptions(options bees.BeeOptions) {
 	//FIXME: implement this
+	mod.SetOptions(options)
 }

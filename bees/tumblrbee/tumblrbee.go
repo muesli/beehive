@@ -82,6 +82,7 @@ func (mod *TumblrBee) Run(eventChan chan bees.Event) {
 		mod.callbackUrl, "http://api.tumblr.com")
 }
 
-func (mod *TumblrBee) SetOptions(options bees.BeeOptions) {
+func (mod *TumblrBee) ReloadOptions(options bees.BeeOptions) {
 	//FIXME: implement this
+	mod.SetOptions(options)
 }

@@ -130,6 +130,7 @@ func (mod *SerialBee) Run(eventChan chan bees.Event) {
 	}
 }
 
-func (mod *SerialBee) SetOptions(options bees.BeeOptions) {
+func (mod *SerialBee) ReloadOptions(options bees.BeeOptions) {
 	//FIXME: implement this
+	mod.SetOptions(options)
 }

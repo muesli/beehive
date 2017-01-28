@@ -90,6 +90,7 @@ func (mod *SpaceApiBee) Run(eventChan chan bees.Event) {
 	mod.evchan = eventChan
 }
 
-func (mod *SpaceApiBee) SetOptions(options bees.BeeOptions) {
+func (mod *SpaceApiBee) ReloadOptions(options bees.BeeOptions) {
 	//FIXME: implement this
+	mod.SetOptions(options)
 }

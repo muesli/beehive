@@ -68,6 +68,7 @@ func (mod *CronBee) Run(eventChan chan bees.Event) {
 	}
 }
 
-func (mod *CronBee) SetOptions(options bees.BeeOptions) {
+func (mod *CronBee) ReloadOptions(options bees.BeeOptions) {
 	//FIXME: implement this
+	mod.SetOptions(options)
 }

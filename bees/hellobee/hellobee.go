@@ -43,6 +43,7 @@ func (mod *HelloBee) Action(action bees.Action) []bees.Placeholder {
 	return []bees.Placeholder{}
 }
 
-func (mod *HelloBee) SetOptions(options bees.BeeOptions) {
+func (mod *HelloBee) ReloadOptions(options bees.BeeOptions) {
 	//FIXME: implement this
+	mod.SetOptions(options)
 }

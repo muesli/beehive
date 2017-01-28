@@ -107,6 +107,7 @@ func (mod *HtmlExtractBee) Run(eventChan chan bees.Event) {
 	mod.evchan = eventChan
 }
 
-func (mod *HtmlExtractBee) SetOptions(options bees.BeeOptions) {
+func (mod *HtmlExtractBee) ReloadOptions(options bees.BeeOptions) {
 	//FIXME: implement this
+	mod.SetOptions(options)
 }

@@ -108,6 +108,7 @@ func (mod *TimeBee) Run(eventChan chan bees.Event) {
 	}
 }
 
-func (mod *TimeBee) SetOptions(options bees.BeeOptions) {
+func (mod *TimeBee) ReloadOptions(options bees.BeeOptions) {
 	//FIXME: implement this
+	mod.SetOptions(options)
 }

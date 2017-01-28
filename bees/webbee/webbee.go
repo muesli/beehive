@@ -175,6 +175,7 @@ func (mod *WebBee) PostRequest(ctx *web.Context) {
 	mod.triggerJsonEvent(&b)
 }
 
-func (mod *WebBee) SetOptions(options bees.BeeOptions) {
+func (mod *WebBee) ReloadOptions(options bees.BeeOptions) {
 	//FIXME: implement this
+	mod.SetOptions(options)
 }
