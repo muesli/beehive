@@ -28,14 +28,13 @@ import (
 	"strings"
 )
 
-// A Placeholder used by ins & outs of a bee.
+// Placeholder used by ins & outs of a bee.
+type PlaceholderSlice []Placeholder
 type Placeholder struct {
 	Name  string
 	Type  string
 	Value interface{}
 }
-
-type PlaceholderSlice []Placeholder
 
 // Retrieve a value from a Placeholder slice
 func (ph PlaceholderSlice) Value(name string) interface{} {
@@ -55,6 +54,11 @@ func (ph PlaceholderSlice) Bind(name string, dst interface{}) error {
 		return errors.New("Placeholder with name " + name + " not found")
 	}
 
+	return ConvertValue(v, dst)
+}
+
+// ConvertValue tries to convert v to dst
+func ConvertValue(v interface{}, dst interface{}) error {
 	switch d := dst.(type) {
 	case *string:
 		switch vt := v.(type) {

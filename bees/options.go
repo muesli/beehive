@@ -21,6 +21,8 @@
 // beehive's central module system.
 package bees
 
+import "errors"
+
 // A FilterOption used by filters
 type FilterOption struct {
 	Name            string
@@ -39,7 +41,7 @@ type BeeOption struct {
 }
 
 // Retrieve a value from an BeeOptions struct
-func (opts BeeOptions) GetValue(name string) interface{} {
+func (opts BeeOptions) Value(name string) interface{} {
 	for _, opt := range opts {
 		if opt.Name == name {
 			return opt.Value
@@ -47,4 +49,14 @@ func (opts BeeOptions) GetValue(name string) interface{} {
 	}
 
 	return nil
+}
+
+// Bind a value from a Placeholder slice
+func (opts BeeOptions) Bind(name string, dst interface{}) error {
+	v := opts.Value(name)
+	if v == nil {
+		return errors.New("Option with name " + name + " not found")
+	}
+
+	return ConvertValue(v, dst)
 }
