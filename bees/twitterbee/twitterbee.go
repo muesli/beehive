@@ -153,7 +153,7 @@ func (mod *TwitterBee) Run(eventChan chan bees.Event) {
 
 		default:
 		}
-		time.Sleep(60 * time.Second)
+		time.Sleep(2 * time.Minute)
 
 		log.Println("Checking for new mentions...")
 		v := url.Values{}
