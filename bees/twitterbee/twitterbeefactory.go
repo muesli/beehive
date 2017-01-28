@@ -116,7 +116,7 @@ func (factory *TwitterBeeFactory) Events() []bees.EventDescriptor {
 		{
 			Namespace:   factory.Name(),
 			Name:        "mention",
-			Description: "is triggered as soon as the API call has been executed",
+			Description: "is triggered whenever someone mentions you on Twitter",
 			Options: []bees.PlaceholderDescriptor{
 				{
 					Name:        "username",
