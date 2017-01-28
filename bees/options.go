@@ -35,7 +35,6 @@ type FilterOption struct {
 type BeeOptions []BeeOption
 type BeeOption struct {
 	Name  string
-	Type  string
 	Value interface{}
 }
 
