@@ -34,11 +34,6 @@ import (
 	"github.com/muesli/beehive/api"
 	"github.com/muesli/beehive/app"
 	_ "github.com/muesli/beehive/filters"
-	_ "github.com/muesli/beehive/filters/contains"
-	_ "github.com/muesli/beehive/filters/endswith"
-	_ "github.com/muesli/beehive/filters/equals"
-	_ "github.com/muesli/beehive/filters/matches"
-	_ "github.com/muesli/beehive/filters/startswith"
 	_ "github.com/muesli/beehive/filters/template"
 
 	"github.com/muesli/beehive/bees"
