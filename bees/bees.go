@@ -211,25 +211,42 @@ func startBee(bee *BeeInterface, fatals int) {
 	(*bee).Run(eventsIn)
 }
 
+func NewBeeInstance(bee BeeInstance) *BeeInterface {
+	factory := GetFactory(bee.Class)
+	if factory == nil {
+		panic("Unknown bee-class in config file: " + bee.Class)
+	}
+	mod := (*factory).New(bee.Name, bee.Description, bee.Options)
+	RegisterBee(mod)
+
+	return &mod
+}
+
+func DeleteBee(bee *BeeInterface) {
+	(*bee).Stop()
+
+	delete(bees, (*bee).Name())
+}
+
+// Starts all registered bees
+func StartBee(bee BeeInstance) *BeeInterface {
+	b := NewBeeInstance(bee)
+
+	(*b).Start()
+	go func(mod *BeeInterface) {
+		startBee(mod, 0)
+	}(b)
+
+	return b
+}
+
 // Starts all registered bees
 func StartBees(beeList []BeeInstance) {
 	eventsIn = make(chan Event)
 	go handleEvents()
 
 	for _, bee := range beeList {
-		factory := GetFactory(bee.Class)
-		if factory == nil {
-			panic("Unknown bee-class in config file: " + bee.Class)
-		}
-		mod := (*factory).New(bee.Name, bee.Description, bee.Options)
-		RegisterBee(mod)
-	}
-
-	for _, m := range bees {
-		(*m).Start()
-		go func(mod *BeeInterface) {
-			startBee(mod, 0)
-		}(m)
+		StartBee(bee)
 	}
 }
 
@@ -245,9 +262,7 @@ func StopBees() {
 }
 
 func RestartBee(bee *BeeInterface) {
-	if (*bee).IsRunning() {
-		(*bee).Stop()
-	}
+	(*bee).Stop()
 
 	(*bee).SetSigChan(make(chan bool))
 	(*bee).WaitGroup().Add(1)
