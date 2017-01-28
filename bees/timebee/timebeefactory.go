@@ -104,16 +104,6 @@ func (factory *TimeBeeFactory) Events() []bees.EventDescriptor {
 	return events
 }
 
-/*
-func (factory *TimeBeeFactory) Actions() []bees.ActionDescriptor {
-        actions := []bees.ActionDescriptor{}
-        return actions
-}
-
-func (factory *TimeBeeFactory) Image() string {
-	return ""
-}*/
-
 func init() {
 	f := TimeBeeFactory{}
 	bees.RegisterFactory(&f)
