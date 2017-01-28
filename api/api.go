@@ -63,6 +63,9 @@ func imageFromPathParam(req *restful.Request, resp *restful.Response) {
 }
 
 func Run() {
+	// to see what happens in the package, uncomment the following
+	//restful.TraceLogger(log.New(os.Stdout, "[restful] ", log.LstdFlags|log.Lshortfile))
+
 	context := &context.APIContext{}
 
 	// Setup web-service
@@ -86,34 +89,12 @@ func Run() {
 	}(
 		&hives.HiveResource{},
 		&bees.BeeResource{},
+		&chains.ChainResource{},
+		&actions.ActionResource{},
 	)
 
 	server := &http.Server{Addr: ":8181", Handler: wsContainer}
 	go func() {
 		log.Fatal(server.ListenAndServe())
 	}()
-
-	// to see what happens in the package, uncomment the following
-	//restful.TraceLogger(log.New(os.Stdout, "[restful] ", log.LstdFlags|log.Lshortfile))
-
-	/*	wsContainer := restful.NewContainer()
-		wsContainer.Router(restful.CurlyRouter{})
-
-		ws := new(restful.WebService)
-		ws.Route(ws.GET("/config/").To(configFromPathParam))
-		ws.Route(ws.GET("/config/{subpath:*}").To(configFromPathParam))
-		ws.Route(ws.GET("/images/{subpath:*}").To(imageFromPathParam))
-		wsContainer.Add(ws)
-
-		b := BeeResource{}
-		b.Register(wsContainer)
-		h := HiveResource{}
-		h.Register(wsContainer)
-
-		log.Println("Starting JSON API on localhost:8181")
-		server := &http.Server{Addr: ":8181", Handler: wsContainer}
-
-		go func() {
-			log.Fatal(server.ListenAndServe())
-		}()*/
 }
