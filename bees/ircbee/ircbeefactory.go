@@ -51,6 +51,10 @@ func (factory *IrcBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+func (factory *IrcBeeFactory) LogoColor() string {
+	return "#3274d0"
+}
+
 func (factory *IrcBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{

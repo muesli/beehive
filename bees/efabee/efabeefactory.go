@@ -51,6 +51,10 @@ func (factory *EFABeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+func (factory *EFABeeFactory) LogoColor() string {
+	return "#ef3e56"
+}
+
 func (factory *EFABeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{

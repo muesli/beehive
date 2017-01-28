@@ -51,6 +51,10 @@ func (factory *AnelPowerCtrlBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+func (factory *AnelPowerCtrlBeeFactory) LogoColor() string {
+	return "#73d44c"
+}
+
 func (factory *AnelPowerCtrlBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{

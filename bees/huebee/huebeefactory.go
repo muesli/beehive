@@ -52,6 +52,10 @@ func (factory *HueBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+func (factory *HueBeeFactory) LogoColor() string {
+	return "#212727"
+}
+
 func (factory *HueBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
