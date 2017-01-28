@@ -65,10 +65,11 @@ var (
 	configFile string
 )
 
-// This is where we unmarshal our beehive.conf into
+// Config contains an entire configuration set for Beehive
 type Config struct {
-	Bees   []bees.BeeInstance
-	Chains []bees.Chain
+	Bees    []bees.BeeConfig
+	Actions []bees.Action
+	Chains  []bees.Chain
 }
 
 // Loads chains from config
@@ -115,6 +116,8 @@ func main() {
 
 	// Initialize bees
 	bees.StartBees(config.Bees)
+	// Load actions from config
+	bees.SetActions(config.Actions)
 	// Load chains from config
 	bees.SetChains(config.Chains)
 
@@ -148,6 +151,8 @@ func main() {
 
 	// Save chains to config
 	log.Println("Storing config...")
-	config.Chains = bees.Chains()
+	config.Bees = bees.BeeConfigs()
+	config.Chains = bees.GetChains()
+	config.Actions = bees.GetActions()
 	saveConfig(config)
 }
