@@ -29,7 +29,9 @@ import (
 
 	"github.com/emicklei/go-restful"
 	_ "github.com/emicklei/go-restful/swagger"
+
 	"github.com/muesli/beehive/api/context"
+	"github.com/muesli/beehive/api/resources/actions"
 	"github.com/muesli/beehive/api/resources/bees"
 	"github.com/muesli/beehive/api/resources/hives"
 	"github.com/muesli/smolder"
