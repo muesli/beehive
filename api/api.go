@@ -1,5 +1,5 @@
 /*
- *    Copyright (C) 2015 Christian Muehlhaeuser
+ *    Copyright (C) 2015-2017 Christian Muehlhaeuser
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License as published

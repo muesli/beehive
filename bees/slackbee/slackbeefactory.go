@@ -1,5 +1,6 @@
 /*
  *    Copyright (C) 2016 Sergio Rubio
+ *                  2017 Christian Muehlhaeuser
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License as published
@@ -16,6 +17,7 @@
  *
  *    Authors:
  *      Sergio Rubio <rubiojr@frameos.org>
+ *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
 package slackbee

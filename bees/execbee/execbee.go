@@ -1,5 +1,6 @@
 /*
- *    Copyright (C) 2015 Dominik Schmidt
+ *    Copyright (C) 2015      Dominik Schmidt
+ *                  2015-2017 Christian Muehlhaeuser
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License as published
@@ -16,6 +17,7 @@
  *
  *    Authors:
  *      Dominik Schmidt <domme@tomahawk-player.org>
+ *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
 // beehive's exec command module.

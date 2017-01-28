@@ -1,6 +1,6 @@
 /*
- *    Copyright (C) 2014 Christian Muehlhaeuser
- *                  2014 Michael Wendland
+ *    Copyright (C) 2014-2017 Christian Muehlhaeuser
+ *                  2014      Michael Wendland
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License as published

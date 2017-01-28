@@ -1,5 +1,6 @@
 /*
- *    Copyright (C) 2014 Stefan 'glaxx' Luecke
+ *    Copyright (C) 2014      Stefan 'glaxx' Luecke
+ *                  2014-2017 Christian Muehlhaeuser
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License as published
@@ -15,7 +16,8 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  *    Authors:
- *      Stefan 'glaxx' Luecke <glaxx@glaxx.net>
+ *		Stefan Luecke <glaxx@glaxx.net>
+ *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
 package cronbee
