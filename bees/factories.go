@@ -33,6 +33,10 @@ func (factory *BeeFactory) Image() string {
 	return ""
 }
 
+func (factory *BeeFactory) LogoColor() string {
+	return "#35465c"
+}
+
 func (factory *BeeFactory) Options() []BeeOptionDescriptor {
 	return []BeeOptionDescriptor{}
 }
@@ -52,6 +56,8 @@ type BeeFactoryInterface interface {
 	Description() string
 	// An image url for the module
 	Image() string
+	// A logo color for the module
+	LogoColor() string
 
 	// Options supported by module
 	Options() []BeeOptionDescriptor
