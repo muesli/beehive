@@ -22,35 +22,17 @@
 
 package transmissionbee
 
-import (
-	"github.com/kr/pretty"
-	"github.com/muesli/beehive/bees"
-	"github.com/odwrtw/transmission"
-)
+import "github.com/muesli/beehive/bees"
 
 type TransmissionBeeFactory struct {
 	bees.BeeFactory
 }
 
 func (factory *TransmissionBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
-	serverURL := options.GetValue("serverURL").(string)
-	username := options.GetValue("username").(string)
-	password := options.GetValue("password").(string)
-
-	conf := transmission.Config{
-		Address:  serverURL,
-		User:     username,
-		Password: password,
-	}
-
-	t, err := transmission.New(conf)
-	if err != nil {
-		pretty.Println(err)
-	}
 	bee := TransmissionBee{
-		Bee:    bees.NewBee(name, factory.Name(), description, options),
-		client: t,
+		Bee: bees.NewBee(name, factory.Name(), description, options),
 	}
+	bee.ReloadOptions(options)
 
 	return &bee
 }

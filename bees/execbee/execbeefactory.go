@@ -35,6 +35,7 @@ func (factory *ExecBeeFactory) New(name, description string, options bees.BeeOpt
 	bee := ExecBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
 	}
+	bee.ReloadOptions(options)
 
 	return &bee
 }

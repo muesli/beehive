@@ -25,6 +25,7 @@ package transmissionbee
 import (
 	"strings"
 
+	"github.com/kr/pretty"
 	"github.com/muesli/beehive/bees"
 	"github.com/odwrtw/transmission"
 )
@@ -53,10 +54,17 @@ func (mod *TransmissionBee) Action(action bees.Action) []bees.Placeholder {
 	return outs
 }
 
-func (mod *TransmissionBee) Run(eventChan chan bees.Event) {
-}
-
 func (mod *TransmissionBee) ReloadOptions(options bees.BeeOptions) {
-	//FIXME: implement this
 	mod.SetOptions(options)
+
+	conf := transmission.Config{}
+	options.Bind("serverURL", &conf.Address)
+	options.Bind("username", &conf.User)
+	options.Bind("password", &conf.Password)
+
+	t, err := transmission.New(conf)
+	if err != nil {
+		pretty.Println(err)
+	}
+	mod.client = t
 }

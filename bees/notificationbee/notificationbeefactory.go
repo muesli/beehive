@@ -34,6 +34,8 @@ func (factory *NotificationBeeFactory) New(name, description string, options bee
 	bee := NotificationBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
 	}
+	bee.ReloadOptions(options)
+
 	return &bee
 }
 

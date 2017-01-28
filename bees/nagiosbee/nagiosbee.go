@@ -167,6 +167,9 @@ func (mod *NagiosBee) Run(cin chan bees.Event) {
 }
 
 func (mod *NagiosBee) ReloadOptions(options bees.BeeOptions) {
-	//FIXME: implement this
 	mod.SetOptions(options)
+
+	options.Bind("url", &mod.url)
+	options.Bind("user", &mod.user)
+	options.Bind("password", &mod.password)
 }

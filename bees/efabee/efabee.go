@@ -112,11 +112,11 @@ func (mod *EFABee) Action(action bees.Action) []bees.Placeholder {
 
 func (mod *EFABee) Run(eventChan chan bees.Event) {
 	mod.eventChan = eventChan
-
-	mod.efa, _ = goefa.ProviderFromJson(mod.Provider)
 }
 
 func (mod *EFABee) ReloadOptions(options bees.BeeOptions) {
-	//FIXME: implement this
 	mod.SetOptions(options)
+
+	options.Bind("provider", &mod.Provider)
+	mod.efa, _ = goefa.ProviderFromJson(mod.Provider)
 }

@@ -32,15 +32,10 @@ type TimeBeeFactory struct {
 
 func (factory *TimeBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := TimeBee{
-		Bee:        bees.NewBee(name, factory.Name(), description, options),
-		second:     int(options.GetValue("Second").(float64)),
-		minute:     int(options.GetValue("Minute").(float64)),
-		hour:       int(options.GetValue("Hour").(float64)),
-		dayofweek:  int(options.GetValue("DayOfWeek").(float64)),
-		dayofmonth: int(options.GetValue("DayOfMonth").(float64)),
-		month:      int(options.GetValue("Month").(float64)),
-		year:       int(options.GetValue("Year").(float64)),
+		Bee: bees.NewBee(name, factory.Name(), description, options),
 	}
+	bee.ReloadOptions(options)
+
 	return &bee
 }
 

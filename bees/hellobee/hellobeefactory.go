@@ -34,6 +34,8 @@ func (factory *HelloBeeFactory) New(name, description string, options bees.BeeOp
 	bee := HelloBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
 	}
+	bee.ReloadOptions(options)
+
 	return &bee
 }
 

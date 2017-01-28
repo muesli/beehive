@@ -131,6 +131,8 @@ func (mod *SerialBee) Run(eventChan chan bees.Event) {
 }
 
 func (mod *SerialBee) ReloadOptions(options bees.BeeOptions) {
-	//FIXME: implement this
 	mod.SetOptions(options)
+
+	options.Bind("device", &mod.device)
+	options.Bind("baudrate", &mod.baudrate)
 }

@@ -32,12 +32,11 @@ type NagiosBeeFactory struct {
 
 func (factory *NagiosBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := NagiosBee{
-		Bee:      bees.NewBee(name, factory.Name(), description, options),
-		url:      options.GetValue("url").(string),
-		user:     options.GetValue("user").(string),
-		password: options.GetValue("password").(string),
+		Bee: bees.NewBee(name, factory.Name(), description, options),
 	}
 	bee.services = make(map[string]map[string]service)
+	bee.ReloadOptions(options)
+
 	return &bee
 }
 

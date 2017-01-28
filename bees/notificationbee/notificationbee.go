@@ -91,6 +91,5 @@ func (mod *NotificationBee) Action(action bees.Action) []bees.Placeholder {
 }
 
 func (mod *NotificationBee) ReloadOptions(options bees.BeeOptions) {
-	//FIXME: implement this
 	mod.SetOptions(options)
 }

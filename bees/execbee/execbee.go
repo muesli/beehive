@@ -130,6 +130,5 @@ func (mod *ExecBee) Run(eventChan chan bees.Event) {
 }
 
 func (mod *ExecBee) ReloadOptions(options bees.BeeOptions) {
-	//FIXME: implement this
 	mod.SetOptions(options)
 }

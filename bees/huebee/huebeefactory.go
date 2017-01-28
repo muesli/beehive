@@ -32,10 +32,9 @@ type HueBeeFactory struct {
 
 func (factory *HueBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := HueBee{
-		Bee:    bees.NewBee(name, factory.Name(), description, options),
-		bridge: options.GetValue("bridge").(string),
-		key:    options.GetValue("key").(string),
+		Bee: bees.NewBee(name, factory.Name(), description, options),
 	}
+	bee.ReloadOptions(options)
 
 	return &bee
 }

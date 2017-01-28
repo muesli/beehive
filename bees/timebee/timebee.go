@@ -109,6 +109,13 @@ func (mod *TimeBee) Run(eventChan chan bees.Event) {
 }
 
 func (mod *TimeBee) ReloadOptions(options bees.BeeOptions) {
-	//FIXME: implement this
 	mod.SetOptions(options)
+
+	options.Bind("Second", &mod.second)
+	options.Bind("Minute", &mod.minute)
+	options.Bind("Hour", &mod.hour)
+	options.Bind("DayOfWeek", &mod.dayofweek)
+	options.Bind("DayOfMonth", &mod.dayofmonth)
+	options.Bind("Month", &mod.month)
+	options.Bind("Year", &mod.year)
 }

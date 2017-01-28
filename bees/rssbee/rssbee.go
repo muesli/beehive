@@ -165,6 +165,8 @@ func (mod *RSSBee) Action(action bees.Action) []bees.Placeholder {
 }
 
 func (mod *RSSBee) ReloadOptions(options bees.BeeOptions) {
-	//FIXME: implement this
 	mod.SetOptions(options)
+
+	options.Bind("skip_first", &mod.skip_next_fetch)
+	options.Bind("url", &mod.url)
 }

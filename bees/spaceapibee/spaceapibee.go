@@ -91,6 +91,7 @@ func (mod *SpaceApiBee) Run(eventChan chan bees.Event) {
 }
 
 func (mod *SpaceApiBee) ReloadOptions(options bees.BeeOptions) {
-	//FIXME: implement this
 	mod.SetOptions(options)
+
+	options.Bind("url", &mod.url)
 }

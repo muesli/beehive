@@ -34,12 +34,8 @@ func (factory *CronBeeFactory) New(name, description string, options bees.BeeOpt
 	bee := CronBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
 	}
-	bee.input[0] = options.GetValue("Second").(string)
-	bee.input[1] = options.GetValue("Minute").(string)
-	bee.input[2] = options.GetValue("Hour").(string)
-	bee.input[3] = options.GetValue("DayOfWeek").(string)
-	bee.input[4] = options.GetValue("DayOfMonth").(string)
-	bee.input[5] = options.GetValue("Month").(string)
+	bee.ReloadOptions(options)
+
 	return &bee
 }
 

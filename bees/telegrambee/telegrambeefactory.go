@@ -22,55 +22,17 @@
 
 package telegrambee
 
-import (
-	"io/ioutil"
-	"log"
-	"os"
-	"strings"
-
-	"github.com/muesli/beehive/bees"
-	telegram "gopkg.in/telegram-bot-api.v4"
-)
+import "github.com/muesli/beehive/bees"
 
 type TelegramBeeFactory struct {
 	bees.BeeFactory
 }
 
-// Gets the Bot's API key from a file, the recipe config or the
-// TELEGRAM_API_KEY environment variable.
-func getApiKey(options *bees.BeeOptions) string {
-	apiKey := options.GetValue("apiKey").(string)
-
-	if strings.HasPrefix(apiKey, "file://") {
-		buf, err := ioutil.ReadFile(strings.TrimPrefix(apiKey, "file://"))
-		if err != nil {
-			panic("Error reading API key file " + apiKey)
-		}
-		apiKey = string(buf)
-	}
-
-	if strings.HasPrefix(apiKey, "env://") {
-		buf := strings.TrimPrefix(apiKey, "env://")
-		apiKey = os.Getenv(string(buf))
-	}
-
-	return strings.TrimSpace(apiKey)
-}
-
 func (factory *TelegramBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
-	apiKey := getApiKey(&options)
-
-	bot, err := telegram.NewBotAPI(apiKey)
-	if err != nil {
-		panic("Authorization failed, make sure the Telegram API key is correct")
-	}
-	log.Printf("TELEGRAM: Authorized on account %s", bot.Self.UserName)
-
 	bee := TelegramBee{
-		Bee:    bees.NewBee(name, factory.Name(), description, options),
-		apiKey: apiKey,
-		bot:    bot,
+		Bee: bees.NewBee(name, factory.Name(), description, options),
 	}
+	bee.ReloadOptions(options)
 
 	return &bee
 }

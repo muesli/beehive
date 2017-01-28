@@ -163,6 +163,9 @@ func (mod *JenkinsBee) Action(action bees.Action) []bees.Placeholder {
 }
 
 func (mod *JenkinsBee) ReloadOptions(options bees.BeeOptions) {
-	//FIXME: implement this
 	mod.SetOptions(options)
+
+	options.Bind("url", &mod.url)
+	options.Bind("user", &mod.user)
+	options.Bind("password", &mod.password)
 }

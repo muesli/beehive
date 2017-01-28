@@ -83,6 +83,12 @@ func (mod *TumblrBee) Run(eventChan chan bees.Event) {
 }
 
 func (mod *TumblrBee) ReloadOptions(options bees.BeeOptions) {
-	//FIXME: implement this
 	mod.SetOptions(options)
+
+	options.Bind("blogname", &mod.blogname)
+	options.Bind("callback_url", &mod.callbackUrl)
+	options.Bind("consumer_key", &mod.consumerKey)
+	options.Bind("consumer_secret", &mod.consumerSecret)
+	options.Bind("token", &mod.token)
+	options.Bind("token_secret", &mod.tokenSecret)
 }

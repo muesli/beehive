@@ -238,18 +238,13 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 
 func (mod *IrcBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
-	mod.server = options.GetValue("server").(string)
-	mod.nick = options.GetValue("nick").(string)
 
-	for _, channel := range options.GetValue("channels").([]interface{}) {
+	options.Bind("server", &mod.server)
+	options.Bind("nick", &mod.nick)
+	options.Bind("password", &mod.password)
+	options.Bind("ssl", &mod.ssl)
+
+	for _, channel := range options.Value("channels").([]interface{}) {
 		mod.channels = append(mod.channels, channel.(string))
-	}
-
-	// optional parameters
-	if options.GetValue("password") != nil {
-		mod.password = options.GetValue("password").(string)
-	}
-	if options.GetValue("ssl") != nil {
-		mod.ssl = options.GetValue("ssl").(bool)
 	}
 }

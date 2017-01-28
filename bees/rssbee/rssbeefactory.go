@@ -31,17 +31,10 @@ type RSSBeeFactory struct {
 // Interface impl
 
 func (factory *RSSBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
-	var skip bool
-	if tmp := options.GetValue("skip_first"); tmp != nil {
-		skip = tmp.(bool)
-	} else {
-		skip = false
-	}
 	bee := RSSBee{
-		Bee:             bees.NewBee(name, factory.Name(), description, options),
-		url:             options.GetValue("url").(string),
-		skip_next_fetch: skip,
+		Bee: bees.NewBee(name, factory.Name(), description, options),
 	}
+	bee.ReloadOptions(options)
 
 	return &bee
 }

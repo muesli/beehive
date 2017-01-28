@@ -71,6 +71,12 @@ func (mod *CronBee) Run(eventChan chan bees.Event) {
 }
 
 func (mod *CronBee) ReloadOptions(options bees.BeeOptions) {
-	//FIXME: implement this
 	mod.SetOptions(options)
+
+	options.Bind("Second", &mod.input[0])
+	options.Bind("Minute", &mod.input[1])
+	options.Bind("Hour", &mod.input[2])
+	options.Bind("DayOfWeek", &mod.input[3])
+	options.Bind("DayOfMonth", &mod.input[4])
+	options.Bind("Month", &mod.input[5])
 }

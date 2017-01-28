@@ -85,7 +85,8 @@ func (mod *AnelPowerCtrlBee) Action(action bees.Action) []bees.Placeholder {
 
 func (mod *AnelPowerCtrlBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
-	mod.addr = options.GetValue("server").(string)
-	mod.user = options.GetValue("user").(string)
-	mod.password = options.GetValue("password").(string)
+
+	options.Bind("server", &mod.addr)
+	options.Bind("user", &mod.user)
+	options.Bind("password", &mod.password)
 }

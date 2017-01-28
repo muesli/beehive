@@ -22,60 +22,18 @@
 
 package slackbee
 
-import (
-	"io/ioutil"
-	"os"
-	"strings"
-
-	"github.com/muesli/beehive/bees"
-	"github.com/nlopes/slack"
-)
+import "github.com/muesli/beehive/bees"
 
 type SlackBeeFactory struct {
 	bees.BeeFactory
 }
 
-// Gets the API key from a file, the recipe config or the
-// configured environment variable.
-func getApiKey(options *bees.BeeOptions) string {
-	apiKey := options.GetValue("apiKey").(string)
-
-	if strings.HasPrefix(apiKey, "file://") {
-		buf, err := ioutil.ReadFile(strings.TrimPrefix(apiKey, "file://"))
-		if err != nil {
-			panic("Slack: error reading API key file " + apiKey)
-		}
-		apiKey = string(buf)
-	}
-
-	if strings.HasPrefix(apiKey, "env://") {
-		buf := strings.TrimPrefix(apiKey, "env://")
-		apiKey = os.Getenv(string(buf))
-	}
-
-	return strings.TrimSpace(apiKey)
-}
-
 func (factory *SlackBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
-	apiKey := getApiKey(&options)
-	client := slack.New(apiKey)
-	_, err := client.AuthTest()
-	if err != nil {
-		panic("Slack: authentication failed!")
-	}
-
 	bee := SlackBee{
-		Bee:      bees.NewBee(name, factory.Name(), description, options),
-		apiKey:   apiKey,
-		channels: map[string]string{},
-		client:   client,
+		Bee: bees.NewBee(name, factory.Name(), description, options),
 	}
+	bee.ReloadOptions(options)
 
-	if options.GetValue("channels") != nil {
-		for _, channel := range options.GetValue("channels").([]interface{}) {
-			bee.channels[channel.(string)] = ""
-		}
-	}
 	return &bee
 }
 

@@ -34,6 +34,7 @@ func (factory *HtmlExtractBeeFactory) New(name, description string, options bees
 	bee := HtmlExtractBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
 	}
+	bee.ReloadOptions(options)
 
 	return &bee
 }

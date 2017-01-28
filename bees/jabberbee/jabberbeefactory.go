@@ -32,15 +32,9 @@ type JabberBeeFactory struct {
 
 func (factory *JabberBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := JabberBee{
-		Bee:      bees.NewBee(name, factory.Name(), description, options),
-		server:   options.GetValue("server").(string),
-		user:     options.GetValue("user").(string),
-		password: options.GetValue("password").(string),
+		Bee: bees.NewBee(name, factory.Name(), description, options),
 	}
-
-	if options.GetValue("notls") != nil {
-		bee.notls = options.GetValue("notls").(bool)
-	}
+	bee.ReloadOptions(options)
 
 	return &bee
 }

@@ -202,6 +202,10 @@ func (mod *TwitterBee) Run(eventChan chan bees.Event) {
 }
 
 func (mod *TwitterBee) ReloadOptions(options bees.BeeOptions) {
-	//FIXME: implement this
 	mod.SetOptions(options)
+
+	options.Bind("consumer_key", &mod.consumer_key)
+	options.Bind("consumer_secret", &mod.consumer_secret)
+	options.Bind("access_token", &mod.access_token)
+	options.Bind("access_token_secret", &mod.access_token_secret)
 }

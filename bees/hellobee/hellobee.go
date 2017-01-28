@@ -46,6 +46,5 @@ func (mod *HelloBee) Action(action bees.Action) []bees.Placeholder {
 }
 
 func (mod *HelloBee) ReloadOptions(options bees.BeeOptions) {
-	//FIXME: implement this
 	mod.SetOptions(options)
 }

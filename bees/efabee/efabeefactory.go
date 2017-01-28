@@ -32,9 +32,9 @@ type EFABeeFactory struct {
 
 func (factory *EFABeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := EFABee{
-		Bee:      bees.NewBee(name, factory.Name(), description, options),
-		Provider: options.GetValue("provider").(string),
+		Bee: bees.NewBee(name, factory.Name(), description, options),
 	}
+	bee.ReloadOptions(options)
 
 	return &bee
 }

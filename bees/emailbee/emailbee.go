@@ -67,6 +67,9 @@ func (mod *EmailBee) Action(action bees.Action) []bees.Placeholder {
 }
 
 func (mod *EmailBee) ReloadOptions(options bees.BeeOptions) {
-	//FIXME: implement this
 	mod.SetOptions(options)
+
+	options.Bind("username", &mod.username)
+	options.Bind("password", &mod.password)
+	options.Bind("server", &mod.server)
 }
