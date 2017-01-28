@@ -93,24 +93,42 @@ func GetFactory(identifier string) *BeeFactoryInterface {
 	return nil
 }
 
+// Returns all known bee factories
+func GetFactories() []*BeeFactoryInterface {
+	r := []*BeeFactoryInterface{}
+	for _, factory := range factories {
+		r = append(r, factory)
+	}
+
+	return r
+}
+
 func (bee *Bee) Name() string {
-	return bee.BeeName
+	return bee.config.Name
 }
 
 func (bee *Bee) Namespace() string {
-	return bee.BeeNamespace
+	return bee.config.Class
 }
 
 func (bee *Bee) Description() string {
-	return bee.BeeDescription
+	return bee.config.Description
 }
 
 func (bee *Bee) SetDescription(s string) {
-	bee.BeeDescription = s
+	bee.config.Description = s
+}
+
+func (bee *Bee) Config() BeeConfig {
+	return bee.config
 }
 
 func (bee *Bee) Options() BeeOptions {
-	return bee.BeeOptions
+	return bee.config.Options
+}
+
+func (bee *Bee) SetOptions(options BeeOptions) {
+	bee.config.Options = options
 }
 
 func (bee *Bee) SetSigChan(c chan bool) {
@@ -133,6 +151,10 @@ func (bee *Bee) Start() {
 }
 
 func (bee *Bee) Stop() {
+	if !bee.IsRunning() {
+		return
+	}
+
 	close(bee.SigChan)
 	bee.waitGroup.Wait()
 	bee.Running = false
