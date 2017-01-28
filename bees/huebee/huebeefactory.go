@@ -94,6 +94,28 @@ func (factory *HueBeeFactory) Actions() []bees.ActionDescriptor {
 				},
 			},
 		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "setcolor",
+			Description: "Changes the color of a Hue light",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "light",
+					Description: "ID of the light you want to switch on or off",
+					Type:        "int",
+				},
+				{
+					Name:        "color",
+					Description: "New color of the light you want to change",
+					Type:        "string",
+				},
+				{
+					Name:        "brightness",
+					Description: "New brightness of the light you want to change",
+					Type:        "int",
+				},
+			},
+		},
 	}
 	return actions
 }
