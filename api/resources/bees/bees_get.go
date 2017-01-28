@@ -72,11 +72,6 @@ func (r *BeeResource) GetByIDs(ctx smolder.APIContext, request *restful.Request,
 func (r *BeeResource) Get(ctx smolder.APIContext, request *restful.Request, response *restful.Response, params map[string][]string) {
 	//	ctxapi := ctx.(*context.APIContext)
 	bees := bees.GetBees()
-	if len(bees) == 0 { // err != nil {
-		r.NotFound(request, response)
-		return
-	}
-
 	resp := BeeResponse{}
 	resp.Init(ctx)
 
