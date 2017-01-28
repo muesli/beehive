@@ -72,7 +72,7 @@ func (r *BeeResource) Put(context smolder.APIContext, request *restful.Request, 
 	}
 
 	(*bee).SetDescription(pps.Bee.Description)
-	(*bee).SetOptions(pps.Bee.Options)
+	(*bee).ReloadOptions(pps.Bee.Options)
 
 	if pps.Bee.Active {
 		bees.RestartBee(bee)
