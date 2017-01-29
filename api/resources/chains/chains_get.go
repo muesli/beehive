@@ -62,7 +62,7 @@ func (r *ChainResource) GetByIDs(ctx smolder.APIContext, request *restful.Reques
 			return
 		}
 
-		resp.AddChain(chain)
+		resp.AddChain(*chain)
 	}
 
 	resp.Send(response)
@@ -76,7 +76,7 @@ func (r *ChainResource) Get(ctx smolder.APIContext, request *restful.Request, re
 	resp.Init(ctx)
 
 	for _, chain := range chains {
-		resp.AddChain(&chain)
+		resp.AddChain(chain)
 	}
 
 	resp.Send(response)

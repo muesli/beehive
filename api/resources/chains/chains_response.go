@@ -21,6 +21,9 @@
 package chains
 
 import (
+	"sort"
+
+	restful "github.com/emicklei/go-restful"
 	"github.com/muesli/beehive/bees"
 
 	"github.com/muesli/smolder"
@@ -31,7 +34,7 @@ type ChainResponse struct {
 	smolder.Response
 
 	Chains []chainInfoResponse `json:"chains,omitempty"`
-	chains []*bees.Chain
+	chains map[string]*bees.Chain
 }
 
 type chainInfoResponse struct {
@@ -48,13 +51,27 @@ func (r *ChainResponse) Init(context smolder.APIContext) {
 	r.Parent = r
 	r.Context = context
 
-	r.Chains = []chainInfoResponse{}
+	r.chains = make(map[string]*bees.Chain)
 }
 
 // AddChain adds a chain to the response
-func (r *ChainResponse) AddChain(chain *bees.Chain) {
-	r.chains = append(r.chains, chain)
-	r.Chains = append(r.Chains, prepareChainResponse(r.Context, chain))
+func (r *ChainResponse) AddChain(chain bees.Chain) {
+	r.chains[chain.Name] = &chain
+}
+
+// Send responds to a request with http.StatusOK
+func (r *ChainResponse) Send(response *restful.Response) {
+	var keys []string
+	for k := range r.chains {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for _, k := range keys {
+		r.Chains = append(r.Chains, prepareChainResponse(r.Context, r.chains[k]))
+	}
+
+	r.Response.Send(response)
 }
 
 // EmptyResponse returns an empty API response for this endpoint if there's no data to respond with

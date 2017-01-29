@@ -88,6 +88,6 @@ func (r *ChainResource) Post(context smolder.APIContext, request *restful.Reques
 	chains := append(bees.GetChains(), chain)
 	bees.SetChains(chains)
 
-	resp.AddChain(&chain)
+	resp.AddChain(chain)
 	resp.Send(response)
 }
