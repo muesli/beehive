@@ -47,6 +47,7 @@ func (mod *HelloBee) Action(action bees.Action) []bees.Placeholder {
 	return []bees.Placeholder{}
 }
 
+// ReloadOptions parses the config options and initializes the Bee.
 func (mod *HelloBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 }

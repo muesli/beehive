@@ -69,6 +69,7 @@ func (mod *SerialBee) Action(action bees.Action) []bees.Placeholder {
 	return outs
 }
 
+// Run executes the Bee's event loop.
 func (mod *SerialBee) Run(eventChan chan bees.Event) {
 	if mod.baudrate == 0 || mod.device == "" {
 		return
@@ -131,6 +132,7 @@ func (mod *SerialBee) Run(eventChan chan bees.Event) {
 	}
 }
 
+// ReloadOptions parses the config options and initializes the Bee.
 func (mod *SerialBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 

@@ -125,6 +125,7 @@ func (mod *IrcBee) Part(channel string) {
 	}
 }
 
+// Run executes the Bee's event loop.
 func (mod *IrcBee) Run(eventChan chan bees.Event) {
 	if len(mod.server) == 0 {
 		return
@@ -235,6 +236,7 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 	}
 }
 
+// ReloadOptions parses the config options and initializes the Bee.
 func (mod *IrcBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 

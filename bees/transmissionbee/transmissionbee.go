@@ -56,6 +56,7 @@ func (mod *TransmissionBee) Action(action bees.Action) []bees.Placeholder {
 	return outs
 }
 
+// ReloadOptions parses the config options and initializes the Bee.
 func (mod *TransmissionBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 

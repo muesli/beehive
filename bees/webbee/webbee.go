@@ -88,6 +88,7 @@ func (mod *WebBee) triggerJsonEvent(resp *[]byte) {
 	mod.eventChan <- ev
 }
 
+// Run executes the Bee's event loop.
 func (mod *WebBee) Run(cin chan bees.Event) {
 	mod.eventChan = cin
 
@@ -177,6 +178,7 @@ func (mod *WebBee) PostRequest(ctx *web.Context) {
 	mod.triggerJsonEvent(&b)
 }
 
+// ReloadOptions parses the config options and initializes the Bee.
 func (mod *WebBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 

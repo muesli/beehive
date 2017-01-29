@@ -146,6 +146,7 @@ func sendEvent(bee string, channel string, user string, text string, eventChan c
 	eventChan <- event
 }
 
+// Run executes the Bee's event loop.
 func (mod *SlackBee) Run(eventChan chan bees.Event) {
 	rtm := mod.client.NewRTM()
 
@@ -189,6 +190,7 @@ Loop:
 	}
 }
 
+// ReloadOptions parses the config options and initializes the Bee.
 func (mod *SlackBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 

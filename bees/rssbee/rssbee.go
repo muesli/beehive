@@ -153,6 +153,7 @@ func (mod *RSSBee) itemHandler(feed *rss.Feed, ch *rss.Channel, newitems []*rss.
 	log.Printf("%d new item(s) in %s\n", len(newitems), feed.Url)
 }
 
+// Run executes the Bee's event loop.
 func (mod *RSSBee) Run(cin chan bees.Event) {
 	mod.eventChan = cin
 
@@ -160,6 +161,7 @@ func (mod *RSSBee) Run(cin chan bees.Event) {
 	mod.pollFeed(mod.url, 5)
 }
 
+// ReloadOptions parses the config options and initializes the Bee.
 func (mod *RSSBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 

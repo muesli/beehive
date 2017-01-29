@@ -85,6 +85,7 @@ func (mod *AnelPowerCtrlBee) Action(action bees.Action) []bees.Placeholder {
 	return outs
 }
 
+// ReloadOptions parses the config options and initializes the Bee.
 func (mod *AnelPowerCtrlBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 

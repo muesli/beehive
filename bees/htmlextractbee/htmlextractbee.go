@@ -104,10 +104,12 @@ func (mod *HtmlExtractBee) Action(action bees.Action) []bees.Placeholder {
 	return outs
 }
 
+// Run executes the Bee's event loop.
 func (mod *HtmlExtractBee) Run(eventChan chan bees.Event) {
 	mod.evchan = eventChan
 }
 
+// ReloadOptions parses the config options and initializes the Bee.
 func (mod *HtmlExtractBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 }

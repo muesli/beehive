@@ -88,6 +88,7 @@ func (mod *TimeBee) Timer() {
 	mod.eventChan <- event
 }
 
+// Run executes the Bee's event loop.
 func (mod *TimeBee) Run(eventChan chan bees.Event) {
 	mod.eventChan = eventChan
 	for {
@@ -103,6 +104,7 @@ func (mod *TimeBee) Run(eventChan chan bees.Event) {
 	}
 }
 
+// ReloadOptions parses the config options and initializes the Bee.
 func (mod *TimeBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 

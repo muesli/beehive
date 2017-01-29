@@ -60,6 +60,7 @@ func (mod *JabberBee) Action(action bees.Action) []bees.Placeholder {
 	return outs
 }
 
+// Run executes the Bee's event loop.
 func (mod *JabberBee) Run(eventChan chan bees.Event) {
 	if len(mod.server) == 0 {
 		return
@@ -122,6 +123,7 @@ func (mod *JabberBee) Run(eventChan chan bees.Event) {
 	}
 }
 
+// ReloadOptions parses the config options and initializes the Bee.
 func (mod *JabberBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 

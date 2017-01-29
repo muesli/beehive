@@ -114,6 +114,7 @@ func (mod *TwitterBee) Action(action bees.Action) []bees.Placeholder {
 	return outs
 }
 
+// Run executes the Bee's event loop.
 func (mod *TwitterBee) Run(eventChan chan bees.Event) {
 	mod.evchan = eventChan
 
@@ -202,6 +203,7 @@ func (mod *TwitterBee) Run(eventChan chan bees.Event) {
 	}
 }
 
+// ReloadOptions parses the config options and initializes the Bee.
 func (mod *TwitterBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 

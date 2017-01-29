@@ -53,6 +53,7 @@ type NotificationBee struct {
 	notifier *dbus.Object
 }
 
+// Run executes the Bee's event loop.
 func (mod *NotificationBee) Run(cin chan bees.Event) {
 	conn, err := dbus.SessionBus()
 	mod.conn = conn
@@ -93,6 +94,7 @@ func (mod *NotificationBee) Action(action bees.Action) []bees.Placeholder {
 	return outs
 }
 
+// ReloadOptions parses the config options and initializes the Bee.
 func (mod *NotificationBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 }

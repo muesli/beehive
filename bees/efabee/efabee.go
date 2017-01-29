@@ -109,10 +109,12 @@ func (mod *EFABee) Action(action bees.Action) []bees.Placeholder {
 	return outs
 }
 
+// Run executes the Bee's event loop.
 func (mod *EFABee) Run(eventChan chan bees.Event) {
 	mod.eventChan = eventChan
 }
 
+// ReloadOptions parses the config options and initializes the Bee.
 func (mod *EFABee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 

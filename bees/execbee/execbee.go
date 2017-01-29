@@ -124,11 +124,12 @@ func (mod *ExecBee) Action(action bees.Action) []bees.Placeholder {
 	return outs
 }
 
-// execbee specific impl
+// Run executes the Bee's event loop.
 func (mod *ExecBee) Run(eventChan chan bees.Event) {
 	mod.eventChan = eventChan
 }
 
+// ReloadOptions parses the config options and initializes the Bee.
 func (mod *ExecBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 }

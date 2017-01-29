@@ -36,6 +36,7 @@ type CronBee struct {
 	eventChan chan bees.Event
 }
 
+// Run executes the Bee's event loop.
 func (mod *CronBee) Run(eventChan chan bees.Event) {
 	mod.eventChan = eventChan
 	timer := cron.ParseInput(mod.input)
@@ -65,6 +66,7 @@ func (mod *CronBee) Run(eventChan chan bees.Event) {
 	}
 }
 
+// ReloadOptions parses the config options and initializes the Bee.
 func (mod *CronBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 

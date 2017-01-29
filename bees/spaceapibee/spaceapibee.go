@@ -87,10 +87,12 @@ func (mod *SpaceApiBee) Action(action bees.Action) []bees.Placeholder {
 	return outs
 }
 
+// Run executes the Bee's event loop.
 func (mod *SpaceApiBee) Run(eventChan chan bees.Event) {
 	mod.evchan = eventChan
 }
 
+// ReloadOptions parses the config options and initializes the Bee.
 func (mod *SpaceApiBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 

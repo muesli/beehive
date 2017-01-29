@@ -97,6 +97,7 @@ func (mod *NagiosBee) announceStatuschange(s service) {
 	mod.eventChan <- event
 }
 
+// Run executes the Bee's event loop.
 func (mod *NagiosBee) Run(cin chan bees.Event) {
 	mod.eventChan = cin
 	for {
@@ -163,6 +164,7 @@ func (mod *NagiosBee) Run(cin chan bees.Event) {
 	}
 }
 
+// ReloadOptions parses the config options and initializes the Bee.
 func (mod *NagiosBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 

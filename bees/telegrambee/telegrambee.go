@@ -69,6 +69,7 @@ func (mod *TelegramBee) Action(action bees.Action) []bees.Placeholder {
 	return outs
 }
 
+// Run executes the Bee's event loop.
 func (mod *TelegramBee) Run(eventChan chan bees.Event) {
 	u := telegram.NewUpdate(0)
 	u.Timeout = 60
@@ -112,6 +113,7 @@ func (mod *TelegramBee) Stop() {
 	log.Println("Stopping the Telegram bee")
 }
 
+// ReloadOptions parses the config options and initializes the Bee.
 func (mod *TelegramBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 

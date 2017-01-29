@@ -73,12 +73,14 @@ func (mod *TumblrBee) Action(action bees.Action) []bees.Placeholder {
 	return outs
 }
 
+// Run executes the Bee's event loop.
 func (mod *TumblrBee) Run(eventChan chan bees.Event) {
 	mod.client = gotumblr.NewTumblrRestClient(mod.consumerKey, mod.consumerSecret,
 		mod.token, mod.tokenSecret,
 		mod.callbackUrl, "http://api.tumblr.com")
 }
 
+// ReloadOptions parses the config options and initializes the Bee.
 func (mod *TumblrBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 

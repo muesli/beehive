@@ -79,6 +79,7 @@ func (mod *JenkinsBee) announceStatusChange(j Job) {
 	mod.eventChan <- event
 }
 
+// Run executes the Bee's event loop.
 func (mod *JenkinsBee) Run(cin chan bees.Event) {
 	mod.eventChan = cin
 	for {
@@ -164,6 +165,7 @@ func (mod *JenkinsBee) Action(action bees.Action) []bees.Placeholder {
 	return outs
 }
 
+// ReloadOptions parses the config options and initializes the Bee.
 func (mod *JenkinsBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
