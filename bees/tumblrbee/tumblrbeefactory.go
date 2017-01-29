@@ -126,7 +126,7 @@ func (factory *TumblrBeeFactory) Actions() []bees.ActionDescriptor {
 				},
 				{
 					Name:        "source",
-					Description: "Optional source of the Tumblr quote",
+					Description: "Source of the Tumblr quote",
 					Type:        "string",
 				},
 			},

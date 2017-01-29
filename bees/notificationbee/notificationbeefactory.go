@@ -72,7 +72,7 @@ func (factory *NotificationBeeFactory) Actions() []bees.ActionDescriptor {
 				},
 				{
 					Name:        "urgency",
-					Description: "The urgencylevel to display the notification with. Can be ('low', 'normal' or 'critical'.",
+					Description: "The urgencylevel to display the notification with ('low', 'normal' or 'critical')",
 					Type:        "string",
 				},
 			},
