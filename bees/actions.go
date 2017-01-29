@@ -34,7 +34,7 @@ type Action struct {
 	ID      string
 	Bee     string
 	Name    string
-	Options PlaceholderSlice
+	Options Placeholders
 }
 
 var (

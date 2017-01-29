@@ -31,9 +31,9 @@ import (
 // ActionPostStruct holds all values of an incoming POST request
 type ActionPostStruct struct {
 	Action struct {
-		Bee     string                `json:"bee"`
-		Name    string                `json:"name"`
-		Options bees.PlaceholderSlice `json:"options"`
+		Bee     string            `json:"bee"`
+		Name    string            `json:"name"`
+		Options bees.Placeholders `json:"options"`
 	} `json:"action"`
 }
 

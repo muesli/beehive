@@ -28,8 +28,8 @@ import (
 	"strings"
 )
 
-// PlaceholderSlice is an array of Placeholder.
-type PlaceholderSlice []Placeholder
+// Placeholders is an array of Placeholder.
+type Placeholders []Placeholder
 
 // Placeholder used by ins & outs of a bee.
 type Placeholder struct {
@@ -39,7 +39,7 @@ type Placeholder struct {
 }
 
 // Value retrieves a value from a Placeholder slice.
-func (ph PlaceholderSlice) Value(name string) interface{} {
+func (ph Placeholders) Value(name string) interface{} {
 	for _, p := range ph {
 		if p.Name == name {
 			return p.Value
@@ -50,7 +50,7 @@ func (ph PlaceholderSlice) Value(name string) interface{} {
 }
 
 // Bind a value from a Placeholder slice.
-func (ph PlaceholderSlice) Bind(name string, dst interface{}) error {
+func (ph Placeholders) Bind(name string, dst interface{}) error {
 	v := ph.Value(name)
 	if v == nil {
 		return errors.New("Placeholder with name " + name + " not found")

@@ -27,7 +27,7 @@ import log "github.com/Sirupsen/logrus"
 type Event struct {
 	Bee     string
 	Name    string
-	Options PlaceholderSlice
+	Options Placeholders
 }
 
 var (

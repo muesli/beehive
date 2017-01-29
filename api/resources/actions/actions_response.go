@@ -35,10 +35,10 @@ type ActionResponse struct {
 }
 
 type actionInfoResponse struct {
-	ID      string                `json:"id"`
-	Bee     string                `json:"bee"`
-	Name    string                `json:"name"`
-	Options bees.PlaceholderSlice `json:"options"`
+	ID      string            `json:"id"`
+	Bee     string            `json:"bee"`
+	Name    string            `json:"name"`
+	Options bees.Placeholders `json:"options"`
 }
 
 // Init a new response
