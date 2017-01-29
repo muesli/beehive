@@ -26,10 +26,11 @@ package main
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
+
+	log "github.com/Sirupsen/logrus"
 
 	"github.com/muesli/beehive/api"
 	"github.com/muesli/beehive/app"

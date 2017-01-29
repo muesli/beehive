@@ -22,7 +22,7 @@
 package bees
 
 import (
-	"log"
+	log "github.com/Sirupsen/logrus"
 
 	"github.com/muesli/beehive/filters"
 )

@@ -22,10 +22,11 @@
 package jabberbee
 
 import (
-	"log"
 	"strings"
 
+	log "github.com/Sirupsen/logrus"
 	"github.com/mattn/go-xmpp"
+
 	"github.com/muesli/beehive/bees"
 )
 

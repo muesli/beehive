@@ -25,11 +25,12 @@ import (
 	"bytes"
 	"encoding/binary"
 	"io"
-	"log"
 	"strings"
 	"time"
 
+	log "github.com/Sirupsen/logrus"
 	"github.com/huin/goserial"
+
 	"github.com/muesli/beehive/bees"
 )
 

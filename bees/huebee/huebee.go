@@ -25,8 +25,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/muesli/beehive/bees"
 	"github.com/muesli/go.hue"
+
+	"github.com/muesli/beehive/bees"
 )
 
 // HueBee is a Bee that can talk to Philips Hue bridges.

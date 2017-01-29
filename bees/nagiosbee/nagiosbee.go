@@ -37,9 +37,10 @@ package nagiosbee
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"time"
+
+	log "github.com/Sirupsen/logrus"
 
 	"github.com/muesli/beehive/bees"
 )

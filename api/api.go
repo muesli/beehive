@@ -22,10 +22,10 @@
 package api
 
 import (
-	"log"
 	"net/http"
 	"path"
 
+	log "github.com/Sirupsen/logrus"
 	"github.com/emicklei/go-restful"
 
 	"github.com/muesli/beehive/api/context"

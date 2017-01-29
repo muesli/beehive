@@ -25,8 +25,9 @@ package spaceapibee
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"net/http"
+
+	log "github.com/Sirupsen/logrus"
 
 	"github.com/muesli/beehive/bees"
 )

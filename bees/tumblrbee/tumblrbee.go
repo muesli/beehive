@@ -23,6 +23,7 @@ package tumblrbee
 
 import (
 	"github.com/MariaTerzieva/gotumblr"
+
 	"github.com/muesli/beehive/bees"
 )
 

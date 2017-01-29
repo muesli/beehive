@@ -23,9 +23,10 @@ package bees
 
 import (
 	"bytes"
-	"log"
 	"strings"
 	"text/template"
+
+	log "github.com/Sirupsen/logrus"
 )
 
 // Action describes an action.

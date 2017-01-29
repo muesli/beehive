@@ -31,8 +31,9 @@ package cron
 
 import (
 	"container/list"
-	"log"
 	"time"
+
+	log "github.com/Sirupsen/logrus"
 )
 
 type crontime struct {

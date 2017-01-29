@@ -22,11 +22,12 @@
 package ircbee
 
 import (
-	"log"
 	"strings"
 	"time"
 
+	log "github.com/Sirupsen/logrus"
 	irc "github.com/fluffle/goirc/client"
+
 	"github.com/muesli/beehive/bees"
 )
 

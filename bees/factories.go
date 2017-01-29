@@ -21,7 +21,7 @@
 // Package bees is Beehive's central module system.
 package bees
 
-import "log"
+import log "github.com/Sirupsen/logrus"
 
 // A BeeFactory is the base struct to be embedded by other BeeFactories.
 type BeeFactory struct {

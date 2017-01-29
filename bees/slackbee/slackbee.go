@@ -25,12 +25,13 @@ package slackbee
 
 import (
 	"io/ioutil"
-	"log"
 	"os"
 	"strings"
 
-	"github.com/muesli/beehive/bees"
+	log "github.com/Sirupsen/logrus"
 	"github.com/nlopes/slack"
+
+	"github.com/muesli/beehive/bees"
 )
 
 // SlackBee is a Bee that can connect to Slack.

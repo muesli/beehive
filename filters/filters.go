@@ -22,7 +22,7 @@
 package filters
 
 import (
-	"log"
+	log "github.com/Sirupsen/logrus"
 )
 
 // FilterInterface is an interface all Filters implement.

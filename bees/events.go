@@ -21,7 +21,7 @@
 // Package bees is Beehive's central module system.
 package bees
 
-import "log"
+import log "github.com/Sirupsen/logrus"
 
 // An Event describes an event including its parameters.
 type Event struct {

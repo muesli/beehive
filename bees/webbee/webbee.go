@@ -25,11 +25,12 @@ package webbee
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strings"
 
+	log "github.com/Sirupsen/logrus"
 	"github.com/hoisie/web"
+
 	"github.com/muesli/beehive/bees"
 )
 

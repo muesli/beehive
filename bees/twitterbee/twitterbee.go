@@ -23,12 +23,13 @@
 package twitterbee
 
 import (
-	"log"
 	"net/url"
 	"strings"
 	"time"
 
 	"github.com/ChimeraCoder/anaconda"
+	log "github.com/Sirupsen/logrus"
+
 	"github.com/muesli/beehive/bees"
 )
 

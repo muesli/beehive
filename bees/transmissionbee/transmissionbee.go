@@ -27,8 +27,9 @@ import (
 	"strings"
 
 	"github.com/kr/pretty"
-	"github.com/muesli/beehive/bees"
 	"github.com/odwrtw/transmission"
+
+	"github.com/muesli/beehive/bees"
 )
 
 // TransmissionBee is a Bee that can send torrents to Transmission.

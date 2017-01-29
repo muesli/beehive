@@ -25,10 +25,11 @@
 package notificationbee
 
 import (
-	"log"
 	"strings"
 
+	log "github.com/Sirupsen/logrus"
 	"github.com/guelfey/go.dbus"
+
 	"github.com/muesli/beehive/bees"
 )
 

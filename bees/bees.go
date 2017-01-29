@@ -22,10 +22,10 @@
 package bees
 
 import (
-	"log"
 	"sync"
 	"time"
 
+	log "github.com/Sirupsen/logrus"
 	uuid "github.com/nu7hatch/gouuid"
 )
 

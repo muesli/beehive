@@ -26,10 +26,11 @@ package execbee
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"strings"
+
+	log "github.com/Sirupsen/logrus"
 
 	"github.com/muesli/beehive/bees"
 )

@@ -24,10 +24,11 @@
 package rssbee
 
 import (
-	"log"
 	"time"
 
+	log "github.com/Sirupsen/logrus"
 	rss "github.com/jteeuwen/go-pkg-rss"
+
 	"github.com/muesli/beehive/bees"
 )
 

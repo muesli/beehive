@@ -24,12 +24,11 @@
 package cron
 
 import (
-	//	"fmt"
+	"sort"
 	"strconv"
 	"strings"
-	//	"time"
-	"log"
-	"sort"
+
+	log "github.com/Sirupsen/logrus"
 )
 
 // ParseInput parses the input and returns a pointer to the generated datastructure.

@@ -23,10 +23,11 @@
 package anelpowerctrlbee
 
 import (
-	"log"
 	"net"
 	"strconv"
 	"time"
+
+	log "github.com/Sirupsen/logrus"
 
 	"github.com/muesli/beehive/bees"
 )

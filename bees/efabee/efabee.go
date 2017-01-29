@@ -22,11 +22,12 @@
 package efabee
 
 import (
-	"log"
 	"time"
 
-	"github.com/muesli/beehive/bees"
+	log "github.com/Sirupsen/logrus"
 	"github.com/muesli/goefa"
+
+	"github.com/muesli/beehive/bees"
 )
 
 // EFABee is a Bee that interfaces with the public EVA API.

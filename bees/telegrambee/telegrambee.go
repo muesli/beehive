@@ -25,13 +25,14 @@ package telegrambee
 
 import (
 	"io/ioutil"
-	"log"
 	"os"
 	"strconv"
 	"strings"
 
-	"github.com/muesli/beehive/bees"
+	log "github.com/Sirupsen/logrus"
 	telegram "gopkg.in/telegram-bot-api.v4"
+
+	"github.com/muesli/beehive/bees"
 )
 
 // TelegramBee is a Bee that can connect to Telegram.
