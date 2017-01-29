@@ -102,7 +102,7 @@ func (factory *CronBeeFactory) Events() []bees.EventDescriptor {
 			Description: "The time has come ...",
 			Options: []bees.PlaceholderDescriptor{
 				{
-					Name:        "timestamp", // For the lulz & future
+					Name:        "timestamp",
 					Description: "Timestamp of the next event",
 					Type:        "string",
 				},
