@@ -22,7 +22,6 @@
 package huebee
 
 import (
-	_ "log"
 	"strconv"
 	"strings"
 

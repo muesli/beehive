@@ -22,8 +22,6 @@
 package tumblrbee
 
 import (
-	_ "log"
-
 	"github.com/MariaTerzieva/gotumblr"
 	"github.com/muesli/beehive/bees"
 )

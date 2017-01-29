@@ -24,11 +24,9 @@
 package cronbee
 
 import (
-	//"fmt"
-	"github.com/muesli/beehive/bees"
-	//"strings"
 	"time"
 
+	"github.com/muesli/beehive/bees"
 	"github.com/muesli/beehive/bees/cronbee/cron"
 )
 

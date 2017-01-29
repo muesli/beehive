@@ -22,7 +22,6 @@
 package emailbee
 
 import (
-	_ "log"
 	"net/smtp"
 	"strings"
 
