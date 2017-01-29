@@ -32,18 +32,19 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// Urgency level iota
 const (
-	URGENCY_LOW      = uint32(iota)
-	URGENCY_NORMAL   = uint32(iota)
-	URGENCY_CRITICAL = uint32(iota)
+	UrgencyLow      = uint32(iota)
+	UrgencyNormal   = uint32(iota)
+	UrgencyCritical = uint32(iota)
 )
 
 var (
-	urgency_map map[string]uint32 = map[string]uint32{
-		"":         URGENCY_NORMAL,
-		"normal":   URGENCY_NORMAL,
-		"low":      URGENCY_LOW,
-		"critical": URGENCY_CRITICAL,
+	urgencyMap map[string]uint32 = map[string]uint32{
+		"":         UrgencyNormal,
+		"normal":   UrgencyNormal,
+		"low":      UrgencyLow,
+		"critical": UrgencyCritical,
 	}
 )
 
@@ -71,12 +72,12 @@ func (mod *NotificationBee) Action(action bees.Action) []bees.Placeholder {
 	case "notify":
 		text := ""
 		u := ""
-		urgency := URGENCY_NORMAL
+		urgency := UrgencyNormal
 
 		action.Options.Bind("text", &text)
 		action.Options.Bind("urgency", &u)
 		text = strings.TrimSpace(text)
-		urgency, _ = urgency_map[u]
+		urgency, _ = urgencyMap[u]
 
 		if len(text) > 0 {
 			call := mod.notifier.Call("org.freedesktop.Notifications.Notify", 0, "", uint32(0),
