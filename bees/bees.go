@@ -72,14 +72,6 @@ type BeeInterface interface {
 	Action(action Action) []Placeholder
 }
 
-// BeeConfig contains all settings for a single Bee.
-type BeeConfig struct {
-	Name        string
-	Class       string
-	Description string
-	Options     BeeOptions
-}
-
 // Bee is the base-struct to be embedded by bee implementations.
 type Bee struct {
 	config BeeConfig
@@ -228,16 +220,6 @@ func NewBee(name, factoryName, description string, options []BeeOption) Bee {
 	b.waitGroup.Add(1)
 
 	return b
-}
-
-// BeeConfigs returns configs for all Bees.
-func BeeConfigs() []BeeConfig {
-	bs := []BeeConfig{}
-	for _, b := range bees {
-		bs = append(bs, (*b).Config())
-	}
-
-	return bs
 }
 
 // Name returns the configured name for a bee.
