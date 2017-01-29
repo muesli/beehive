@@ -78,16 +78,14 @@ func (mod *TimeBee) Timer() {
 
 	if fail == true || mod.cur_time == mod.last_event {
 		return
-	} else {
-		mod.last_event = mod.cur_time
-		event := bees.Event{
-			Bee:  mod.Name(),
-			Name: "time_event",
-		}
-		mod.eventChan <- event
-		return
 	}
 
+	mod.last_event = mod.cur_time
+	event := bees.Event{
+		Bee:  mod.Name(),
+		Name: "time_event",
+	}
+	mod.eventChan <- event
 }
 
 func (mod *TimeBee) Action(action bees.Action) []bees.Placeholder {
