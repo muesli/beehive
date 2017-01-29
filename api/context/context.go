@@ -39,6 +39,8 @@ func (context *APIContext) NewAPIContext() smolder.APIContext {
 
 // Authentication parses the request for an access-/authtoken and returns the matching user
 func (context *APIContext) Authentication(request *restful.Request) (interface{}, error) {
+	//FIXME: implement this properly
+
 	t := request.QueryParameter("accesstoken")
 	if len(t) == 0 {
 		t = request.HeaderParameter("authorization")
