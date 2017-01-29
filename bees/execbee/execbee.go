@@ -47,76 +47,74 @@ func (mod *ExecBee) Action(action bees.Action) []bees.Placeholder {
 
 	switch action.Name {
 	case "localCommand":
-		for _, opt := range action.Options {
-			if opt.Name == "command" {
-				log.Println("Execute locally: ", opt.Name, opt.Value.(string))
+		var command string
+		action.Options.Bind("command", &command)
+		log.Println("Executing locally: ", command)
 
-				go func() {
-					c := strings.Split(opt.Value.(string), " ")
-					cmd := exec.Command(c[0], c[1:]...)
+		go func() {
+			c := strings.Split(command, " ")
+			cmd := exec.Command(c[0], c[1:]...)
 
-					// read and print stdout
-					outReader, err := cmd.StdoutPipe()
-					if err != nil {
-						fmt.Fprintln(os.Stderr, "Error creating StdoutPipe for Cmd", err)
-						return
-					}
-					outBuffer := []string{}
-					outScanner := bufio.NewScanner(outReader)
-					go func() {
-						for outScanner.Scan() {
-							foo := outScanner.Text()
-							log.Println("execbee: std: | ", foo)
-							outBuffer = append(outBuffer, foo)
-						}
-					}()
-
-					// read and print stderr
-					errReader, err := cmd.StderrPipe()
-					if err != nil {
-						fmt.Fprintln(os.Stderr, "Error creating StderrPipe for Cmd", err)
-						return
-					}
-					errBuffer := []string{}
-					errScanner := bufio.NewScanner(errReader)
-					go func() {
-						for errScanner.Scan() {
-							foo := errScanner.Text()
-							log.Println("execbee: err: | ", foo)
-							errBuffer = append(errBuffer, foo)
-						}
-					}()
-
-					err = cmd.Start()
-					if err != nil {
-						fmt.Fprintln(os.Stderr, "Error starting Cmd", err)
-					}
-
-					err = cmd.Wait()
-					if err != nil {
-						fmt.Fprintln(os.Stderr, "Error waiting for Cmd", err)
-					}
-
-					ev := bees.Event{
-						Bee:  mod.Name(),
-						Name: "commandResult",
-						Options: []bees.Placeholder{
-							{
-								Name:  "stdout",
-								Type:  "string",
-								Value: strings.Join(outBuffer, "\n"),
-							},
-							{
-								Name:  "stderr",
-								Type:  "string",
-								Value: strings.Join(errBuffer, "\n"),
-							},
-						},
-					}
-					mod.eventChan <- ev
-				}()
+			// read and print stdout
+			outReader, err := cmd.StdoutPipe()
+			if err != nil {
+				fmt.Fprintln(os.Stderr, "Error creating StdoutPipe for Cmd", err)
+				return
 			}
-		}
+			outBuffer := []string{}
+			outScanner := bufio.NewScanner(outReader)
+			go func() {
+				for outScanner.Scan() {
+					foo := outScanner.Text()
+					log.Println("execbee: std: | ", foo)
+					outBuffer = append(outBuffer, foo)
+				}
+			}()
+
+			// read and print stderr
+			errReader, err := cmd.StderrPipe()
+			if err != nil {
+				fmt.Fprintln(os.Stderr, "Error creating StderrPipe for Cmd", err)
+				return
+			}
+			errBuffer := []string{}
+			errScanner := bufio.NewScanner(errReader)
+			go func() {
+				for errScanner.Scan() {
+					foo := errScanner.Text()
+					log.Println("execbee: err: | ", foo)
+					errBuffer = append(errBuffer, foo)
+				}
+			}()
+
+			err = cmd.Start()
+			if err != nil {
+				fmt.Fprintln(os.Stderr, "Error starting Cmd", err)
+			}
+
+			err = cmd.Wait()
+			if err != nil {
+				fmt.Fprintln(os.Stderr, "Error waiting for Cmd", err)
+			}
+
+			ev := bees.Event{
+				Bee:  mod.Name(),
+				Name: "commandResult",
+				Options: []bees.Placeholder{
+					{
+						Name:  "stdout",
+						Type:  "string",
+						Value: strings.Join(outBuffer, "\n"),
+					},
+					{
+						Name:  "stderr",
+						Type:  "string",
+						Value: strings.Join(errBuffer, "\n"),
+					},
+				},
+			}
+			mod.eventChan <- ev
+		}()
 
 	default:
 		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)

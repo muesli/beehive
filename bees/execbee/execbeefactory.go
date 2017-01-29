@@ -61,12 +61,12 @@ func (factory *ExecBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{
 			Namespace:   factory.Name(),
-			Name:        "cmd",
+			Name:        "commandResult",
 			Description: "A command was executed",
 			Options: []bees.PlaceholderDescriptor{
 				{
 					Name:        "stdout",
-					Description: "std output of the executed command",
+					Description: "stdout output of the executed command",
 					Type:        "string",
 				},
 				{
