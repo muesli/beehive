@@ -40,30 +40,30 @@ func Test_add(t *testing.T) {
 	}
 }
 
-func Test_absolute_over_breakpoint(t *testing.T) {
-	if absolute_over_breakpoint(13, 17, 60) != 4 {
-		t.Error("crontime: absolute_over_breakpoint()-Test failed, 1")
-	} else if absolute_over_breakpoint(17, 13, 60) != 56 {
-		t.Error("crontime: absolute_over_breakpoint()-Test failed, 2")
-	} else if absolute_over_breakpoint(20, 1, 24) != 5 {
-		t.Error("crontime: absolute_over_breakpoint()-Test failed, 3")
-	} else if absolute_over_breakpoint(0, 0, 24) != 0 {
-		t.Error("crontime: absolute_over_breakpoint()-Test failed, 4")
-	} else if absolute_over_breakpoint(13, 13, 60) != 0 {
-		t.Error("crontime: absolute_over_breakpoint()-Test failed, 5")
+func Test_absoluteOverBreakpoint(t *testing.T) {
+	if absoluteOverBreakpoint(13, 17, 60) != 4 {
+		t.Error("crontime: absoluteOverBreakpoint()-Test failed, 1")
+	} else if absoluteOverBreakpoint(17, 13, 60) != 56 {
+		t.Error("crontime: absoluteOverBreakpoint()-Test failed, 2")
+	} else if absoluteOverBreakpoint(20, 1, 24) != 5 {
+		t.Error("crontime: absoluteOverBreakpoint()-Test failed, 3")
+	} else if absoluteOverBreakpoint(0, 0, 24) != 0 {
+		t.Error("crontime: absoluteOverBreakpoint()-Test failed, 4")
+	} else if absoluteOverBreakpoint(13, 13, 60) != 0 {
+		t.Error("crontime: absoluteOverBreakpoint()-Test failed, 5")
 	} else {
-		t.Log("crontime: absolute_over_breakpoint()-Test passed")
+		t.Log("crontime: absoluteOverBreakpoint()-Test passed")
 	}
 }
 
-func Test_value_range(t *testing.T) {
-	if !IntsEquals(value_range(2, 5, 60), []int{2, 3, 4, 5}) {
-		t.Error("crontime: value_range()-Test failed, 1")
-		fmt.Println(value_range(2, 5, 60), []int{2, 3, 4, 5})
-	} else if !IntsEquals(value_range(59, 1, 60), []int{59, 0, 1}) {
-		t.Error("crontime: value_range()-Test failed, 2s")
+func Test_valueRange(t *testing.T) {
+	if !IntsEquals(valueRange(2, 5, 60), []int{2, 3, 4, 5}) {
+		t.Error("crontime: valueRange()-Test failed, 1")
+		fmt.Println(valueRange(2, 5, 60), []int{2, 3, 4, 5})
+	} else if !IntsEquals(valueRange(59, 1, 60), []int{59, 0, 1}) {
+		t.Error("crontime: valueRange()-Test failed, 2s")
 	} else {
-		t.Log("crontime: value_range()-Test passed")
+		t.Log("crontime: valueRange()-Test passed")
 	}
 }
 
@@ -87,43 +87,43 @@ func Test_periodic(t *testing.T) {
 	}
 }
 
-func Test_check_syntax(t *testing.T) {
-	if !check_syntax("13") {
-		t.Error("crontime: check_syntax()-Test failed, 1")
-	} else if !check_syntax("*/05") {
-		t.Error("crontime: check_syntax()-Test failed, 2")
-	} else if !check_syntax("13,23") {
-		t.Error("crontime: check_syntax()-Test failed, 3")
-	} else if !check_syntax("14-15") {
-		t.Error("crontime: check_syntax()-Test failed, 4")
-	} else if !check_syntax("*") {
-		t.Error("crontime: check_syntax()-Test failed, 5")
-	} else if check_syntax("13-13-13") {
-		t.Error("crontime: check_syntax()-Test failed, 6")
-	} else if check_syntax("13,") {
-		t.Error("crontime: check_syntax()-Test failed, 7")
-	} else if check_syntax("13-") {
-		t.Error("crontime: check_syntax()-Test failed, 8")
-	} else if check_syntax("5/*") {
-		t.Error("crontime: check_syntax()-Test failed, 9")
-	} else if check_syntax("**") {
-		t.Error("crontime: check_syntax()-Test failed, 10")
-	} else if check_syntax("asdf") {
-		t.Error("crontime: check_syntax()-Test failed, 11")
-	} else if check_syntax(",,") {
-		t.Error("crontime: check_syntax()-Test failed, 12")
-	} else if check_syntax("*/*/*/*/") {
-		t.Error("crontime: check_syntax()-Test failed, 13")
-	} else if check_syntax("*/*/*/23") {
-		t.Error("crontime: check_syntax()-Test failed, 14")
-	} else if check_syntax("") {
-		t.Error("crontime: check_syntax()-Test failed, 15")
-	} else if check_syntax("*/5") {
-		t.Error("crontime: check_syntax()-Test failed, 16")
-	} else if check_syntax("æſ»„ł@¶²¼½öäüµ") {
-		t.Error("crontime: check_syntax()-Test failed, 17")
+func Test_checkSyntax(t *testing.T) {
+	if !checkSyntax("13") {
+		t.Error("crontime: checkSyntax()-Test failed, 1")
+	} else if !checkSyntax("*/05") {
+		t.Error("crontime: checkSyntax()-Test failed, 2")
+	} else if !checkSyntax("13,23") {
+		t.Error("crontime: checkSyntax()-Test failed, 3")
+	} else if !checkSyntax("14-15") {
+		t.Error("crontime: checkSyntax()-Test failed, 4")
+	} else if !checkSyntax("*") {
+		t.Error("crontime: checkSyntax()-Test failed, 5")
+	} else if checkSyntax("13-13-13") {
+		t.Error("crontime: checkSyntax()-Test failed, 6")
+	} else if checkSyntax("13,") {
+		t.Error("crontime: checkSyntax()-Test failed, 7")
+	} else if checkSyntax("13-") {
+		t.Error("crontime: checkSyntax()-Test failed, 8")
+	} else if checkSyntax("5/*") {
+		t.Error("crontime: checkSyntax()-Test failed, 9")
+	} else if checkSyntax("**") {
+		t.Error("crontime: checkSyntax()-Test failed, 10")
+	} else if checkSyntax("asdf") {
+		t.Error("crontime: checkSyntax()-Test failed, 11")
+	} else if checkSyntax(",,") {
+		t.Error("crontime: checkSyntax()-Test failed, 12")
+	} else if checkSyntax("*/*/*/*/") {
+		t.Error("crontime: checkSyntax()-Test failed, 13")
+	} else if checkSyntax("*/*/*/23") {
+		t.Error("crontime: checkSyntax()-Test failed, 14")
+	} else if checkSyntax("") {
+		t.Error("crontime: checkSyntax()-Test failed, 15")
+	} else if checkSyntax("*/5") {
+		t.Error("crontime: checkSyntax()-Test failed, 16")
+	} else if checkSyntax("æſ»„ł@¶²¼½öäüµ") {
+		t.Error("crontime: checkSyntax()-Test failed, 17")
 	} else {
-		t.Log("crontime: check_syntax()-Test passed")
+		t.Log("crontime: checkSyntax()-Test passed")
 	}
 }
 

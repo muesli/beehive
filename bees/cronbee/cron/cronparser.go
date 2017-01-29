@@ -1,22 +1,26 @@
 /*
- *        Copyright (C) 2014 Stefan 'glaxx' Luecke
+ *    Copyright (C) 2014      Stefan 'glaxx' Luecke
+ *                  2014-2017 Christian Muehlhaeuser
  *
- *        This program is free software: you can redistribute it and/or modify
- *        it under the terms of the GNU Affero General Public License as published
- *        by the Free Software Foundation, either version 3 of the License, or
- *        (at your option) any later version.
+ *    This program is free software: you can redistribute it and/or modify
+ *    it under the terms of the GNU Affero General Public License as published
+ *    by the Free Software Foundation, either version 3 of the License, or
+ *    (at your option) any later version.
  *
- *        This program is distributed in the hope that it will be useful,
- *        but WITHOUT ANY WARRANTY; without even the implied warranty of
- *        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *        GNU Affero General Public License for more details.
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU Affero General Public License for more details.
  *
- *        You should have received a copy of the GNU Affero General Public License
- *        along with this program.      If not, see <http://www.gnu.org/licenses/>.
+ *    You should have received a copy of the GNU Affero General Public License
+ *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- *        Authors:	Stefan Luecke <glaxx@glaxx.net>
+ *    Authors:
+ *		Stefan Luecke <glaxx@glaxx.net>
+ *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
+// Package cron allows you to schedule events.
 package cron
 
 import (
@@ -28,7 +32,7 @@ import (
 	"sort"
 )
 
-//Reads the input and returns a pointer to the generated datastructure.
+// ParseInput parses the input and returns a pointer to the generated datastructure.
 // input[0]: Second
 // input[1]: Minute
 // input[2]: Hour
@@ -39,7 +43,7 @@ func ParseInput(input [6]string) *crontime {
 	var result crontime
 	// Check the syntax of the input
 	for i := 0; i != len(input); i++ {
-		if check_syntax(input[i]) == false {
+		if checkSyntax(input[i]) == false {
 			log.Panicln("Invalid config at Line", i) // TODO be more helpful
 		}
 	}
@@ -93,7 +97,7 @@ func ParseInput(input [6]string) *crontime {
 		}
 	}
 	// Do a sanity check, eg. there is no 32th Day in any Month
-	result.check_values()
+	result.checkValues()
 
 	// Makes timestamp generation easier
 	sort.Ints(result.second)
@@ -170,17 +174,17 @@ func (c *crontime) parseRange(input string, i int) {
 	}
 	switch i {
 	case 0:
-		c.second = value_range(a, b, 60)
+		c.second = valueRange(a, b, 60)
 	case 1:
-		c.minute = value_range(a, b, 60)
+		c.minute = valueRange(a, b, 60)
 	case 2:
-		c.hour = value_range(a, b, 24)
+		c.hour = valueRange(a, b, 24)
 	case 3:
-		c.dow = value_range(a, b, 7)
+		c.dow = valueRange(a, b, 7)
 	case 4:
-		c.dom = value_range(a, b, 32)
+		c.dom = valueRange(a, b, 32)
 	case 5:
-		c.month = value_range(a, b, 13)
+		c.month = valueRange(a, b, 13)
 	}
 }
 
@@ -219,7 +223,7 @@ func (c *crontime) parseIgnore(i int) {
 	}
 }
 
-func check_syntax(insane string) bool {
+func checkSyntax(insane string) bool {
 	/* State machine; Sane == S3, S1
 	~	0\-9		,		-		*		/
 	S0	S + 2		Err		Err		S + 3	Err
@@ -274,13 +278,12 @@ func check_syntax(insane string) bool {
 	}
 	if state == 3 || state == 1 {
 		return true
-	} else {
-		return false
 	}
+	return false
 }
 
 // Look for obvious nonsense in the config.
-func (c *crontime) check_values() {
+func (c *crontime) checkValues() {
 	for _, sec := range c.second {
 		if sec >= 60 || sec < 0 {
 			log.Panicln("Cronbee: Your config seems messed up. Check the range of \"Second\".")
@@ -325,8 +328,8 @@ func add(a, b, bp int) int {
 }
 
 // 'Absolute' value (or distance) with an variable base.
-// Example: absolute_over_breakpoint(59, 1, 60) returns 2
-func absolute_over_breakpoint(a, b, base int) int {
+// Example: absoluteOverBreakpoint(59, 1, 60) returns 2
+func absoluteOverBreakpoint(a, b, base int) int {
 	if a >= base || b >= base {
 		panic("Invalid Values")
 	}
@@ -341,8 +344,8 @@ func absolute_over_breakpoint(a, b, base int) int {
 
 // Returns an array filled with all values between a and b considering
 // the base.
-func value_range(a, b, base int) []int {
-	value := make([]int, absolute_over_breakpoint(a, b, base)+1)
+func valueRange(a, b, base int) []int {
+	value := make([]int, absoluteOverBreakpoint(a, b, base)+1)
 	i := 0
 	for ; a != b; a++ {
 		if a == base {

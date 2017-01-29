@@ -212,30 +212,30 @@ func Benchmark_parsePeriodic(b *testing.B) {
 
 func Benchmark_check_syntaxA(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		check_syntax("23,24,00,01,02,03,04,05,06,07")
+		checkSyntax("23,24,00,01,02,03,04,05,06,07")
 	}
 }
 
 func Benchmark_check_syntaxB(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		check_syntax("01-23")
+		checkSyntax("01-23")
 	}
 }
 
 func Benchmark_check_syntaxC(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		check_syntax("*/05")
+		checkSyntax("*/05")
 	}
 }
 
 func Benchmark_check_syntaxD(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		check_syntax("*")
+		checkSyntax("*")
 	}
 }
 
 func Benchmark_check_syntaxE(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		check_syntax("13")
+		checkSyntax("13")
 	}
 }

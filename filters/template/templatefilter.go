@@ -18,7 +18,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// beehive's template-filter.
+// Package templatefilter provides a template-based filter.
 package templatefilter
 
 import (
@@ -29,17 +29,21 @@ import (
 	"github.com/muesli/beehive/filters"
 )
 
+// TemplateFilter is a template-based filter.
 type TemplateFilter struct {
 }
 
+// Name returns the name of this Filter.
 func (filter *TemplateFilter) Name() string {
 	return "template"
 }
 
+// Description returns the description of this Filter.
 func (filter *TemplateFilter) Description() string {
 	return "This filter passes when a template-if returns true"
 }
 
+// Passes returns true when the Filter matched the data.
 func (filter *TemplateFilter) Passes(data interface{}, value interface{}) bool {
 	switch v := value.(type) {
 	case string:
@@ -52,9 +56,8 @@ func (filter *TemplateFilter) Passes(data interface{}, value interface{}) bool {
 			"Mid": func(values ...interface{}) string {
 				if len(values) > 2 {
 					return values[0].(string)[values[1].(int):values[2].(int)]
-				} else {
-					return values[0].(string)[values[1].(int):]
 				}
+				return values[0].(string)[values[1].(int):]
 			},
 			"Right": func(values ...interface{}) string {
 				return values[0].(string)[len(values[0].(string))-values[1].(int):]

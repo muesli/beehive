@@ -18,7 +18,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// Package bees is Beehive's central module system
+// Package bees is Beehive's central module system.
 package bees
 
 // EventDescriptor describes an Event provided by a Bee.

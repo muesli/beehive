@@ -1,20 +1,23 @@
 /*
- *        Copyright (C) 2014 Stefan 'glaxx' Luecke
+ *    Copyright (C) 2014      Stefan 'glaxx' Luecke
+ *                  2014-2017 Christian Muehlhaeuser
  *
- *        This program is free software: you can redistribute it and/or modify
- *        it under the terms of the GNU Affero General Public License as published
- *        by the Free Software Foundation, either version 3 of the License, or
- *        (at your option) any later version.
+ *    This program is free software: you can redistribute it and/or modify
+ *    it under the terms of the GNU Affero General Public License as published
+ *    by the Free Software Foundation, either version 3 of the License, or
+ *    (at your option) any later version.
  *
- *        This program is distributed in the hope that it will be useful,
- *        but WITHOUT ANY WARRANTY; without even the implied warranty of
- *        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *        GNU Affero General Public License for more details.
+ *    This program is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *    GNU Affero General Public License for more details.
  *
- *        You should have received a copy of the GNU Affero General Public License
- *        along with this program.      If not, see <http://www.gnu.org/licenses/>.
+ *    You should have received a copy of the GNU Affero General Public License
+ *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- *        Authors:	Stefan Luecke <glaxx@glaxx.net>
+ *    Authors:
+ *		Stefan Luecke <glaxx@glaxx.net>
+ *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
 /*
@@ -23,15 +26,13 @@
  * - Test
  */
 
-// This package allows you to schedule events
+// Package cron allows you to schedule events.
 package cron
 
 import (
-	//	"fmt"
-	"time"
-	//	"sort"
 	"container/list"
 	"log"
+	"time"
 )
 
 type crontime struct {
@@ -223,9 +224,8 @@ func (c *crontime) minuteHasPassed(baseTime time.Time) bool {
 		return true
 	} else if c.calculatedTime.Minute() > baseTime.Minute() {
 		return true
-	} else {
-		return false
 	}
+	return false
 }
 
 func hasPassed(value, tstamp int) bool {
@@ -239,9 +239,8 @@ func monthHasDom(dom, month, year int) bool {
 	case 2:
 		if isLeapYear(year) {
 			return dom <= 29
-		} else {
-			return dom <= 28
 		}
+		return dom <= 28
 	case 3:
 		return dom <= 31
 	case 4:

@@ -18,14 +18,14 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// beehive's filter system.
+// Package filters contains Beehive's filter system.
 package filters
 
 import (
 	"log"
 )
 
-// Interface which all filters need to implement
+// FilterInterface is an interface all Filters implement.
 type FilterInterface interface {
 	// Name of the filter
 	Name() string
@@ -37,16 +37,16 @@ type FilterInterface interface {
 }
 
 var (
-	filters map[string]*FilterInterface = make(map[string]*FilterInterface)
+	filters = make(map[string]*FilterInterface)
 )
 
-// Filters need to call this method to register themselves
+// RegisterFilter gets called by Filters to register themselves.
 func RegisterFilter(filter FilterInterface) {
 	log.Println("Filter bee ready:", filter.Name(), "-", filter.Description())
 	filters[filter.Name()] = &filter
 }
 
-// Returns filter with this name
+// GetFilter returns a filter with a specific name
 func GetFilter(identifier string) *FilterInterface {
 	filter, ok := filters[identifier]
 	if ok {
