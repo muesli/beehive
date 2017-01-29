@@ -21,6 +21,9 @@
 package hives
 
 import (
+	"sort"
+
+	restful "github.com/emicklei/go-restful"
 	"github.com/muesli/beehive/bees"
 
 	"github.com/muesli/smolder"
@@ -31,7 +34,7 @@ type HiveResponse struct {
 	smolder.Response
 
 	Hives []hiveInfoResponse `json:"hives,omitempty"`
-	hives []*bees.BeeFactoryInterface
+	hives map[string]*bees.BeeFactoryInterface
 }
 
 type hiveInfoResponse struct {
@@ -50,13 +53,27 @@ func (r *HiveResponse) Init(context smolder.APIContext) {
 	r.Parent = r
 	r.Context = context
 
-	r.Hives = []hiveInfoResponse{}
+	r.hives = make(map[string]*bees.BeeFactoryInterface)
 }
 
 // AddHive adds a hive to the response
 func (r *HiveResponse) AddHive(hive *bees.BeeFactoryInterface) {
-	r.hives = append(r.hives, hive)
-	r.Hives = append(r.Hives, prepareHiveResponse(r.Context, hive))
+	r.hives[(*hive).Name()] = hive
+}
+
+// Send responds to a request with http.StatusOK
+func (r *HiveResponse) Send(response *restful.Response) {
+	var keys []string
+	for k := range r.hives {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for _, k := range keys {
+		r.Hives = append(r.Hives, prepareHiveResponse(r.Context, r.hives[k]))
+	}
+
+	r.Response.Send(response)
 }
 
 // EmptyResponse returns an empty API response for this endpoint if there's no data to respond with
