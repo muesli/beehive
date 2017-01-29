@@ -18,12 +18,12 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// beehive's central module system.
+// Package bees is Beehive's central module system
 package bees
 
 import "errors"
 
-// A FilterOption used by filters
+// A FilterOption used by filters.
 type FilterOption struct {
 	Name            string
 	Type            string
@@ -33,14 +33,16 @@ type FilterOption struct {
 	Value           interface{}
 }
 
-// A BeeOption is used to configure bees
+// BeeOptions is an array of BeeOption.
 type BeeOptions []BeeOption
+
+// A BeeOption is used to configure bees.
 type BeeOption struct {
 	Name  string
 	Value interface{}
 }
 
-// Retrieve a value from an BeeOptions struct
+// Value retrieves a value from a BeeOptions slice.
 func (opts BeeOptions) Value(name string) interface{} {
 	for _, opt := range opts {
 		if opt.Name == name {
@@ -51,7 +53,7 @@ func (opts BeeOptions) Value(name string) interface{} {
 	return nil
 }
 
-// Bind a value from a Placeholder slice
+// Bind a value from a BeeOptions slice.
 func (opts BeeOptions) Bind(name string, dst interface{}) error {
 	v := opts.Value(name)
 	if v == nil {

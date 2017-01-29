@@ -18,17 +18,18 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
+// Package bees is Beehive's central module system
 package bees
 
 import "log"
 
-// An element in a Chain
+// ChainElement is an element in a Chain
 type ChainElement struct {
 	Action Action
 	Filter Filter
 }
 
-// A user defined Chain
+// Chain is a user defined chain
 type Chain struct {
 	Name        string
 	Description string
@@ -42,10 +43,12 @@ var (
 	chains []Chain
 )
 
+// GetChains returns all chains
 func GetChains() []Chain {
 	return chains
 }
 
+// GetChain returns a chain with a specific id
 func GetChain(id string) *Chain {
 	for _, c := range chains {
 		if c.Name == id {
@@ -56,7 +59,7 @@ func GetChain(id string) *Chain {
 	return nil
 }
 
-// Setter for chains
+// SetChains sets the currently configured chains
 func SetChains(cs []Chain) {
 	newcs := []Chain{}
 	// migrate old chain style
@@ -80,7 +83,7 @@ func SetChains(cs []Chain) {
 	chains = newcs
 }
 
-// Execute chains for an event we received.
+// execChains executes chains for an event we received
 func execChains(event *Event) {
 	for _, c := range chains {
 		if c.Event.Name != event.Name || c.Event.Bee != event.Bee {

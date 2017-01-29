@@ -18,6 +18,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
+// Package bees is Beehive's central module system
 package bees
 
 import (
@@ -27,7 +28,7 @@ import (
 	"text/template"
 )
 
-// An Action
+// Action describes an action.
 type Action struct {
 	ID      string
 	Bee     string
@@ -39,10 +40,12 @@ var (
 	actions []Action
 )
 
+// GetActions returns all configured actions.
 func GetActions() []Action {
 	return actions
 }
 
+// GetAction returns one action with a specific ID.
 func GetAction(id string) *Action {
 	for _, a := range actions {
 		if a.ID == id {
@@ -53,11 +56,12 @@ func GetAction(id string) *Action {
 	return nil
 }
 
+// SetActions sets the currently configured actions.
 func SetActions(as []Action) {
 	actions = as
 }
 
-// Execute an action and map its ins & outs.
+// execAction executes an action and map its ins & outs.
 func execAction(action Action, opts map[string]interface{}) bool {
 	a := Action{
 		Bee:  action.Bee,

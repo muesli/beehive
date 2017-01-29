@@ -18,7 +18,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// beehive's central module system.
+// Package bees is Beehive's central module system
 package bees
 
 import (
@@ -29,7 +29,7 @@ import (
 	uuid "github.com/nu7hatch/gouuid"
 )
 
-// Interface which all bees need to implement
+// BeeInterface is an interface all bees implement.
 type BeeInterface interface {
 	// Name of the bee
 	Name() string
@@ -72,7 +72,7 @@ type BeeInterface interface {
 	Action(action Action) []Placeholder
 }
 
-// An instance of a bee
+// BeeConfig contains all settings for a single Bee.
 type BeeConfig struct {
 	Name        string
 	Class       string
@@ -80,7 +80,7 @@ type BeeConfig struct {
 	Options     BeeOptions
 }
 
-// Base-struct to be embedded by bee implementations
+// Bee is the base-struct to be embedded by bee implementations.
 type Bee struct {
 	config BeeConfig
 
@@ -97,14 +97,14 @@ var (
 	factories map[string]*BeeFactoryInterface = make(map[string]*BeeFactoryInterface)
 )
 
-// Bees need to call this method to register themselves
+// RegisterBee gets called by Bees to register themselves.
 func RegisterBee(bee BeeInterface) {
 	log.Println("Worker bee ready:", bee.Name(), "-", bee.Description())
 
 	bees[bee.Name()] = &bee
 }
 
-// Returns bee with this name
+// GetBee returns a bee with a specific name.
 func GetBee(identifier string) *BeeInterface {
 	bee, ok := bees[identifier]
 	if ok {
@@ -114,7 +114,7 @@ func GetBee(identifier string) *BeeInterface {
 	return nil
 }
 
-// Returns all known bees
+// GetBees returns all known bees.
 func GetBees() []*BeeInterface {
 	r := []*BeeInterface{}
 	for _, bee := range bees {
@@ -124,7 +124,7 @@ func GetBees() []*BeeInterface {
 	return r
 }
 
-// Starts a bee and recovers from panics
+// startBee starts a bee and recovers from panics.
 func startBee(bee *BeeInterface, fatals int) {
 	if fatals >= 3 {
 		log.Println("Terminating evil bee", (*bee).Name(), "after", fatals, "failed tries!")
@@ -142,6 +142,7 @@ func startBee(bee *BeeInterface, fatals int) {
 	(*bee).Run(eventsIn)
 }
 
+// NewBeeInstance sets up a new Bee with supplied config.
 func NewBeeInstance(bee BeeConfig) *BeeInterface {
 	factory := GetFactory(bee.Class)
 	if factory == nil {
@@ -153,13 +154,14 @@ func NewBeeInstance(bee BeeConfig) *BeeInterface {
 	return &mod
 }
 
+// DeleteBee removes a Bee instance.
 func DeleteBee(bee *BeeInterface) {
 	(*bee).Stop()
 
 	delete(bees, (*bee).Name())
 }
 
-// Starts all registered bees
+// StartBee starts a bee.
 func StartBee(bee BeeConfig) *BeeInterface {
 	b := NewBeeInstance(bee)
 
@@ -171,7 +173,7 @@ func StartBee(bee BeeConfig) *BeeInterface {
 	return b
 }
 
-// Starts all registered bees
+// StartBees starts all registered bees.
 func StartBees(beeList []BeeConfig) {
 	eventsIn = make(chan Event)
 	go handleEvents()
@@ -181,7 +183,7 @@ func StartBees(beeList []BeeConfig) {
 	}
 }
 
-// Stops all bees gracefully
+// StopBees stops all bees gracefully.
 func StopBees() {
 	for _, bee := range bees {
 		log.Println("Stopping bee:", (*bee).Name())
@@ -192,6 +194,7 @@ func StopBees() {
 	bees = make(map[string]*BeeInterface)
 }
 
+// RestartBee restarts a Bee.
 func RestartBee(bee *BeeInterface) {
 	(*bee).Stop()
 
@@ -203,13 +206,13 @@ func RestartBee(bee *BeeInterface) {
 	}(bee)
 }
 
-// Stops all running bees and restarts a new set of bees
+// RestartBees stops all running bees and restarts a new set of bees.
 func RestartBees(bees []BeeConfig) {
 	StopBees()
 	StartBees(bees)
 }
 
-// Returns a new bee and sets up sig-channel & waitGroup
+// NewBee returns a new bee and sets up sig-channel & waitGroup.
 func NewBee(name, factoryName, description string, options []BeeOption) Bee {
 	c := BeeConfig{
 		Name:        name,
@@ -227,6 +230,7 @@ func NewBee(name, factoryName, description string, options []BeeOption) Bee {
 	return b
 }
 
+// BeeConfigs returns configs for all Bees.
 func BeeConfigs() []BeeConfig {
 	bs := []BeeConfig{}
 	for _, b := range bees {
@@ -236,6 +240,7 @@ func BeeConfigs() []BeeConfig {
 	return bs
 }
 
+// UUID generates a new unique ID.
 func UUID() string {
 	u, _ := uuid.NewV4()
 	return u.String()

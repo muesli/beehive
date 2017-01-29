@@ -18,6 +18,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
+// Package bees is Beehive's central module system
 package bees
 
 import (
@@ -26,29 +27,36 @@ import (
 	"time"
 )
 
+// A BeeFactory is the base struct to be embedded by other BeeFactories.
 type BeeFactory struct {
 }
 
+// Image returns an empty image filename per default.
 func (factory *BeeFactory) Image() string {
 	return ""
 }
 
+// LogoColor returns the default logo color.
 func (factory *BeeFactory) LogoColor() string {
 	return "#35465c"
 }
 
+// Options returns the default empty options set.
 func (factory *BeeFactory) Options() []BeeOptionDescriptor {
 	return []BeeOptionDescriptor{}
 }
 
+// Events returns the default empty events set.
 func (factory *BeeFactory) Events() []EventDescriptor {
 	return []EventDescriptor{}
 }
 
+// Actions returns the default empty actions set.
 func (factory *BeeFactory) Actions() []ActionDescriptor {
 	return []ActionDescriptor{}
 }
 
+// A BeeFactoryInterface is the interface that gets implemented by a BeeFactory.
 type BeeFactoryInterface interface {
 	// Name of the module
 	Name() string
@@ -69,7 +77,7 @@ type BeeFactoryInterface interface {
 	New(name, description string, options BeeOptions) BeeInterface
 }
 
-// ModuleFactories need to call this method to register themselves
+// RegisterFactory gets called by BeeFactories to register themselves.
 func RegisterFactory(factory BeeFactoryInterface) {
 	log.Println("Bee Factory ready:", factory.Name(), "-", factory.Description())
 	/* for _, ev := range factory.Events() {
@@ -89,7 +97,7 @@ func RegisterFactory(factory BeeFactoryInterface) {
 	factories[factory.Name()] = &factory
 }
 
-// Returns factory with this name
+// GetFactory returns the factory with a specific name.
 func GetFactory(identifier string) *BeeFactoryInterface {
 	factory, ok := factories[identifier]
 	if ok {
@@ -99,7 +107,7 @@ func GetFactory(identifier string) *BeeFactoryInterface {
 	return nil
 }
 
-// Returns all known bee factories
+// GetFactories returns all known bee factories.
 func GetFactories() []*BeeFactoryInterface {
 	r := []*BeeFactoryInterface{}
 	for _, factory := range factories {
@@ -109,53 +117,66 @@ func GetFactories() []*BeeFactoryInterface {
 	return r
 }
 
+// Name returns the configured name for a bee.
 func (bee *Bee) Name() string {
 	return bee.config.Name
 }
 
+// Namespace returns the namespace for a bee.
 func (bee *Bee) Namespace() string {
 	return bee.config.Class
 }
 
+// Description returns the description for a bee.
 func (bee *Bee) Description() string {
 	return bee.config.Description
 }
 
+// SetDescription sets the description for a bee.
 func (bee *Bee) SetDescription(s string) {
 	bee.config.Description = s
 }
 
+// Config returns the config for a bee.
 func (bee *Bee) Config() BeeConfig {
 	return bee.config
 }
 
+// Options returns the options for a bee.
 func (bee *Bee) Options() BeeOptions {
 	return bee.config.Options
 }
 
+// SetOptions sets the options for a bee.
 func (bee *Bee) SetOptions(options BeeOptions) {
 	bee.config.Options = options
 }
 
+// SetSigChan sets the signaling channel for a bee.
 func (bee *Bee) SetSigChan(c chan bool) {
 	bee.SigChan = c
 }
 
+// WaitGroup returns the WaitGroup for a bee.
 func (bee *Bee) WaitGroup() *sync.WaitGroup {
 	return bee.waitGroup
 }
 
+// Run is the default, empty implementation of a Bee's Run method.
 func (bee *Bee) Run(chan Event) {
 }
 
+// IsRunning returns whether a Bee is currently running.
 func (bee *Bee) IsRunning() bool {
 	return bee.Running
 }
 
+// Start gets called when a Bee gets started.
 func (bee *Bee) Start() {
 	bee.Running = true
 }
 
+// Stop gracefully stops a Bee.
 func (bee *Bee) Stop() {
 	if !bee.IsRunning() {
 		return
@@ -167,18 +188,22 @@ func (bee *Bee) Stop() {
 	log.Println(bee.Name(), "stopped gracefully!")
 }
 
+// LastEvent returns the timestamp of the last triggered event.
 func (bee *Bee) LastEvent() time.Time {
 	return bee.lastEvent
 }
 
+// LastAction returns the timestamp of the last triggered action.
 func (bee *Bee) LastAction() time.Time {
 	return bee.lastAction
 }
 
+// LogEvent logs the last triggered event.
 func (bee *Bee) LogEvent() {
 	bee.lastEvent = time.Now()
 }
 
+// LogAction logs the last triggered action.
 func (bee *Bee) LogAction() {
 	bee.lastAction = time.Now()
 }

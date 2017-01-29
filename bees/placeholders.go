@@ -18,7 +18,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// beehive's central module system.
+// Package bees is Beehive's central module system
 package bees
 
 import (
@@ -28,15 +28,17 @@ import (
 	"strings"
 )
 
-// Placeholder used by ins & outs of a bee.
+// PlaceholderSlice is an array of Placeholder.
 type PlaceholderSlice []Placeholder
+
+// Placeholder used by ins & outs of a bee.
 type Placeholder struct {
 	Name  string
 	Type  string
 	Value interface{}
 }
 
-// Retrieve a value from a Placeholder slice
+// Value retrieves a value from a Placeholder slice.
 func (ph PlaceholderSlice) Value(name string) interface{} {
 	for _, p := range ph {
 		if p.Name == name {
@@ -47,7 +49,7 @@ func (ph PlaceholderSlice) Value(name string) interface{} {
 	return nil
 }
 
-// Bind a value from a Placeholder slice
+// Bind a value from a Placeholder slice.
 func (ph PlaceholderSlice) Bind(name string, dst interface{}) error {
 	v := ph.Value(name)
 	if v == nil {
@@ -57,7 +59,7 @@ func (ph PlaceholderSlice) Bind(name string, dst interface{}) error {
 	return ConvertValue(v, dst)
 }
 
-// ConvertValue tries to convert v to dst
+// ConvertValue tries to convert v to dst.
 func ConvertValue(v interface{}, dst interface{}) error {
 	switch d := dst.(type) {
 	case *string:

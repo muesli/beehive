@@ -18,12 +18,12 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// beehive's central module system.
+// Package bees is Beehive's central module system
 package bees
 
 import "log"
 
-// An Event
+// An Event describes an event including its parameters.
 type Event struct {
 	Bee     string
 	Name    string
@@ -34,7 +34,7 @@ var (
 	eventsIn = make(chan Event)
 )
 
-// Handles incoming events and executes matching Chains.
+// handleEvents handles incoming events and executes matching Chains.
 func handleEvents() {
 	for {
 		event, ok := <-eventsIn

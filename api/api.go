@@ -18,7 +18,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// beehive's RESTful api for introspection and configuration
+// Package api is Beehive's RESTful api for introspection and configuration
 package api
 
 import (
@@ -65,6 +65,7 @@ func imageFromPathParam(req *restful.Request, resp *restful.Response) {
 		actual)
 }
 
+// Run sets up the restful API container and an HTTP server go-routine
 func Run() {
 	// to see what happens in the package, uncomment the following
 	//restful.TraceLogger(log.New(os.Stdout, "[restful] ", log.LstdFlags|log.Lshortfile))

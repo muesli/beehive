@@ -18,6 +18,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
+// Package bees is Beehive's central module system
 package bees
 
 import (
@@ -26,14 +27,14 @@ import (
 	"github.com/muesli/beehive/filters"
 )
 
-// A Filter
+// Filter describes a user configured event filter.
 type Filter struct {
 	ID      string
 	Name    string
 	Options FilterOption
 }
 
-// Execute a filter. Returns whether the filter passed or not.
+// execFilter executes a filter. Returns whether the filter passed or not.
 func execFilter(filter string, opts map[string]interface{}) bool {
 	f := *filters.GetFilter("template")
 	log.Println("\tExecuting filter:", filter)

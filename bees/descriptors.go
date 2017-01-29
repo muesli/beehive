@@ -18,9 +18,10 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
+// Package bees is Beehive's central module system
 package bees
 
-// Modules provide events, which are described in an EventDescriptor.
+// EventDescriptor describes an Event provided by a Bee.
 type EventDescriptor struct {
 	Namespace   string
 	Name        string
@@ -28,7 +29,7 @@ type EventDescriptor struct {
 	Options     []PlaceholderDescriptor
 }
 
-// Modules offer actions, which are described in an ActionDescriptor.
+// ActionDescriptor describes an Action provided by a Bee.
 type ActionDescriptor struct {
 	Namespace   string
 	Name        string
@@ -52,7 +53,7 @@ type BeeOptionDescriptor struct {
 	Mandatory   bool
 }
 
-// Returns the ActionDescriptor matching an action.
+// GetActionDescriptor returns the ActionDescriptor matching an action.
 func GetActionDescriptor(action *Action) ActionDescriptor {
 	bee := GetBee(action.Bee)
 	if bee == nil {
@@ -68,7 +69,7 @@ func GetActionDescriptor(action *Action) ActionDescriptor {
 	return ActionDescriptor{}
 }
 
-// Returns the EventDescriptor matching an event.
+// GetEventDescriptor returns the EventDescriptor matching an event.
 func GetEventDescriptor(event *Event) EventDescriptor {
 	bee := GetBee(event.Bee)
 	if bee == nil {

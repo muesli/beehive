@@ -18,13 +18,15 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// beehive's application container. Handles command-line arguments parsing.
+// Package app is Beehive's application container. Handles command-line arguments parsing.
 package app
 
 import (
 	"flag"
 )
 
+// A CliFlag can be added by Beehive modules to map a command-line parameter
+// to a local variable
 type CliFlag struct {
 	V     interface{}
 	Name  string
@@ -36,12 +38,14 @@ var (
 	appflags []CliFlag
 )
 
+// AddFlags adds CliFlags to appflags
 func AddFlags(flags []CliFlag) {
 	for _, flag := range flags {
 		appflags = append(appflags, flag)
 	}
 }
 
+// Run sets up all the cli-param mappings
 func Run() {
 	for _, f := range appflags {
 		switch f.Value.(type) {
