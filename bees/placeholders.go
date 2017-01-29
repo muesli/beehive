@@ -70,10 +70,22 @@ func ConvertValue(v interface{}, dst interface{}) error {
 			*d = strconv.FormatBool(vt)
 		case int64:
 			*d = strconv.FormatInt(vt, 10)
+		case float64:
+			*d = strconv.FormatFloat(vt, 'f', -1, 64)
 		case int:
 			*d = strconv.FormatInt(int64(vt), 10)
 		default:
-			panic(fmt.Sprintf("Unhandled type %+v", vt))
+			panic(fmt.Sprintf("Unhandled type %+v for string conversion", vt))
+		}
+
+	case *[]string:
+		switch vt := v.(type) {
+		case []string:
+			*d = vt
+		case string:
+			*d = strings.Split(vt, ",")
+		default:
+			panic(fmt.Sprintf("Unhandled type %+v for []string conversion", vt))
 		}
 
 	case *bool:
@@ -82,42 +94,86 @@ func ConvertValue(v interface{}, dst interface{}) error {
 			*d = vt
 		case string:
 			vt = strings.ToLower(vt)
-			if vt == "true" || vt == "on" || vt == "yes" || vt == "1" {
+			if vt == "true" || vt == "on" || vt == "yes" || vt == "1" || vt == "t" {
 				*d = true
 			}
 		case int64:
 			*d = vt > 0
 		case int:
 			*d = vt > 0
+		case uint64:
+			*d = vt > 0
+		case uint:
+			*d = vt > 0
 		case float64:
 			*d = vt > 0
 		default:
-			panic(fmt.Sprintf("Unhandled type %+v", vt))
+			panic(fmt.Sprintf("Unhandled type %+v for bool conversion", vt))
 		}
 
 	case *float64:
 		switch vt := v.(type) {
+		case int64:
+			*d = float64(vt)
+		case int32:
+			*d = float64(vt)
+		case int16:
+			*d = float64(vt)
+		case int8:
+			*d = float64(vt)
+		case int:
+			*d = float64(vt)
+		case uint64:
+			*d = float64(vt)
+		case uint32:
+			*d = float64(vt)
+		case uint16:
+			*d = float64(vt)
+		case uint8:
+			*d = float64(vt)
+		case uint:
+			*d = float64(vt)
 		case float64:
 			*d = vt
+		case float32:
+			*d = float64(vt)
 		case string:
 			x, _ := strconv.Atoi(vt)
 			*d = float64(x)
 		default:
-			panic(fmt.Sprintf("Unhandled type %+v", vt))
+			panic(fmt.Sprintf("Unhandled type %+v for float64 conversion", vt))
 		}
 
 	case *int:
 		switch vt := v.(type) {
+		case int64:
+			*d = int(vt)
+		case int32:
+			*d = int(vt)
+		case int16:
+			*d = int(vt)
+		case int8:
+			*d = int(vt)
 		case int:
 			*d = vt
+		case uint64:
+			*d = int(vt)
+		case uint32:
+			*d = int(vt)
+		case uint16:
+			*d = int(vt)
+		case uint8:
+			*d = int(vt)
 		case uint:
 			*d = int(vt)
 		case float64:
 			*d = int(vt)
+		case float32:
+			*d = int(vt)
 		case string:
 			*d, _ = strconv.Atoi(vt)
 		default:
-			panic(fmt.Sprintf("Unhandled type %+v", vt))
+			panic(fmt.Sprintf("Unhandled type %+v for int conversion", vt))
 		}
 
 	default:
