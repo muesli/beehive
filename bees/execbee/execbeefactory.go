@@ -52,9 +52,9 @@ func (factory *ExecBeeFactory) Description() string {
 }
 
 // Image returns the filename of an image for this Bee.
-// func (factory *ExecBeeFactory) Image() string {
-// 	return factory.Name() + ".png"
-// }
+func (factory *ExecBeeFactory) Image() string {
+	return factory.Name() + ".png"
+}
 
 // Events describes the available events provided by this Bee.
 func (factory *ExecBeeFactory) Events() []bees.EventDescriptor {
