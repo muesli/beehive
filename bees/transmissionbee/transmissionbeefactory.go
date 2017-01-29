@@ -73,7 +73,7 @@ func (factory *TransmissionBeeFactory) Actions() []bees.ActionDescriptor {
 		Options: []bees.PlaceholderDescriptor{
 			{
 				Name:        "torrent",
-				Description: "Telegram chat/group to send the message to",
+				Description: "URL of the Torrent to download",
 				Type:        "string",
 				Mandatory:   true,
 			},
