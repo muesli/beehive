@@ -66,6 +66,8 @@ func ConvertValue(v interface{}, dst interface{}) error {
 		switch vt := v.(type) {
 		case string:
 			*d = vt
+		case []string:
+			*d = strings.Join(vt, ",")
 		case bool:
 			*d = strconv.FormatBool(vt)
 		case int64:
