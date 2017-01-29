@@ -81,11 +81,6 @@ func (factory *EFABeeFactory) Events() []bees.EventDescriptor {
 			Description: "Departure for a stop has been retrieved",
 			Options: []bees.PlaceholderDescriptor{
 				{
-					Name:        "stop",
-					Description: "Which stop the departures are for",
-					Type:        "string",
-				},
-				{
 					Name:        "eta",
 					Description: "Expected time of arrival in minutes",
 					Type:        "int",
