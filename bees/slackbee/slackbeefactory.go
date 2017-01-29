@@ -58,7 +58,7 @@ func (factory *SlackBeeFactory) Image() string {
 func (factory *SlackBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
-			Name:        "apiKey",
+			Name:        "api_key",
 			Description: "Slack API key",
 			Type:        "string",
 			Mandatory:   true,

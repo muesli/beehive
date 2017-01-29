@@ -93,12 +93,12 @@ func (factory *HTMLExtractBeeFactory) Events() []bees.EventDescriptor {
 					Type:        "string",
 				},
 				{
-					Name:        "topimage",
+					Name:        "top_image",
 					Description: "The top image for the page",
 					Type:        "url",
 				},
 				{
-					Name:        "finalurl",
+					Name:        "final_url",
 					Description: "Eventual URL after potentially being redirected",
 					Type:        "url",
 				},

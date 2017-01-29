@@ -60,37 +60,37 @@ func (factory *TimeBeeFactory) Image() string {
 func (factory *TimeBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
-			Name:        "Second",
+			Name:        "second",
 			Description: "00-59 for a specific time; -1 for ignore",
 			Type:        "int",
 		},
 		{
-			Name:        "Minute",
+			Name:        "minute",
 			Description: "00-59 for a specific time; -1 for ignore",
 			Type:        "int",
 		},
 		{
-			Name:        "Hour",
+			Name:        "hour",
 			Description: "00-23 for a specific time; -1 for ignore",
 			Type:        "int",
 		},
 		{
-			Name:        "DayOfWeek",
+			Name:        "day_of_week",
 			Description: "0-6 0 = Sunday 6 = Saturday; -1 for ignore",
 			Type:        "int",
 		},
 		{
-			Name:        "DayOfMonth",
+			Name:        "day_of_month",
 			Description: "01-31 for a specific time; -1 for ignore)",
 			Type:        "int",
 		},
 		{
-			Name:        "Month",
+			Name:        "month",
 			Description: "01 - 12 for a specific time; -1 for ignore)",
 			Type:        "int",
 		},
 		{
-			Name:        "Year",
+			Name:        "year",
 			Description: "2014 - 9999 for specific time (non-reoccuring); -1 for ignore (recommended)",
 			Type:        "int",
 		},
@@ -103,7 +103,7 @@ func (factory *TimeBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{
 			Namespace:   factory.Name(),
-			Name:        "time_event",
+			Name:        "time",
 			Description: "The time has come ...",
 			Options:     []bees.PlaceholderDescriptor{},
 		},

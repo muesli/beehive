@@ -54,7 +54,7 @@ func (mod *CronBee) Run(eventChan chan bees.Event) {
 		time.Sleep(timer.DurationUntilNextEvent())
 		event := bees.Event{
 			Bee:  mod.Name(),
-			Name: "time_event",
+			Name: "time",
 			Options: []bees.Placeholder{
 				{
 					Name:  "timestamp",
@@ -71,10 +71,10 @@ func (mod *CronBee) Run(eventChan chan bees.Event) {
 func (mod *CronBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
-	options.Bind("Second", &mod.input[0])
-	options.Bind("Minute", &mod.input[1])
-	options.Bind("Hour", &mod.input[2])
-	options.Bind("DayOfWeek", &mod.input[3])
-	options.Bind("DayOfMonth", &mod.input[4])
-	options.Bind("Month", &mod.input[5])
+	options.Bind("second", &mod.input[0])
+	options.Bind("minute", &mod.input[1])
+	options.Bind("hour", &mod.input[2])
+	options.Bind("day_of_week", &mod.input[3])
+	options.Bind("day_of_month", &mod.input[4])
+	options.Bind("month", &mod.input[5])
 }

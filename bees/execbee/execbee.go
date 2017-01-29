@@ -46,7 +46,7 @@ func (mod *ExecBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 
 	switch action.Name {
-	case "localCommand":
+	case "execute":
 		var command string
 		action.Options.Bind("command", &command)
 		log.Println("Executing locally: ", command)
@@ -99,7 +99,7 @@ func (mod *ExecBee) Action(action bees.Action) []bees.Placeholder {
 
 			ev := bees.Event{
 				Bee:  mod.Name(),
-				Name: "commandResult",
+				Name: "result",
 				Options: []bees.Placeholder{
 					{
 						Name:  "stdout",

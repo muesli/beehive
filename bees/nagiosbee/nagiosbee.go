@@ -71,7 +71,7 @@ type service struct {
 func (mod *NagiosBee) announceStatuschange(s service) {
 	event := bees.Event{
 		Bee:  mod.Name(),
-		Name: "statuschange",
+		Name: "status_change",
 		Options: []bees.Placeholder{
 			{
 				Name:  "host",

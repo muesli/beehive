@@ -52,7 +52,7 @@ func (mod *TelegramBee) Action(action bees.Action) []bees.Placeholder {
 	case "send":
 		chatID := ""
 		text := ""
-		action.Options.Bind("chatId", &chatID)
+		action.Options.Bind("chat_id", &chatID)
 		action.Options.Bind("text", &text)
 
 		cid, err := strconv.Atoi(chatID)
@@ -95,12 +95,12 @@ func (mod *TelegramBee) Run(eventChan chan bees.Event) {
 					Value: update.Message.Text,
 				},
 				{
-					Name:  "chatID",
+					Name:  "chat_id",
 					Type:  "string",
 					Value: strconv.FormatInt(update.Message.Chat.ID, 10),
 				},
 				{
-					Name:  "userID",
+					Name:  "user_id",
 					Type:  "string",
 					Value: strconv.Itoa(update.Message.From.ID),
 				},
@@ -134,7 +134,7 @@ func (mod *TelegramBee) ReloadOptions(options bees.BeeOptions) {
 // TELEGRAM_API_KEY environment variable.
 func getAPIKey(options *bees.BeeOptions) string {
 	var apiKey string
-	options.Bind("apiKey", &apiKey)
+	options.Bind("api_key", &apiKey)
 
 	if strings.HasPrefix(apiKey, "file://") {
 		buf, err := ioutil.ReadFile(strings.TrimPrefix(apiKey, "file://"))

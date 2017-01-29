@@ -102,7 +102,7 @@ func (factory *TumblrBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		{
 			Namespace:   factory.Name(),
-			Name:        "postText",
+			Name:        "post_text",
 			Description: "Posts a text on Tumblr",
 			Options: []bees.PlaceholderDescriptor{
 				{
@@ -115,7 +115,7 @@ func (factory *TumblrBeeFactory) Actions() []bees.ActionDescriptor {
 		},
 		{
 			Namespace:   factory.Name(),
-			Name:        "postQuote",
+			Name:        "post_quote",
 			Description: "Posts a quote on Tumblr",
 			Options: []bees.PlaceholderDescriptor{
 				{

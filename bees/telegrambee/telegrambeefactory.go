@@ -58,7 +58,7 @@ func (factory *TelegramBeeFactory) Image() string {
 func (factory *TelegramBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
-			Name:        "apiKey",
+			Name:        "api_key",
 			Description: "Telegram bot API key",
 			Type:        "string",
 			Mandatory:   true,
@@ -80,12 +80,12 @@ func (factory *TelegramBeeFactory) Events() []bees.EventDescriptor {
 					Description: "The message that was received",
 					Type:        "string",
 				}, {
-					Name:        "chatID",
+					Name:        "chat_id",
 					Description: "Telegram's chat ID",
 					Type:        "string",
 				},
 				{
-					Name:        "userID",
+					Name:        "user_id",
 					Description: "User ID  sending the message",
 					Type:        "string",
 				},
@@ -104,7 +104,7 @@ func (factory *TelegramBeeFactory) Actions() []bees.ActionDescriptor {
 		Description: "Sends a message to a Telegram chat or group",
 		Options: []bees.PlaceholderDescriptor{
 			{
-				Name:        "chatId",
+				Name:        "chat_id",
 				Description: "Telegram chat/group to send the message to",
 				Type:        "string",
 				Mandatory:   true,

@@ -84,7 +84,7 @@ func (mod *TimeBee) timer() {
 	mod.lastEvent = mod.curTime
 	event := bees.Event{
 		Bee:  mod.Name(),
-		Name: "time_event",
+		Name: "time",
 	}
 	mod.eventChan <- event
 }
@@ -109,11 +109,11 @@ func (mod *TimeBee) Run(eventChan chan bees.Event) {
 func (mod *TimeBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
-	options.Bind("Second", &mod.second)
-	options.Bind("Minute", &mod.minute)
-	options.Bind("Hour", &mod.hour)
-	options.Bind("DayOfWeek", &mod.dayofweek)
-	options.Bind("DayOfMonth", &mod.dayofmonth)
-	options.Bind("Month", &mod.month)
-	options.Bind("Year", &mod.year)
+	options.Bind("second", &mod.second)
+	options.Bind("minute", &mod.minute)
+	options.Bind("hour", &mod.hour)
+	options.Bind("day_of_week", &mod.dayofweek)
+	options.Bind("day_of_month", &mod.dayofmonth)
+	options.Bind("month", &mod.month)
+	options.Bind("year", &mod.year)
 }

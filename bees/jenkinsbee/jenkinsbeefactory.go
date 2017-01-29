@@ -84,7 +84,7 @@ func (factory *JenkinsBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{
 			Namespace:   factory.Name(),
-			Name:        "statuschange",
+			Name:        "status_change",
 			Description: "the status of a job has changed",
 			Options: []bees.PlaceholderDescriptor{
 				{

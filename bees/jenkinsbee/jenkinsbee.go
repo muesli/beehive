@@ -59,7 +59,7 @@ type Job struct {
 func (mod *JenkinsBee) announceStatusChange(j Job) {
 	event := bees.Event{
 		Bee:  mod.Name(),
-		Name: "statuschange",
+		Name: "status_change",
 		Options: []bees.Placeholder{
 			{
 				Name:  "name",

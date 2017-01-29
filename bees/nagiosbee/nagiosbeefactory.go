@@ -84,7 +84,7 @@ func (factory *NagiosBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{
 			Namespace:   factory.Name(),
-			Name:        "statuschange",
+			Name:        "status_change",
 			Description: "The status of a Service has changed",
 			Options: []bees.PlaceholderDescriptor{
 				{

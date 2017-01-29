@@ -46,7 +46,7 @@ func (mod *TumblrBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 
 	switch action.Name {
-	case "postText":
+	case "post_text":
 		text := ""
 		action.Options.Bind("text", &text)
 
@@ -55,7 +55,7 @@ func (mod *TumblrBee) Action(action bees.Action) []bees.Placeholder {
 			"body":  text,
 			"state": state})
 
-	case "postQuote":
+	case "post_quote":
 		quote := ""
 		source := ""
 		action.Options.Bind("quote", &quote)

@@ -42,11 +42,11 @@ type TransmissionBee struct {
 func (mod *TransmissionBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 	switch action.Name {
-	case "add-torrent":
+	case "add_torrent":
 		torrentMsg := ""
 		commandPrefix := ""
 		action.Options.Bind("torrent", &torrentMsg)
-		action.Options.Bind("commandPrefix", &commandPrefix)
+		action.Options.Bind("command_prefix", &commandPrefix)
 
 		torrentMsg = strings.TrimSpace(strings.Replace(torrentMsg, commandPrefix, "", 1))
 		_, err := mod.client.Add(torrentMsg)
@@ -62,7 +62,7 @@ func (mod *TransmissionBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
 	conf := transmission.Config{}
-	options.Bind("serverURL", &conf.Address)
+	options.Bind("server_url", &conf.Address)
 	options.Bind("username", &conf.User)
 	options.Bind("password", &conf.Password)
 

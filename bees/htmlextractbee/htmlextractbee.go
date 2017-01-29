@@ -74,12 +74,12 @@ func (mod *HTMLExtractBee) Action(action bees.Action) []bees.Placeholder {
 						Value: article.Domain,
 					},
 					{
-						Name:  "topimage",
+						Name:  "top_image",
 						Type:  "url",
 						Value: article.TopImage,
 					},
 					{
-						Name:  "finalurl",
+						Name:  "final_url",
 						Type:  "url",
 						Value: article.FinalURL,
 					},

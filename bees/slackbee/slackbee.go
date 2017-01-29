@@ -195,7 +195,7 @@ Loop:
 func (mod *SlackBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
-	apiKey := getApiKey(&options)
+	apiKey := getAPIKey(&options)
 	client := slack.New(apiKey)
 	_, err := client.AuthTest()
 	if err != nil {
@@ -215,9 +215,9 @@ func (mod *SlackBee) ReloadOptions(options bees.BeeOptions) {
 
 // Gets the API key from a file, the recipe config or the
 // configured environment variable.
-func getApiKey(options *bees.BeeOptions) string {
+func getAPIKey(options *bees.BeeOptions) string {
 	var apiKey string
-	options.Bind("apiKey", &apiKey)
+	options.Bind("api_key", &apiKey)
 
 	if strings.HasPrefix(apiKey, "file://") {
 		buf, err := ioutil.ReadFile(strings.TrimPrefix(apiKey, "file://"))

@@ -61,7 +61,7 @@ func (factory *ExecBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{
 			Namespace:   factory.Name(),
-			Name:        "commandResult",
+			Name:        "result",
 			Description: "A command was executed",
 			Options: []bees.PlaceholderDescriptor{
 				{
@@ -85,7 +85,7 @@ func (factory *ExecBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		{
 			Namespace:   factory.Name(),
-			Name:        "localCommand",
+			Name:        "execute",
 			Description: "Executes a command on the local host",
 			Options: []bees.PlaceholderDescriptor{
 				{
