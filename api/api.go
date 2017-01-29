@@ -25,10 +25,8 @@ import (
 	"log"
 	"net/http"
 	"path"
-	_ "strconv"
 
 	"github.com/emicklei/go-restful"
-	_ "github.com/emicklei/go-restful/swagger"
 
 	"github.com/muesli/beehive/api/context"
 	"github.com/muesli/beehive/api/resources/actions"
