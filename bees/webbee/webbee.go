@@ -33,6 +33,8 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// WebBee is a Bee that starts an HTTP server and fires events for incoming
+// requests.
 type WebBee struct {
 	bees.Bee
 
@@ -42,7 +44,7 @@ type WebBee struct {
 	eventChan chan bees.Event
 }
 
-func (mod *WebBee) triggerJsonEvent(resp *[]byte) {
+func (mod *WebBee) triggerJSONEvent(resp *[]byte) {
 	var payload interface{}
 	err := json.Unmarshal(*resp, &payload)
 	if err != nil {
@@ -92,8 +94,8 @@ func (mod *WebBee) triggerJsonEvent(resp *[]byte) {
 func (mod *WebBee) Run(cin chan bees.Event) {
 	mod.eventChan = cin
 
-	web.Get(mod.path, mod.GetRequest)
-	web.Post(mod.path, mod.PostRequest)
+	web.Get(mod.path, mod.getRequest)
+	web.Post(mod.path, mod.postRequest)
 
 	web.Run(mod.addr)
 
@@ -132,7 +134,7 @@ func (mod *WebBee) Action(action bees.Action) []bees.Placeholder {
 			return outs
 		}
 
-		mod.triggerJsonEvent(&b)
+		mod.triggerJSONEvent(&b)
 
 	default:
 		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
@@ -141,7 +143,8 @@ func (mod *WebBee) Action(action bees.Action) []bees.Placeholder {
 	return outs
 }
 
-func (mod *WebBee) GetRequest(ctx *web.Context) {
+// getRequest gets called for incoming GET requests
+func (mod *WebBee) getRequest(ctx *web.Context) {
 	ev := bees.Event{
 		Bee:  mod.Name(),
 		Name: "get",
@@ -168,14 +171,15 @@ func (mod *WebBee) GetRequest(ctx *web.Context) {
 	mod.eventChan <- ev
 }
 
-func (mod *WebBee) PostRequest(ctx *web.Context) {
+// postRequest gets called for incoming POST requests
+func (mod *WebBee) postRequest(ctx *web.Context) {
 	b, err := ioutil.ReadAll(ctx.Request.Body)
 	if err != nil {
 		log.Println("Error:", err)
 		return
 	}
 
-	mod.triggerJsonEvent(&b)
+	mod.triggerJSONEvent(&b)
 }
 
 // ReloadOptions parses the config options and initializes the Bee.

@@ -33,6 +33,7 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// JenkinsBee is a Bee that can interface with a Jenkins server.
 type JenkinsBee struct {
 	bees.Bee
 
@@ -48,9 +49,10 @@ type report struct {
 	Jobs []Job `json:"jobs"`
 }
 
+// Job represents the JSON API response for a Jenkins job.
 type Job struct {
 	Name  string `json:"name"`
-	Url   string `json:"url"`
+	URL   string `json:"url"`
 	Color string `json:"color"`
 }
 
@@ -67,7 +69,7 @@ func (mod *JenkinsBee) announceStatusChange(j Job) {
 			{
 				Name:  "url",
 				Type:  "string",
-				Value: j.Url,
+				Value: j.URL,
 			},
 			{
 				Name:  "status",

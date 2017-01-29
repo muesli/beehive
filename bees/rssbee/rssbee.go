@@ -31,12 +31,13 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// RSSBee is a Bee for handling RSS feeds.
 type RSSBee struct {
 	bees.Bee
 
 	url string
 	// decides whether the next fetch should be skipped
-	skip_next_fetch bool
+	skipNextFetch bool
 
 	eventChan chan bees.Event
 }
@@ -66,8 +67,8 @@ func (mod *RSSBee) chanHandler(feed *rss.Feed, newchannels []*rss.Channel) {
 }
 
 func (mod *RSSBee) itemHandler(feed *rss.Feed, ch *rss.Channel, newitems []*rss.Item) {
-	if mod.skip_next_fetch == true {
-		mod.skip_next_fetch = false
+	if mod.skipNextFetch == true {
+		mod.skipNextFetch = false
 		return
 	}
 	for i := range newitems {
@@ -165,6 +166,6 @@ func (mod *RSSBee) Run(cin chan bees.Event) {
 func (mod *RSSBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
-	options.Bind("skip_first", &mod.skip_next_fetch)
+	options.Bind("skip_first", &mod.skipNextFetch)
 	options.Bind("url", &mod.url)
 }

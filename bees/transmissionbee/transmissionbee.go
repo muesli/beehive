@@ -31,6 +31,7 @@ import (
 	"github.com/odwrtw/transmission"
 )
 
+// TransmissionBee is a Bee that can send torrents to Transmission.
 type TransmissionBee struct {
 	bees.Bee
 

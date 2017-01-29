@@ -29,6 +29,7 @@ import (
 	"github.com/muesli/goefa"
 )
 
+// EFABee is a Bee that interfaces with the public EVA API.
 type EFABee struct {
 	bees.Bee
 

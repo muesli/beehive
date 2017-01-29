@@ -26,6 +26,7 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// TumblrBee is a Bee that can post blogs & quotes on Tumblr.
 type TumblrBee struct {
 	bees.Bee
 
@@ -33,7 +34,7 @@ type TumblrBee struct {
 
 	blogname string
 
-	callbackUrl    string
+	callbackURL    string
 	consumerKey    string
 	consumerSecret string
 	token          string
@@ -77,7 +78,7 @@ func (mod *TumblrBee) Action(action bees.Action) []bees.Placeholder {
 func (mod *TumblrBee) Run(eventChan chan bees.Event) {
 	mod.client = gotumblr.NewTumblrRestClient(mod.consumerKey, mod.consumerSecret,
 		mod.token, mod.tokenSecret,
-		mod.callbackUrl, "http://api.tumblr.com")
+		mod.callbackURL, "http://api.tumblr.com")
 }
 
 // ReloadOptions parses the config options and initializes the Bee.
@@ -85,7 +86,7 @@ func (mod *TumblrBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
 	options.Bind("blogname", &mod.blogname)
-	options.Bind("callback_url", &mod.callbackUrl)
+	options.Bind("callback_url", &mod.callbackURL)
 	options.Bind("consumer_key", &mod.consumerKey)
 	options.Bind("consumer_secret", &mod.consumerSecret)
 	options.Bind("token", &mod.token)

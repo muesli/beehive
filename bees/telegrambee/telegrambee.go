@@ -34,6 +34,7 @@ import (
 	telegram "gopkg.in/telegram-bot-api.v4"
 )
 
+// TelegramBee is a Bee that can connect to Telegram.
 type TelegramBee struct {
 	bees.Bee
 
@@ -49,12 +50,12 @@ func (mod *TelegramBee) Action(action bees.Action) []bees.Placeholder {
 
 	switch action.Name {
 	case "send":
-		chatId := ""
+		chatID := ""
 		text := ""
-		action.Options.Bind("chatId", &chatId)
+		action.Options.Bind("chatId", &chatID)
 		action.Options.Bind("text", &text)
 
-		cid, err := strconv.Atoi(chatId)
+		cid, err := strconv.Atoi(chatID)
 		if err != nil {
 			panic("Invalid telegram chat ID")
 		}
@@ -109,6 +110,7 @@ func (mod *TelegramBee) Run(eventChan chan bees.Event) {
 	}
 }
 
+// Stop stops the running Bee.
 func (mod *TelegramBee) Stop() {
 	log.Println("Stopping the Telegram bee")
 }
@@ -117,7 +119,7 @@ func (mod *TelegramBee) Stop() {
 func (mod *TelegramBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
-	apiKey := getApiKey(&options)
+	apiKey := getAPIKey(&options)
 	bot, err := telegram.NewBotAPI(apiKey)
 	if err != nil {
 		panic("Authorization failed, make sure the Telegram API key is correct")
@@ -130,7 +132,7 @@ func (mod *TelegramBee) ReloadOptions(options bees.BeeOptions) {
 
 // Gets the Bot's API key from a file, the recipe config or the
 // TELEGRAM_API_KEY environment variable.
-func getApiKey(options *bees.BeeOptions) string {
+func getAPIKey(options *bees.BeeOptions) string {
 	var apiKey string
 	options.Bind("apiKey", &apiKey)
 

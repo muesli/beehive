@@ -25,14 +25,14 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
-// SpaceApiBeeFactory is a factory for SpaceApiBees.
-type SpaceApiBeeFactory struct {
+// SpaceAPIBeeFactory is a factory for SpaceAPIBees.
+type SpaceAPIBeeFactory struct {
 	bees.BeeFactory
 }
 
 // New returns a new Bee instance configured with the supplied options.
-func (factory *SpaceApiBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
-	bee := SpaceApiBee{
+func (factory *SpaceAPIBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
+	bee := SpaceAPIBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
 	}
 	bee.ReloadOptions(options)
@@ -41,22 +41,22 @@ func (factory *SpaceApiBeeFactory) New(name, description string, options bees.Be
 }
 
 // Name returns the name of this Bee.
-func (factory *SpaceApiBeeFactory) Name() string {
+func (factory *SpaceAPIBeeFactory) Name() string {
 	return "spaceapibee"
 }
 
 // Description returns the description of this Bee.
-func (factory *SpaceApiBeeFactory) Description() string {
+func (factory *SpaceAPIBeeFactory) Description() string {
 	return "A bee that echoes the status of a SpaceAPI instance"
 }
 
 // Image returns the filename of an image for this Bee.
-func (factory *SpaceApiBeeFactory) Image() string {
+func (factory *SpaceAPIBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
 // Options returns the options available to configure this Bee.
-func (factory *SpaceApiBeeFactory) Options() []bees.BeeOptionDescriptor {
+func (factory *SpaceAPIBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
 			Name:        "url",
@@ -68,7 +68,7 @@ func (factory *SpaceApiBeeFactory) Options() []bees.BeeOptionDescriptor {
 }
 
 // Actions describes the available actions provided by this Bee.
-func (factory *SpaceApiBeeFactory) Actions() []bees.ActionDescriptor {
+func (factory *SpaceAPIBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		{
 			Namespace:   factory.Name(),
@@ -81,7 +81,7 @@ func (factory *SpaceApiBeeFactory) Actions() []bees.ActionDescriptor {
 }
 
 // Events describes the available events provided by this Bee.
-func (factory *SpaceApiBeeFactory) Events() []bees.EventDescriptor {
+func (factory *SpaceAPIBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{
 			Namespace:   factory.Name(),
@@ -100,6 +100,6 @@ func (factory *SpaceApiBeeFactory) Events() []bees.EventDescriptor {
 }
 
 func init() {
-	f := SpaceApiBeeFactory{}
+	f := SpaceAPIBeeFactory{}
 	bees.RegisterFactory(&f)
 }

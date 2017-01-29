@@ -30,57 +30,58 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// TimeBee is a Bee that can fire events at a specific time.
 type TimeBee struct {
 	bees.Bee
-	cur_time, last_event                                     MyTime
+	curTime, lastEvent                                       intTime
 	second, minute, hour, dayofweek, dayofmonth, month, year int
 	eventChan                                                chan bees.Event
 }
 
-type MyTime struct {
+type intTime struct {
 	second, minute, hour, dayofweek, dayofmonth, month, year int
 }
 
-func (mod *TimeBee) Timer() {
+func (mod *TimeBee) timer() {
 	fail := false
-	mod.cur_time.second = int(time.Now().Second())
-	mod.cur_time.minute = int(time.Now().Minute())
-	mod.cur_time.hour = int(time.Now().Hour())
-	mod.cur_time.dayofweek = int(time.Now().Weekday())
-	mod.cur_time.dayofmonth = int(time.Now().Day())
-	mod.cur_time.month = int(time.Now().Month())
-	mod.cur_time.year = int(time.Now().Year())
+	mod.curTime.second = int(time.Now().Second())
+	mod.curTime.minute = int(time.Now().Minute())
+	mod.curTime.hour = int(time.Now().Hour())
+	mod.curTime.dayofweek = int(time.Now().Weekday())
+	mod.curTime.dayofmonth = int(time.Now().Day())
+	mod.curTime.month = int(time.Now().Month())
+	mod.curTime.year = int(time.Now().Year())
 	if mod.second > 59 || mod.minute > 59 || mod.dayofweek > 6 || mod.dayofmonth > 31 || mod.month > 12 || mod.year > 9999 {
 		fmt.Println("Error: Date is invalid")
 		return
 	}
-	if mod.cur_time.second != mod.second && mod.second != -1 {
+	if mod.curTime.second != mod.second && mod.second != -1 {
 		fail = true
 	}
-	if mod.cur_time.minute != mod.minute && mod.minute != -1 {
+	if mod.curTime.minute != mod.minute && mod.minute != -1 {
 		fail = true
 	}
-	if mod.cur_time.hour != mod.hour && mod.hour != -1 {
+	if mod.curTime.hour != mod.hour && mod.hour != -1 {
 		fail = true
 	}
-	if mod.cur_time.dayofweek != mod.dayofweek && mod.dayofweek != -1 {
+	if mod.curTime.dayofweek != mod.dayofweek && mod.dayofweek != -1 {
 		fail = true
 	}
-	if mod.cur_time.dayofmonth != mod.dayofmonth && mod.dayofmonth != -1 {
+	if mod.curTime.dayofmonth != mod.dayofmonth && mod.dayofmonth != -1 {
 		fail = true
 	}
-	if mod.cur_time.month != mod.month && mod.month != -1 {
+	if mod.curTime.month != mod.month && mod.month != -1 {
 		fail = true
 	}
-	if mod.cur_time.year != mod.year && mod.year != -1 {
+	if mod.curTime.year != mod.year && mod.year != -1 {
 		fail = true
 	}
 
-	if fail == true || mod.cur_time == mod.last_event {
+	if fail == true || mod.curTime == mod.lastEvent {
 		return
 	}
 
-	mod.last_event = mod.cur_time
+	mod.lastEvent = mod.curTime
 	event := bees.Event{
 		Bee:  mod.Name(),
 		Name: "time_event",
@@ -99,7 +100,7 @@ func (mod *TimeBee) Run(eventChan chan bees.Event) {
 		default:
 		}
 
-		mod.Timer()
+		mod.timer()
 		time.Sleep(500 * time.Millisecond)
 	}
 }

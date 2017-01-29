@@ -48,6 +48,8 @@ var (
 	}
 )
 
+// NotificationBee is a Bee that can trigger freedesktop.org DBus
+// notifications.
 type NotificationBee struct {
 	bees.Bee
 	conn     *dbus.Conn

@@ -33,6 +33,7 @@ import (
 	"github.com/nlopes/slack"
 )
 
+// SlackBee is a Bee that can connect to Slack.
 type SlackBee struct {
 	bees.Bee
 

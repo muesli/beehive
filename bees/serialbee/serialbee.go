@@ -33,6 +33,7 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// SerialBee is a Bee that can send & receive data on a serial port.
 type SerialBee struct {
 	bees.Bee
 

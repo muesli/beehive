@@ -31,6 +31,8 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// AnelPowerCtrlBee is a Bee for talking to Anel's PowerCtrl network power
+// sockets.
 type AnelPowerCtrlBee struct {
 	bees.Bee
 

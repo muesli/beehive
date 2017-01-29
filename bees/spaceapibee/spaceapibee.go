@@ -31,7 +31,8 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
-type SpaceApiBee struct {
+// SpaceAPIBee is a Bee that can query a spaceapi server.
+type SpaceAPIBee struct {
 	bees.Bee
 
 	url string
@@ -40,17 +41,17 @@ type SpaceApiBee struct {
 }
 
 // Action triggers the action passed to it.
-func (mod *SpaceApiBee) Action(action bees.Action) []bees.Placeholder {
+func (mod *SpaceAPIBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 
 	switch action.Name {
 	case "get_status":
-		type SpaceApiResult struct {
+		type SpaceAPIResult struct {
 			State struct {
 				Open bool `json:"open"`
 			} `json:"state"`
 		}
-		api_state := new(SpaceApiResult)
+		apiState := new(SpaceAPIResult)
 
 		// get json data
 		resp, err := http.Get(mod.url)
@@ -60,10 +61,10 @@ func (mod *SpaceApiBee) Action(action bees.Action) []bees.Placeholder {
 			defer resp.Body.Close()
 			body, _ := ioutil.ReadAll(resp.Body)
 
-			err = json.Unmarshal(body, api_state)
+			err = json.Unmarshal(body, apiState)
 			if err != nil {
 				log.Println("Sorry, couldn't unmarshal the JSON data from SpaceAPI Instance @ " + mod.url)
-				api_state.State.Open = false
+				apiState.State.Open = false
 			}
 		}
 
@@ -74,7 +75,7 @@ func (mod *SpaceApiBee) Action(action bees.Action) []bees.Placeholder {
 				{
 					Name:  "open",
 					Type:  "bool",
-					Value: api_state.State.Open,
+					Value: apiState.State.Open,
 				},
 			},
 		}
@@ -88,12 +89,12 @@ func (mod *SpaceApiBee) Action(action bees.Action) []bees.Placeholder {
 }
 
 // Run executes the Bee's event loop.
-func (mod *SpaceApiBee) Run(eventChan chan bees.Event) {
+func (mod *SpaceAPIBee) Run(eventChan chan bees.Event) {
 	mod.evchan = eventChan
 }
 
 // ReloadOptions parses the config options and initializes the Bee.
-func (mod *SpaceApiBee) ReloadOptions(options bees.BeeOptions) {
+func (mod *SpaceAPIBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
 	options.Bind("url", &mod.url)

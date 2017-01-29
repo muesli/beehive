@@ -44,6 +44,7 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// NagiosBee is a Bee that can interface with a Nagios instance.
 type NagiosBee struct {
 	bees.Bee
 
@@ -60,11 +61,11 @@ type report struct {
 }
 
 type service struct {
-	Host_name           string `json:"host_name"`
-	Service_description string `json:"service_description"`
-	Current_state       string `json:"current_state"`
-	Last_hard_state     string `json:"last_hard_state"`
-	Plugin_output       string `json:"plugin_output"`
+	HostName           string `json:"host_name"`
+	ServiceDescription string `json:"service_description"`
+	CurrentState       string `json:"current_state"`
+	LastHardState      string `json:"last_hard_state"`
+	PluginOutput       string `json:"plugin_output"`
 }
 
 func (mod *NagiosBee) announceStatuschange(s service) {
@@ -75,22 +76,22 @@ func (mod *NagiosBee) announceStatuschange(s service) {
 			{
 				Name:  "host",
 				Type:  "string",
-				Value: s.Host_name,
+				Value: s.HostName,
 			},
 			{
 				Name:  "service",
 				Type:  "string",
-				Value: s.Service_description,
+				Value: s.ServiceDescription,
 			},
 			{
 				Name:  "message",
 				Type:  "string",
-				Value: s.Plugin_output,
+				Value: s.PluginOutput,
 			},
 			{
 				Name:  "status",
 				Type:  "string",
-				Value: s.Current_state,
+				Value: s.CurrentState,
 			},
 		},
 	}
@@ -148,12 +149,12 @@ func (mod *NagiosBee) Run(cin chan bees.Event) {
 					log.Println("jedesmaldarein")
 					mod.announceStatuschange(s)
 				} else {
-					if s.Current_state != oldService.Current_state {
+					if s.CurrentState != oldService.CurrentState {
 						log.Println("statuschange")
 						mod.announceStatuschange(s)
 					}
 				}
-				if s.Current_state != s.Last_hard_state {
+				if s.CurrentState != s.LastHardState {
 					log.Println("hardstate_changed")
 					//TODO: Evaluate if good enough
 				}

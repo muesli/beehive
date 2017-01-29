@@ -32,28 +32,29 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// TwitterBee is a Bee that can interface with Twitter.
 type TwitterBee struct {
 	bees.Bee
 
-	consumer_key        string
-	consumer_secret     string
-	access_token        string
-	access_token_secret string
+	consumerKey       string
+	consumerSecret    string
+	accessToken       string
+	accessTokenSecret string
 
-	twitter_api      *anaconda.TwitterApi
-	twitter_mentions []anaconda.Tweet
+	twitterAPI      *anaconda.TwitterApi
+	twitterMentions []anaconda.Tweet
 
 	evchan chan bees.Event
 }
 
-func handle_anaconda_error(err error, msg string) {
+func handleAnacondaError(err error, msg string) {
 	if err != nil {
-		is_rate_limit_error, next_window := err.(*anaconda.ApiError).RateLimitCheck()
-		if is_rate_limit_error {
+		isRateLimitError, nextWindow := err.(*anaconda.ApiError).RateLimitCheck()
+		if isRateLimitError {
 			log.Println("Oops, I exceeded the API rate limit!")
-			wait_period := next_window.Sub(time.Now())
-			log.Printf("waiting %f seconds to next window!\n", wait_period.Seconds())
-			time.Sleep(wait_period)
+			waitPeriod := nextWindow.Sub(time.Now())
+			log.Printf("waiting %f seconds to next window!\n", waitPeriod.Seconds())
+			time.Sleep(waitPeriod)
 		} else {
 			if msg != "" {
 				panic(msg)
@@ -70,27 +71,27 @@ func (mod *TwitterBee) Action(action bees.Action) []bees.Placeholder {
 		status := ""
 		action.Options.Bind("status", &status)
 
-		posted_tweet := false
-		for !posted_tweet {
+		postedTweet := false
+		for !postedTweet {
 			v := url.Values{}
 
-			for _, mention := range mod.twitter_mentions {
-				tmp_mention_time, _ := mention.CreatedAtTime()
-				if strings.Contains(status, "@"+mention.User.ScreenName) && time.Now().Sub(tmp_mention_time).Hours() < 2 {
+			for _, mention := range mod.twitterMentions {
+				tmpMentionTime, _ := mention.CreatedAtTime()
+				if strings.Contains(status, "@"+mention.User.ScreenName) && time.Now().Sub(tmpMentionTime).Hours() < 2 {
 					log.Printf("This might be a reply to " + mention.User.ScreenName)
 					v.Set("in_reply_to_status_id", mention.IdStr)
 					break
 				}
 			}
-			posted_tweet = true
+			postedTweet = true
 
 			log.Printf("Attempting to paste \"%s\" to Twitter", status)
-			_, err := mod.twitter_api.PostTweet(status, v)
+			_, err := mod.twitterAPI.PostTweet(status, v)
 			if err != nil {
 				log.Printf("Error posting to twitter %v", err)
-				handle_anaconda_error(err, "")
+				handleAnacondaError(err, "")
 			} else {
-				posted_tweet = true
+				postedTweet = true
 			}
 		}
 
@@ -118,32 +119,32 @@ func (mod *TwitterBee) Action(action bees.Action) []bees.Placeholder {
 func (mod *TwitterBee) Run(eventChan chan bees.Event) {
 	mod.evchan = eventChan
 
-	anaconda.SetConsumerKey(mod.consumer_key)
-	anaconda.SetConsumerSecret(mod.consumer_secret)
-	mod.twitter_api = anaconda.NewTwitterApi(mod.access_token, mod.access_token_secret)
-	mod.twitter_api.ReturnRateLimitError(true)
+	anaconda.SetConsumerKey(mod.consumerKey)
+	anaconda.SetConsumerSecret(mod.consumerSecret)
+	mod.twitterAPI = anaconda.NewTwitterApi(mod.accessToken, mod.accessTokenSecret)
+	mod.twitterAPI.ReturnRateLimitError(true)
 
 	// Test the credentials on startup
-	credentials_verified := false
-	for !credentials_verified {
-		ok, err := mod.twitter_api.VerifyCredentials()
-		handle_anaconda_error(err, "Could not verify Twitter API Credentials")
-		credentials_verified = ok
+	credentialsVerified := false
+	for !credentialsVerified {
+		ok, err := mod.twitterAPI.VerifyCredentials()
+		handleAnacondaError(err, "Could not verify Twitter API Credentials")
+		credentialsVerified = ok
 	}
 
 	// populate mentions initially
-	mentions_populated := false
-	for !mentions_populated {
+	mentionsPopulated := false
+	for !mentionsPopulated {
 		v := url.Values{}
 		v.Set("count", "30")
 
 		log.Println("Populating Mentions...")
-		mentions, err := mod.twitter_api.GetMentionsTimeline(v)
-		handle_anaconda_error(err, "Could not populate mentions initially")
+		mentions, err := mod.twitterAPI.GetMentionsTimeline(v)
+		handleAnacondaError(err, "Could not populate mentions initially")
 		if err == nil {
-			mentions_populated = true
+			mentionsPopulated = true
 		}
-		mod.twitter_mentions = mentions
+		mod.twitterMentions = mentions
 	}
 
 	// check twitter mentions every 60 seconds
@@ -160,21 +161,21 @@ func (mod *TwitterBee) Run(eventChan chan bees.Event) {
 		log.Println("Checking for new mentions...")
 		v := url.Values{}
 		v.Set("count", "30")
-		new_mentions, err := mod.twitter_api.GetMentionsTimeline(v)
+		newMentions, err := mod.twitterAPI.GetMentionsTimeline(v)
 		if err != nil {
 			panic("Error: Could not get mentions")
 		}
 
 		// check if newest new mention is newer than newest old
-		newest_new_time, _ := new_mentions[0].CreatedAtTime()
-		newest_old_time, _ := mod.twitter_mentions[0].CreatedAtTime()
+		newestNewTime, _ := newMentions[0].CreatedAtTime()
+		newestOldTime, _ := mod.twitterMentions[0].CreatedAtTime()
 
-		if newest_new_time.After(newest_old_time) {
+		if newestNewTime.After(newestOldTime) {
 			log.Println("New mentions found!")
 			for i := 0; ; i++ {
-				tmp_mention := new_mentions[i]
-				tmp_mention_time, _ := tmp_mention.CreatedAtTime()
-				if tmp_mention_time.After(newest_old_time) {
+				tmpMention := newMentions[i]
+				tmpMentionTime, _ := tmpMention.CreatedAtTime()
+				if tmpMentionTime.After(newestOldTime) {
 					ev := bees.Event{
 						Bee:  mod.Name(),
 						Name: "mention",
@@ -182,12 +183,12 @@ func (mod *TwitterBee) Run(eventChan chan bees.Event) {
 							{
 								Name:  "username",
 								Type:  "string",
-								Value: tmp_mention.User.ScreenName,
+								Value: tmpMention.User.ScreenName,
 							},
 							{
 								Name:  "text",
 								Type:  "string",
-								Value: tmp_mention.Text,
+								Value: tmpMention.Text,
 							},
 						},
 					}
@@ -198,7 +199,7 @@ func (mod *TwitterBee) Run(eventChan chan bees.Event) {
 					break
 				}
 			}
-			mod.twitter_mentions = new_mentions
+			mod.twitterMentions = newMentions
 		}
 	}
 }
@@ -207,8 +208,8 @@ func (mod *TwitterBee) Run(eventChan chan bees.Event) {
 func (mod *TwitterBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
-	options.Bind("consumer_key", &mod.consumer_key)
-	options.Bind("consumer_secret", &mod.consumer_secret)
-	options.Bind("access_token", &mod.access_token)
-	options.Bind("access_token_secret", &mod.access_token_secret)
+	options.Bind("consumer_key", &mod.consumerKey)
+	options.Bind("consumer_secret", &mod.consumerSecret)
+	options.Bind("access_token", &mod.accessToken)
+	options.Bind("access_token_secret", &mod.accessTokenSecret)
 }

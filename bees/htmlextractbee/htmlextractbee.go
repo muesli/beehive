@@ -28,7 +28,8 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
-type HtmlExtractBee struct {
+// HTMLExtractBee is a Bee that can extract metadata from HTTP URLs.
+type HTMLExtractBee struct {
 	bees.Bee
 
 	url string
@@ -37,7 +38,7 @@ type HtmlExtractBee struct {
 }
 
 // Action triggers the action passed to it.
-func (mod *HtmlExtractBee) Action(action bees.Action) []bees.Placeholder {
+func (mod *HTMLExtractBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 
 	switch action.Name {
@@ -105,11 +106,11 @@ func (mod *HtmlExtractBee) Action(action bees.Action) []bees.Placeholder {
 }
 
 // Run executes the Bee's event loop.
-func (mod *HtmlExtractBee) Run(eventChan chan bees.Event) {
+func (mod *HTMLExtractBee) Run(eventChan chan bees.Event) {
 	mod.evchan = eventChan
 }
 
 // ReloadOptions parses the config options and initializes the Bee.
-func (mod *HtmlExtractBee) ReloadOptions(options bees.BeeOptions) {
+func (mod *HTMLExtractBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 }

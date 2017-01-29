@@ -29,6 +29,7 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// JabberBee is a Bee that can connect to a Jabber/XMPP server.
 type JabberBee struct {
 	bees.Bee
 

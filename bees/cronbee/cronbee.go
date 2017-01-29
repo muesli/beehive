@@ -30,6 +30,7 @@ import (
 	"github.com/muesli/beehive/bees/cronbee/cron"
 )
 
+// CronBee is a Bee that acts like a time-based job scheduler (cron).
 type CronBee struct {
 	bees.Bee
 	input     [6]string

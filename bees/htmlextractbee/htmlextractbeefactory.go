@@ -24,14 +24,14 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
-// HtmlExtractBeeFactory is a factory for HtmlExtractBees.
-type HtmlExtractBeeFactory struct {
+// HTMLExtractBeeFactory is a factory for HTMLExtractBees.
+type HTMLExtractBeeFactory struct {
 	bees.BeeFactory
 }
 
 // New returns a new Bee instance configured with the supplied options.
-func (factory *HtmlExtractBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
-	bee := HtmlExtractBee{
+func (factory *HTMLExtractBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
+	bee := HTMLExtractBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
 	}
 	bee.ReloadOptions(options)
@@ -40,22 +40,22 @@ func (factory *HtmlExtractBeeFactory) New(name, description string, options bees
 }
 
 // Name returns the name of this Bee.
-func (factory *HtmlExtractBeeFactory) Name() string {
+func (factory *HTMLExtractBeeFactory) Name() string {
 	return "htmlextractbee"
 }
 
 // Description returns the description of this Bee.
-func (factory *HtmlExtractBeeFactory) Description() string {
+func (factory *HTMLExtractBeeFactory) Description() string {
 	return "A bee that extracts information from an arbitrary web page"
 }
 
 // Image returns the filename of an image for this Bee.
-func (factory *HtmlExtractBeeFactory) Image() string {
+func (factory *HTMLExtractBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
 // Actions describes the available actions provided by this Bee.
-func (factory *HtmlExtractBeeFactory) Actions() []bees.ActionDescriptor {
+func (factory *HTMLExtractBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		{
 			Namespace:   factory.Name(),
@@ -74,7 +74,7 @@ func (factory *HtmlExtractBeeFactory) Actions() []bees.ActionDescriptor {
 }
 
 // Events describes the available events provided by this Bee.
-func (factory *HtmlExtractBeeFactory) Events() []bees.EventDescriptor {
+func (factory *HTMLExtractBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{
 			Namespace:   factory.Name(),
@@ -118,6 +118,6 @@ func (factory *HtmlExtractBeeFactory) Events() []bees.EventDescriptor {
 }
 
 func init() {
-	f := HtmlExtractBeeFactory{}
+	f := HTMLExtractBeeFactory{}
 	bees.RegisterFactory(&f)
 }

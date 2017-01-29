@@ -29,6 +29,7 @@ import (
 	"github.com/muesli/go.hue"
 )
 
+// HueBee is a Bee that can talk to Philips Hue bridges.
 type HueBee struct {
 	bees.Bee
 
@@ -44,14 +45,14 @@ func (mod *HueBee) Action(action bees.Action) []bees.Placeholder {
 
 	switch action.Name {
 	case "setcolor":
-		var lightId int
+		var lightID int
 		var color string
 		brightness := 254
-		action.Options.Bind("light", &lightId)
+		action.Options.Bind("light", &lightID)
 		action.Options.Bind("color", &color)
 		action.Options.Bind("brightness", &brightness)
 
-		light, err := mod.client.FindLightById(strconv.Itoa(lightId))
+		light, err := mod.client.FindLightById(strconv.Itoa(lightID))
 		if err != nil {
 			panic(err)
 		}

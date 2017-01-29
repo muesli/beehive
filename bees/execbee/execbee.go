@@ -34,6 +34,7 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// ExecBee is a Bee that can launch external processes.
 type ExecBee struct {
 	bees.Bee
 

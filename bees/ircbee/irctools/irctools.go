@@ -1,10 +1,5 @@
-// A collection of convenient IRC styling methods.
+// Package irctools is a collection of convenient IRC styling methods.
 package irctools
-
-import (
-	_ "fmt"
-	_ "net"
-)
 
 /*
 func PostTobeehive(host string, channel string, val string) {
@@ -34,10 +29,12 @@ func PostTobeehive(host string, channel string, val string) {
 }
 */
 
+// Bold wraps val in bold styling tags.
 func Bold(val string) string {
 	return "\x02" + val + "\x02"
 }
 
+// Colored wraps val in color styling tags.
 func Colored(val string, color string) string {
 	// 00 white 01 black 02 blue (navy) 03 green 04 red 05 brown (maroon)
 	// 06 purple 07 orange (olive) 08 yellow 09 light green (lime)

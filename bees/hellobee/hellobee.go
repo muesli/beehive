@@ -28,10 +28,13 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// HelloBee is an example for a Bee skeleton, designed to help you get started
+// with writing your own Bees.
 type HelloBee struct {
 	bees.Bee
 }
 
+// Run executes the Bee's event loop.
 func (mod *HelloBee) Run(eventChan chan bees.Event) {
 	/*	ev := bees.Event{
 			Bee: mod.Name(),

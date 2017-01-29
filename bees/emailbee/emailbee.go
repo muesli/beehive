@@ -28,6 +28,7 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// EmailBee is a Bee that is able to send emails.
 type EmailBee struct {
 	bees.Bee
 

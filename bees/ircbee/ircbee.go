@@ -30,6 +30,7 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// IrcBee is a Bee that can connect to an IRC server.
 type IrcBee struct {
 	bees.Bee
 
@@ -81,13 +82,13 @@ func (mod *IrcBee) Action(action bees.Action) []bees.Placeholder {
 	case "join":
 		for _, opt := range action.Options {
 			if opt.Name == "channel" {
-				mod.Join(opt.Value.(string))
+				mod.join(opt.Value.(string))
 			}
 		}
 	case "part":
 		for _, opt := range action.Options {
 			if opt.Name == "channel" {
-				mod.Part(opt.Value.(string))
+				mod.part(opt.Value.(string))
 			}
 		}
 
@@ -100,20 +101,20 @@ func (mod *IrcBee) Action(action bees.Action) []bees.Placeholder {
 
 // ircbee specific impl
 
-func (mod *IrcBee) Rejoin() {
+func (mod *IrcBee) rejoin() {
 	for _, channel := range mod.channels {
 		mod.client.Join(channel)
 	}
 }
 
-func (mod *IrcBee) Join(channel string) {
+func (mod *IrcBee) join(channel string) {
 	channel = strings.TrimSpace(channel)
 	mod.client.Join(channel)
 
 	mod.channels = append(mod.channels, channel)
 }
 
-func (mod *IrcBee) Part(channel string) {
+func (mod *IrcBee) part(channel string) {
 	channel = strings.TrimSpace(channel)
 	mod.client.Part(channel)
 
@@ -216,7 +217,7 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 				log.Println("Connected to IRC:", mod.server)
 				connecting = false
 				disconnected = false
-				mod.Rejoin()
+				mod.rejoin()
 			} else {
 				log.Println("Disconnected from IRC:", mod.server)
 				connecting = false
