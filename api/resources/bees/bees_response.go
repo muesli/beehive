@@ -21,8 +21,10 @@
 package bees
 
 import (
+	"sort"
 	"time"
 
+	restful "github.com/emicklei/go-restful"
 	"github.com/muesli/beehive/bees"
 
 	"github.com/muesli/smolder"
@@ -33,7 +35,7 @@ type BeeResponse struct {
 	smolder.Response
 
 	Bees []beeInfoResponse `json:"bees,omitempty"`
-	bees []*bees.BeeInterface
+	bees map[string]*bees.BeeInterface
 }
 
 type beeInfoResponse struct {
@@ -52,13 +54,27 @@ func (r *BeeResponse) Init(context smolder.APIContext) {
 	r.Parent = r
 	r.Context = context
 
-	r.Bees = []beeInfoResponse{}
+	r.bees = make(map[string]*bees.BeeInterface)
 }
 
 // AddBee adds a bee to the response
 func (r *BeeResponse) AddBee(bee *bees.BeeInterface) {
-	r.bees = append(r.bees, bee)
-	r.Bees = append(r.Bees, prepareBeeResponse(r.Context, bee))
+	r.bees[(*bee).Name()] = bee
+}
+
+// Send responds to a request with http.StatusOK
+func (r *BeeResponse) Send(response *restful.Response) {
+	var keys []string
+	for k := range r.bees {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for _, k := range keys {
+		r.Bees = append(r.Bees, prepareBeeResponse(r.Context, r.bees[k]))
+	}
+
+	r.Response.Send(response)
 }
 
 // EmptyResponse returns an empty API response for this endpoint if there's no data to respond with
