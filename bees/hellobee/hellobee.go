@@ -42,6 +42,7 @@ func (mod *HelloBee) Run(eventChan chan bees.Event) {
 		eventChan <- ev*/
 }
 
+// Action triggers the action passed to it.
 func (mod *HelloBee) Action(action bees.Action) []bees.Placeholder {
 	return []bees.Placeholder{}
 }

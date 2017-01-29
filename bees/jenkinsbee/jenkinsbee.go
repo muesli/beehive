@@ -148,6 +148,7 @@ func (mod *JenkinsBee) triggerBuild(jobname string) {
 	}
 }
 
+// Action triggers the action passed to it.
 func (mod *JenkinsBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 	switch action.Name {

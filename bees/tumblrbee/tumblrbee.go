@@ -40,8 +40,7 @@ type TumblrBee struct {
 	tokenSecret    string
 }
 
-// Interface impl
-
+// Action triggers the action passed to it.
 func (mod *TumblrBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 

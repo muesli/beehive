@@ -43,6 +43,7 @@ type TelegramBee struct {
 	bot *telegram.BotAPI
 }
 
+// Action triggers the action passed to it.
 func (mod *TelegramBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 

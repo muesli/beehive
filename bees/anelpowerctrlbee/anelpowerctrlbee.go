@@ -65,6 +65,7 @@ func (mod *AnelPowerCtrlBee) anelSwitch(socket int, state bool) bool {
 	return true
 }
 
+// Action triggers the action passed to it.
 func (mod *AnelPowerCtrlBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 

@@ -36,8 +36,7 @@ type EmailBee struct {
 	server   string
 }
 
-// Interface impl
-
+// Action triggers the action passed to it.
 func (mod *EmailBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 

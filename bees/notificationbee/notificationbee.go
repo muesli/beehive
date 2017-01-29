@@ -62,6 +62,7 @@ func (mod *NotificationBee) Run(cin chan bees.Event) {
 	mod.notifier = mod.conn.Object("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
 }
 
+// Action triggers the action passed to it.
 func (mod *NotificationBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 

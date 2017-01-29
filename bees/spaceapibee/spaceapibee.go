@@ -39,6 +39,7 @@ type SpaceApiBee struct {
 	evchan chan bees.Event
 }
 
+// Action triggers the action passed to it.
 func (mod *SpaceApiBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 

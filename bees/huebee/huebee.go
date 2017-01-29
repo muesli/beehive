@@ -38,8 +38,7 @@ type HueBee struct {
 	bridge string
 }
 
-// Interface impl
-
+// Action triggers the action passed to it.
 func (mod *HueBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 

@@ -41,6 +41,7 @@ type SlackBee struct {
 	apiKey   string
 }
 
+// Action triggers the action passed to it.
 func (mod *SlackBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 

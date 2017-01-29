@@ -37,6 +37,7 @@ type TransmissionBee struct {
 	client *transmission.Client
 }
 
+// Action triggers the action passed to it.
 func (mod *TransmissionBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 	switch action.Name {

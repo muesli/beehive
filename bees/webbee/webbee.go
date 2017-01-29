@@ -107,6 +107,7 @@ func (mod *WebBee) Run(cin chan bees.Event) {
 	}
 }
 
+// Action triggers the action passed to it.
 func (mod *WebBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 

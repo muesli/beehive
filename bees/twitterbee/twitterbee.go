@@ -62,6 +62,7 @@ func handle_anaconda_error(err error, msg string) {
 	}
 }
 
+// Action triggers the action passed to it.
 func (mod *TwitterBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 	switch action.Name {

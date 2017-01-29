@@ -42,6 +42,7 @@ type SerialBee struct {
 	baudrate int
 }
 
+// Action triggers the action passed to it.
 func (mod *SerialBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 	text := ""

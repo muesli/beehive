@@ -36,6 +36,7 @@ type HtmlExtractBee struct {
 	evchan chan bees.Event
 }
 
+// Action triggers the action passed to it.
 func (mod *HtmlExtractBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 

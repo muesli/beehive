@@ -40,6 +40,7 @@ type JabberBee struct {
 	notls    bool
 }
 
+// Action triggers the action passed to it.
 func (mod *JabberBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 

@@ -38,8 +38,7 @@ type EFABee struct {
 	eventChan chan bees.Event
 }
 
-// Interface impl
-
+// Action triggers the action passed to it.
 func (mod *EFABee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 
