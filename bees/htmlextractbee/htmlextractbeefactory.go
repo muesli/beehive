@@ -66,6 +66,7 @@ func (factory *HTMLExtractBeeFactory) Actions() []bees.ActionDescriptor {
 					Name:        "url",
 					Description: "The web page you want to extract information from",
 					Type:        "url",
+					Mandatory:   true,
 				},
 			},
 		},

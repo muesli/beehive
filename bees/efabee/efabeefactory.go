@@ -128,6 +128,7 @@ func (factory *EFABeeFactory) Actions() []bees.ActionDescriptor {
 					Name:        "stop",
 					Description: "The stop you want departures for",
 					Type:        "string",
+					Mandatory:   true,
 				},
 			},
 		},

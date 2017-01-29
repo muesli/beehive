@@ -94,6 +94,7 @@ func (factory *TwitterBeeFactory) Actions() []bees.ActionDescriptor {
 					Name:        "status",
 					Description: "Text of the Status to tweet, may be no longer than 140 characters",
 					Type:        "String",
+					Mandatory:   true,
 				},
 			},
 		},

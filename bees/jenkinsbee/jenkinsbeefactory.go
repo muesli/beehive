@@ -120,6 +120,7 @@ func (factory *JenkinsBeeFactory) Actions() []bees.ActionDescriptor {
 					Name:        "job",
 					Description: "Name of the job on which to trigger a build",
 					Type:        "string",
+					Mandatory:   true,
 				},
 			},
 		},

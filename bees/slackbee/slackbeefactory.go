@@ -114,11 +114,13 @@ func (factory *SlackBeeFactory) Actions() []bees.ActionDescriptor {
 					Name:        "channel",
 					Description: "Which channel to send the message to",
 					Type:        "string",
+					Mandatory:   true,
 				},
 				{
 					Name:        "text",
 					Description: "Content of the message",
 					Type:        "string",
+					Mandatory:   true,
 				},
 			},
 		},

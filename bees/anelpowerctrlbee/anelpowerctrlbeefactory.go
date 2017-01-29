@@ -96,11 +96,13 @@ func (factory *AnelPowerCtrlBeeFactory) Actions() []bees.ActionDescriptor {
 					Name:        "socket",
 					Description: "Which socket to switch",
 					Type:        "int",
+					Mandatory:   true,
 				},
 				{
 					Name:        "state",
 					Description: "True to activate the socket, false to cut the power",
 					Type:        "bool",
+					Mandatory:   true,
 				},
 			},
 		},

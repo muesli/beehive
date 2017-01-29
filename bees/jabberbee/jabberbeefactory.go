@@ -120,11 +120,13 @@ func (factory *JabberBeeFactory) Actions() []bees.ActionDescriptor {
 					Name:        "user",
 					Description: "Which remote to send the message to",
 					Type:        "string",
+					Mandatory:   true,
 				},
 				{
 					Name:        "text",
 					Description: "Content of the message",
 					Type:        "string",
+					Mandatory:   true,
 				},
 			},
 		},

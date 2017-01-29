@@ -131,6 +131,7 @@ func (factory *WebBeeFactory) Actions() []bees.ActionDescriptor {
 					Name:        "url",
 					Description: "Where to connect to",
 					Type:        "string",
+					Mandatory:   true,
 				},
 			},
 		},

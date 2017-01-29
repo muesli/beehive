@@ -42,6 +42,7 @@ type PlaceholderDescriptor struct {
 	Name        string
 	Description string
 	Type        string
+	Mandatory   bool
 }
 
 // A BeeOptionDescriptor shows which config values a module expects.

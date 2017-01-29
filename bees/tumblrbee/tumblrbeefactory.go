@@ -109,6 +109,7 @@ func (factory *TumblrBeeFactory) Actions() []bees.ActionDescriptor {
 					Name:        "text",
 					Description: "Content of the Tumblr post",
 					Type:        "string",
+					Mandatory:   true,
 				},
 			},
 		},
@@ -121,6 +122,7 @@ func (factory *TumblrBeeFactory) Actions() []bees.ActionDescriptor {
 					Name:        "quote",
 					Description: "Content of the Tumblr quote",
 					Type:        "string",
+					Mandatory:   true,
 				},
 				{
 					Name:        "source",

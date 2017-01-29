@@ -97,6 +97,7 @@ func (factory *EmailBeeFactory) Actions() []bees.ActionDescriptor {
 					Name:        "text",
 					Description: "Content of the email",
 					Type:        "string",
+					Mandatory:   true,
 				},
 			},
 		},

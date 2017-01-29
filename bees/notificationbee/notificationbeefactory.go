@@ -68,6 +68,7 @@ func (factory *NotificationBeeFactory) Actions() []bees.ActionDescriptor {
 					Name:        "text",
 					Description: "The content of the notification",
 					Type:        "string",
+					Mandatory:   true,
 				},
 				{
 					Name:        "urgency",

@@ -75,6 +75,7 @@ func (factory *TransmissionBeeFactory) Actions() []bees.ActionDescriptor {
 				Name:        "torrent",
 				Description: "Telegram chat/group to send the message to",
 				Type:        "string",
+				Mandatory:   true,
 			},
 			{
 				Name:        "commandPrefix",

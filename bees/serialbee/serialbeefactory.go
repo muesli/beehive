@@ -109,6 +109,7 @@ func (factory *SerialBeeFactory) Actions() []bees.ActionDescriptor {
 					Name:        "text",
 					Description: "Content of the message",
 					Type:        "string",
+					Mandatory:   true,
 				},
 			},
 		},

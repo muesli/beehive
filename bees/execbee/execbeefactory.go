@@ -92,6 +92,7 @@ func (factory *ExecBeeFactory) Actions() []bees.ActionDescriptor {
 					Name:        "command",
 					Description: "command to be executed",
 					Type:        "string",
+					Mandatory:   true,
 				},
 			},
 		},
