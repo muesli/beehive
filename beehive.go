@@ -102,7 +102,12 @@ func saveConfig(c Config) {
 
 func main() {
 	app.AddFlags([]app.CliFlag{
-		{&configFile, "config", "./beehive.conf", "Config-file to use"},
+		{
+			V:     &configFile,
+			Name:  "config",
+			Value: "./beehive.conf",
+			Desc:  "Config-file to use",
+		},
 	})
 
 	// Parse command-line args for all registered bees

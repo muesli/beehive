@@ -93,8 +93,8 @@ type Bee struct {
 }
 
 var (
-	bees      map[string]*BeeInterface        = make(map[string]*BeeInterface)
-	factories map[string]*BeeFactoryInterface = make(map[string]*BeeFactoryInterface)
+	bees      = make(map[string]*BeeInterface)
+	factories = make(map[string]*BeeFactoryInterface)
 )
 
 // RegisterBee gets called by Bees to register themselves.
