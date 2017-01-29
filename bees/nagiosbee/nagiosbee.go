@@ -67,10 +67,6 @@ type service struct {
 	Plugin_output       string `json:"plugin_output"`
 }
 
-func (mod *NagiosBee) Action(action bees.Action) []bees.Placeholder {
-	return []bees.Placeholder{}
-}
-
 func (mod *NagiosBee) announceStatuschange(s service) {
 	event := bees.Event{
 		Bee:  mod.Name(),

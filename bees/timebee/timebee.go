@@ -88,10 +88,6 @@ func (mod *TimeBee) Timer() {
 	mod.eventChan <- event
 }
 
-func (mod *TimeBee) Action(action bees.Action) []bees.Placeholder {
-	return []bees.Placeholder{}
-}
-
 func (mod *TimeBee) Run(eventChan chan bees.Event) {
 	mod.eventChan = eventChan
 	for {

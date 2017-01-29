@@ -36,10 +36,6 @@ type CronBee struct {
 	eventChan chan bees.Event
 }
 
-func (mod *CronBee) Action(action bees.Action) []bees.Placeholder {
-	return []bees.Placeholder{}
-}
-
 func (mod *CronBee) Run(eventChan chan bees.Event) {
 	mod.eventChan = eventChan
 	timer := cron.ParseInput(mod.input)

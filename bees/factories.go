@@ -166,6 +166,11 @@ func (bee *Bee) WaitGroup() *sync.WaitGroup {
 func (bee *Bee) Run(chan Event) {
 }
 
+// Action is the default, empty implementation of a Bee's Action method.
+func (bee *Bee) Action(action Action) []Placeholder {
+	return []Placeholder{}
+}
+
 // IsRunning returns whether a Bee is currently running.
 func (bee *Bee) IsRunning() bool {
 	return bee.Running

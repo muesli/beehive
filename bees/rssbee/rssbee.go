@@ -160,10 +160,6 @@ func (mod *RSSBee) Run(cin chan bees.Event) {
 	mod.pollFeed(mod.url, 5)
 }
 
-func (mod *RSSBee) Action(action bees.Action) []bees.Placeholder {
-	return []bees.Placeholder{}
-}
-
 func (mod *RSSBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
