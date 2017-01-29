@@ -26,10 +26,12 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// TimeBeeFactory is a factory for TimeBees.
 type TimeBeeFactory struct {
 	bees.BeeFactory
 }
 
+// New returns a new Bee instance configured with the supplied options.
 func (factory *TimeBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := TimeBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
@@ -39,18 +41,22 @@ func (factory *TimeBeeFactory) New(name, description string, options bees.BeeOpt
 	return &bee
 }
 
+// Name returns the name of this Bee.
 func (factory *TimeBeeFactory) Name() string {
 	return "timebee"
 }
 
+// Description returns the description of this Bee.
 func (factory *TimeBeeFactory) Description() string {
 	return "A bee that triggers an event at a given time"
 }
 
+// Image returns the filename of an image for this Bee.
 func (factory *TimeBeeFactory) Image() string {
 	return "cronbee.png"
 }
 
+// Options returns the options available to configure this Bee.
 func (factory *TimeBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
@@ -92,6 +98,7 @@ func (factory *TimeBeeFactory) Options() []bees.BeeOptionDescriptor {
 	return opts
 }
 
+// Events describes the available events provided by this Bee.
 func (factory *TimeBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{

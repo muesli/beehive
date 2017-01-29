@@ -26,10 +26,12 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// NotificationBeeFactory is a factory for NotificationBees.
 type NotificationBeeFactory struct {
 	bees.BeeFactory
 }
 
+// New returns a new Bee instance configured with the supplied options.
 func (factory *NotificationBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := NotificationBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
@@ -39,18 +41,22 @@ func (factory *NotificationBeeFactory) New(name, description string, options bee
 	return &bee
 }
 
+// Name returns the name of this Bee.
 func (factory *NotificationBeeFactory) Name() string {
 	return "notificationbee"
 }
 
+// Description returns the description of this Bee.
 func (factory *NotificationBeeFactory) Description() string {
 	return "A bee that shows desktop-notifications"
 }
 
+// Image returns the filename of an image for this Bee.
 func (factory *NotificationBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// Actions describes the available actions provided by this Bee.
 func (factory *NotificationBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		{

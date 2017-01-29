@@ -26,10 +26,12 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// CronBeeFactory is a factory for CronBees.
 type CronBeeFactory struct {
 	bees.BeeFactory
 }
 
+// New returns a new Bee instance configured with the supplied options.
 func (factory *CronBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := CronBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
@@ -39,18 +41,22 @@ func (factory *CronBeeFactory) New(name, description string, options bees.BeeOpt
 	return &bee
 }
 
+// Name returns the name of this Bee.
 func (factory *CronBeeFactory) Name() string {
 	return "cronbee"
 }
 
+// Description returns the description of this Bee.
 func (factory *CronBeeFactory) Description() string {
 	return "A bee that triggers events in given intervals"
 }
 
+// Image returns the filename of an image for this Bee.
 func (factory *CronBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// Options returns the options available to configure this Bee.
 func (factory *CronBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
@@ -87,6 +93,7 @@ func (factory *CronBeeFactory) Options() []bees.BeeOptionDescriptor {
 	return opts
 }
 
+// Events describes the available events provided by this Bee.
 func (factory *CronBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{

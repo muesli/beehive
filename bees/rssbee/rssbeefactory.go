@@ -24,12 +24,12 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// RSSBeeFactory is a factory for RSSBees.
 type RSSBeeFactory struct {
 	bees.BeeFactory
 }
 
-// Interface impl
-
+// New returns a new Bee instance configured with the supplied options.
 func (factory *RSSBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := RSSBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
@@ -39,18 +39,22 @@ func (factory *RSSBeeFactory) New(name, description string, options bees.BeeOpti
 	return &bee
 }
 
+// Name returns the name of this Bee.
 func (factory *RSSBeeFactory) Name() string {
 	return "rssbee"
 }
 
+// Description returns the description of this Bee.
 func (factory *RSSBeeFactory) Description() string {
 	return "A bee that manages RSS-feeds"
 }
 
+// Image returns the filename of an image for this Bee.
 func (factory *RSSBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// Options returns the options available to configure this Bee.
 func (factory *RSSBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
@@ -69,6 +73,7 @@ func (factory *RSSBeeFactory) Options() []bees.BeeOptionDescriptor {
 	return opts
 }
 
+// Events describes the available events provided by this Bee.
 func (factory *RSSBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{

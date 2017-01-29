@@ -24,12 +24,12 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// HelloBeeFactory is a factory for HelloBees.
 type HelloBeeFactory struct {
 	bees.BeeFactory
 }
 
-// Interface impl
-
+// New returns a new Bee instance configured with the supplied options.
 func (factory *HelloBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := HelloBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
@@ -39,10 +39,12 @@ func (factory *HelloBeeFactory) New(name, description string, options bees.BeeOp
 	return &bee
 }
 
+// Name returns the name of this Bee.
 func (factory *HelloBeeFactory) Name() string {
 	return "hellobee"
 }
 
+// Description returns the description of this Bee.
 func (factory *HelloBeeFactory) Description() string {
 	return "A 'Hello World' module for beehive"
 }

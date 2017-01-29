@@ -25,12 +25,12 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// SpaceApiBeeFactory is a factory for SpaceApiBees.
 type SpaceApiBeeFactory struct {
 	bees.BeeFactory
 }
 
-// Interface impl
-
+// New returns a new Bee instance configured with the supplied options.
 func (factory *SpaceApiBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := SpaceApiBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
@@ -40,18 +40,22 @@ func (factory *SpaceApiBeeFactory) New(name, description string, options bees.Be
 	return &bee
 }
 
+// Name returns the name of this Bee.
 func (factory *SpaceApiBeeFactory) Name() string {
 	return "spaceapibee"
 }
 
+// Description returns the description of this Bee.
 func (factory *SpaceApiBeeFactory) Description() string {
 	return "A bee that echoes the status of a SpaceAPI instance"
 }
 
+// Image returns the filename of an image for this Bee.
 func (factory *SpaceApiBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// Options returns the options available to configure this Bee.
 func (factory *SpaceApiBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
@@ -63,6 +67,7 @@ func (factory *SpaceApiBeeFactory) Options() []bees.BeeOptionDescriptor {
 	return opts
 }
 
+// Actions describes the available actions provided by this Bee.
 func (factory *SpaceApiBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		{
@@ -75,6 +80,7 @@ func (factory *SpaceApiBeeFactory) Actions() []bees.ActionDescriptor {
 	return actions
 }
 
+// Events describes the available events provided by this Bee.
 func (factory *SpaceApiBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{

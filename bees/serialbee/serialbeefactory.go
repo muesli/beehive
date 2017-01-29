@@ -24,12 +24,12 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// SerialBeeFactory is a factory for SerialBees.
 type SerialBeeFactory struct {
 	bees.BeeFactory
 }
 
-// Interface impl
-
+// New returns a new Bee instance configured with the supplied options.
 func (factory *SerialBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := SerialBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
@@ -39,18 +39,22 @@ func (factory *SerialBeeFactory) New(name, description string, options bees.BeeO
 	return &bee
 }
 
+// Name returns the name of this Bee.
 func (factory *SerialBeeFactory) Name() string {
 	return "serialbee"
 }
 
+// Description returns the description of this Bee.
 func (factory *SerialBeeFactory) Description() string {
 	return "A bee that talks serially"
 }
 
+// Image returns the filename of an image for this Bee.
 func (factory *SerialBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// Options returns the options available to configure this Bee.
 func (factory *SerialBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
@@ -69,6 +73,7 @@ func (factory *SerialBeeFactory) Options() []bees.BeeOptionDescriptor {
 	return opts
 }
 
+// Events describes the available events provided by this Bee.
 func (factory *SerialBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{
@@ -92,6 +97,7 @@ func (factory *SerialBeeFactory) Events() []bees.EventDescriptor {
 	return events
 }
 
+// Actions describes the available actions provided by this Bee.
 func (factory *SerialBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		{

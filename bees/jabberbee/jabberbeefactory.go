@@ -24,12 +24,12 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// JabberBeeFactory is a factory for JabberBees.
 type JabberBeeFactory struct {
 	bees.BeeFactory
 }
 
-// Interface impl
-
+// New returns a new Bee instance configured with the supplied options.
 func (factory *JabberBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := JabberBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
@@ -39,18 +39,22 @@ func (factory *JabberBeeFactory) New(name, description string, options bees.BeeO
 	return &bee
 }
 
+// Name returns the name of this Bee.
 func (factory *JabberBeeFactory) Name() string {
 	return "jabberbee"
 }
 
+// Description returns the description of this Bee.
 func (factory *JabberBeeFactory) Description() string {
 	return "A Jabber module for beehive"
 }
 
+// Image returns the filename of an image for this Bee.
 func (factory *JabberBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// Options returns the options available to configure this Bee.
 func (factory *JabberBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
@@ -80,6 +84,7 @@ func (factory *JabberBeeFactory) Options() []bees.BeeOptionDescriptor {
 	return opts
 }
 
+// Events describes the available events provided by this Bee.
 func (factory *JabberBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{
@@ -103,6 +108,7 @@ func (factory *JabberBeeFactory) Events() []bees.EventDescriptor {
 	return events
 }
 
+// Actions describes the available actions provided by this Bee.
 func (factory *JabberBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		{

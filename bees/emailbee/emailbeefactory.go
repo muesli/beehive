@@ -24,12 +24,12 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// EmailBeeFactory is a factory for EmailBees.
 type EmailBeeFactory struct {
 	bees.BeeFactory
 }
 
-// Interface impl
-
+// New returns a new Bee instance configured with the supplied options.
 func (factory *EmailBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := EmailBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
@@ -39,18 +39,22 @@ func (factory *EmailBeeFactory) New(name, description string, options bees.BeeOp
 	return &bee
 }
 
+// Name returns the name of this Bee.
 func (factory *EmailBeeFactory) Name() string {
 	return "emailbee"
 }
 
+// Description returns the description of this Bee.
 func (factory *EmailBeeFactory) Description() string {
 	return "An email module for beehive"
 }
 
+// Image returns the filename of an image for this Bee.
 func (factory *EmailBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// Options returns the options available to configure this Bee.
 func (factory *EmailBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
@@ -75,11 +79,13 @@ func (factory *EmailBeeFactory) Options() []bees.BeeOptionDescriptor {
 	return opts
 }
 
+// Events describes the available events provided by this Bee.
 func (factory *EmailBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{}
 	return events
 }
 
+// Actions describes the available actions provided by this Bee.
 func (factory *EmailBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		{

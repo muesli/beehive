@@ -26,10 +26,12 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// NagiosBeeFactory is a factory for NagiosBees.
 type NagiosBeeFactory struct {
 	bees.BeeFactory
 }
 
+// New returns a new Bee instance configured with the supplied options.
 func (factory *NagiosBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := NagiosBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
@@ -40,18 +42,22 @@ func (factory *NagiosBeeFactory) New(name, description string, options bees.BeeO
 	return &bee
 }
 
+// Name returns the name of this Bee.
 func (factory *NagiosBeeFactory) Name() string {
 	return "nagiosbee"
 }
 
+// Description returns the description of this Bee.
 func (factory *NagiosBeeFactory) Description() string {
 	return "A bee that fetches status changes from nagios-monitors."
 }
 
+// Image returns the filename of an image for this Bee.
 func (factory *NagiosBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// Options returns the options available to configure this Bee.
 func (factory *NagiosBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
@@ -73,6 +79,7 @@ func (factory *NagiosBeeFactory) Options() []bees.BeeOptionDescriptor {
 	return opts
 }
 
+// Events describes the available events provided by this Bee.
 func (factory *NagiosBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{

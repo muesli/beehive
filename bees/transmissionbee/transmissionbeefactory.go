@@ -24,10 +24,12 @@ package transmissionbee
 
 import "github.com/muesli/beehive/bees"
 
+// TransmissionBeeFactory is a factory for TransmissionBees.
 type TransmissionBeeFactory struct {
 	bees.BeeFactory
 }
 
+// New returns a new Bee instance configured with the supplied options.
 func (factory *TransmissionBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := TransmissionBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
@@ -37,6 +39,7 @@ func (factory *TransmissionBeeFactory) New(name, description string, options bee
 	return &bee
 }
 
+// Options returns the options available to configure this Bee.
 func (factory *TransmissionBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
@@ -61,6 +64,7 @@ func (factory *TransmissionBeeFactory) Options() []bees.BeeOptionDescriptor {
 	return opts
 }
 
+// Actions describes the available actions provided by this Bee.
 func (factory *TransmissionBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{{
 		Namespace:   factory.Name(),
@@ -82,14 +86,17 @@ func (factory *TransmissionBeeFactory) Actions() []bees.ActionDescriptor {
 	return actions
 }
 
+// Name returns the name of this Bee.
 func (factory *TransmissionBeeFactory) Name() string {
 	return "transmissionbee"
 }
 
+// Image returns the filename of an image for this Bee.
 func (factory *TransmissionBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// Description returns the description of this Bee.
 func (factory *TransmissionBeeFactory) Description() string {
 	return "A bee for adding torrents to a transmission server"
 }

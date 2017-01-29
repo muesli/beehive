@@ -24,12 +24,12 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// IrcBeeFactory is a factory for IrcBees.
 type IrcBeeFactory struct {
 	bees.BeeFactory
 }
 
-// Interface impl
-
+// New returns a new Bee instance configured with the supplied options.
 func (factory *IrcBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := IrcBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
@@ -39,22 +39,27 @@ func (factory *IrcBeeFactory) New(name, description string, options bees.BeeOpti
 	return &bee
 }
 
+// Name returns the name of this Bee.
 func (factory *IrcBeeFactory) Name() string {
 	return "ircbee"
 }
 
+// Description returns the description of this Bee.
 func (factory *IrcBeeFactory) Description() string {
 	return "An IRC module for beehive"
 }
 
+// Image returns the filename of an image for this Bee.
 func (factory *IrcBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// LogoColor returns the preferred logo background color (used by the admin interface).
 func (factory *IrcBeeFactory) LogoColor() string {
 	return "#3274d0"
 }
 
+// Options returns the options available to configure this Bee.
 func (factory *IrcBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
@@ -91,6 +96,7 @@ func (factory *IrcBeeFactory) Options() []bees.BeeOptionDescriptor {
 	return opts
 }
 
+// Events describes the available events provided by this Bee.
 func (factory *IrcBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{
@@ -124,6 +130,7 @@ func (factory *IrcBeeFactory) Events() []bees.EventDescriptor {
 	return events
 }
 
+// Actions describes the available actions provided by this Bee.
 func (factory *IrcBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		{

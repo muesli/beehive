@@ -24,12 +24,12 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// AnelPowerCtrlBeeFactory is a factory for AnelPowerCtrlBees.
 type AnelPowerCtrlBeeFactory struct {
 	bees.BeeFactory
 }
 
-// Interface impl
-
+// New returns a new Bee instance configured with the supplied options.
 func (factory *AnelPowerCtrlBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := AnelPowerCtrlBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
@@ -39,22 +39,27 @@ func (factory *AnelPowerCtrlBeeFactory) New(name, description string, options be
 	return &bee
 }
 
+// Name returns the name of this Bee.
 func (factory *AnelPowerCtrlBeeFactory) Name() string {
 	return "anelpowerctrlbee"
 }
 
+// Description returns the description of this Bee.
 func (factory *AnelPowerCtrlBeeFactory) Description() string {
 	return "A bee that controls Anel's PowerCtrl"
 }
 
+// Image returns the filename of an image for this Bee.
 func (factory *AnelPowerCtrlBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// LogoColor returns the preferred logo background color (used by the admin interface).
 func (factory *AnelPowerCtrlBeeFactory) LogoColor() string {
 	return "#73d44c"
 }
 
+// Options returns the options available to configure this Bee.
 func (factory *AnelPowerCtrlBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
@@ -79,6 +84,7 @@ func (factory *AnelPowerCtrlBeeFactory) Options() []bees.BeeOptionDescriptor {
 	return opts
 }
 
+// Actions describes the available actions provided by this Bee.
 func (factory *AnelPowerCtrlBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		{

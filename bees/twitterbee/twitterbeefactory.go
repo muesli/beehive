@@ -25,12 +25,12 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// TwitterBeeFactory is a factory for TwitterBees.
 type TwitterBeeFactory struct {
 	bees.BeeFactory
 }
 
-// Interface impl
-
+// New returns a new Bee instance configured with the supplied options.
 func (factory *TwitterBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := TwitterBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
@@ -40,18 +40,22 @@ func (factory *TwitterBeeFactory) New(name, description string, options bees.Bee
 	return &bee
 }
 
+// Name returns the name of this Bee.
 func (factory *TwitterBeeFactory) Name() string {
 	return "twitterbee"
 }
 
+// Description returns the description of this Bee.
 func (factory *TwitterBeeFactory) Description() string {
 	return "Tweet and receive Tweets."
 }
 
+// Image returns the filename of an image for this Bee.
 func (factory *TwitterBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// Options returns the options available to configure this Bee.
 func (factory *TwitterBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
@@ -78,6 +82,7 @@ func (factory *TwitterBeeFactory) Options() []bees.BeeOptionDescriptor {
 	return opts
 }
 
+// Actions describes the available actions provided by this Bee.
 func (factory *TwitterBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		{
@@ -96,6 +101,7 @@ func (factory *TwitterBeeFactory) Actions() []bees.ActionDescriptor {
 	return actions
 }
 
+// Events describes the available events provided by this Bee.
 func (factory *TwitterBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{

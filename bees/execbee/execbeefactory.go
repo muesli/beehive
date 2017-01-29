@@ -26,11 +26,12 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// ExecBeeFactory is a factory for ExecBees.
 type ExecBeeFactory struct {
 	bees.BeeFactory
 }
 
-// Interface impl
+// New returns a new Bee instance configured with the supplied options.
 func (factory *ExecBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := ExecBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
@@ -40,18 +41,22 @@ func (factory *ExecBeeFactory) New(name, description string, options bees.BeeOpt
 	return &bee
 }
 
+// Name returns the name of this Bee.
 func (factory *ExecBeeFactory) Name() string {
 	return "execbee"
 }
 
+// Description returns the description of this Bee.
 func (factory *ExecBeeFactory) Description() string {
 	return "A bee that allows executing commands"
 }
 
+// Image returns the filename of an image for this Bee.
 // func (factory *ExecBeeFactory) Image() string {
 // 	return factory.Name() + ".png"
 // }
 
+// Events describes the available events provided by this Bee.
 func (factory *ExecBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{
@@ -75,6 +80,7 @@ func (factory *ExecBeeFactory) Events() []bees.EventDescriptor {
 	return events
 }
 
+// Actions describes the available actions provided by this Bee.
 func (factory *ExecBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		{

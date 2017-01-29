@@ -24,10 +24,12 @@ package slackbee
 
 import "github.com/muesli/beehive/bees"
 
+// SlackBeeFactory is a factory for SlackBees.
 type SlackBeeFactory struct {
 	bees.BeeFactory
 }
 
+// New returns a new Bee instance configured with the supplied options.
 func (factory *SlackBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := SlackBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
@@ -37,18 +39,22 @@ func (factory *SlackBeeFactory) New(name, description string, options bees.BeeOp
 	return &bee
 }
 
+// Name returns the name of this Bee.
 func (factory *SlackBeeFactory) Name() string {
 	return "slackbee"
 }
 
+// Description returns the description of this Bee.
 func (factory *SlackBeeFactory) Description() string {
 	return "A Slack module for beehive"
 }
 
+// Image returns the filename of an image for this Bee.
 func (factory *SlackBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// Options returns the options available to configure this Bee.
 func (factory *SlackBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
@@ -67,6 +73,7 @@ func (factory *SlackBeeFactory) Options() []bees.BeeOptionDescriptor {
 	return opts
 }
 
+// Events describes the available events provided by this Bee.
 func (factory *SlackBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{
@@ -95,6 +102,7 @@ func (factory *SlackBeeFactory) Events() []bees.EventDescriptor {
 	return events
 }
 
+// Actions describes the available actions provided by this Bee.
 func (factory *SlackBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		{

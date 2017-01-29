@@ -24,12 +24,12 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// HtmlExtractBeeFactory is a factory for HtmlExtractBees.
 type HtmlExtractBeeFactory struct {
 	bees.BeeFactory
 }
 
-// Interface impl
-
+// New returns a new Bee instance configured with the supplied options.
 func (factory *HtmlExtractBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := HtmlExtractBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
@@ -39,18 +39,22 @@ func (factory *HtmlExtractBeeFactory) New(name, description string, options bees
 	return &bee
 }
 
+// Name returns the name of this Bee.
 func (factory *HtmlExtractBeeFactory) Name() string {
 	return "htmlextractbee"
 }
 
+// Description returns the description of this Bee.
 func (factory *HtmlExtractBeeFactory) Description() string {
 	return "A bee that extracts information from an arbitrary web page"
 }
 
+// Image returns the filename of an image for this Bee.
 func (factory *HtmlExtractBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// Actions describes the available actions provided by this Bee.
 func (factory *HtmlExtractBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		{
@@ -69,6 +73,7 @@ func (factory *HtmlExtractBeeFactory) Actions() []bees.ActionDescriptor {
 	return actions
 }
 
+// Events describes the available events provided by this Bee.
 func (factory *HtmlExtractBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{

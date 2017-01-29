@@ -24,12 +24,12 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// TumblrBeeFactory is a factory for TumblrBees.
 type TumblrBeeFactory struct {
 	bees.BeeFactory
 }
 
-// Interface impl
-
+// New returns a new Bee instance configured with the supplied options.
 func (factory *TumblrBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := TumblrBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
@@ -39,18 +39,22 @@ func (factory *TumblrBeeFactory) New(name, description string, options bees.BeeO
 	return &bee
 }
 
+// Name returns the name of this Bee.
 func (factory *TumblrBeeFactory) Name() string {
 	return "tumblrbee"
 }
 
+// Description returns the description of this Bee.
 func (factory *TumblrBeeFactory) Description() string {
 	return "A Tumblr module for beehive"
 }
 
+// Image returns the filename of an image for this Bee.
 func (factory *TumblrBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// Options returns the options available to configure this Bee.
 func (factory *TumblrBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
@@ -93,11 +97,7 @@ func (factory *TumblrBeeFactory) Options() []bees.BeeOptionDescriptor {
 	return opts
 }
 
-func (factory *TumblrBeeFactory) Events() []bees.EventDescriptor {
-	events := []bees.EventDescriptor{}
-	return events
-}
-
+// Actions describes the available actions provided by this Bee.
 func (factory *TumblrBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		{

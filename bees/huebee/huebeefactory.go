@@ -24,12 +24,12 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+// HueBeeFactory is a factory for HueBees.
 type HueBeeFactory struct {
 	bees.BeeFactory
 }
 
-// Interface impl
-
+// New returns a new Bee instance configured with the supplied options.
 func (factory *HueBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := HueBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
@@ -39,22 +39,27 @@ func (factory *HueBeeFactory) New(name, description string, options bees.BeeOpti
 	return &bee
 }
 
+// Name returns the name of this Bee.
 func (factory *HueBeeFactory) Name() string {
 	return "huebee"
 }
 
+// Description returns the description of this Bee.
 func (factory *HueBeeFactory) Description() string {
 	return "A Philips hue module for beehive"
 }
 
+// Image returns the filename of an image for this Bee.
 func (factory *HueBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// LogoColor returns the preferred logo background color (used by the admin interface).
 func (factory *HueBeeFactory) LogoColor() string {
 	return "#212727"
 }
 
+// Options returns the options available to configure this Bee.
 func (factory *HueBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
@@ -73,11 +78,13 @@ func (factory *HueBeeFactory) Options() []bees.BeeOptionDescriptor {
 	return opts
 }
 
+// Events describes the available events provided by this Bee.
 func (factory *HueBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{}
 	return events
 }
 
+// Actions describes the available actions provided by this Bee.
 func (factory *HueBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		{

@@ -24,10 +24,12 @@ package telegrambee
 
 import "github.com/muesli/beehive/bees"
 
+// TelegramBeeFactory is a factory for TelegramBees.
 type TelegramBeeFactory struct {
 	bees.BeeFactory
 }
 
+// New returns a new Bee instance configured with the supplied options.
 func (factory *TelegramBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := TelegramBee{
 		Bee: bees.NewBee(name, factory.Name(), description, options),
@@ -37,18 +39,22 @@ func (factory *TelegramBeeFactory) New(name, description string, options bees.Be
 	return &bee
 }
 
+// Name returns the name of this Bee.
 func (factory *TelegramBeeFactory) Name() string {
 	return "telegrambee"
 }
 
+// Description returns the description of this Bee.
 func (factory *TelegramBeeFactory) Description() string {
 	return "A Telegram bot bee"
 }
 
+// Image returns the filename of an image for this Bee.
 func (factory *TelegramBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// Options returns the options available to configure this Bee.
 func (factory *TelegramBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
@@ -61,6 +67,7 @@ func (factory *TelegramBeeFactory) Options() []bees.BeeOptionDescriptor {
 	return opts
 }
 
+// Events describes the available events provided by this Bee.
 func (factory *TelegramBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{
@@ -89,6 +96,7 @@ func (factory *TelegramBeeFactory) Events() []bees.EventDescriptor {
 	return events
 }
 
+// Actions describes the available actions provided by this Bee.
 func (factory *TelegramBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{{
 		Namespace:   factory.Name(),
