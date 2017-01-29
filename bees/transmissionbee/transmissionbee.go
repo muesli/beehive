@@ -62,7 +62,7 @@ func (mod *TransmissionBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
 	conf := transmission.Config{}
-	options.Bind("server_url", &conf.Address)
+	options.Bind("url", &conf.Address)
 	options.Bind("username", &conf.User)
 	options.Bind("password", &conf.Password)
 

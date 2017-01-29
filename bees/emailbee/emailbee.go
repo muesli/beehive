@@ -71,5 +71,5 @@ func (mod *EmailBee) ReloadOptions(options bees.BeeOptions) {
 
 	options.Bind("username", &mod.username)
 	options.Bind("password", &mod.password)
-	options.Bind("server", &mod.server)
+	options.Bind("address", &mod.server)
 }

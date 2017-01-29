@@ -58,7 +58,7 @@ func (factory *JabberBeeFactory) Image() string {
 func (factory *JabberBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
-			Name:        "server",
+			Name:        "address",
 			Description: "Hostname of Jabber server, eg: talk.google.com:443",
 			Type:        "string",
 			Mandatory:   true,

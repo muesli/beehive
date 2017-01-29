@@ -70,7 +70,7 @@ func (factory *EmailBeeFactory) Options() []bees.BeeOptionDescriptor {
 			Mandatory:   true,
 		},
 		{
-			Name:        "server",
+			Name:        "address",
 			Description: "Address of SMTP server, eg: smtp.myserver.com:587",
 			Type:        "url",
 			Mandatory:   true,

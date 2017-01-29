@@ -115,7 +115,7 @@ func (mod *HueBee) Action(action bees.Action) []bees.Placeholder {
 func (mod *HueBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
-	options.Bind("bridge", &mod.bridge)
+	options.Bind("address", &mod.bridge)
 	options.Bind("key", &mod.key)
 
 	mod.client = hue.NewBridge(mod.bridge, mod.key)

@@ -63,7 +63,7 @@ func (factory *HueBeeFactory) LogoColor() string {
 func (factory *HueBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
-			Name:        "bridge",
+			Name:        "address",
 			Description: "Address of the Hue bridge, eg: 192.168.0.1",
 			Type:        "url",
 			Mandatory:   true,

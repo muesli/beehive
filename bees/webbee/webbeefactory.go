@@ -58,7 +58,7 @@ func (factory *WebBeeFactory) Image() string {
 func (factory *WebBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
-			Name:        "addr",
+			Name:        "address",
 			Description: "Which addr to listen on, eg: 0.0.0.0:12345",
 			Type:        "string",
 			Mandatory:   true,

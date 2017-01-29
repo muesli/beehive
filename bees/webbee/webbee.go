@@ -186,6 +186,6 @@ func (mod *WebBee) postRequest(ctx *web.Context) {
 func (mod *WebBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
-	options.Bind("addr", &mod.addr)
+	options.Bind("address", &mod.addr)
 	options.Bind("path", &mod.path)
 }

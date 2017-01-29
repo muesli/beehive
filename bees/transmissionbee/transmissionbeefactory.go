@@ -43,7 +43,7 @@ func (factory *TransmissionBeeFactory) New(name, description string, options bee
 func (factory *TransmissionBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
-			Name:        "server_url",
+			Name:        "url",
 			Description: "Transmission server URL",
 			Type:        "url",
 			Mandatory:   true,

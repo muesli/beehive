@@ -128,7 +128,7 @@ func (mod *JabberBee) Run(eventChan chan bees.Event) {
 func (mod *JabberBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
-	options.Bind("server", &mod.server)
+	options.Bind("address", &mod.server)
 	options.Bind("user", &mod.user)
 	options.Bind("password", &mod.password)
 	options.Bind("notls", &mod.notls)

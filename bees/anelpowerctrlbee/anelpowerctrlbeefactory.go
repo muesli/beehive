@@ -63,7 +63,7 @@ func (factory *AnelPowerCtrlBeeFactory) LogoColor() string {
 func (factory *AnelPowerCtrlBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
-			Name:        "server",
+			Name:        "address",
 			Description: "Hostname of Anel PowerCtrl device, eg: 192.168.0.2",
 			Type:        "string",
 			Mandatory:   true,

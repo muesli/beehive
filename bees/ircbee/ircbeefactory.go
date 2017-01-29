@@ -63,7 +63,7 @@ func (factory *IrcBeeFactory) LogoColor() string {
 func (factory *IrcBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
-			Name:        "server",
+			Name:        "address",
 			Description: "Hostname of IRC server, eg: irc.example.org:6667",
 			Type:        "url",
 			Mandatory:   true,

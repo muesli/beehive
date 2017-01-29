@@ -241,7 +241,7 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 func (mod *IrcBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
-	options.Bind("server", &mod.server)
+	options.Bind("address", &mod.server)
 	options.Bind("nick", &mod.nick)
 	options.Bind("password", &mod.password)
 	options.Bind("ssl", &mod.ssl)
