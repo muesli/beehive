@@ -21,8 +21,6 @@
 package bees
 
 import (
-	"net/http"
-
 	"github.com/emicklei/go-restful"
 	"github.com/muesli/beehive/bees"
 	"github.com/muesli/smolder"
@@ -63,21 +61,25 @@ func (r *BeeResource) Post(context smolder.APIContext, request *restful.Request,
 	err := request.ReadEntity(&pps)
 	if err != nil {
 		smolder.ErrorResponseHandler(request, response, smolder.NewErrorResponse(
-			http.StatusBadRequest,
+			422, // Go 1.7+: http.StatusUnprocessableEntity,
 			false,
 			"Can't parse POST data",
 			"BeeResource POST"))
 		return
 	}
 
-	bi := bees.BeeConfig{
-		Class:       pps.Bee.Namespace,
-		Name:        pps.Bee.Name,
-		Description: pps.Bee.Description,
-		Options:     pps.Bee.Options,
+	c, err := bees.NewBeeConfig(pps.Bee.Name, pps.Bee.Namespace, pps.Bee.Description, pps.Bee.Options)
+	if err != nil {
+		smolder.ErrorResponseHandler(request, response, smolder.NewErrorResponse(
+			422, // Go 1.7+: http.StatusUnprocessableEntity,
+			false,
+			err,
+			"BeeResource POST"))
+		return
 	}
-	bee := bees.StartBee(bi)
 
+	bee := bees.StartBee(c)
 	resp.AddBee(bee)
+
 	resp.Send(response)
 }
