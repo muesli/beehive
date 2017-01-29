@@ -31,6 +31,7 @@
    installation resides
 */
 
+// Package nagiosbee is a Bee that can interface with a Nagios instance.
 package nagiosbee
 
 import (

@@ -20,6 +20,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
+// Package timebee is a Bee that can fire events at a specific time.
 package timebee
 
 import (

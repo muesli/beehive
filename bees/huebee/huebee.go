@@ -18,7 +18,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// beehive's Philips Hue module.
+// Package huebee is a Bee that can talk to Philips Hue bridges.
 package huebee
 
 import (

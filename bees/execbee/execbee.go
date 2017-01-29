@@ -20,7 +20,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// beehive's exec command module.
+// Package execbee is a Bee that can launch external processes.
 package execbee
 
 import (

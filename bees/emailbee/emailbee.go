@@ -18,7 +18,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// beehive's email module.
+// Package emailbee is a Bee that is able to send emails.
 package emailbee
 
 import (

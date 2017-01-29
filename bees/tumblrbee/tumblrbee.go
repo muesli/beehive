@@ -18,7 +18,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// beehive's Tumblr module.
+// Package tumblrbee is a Bee that can post blogs & quotes on Tumblr.
 package tumblrbee
 
 import (

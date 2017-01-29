@@ -20,6 +20,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
+// Package slackbee is a Bee that can connect to Slack.
 package slackbee
 
 import (

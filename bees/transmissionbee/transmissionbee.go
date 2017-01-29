@@ -20,6 +20,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
+// Package transmissionbee is a Bee that can send torrents to Transmission.
 package transmissionbee
 
 import (

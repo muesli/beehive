@@ -18,7 +18,8 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// beehive's Anel PowerCtrl module.
+// Package anelpowerctrlbee is a Bee for talking to Anel's PowerCtrl network
+// power sockets.
 package anelpowerctrlbee
 
 import (

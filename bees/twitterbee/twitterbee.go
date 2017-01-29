@@ -19,7 +19,7 @@
  *      Johannes Fürmann <johannes@weltraumpflege.org>
  */
 
-// beehive's Twitter module.
+// Package twitterbee is a Bee that can interface with Twitter.
 package twitterbee
 
 import (

@@ -18,7 +18,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// beehive's Jabber module.
+// Package jabberbee is a Bee that can connect to a Jabber/XMPP server.
 package jabberbee
 
 import (

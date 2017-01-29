@@ -20,6 +20,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
+// Package cronbee is a Bee that acts like a time-based job scheduler (cron).
 package cronbee
 
 import (

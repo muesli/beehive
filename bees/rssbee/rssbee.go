@@ -20,7 +20,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// RSS module for beehive.
+// Package rssbee is a Bee for handling RSS feeds.
 package rssbee
 
 import (

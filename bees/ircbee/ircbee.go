@@ -18,7 +18,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// beehive's IRC module.
+// Package ircbee is a Bee that can connect to an IRC server.
 package ircbee
 
 import (

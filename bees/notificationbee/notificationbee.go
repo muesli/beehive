@@ -20,6 +20,8 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
+// Package notificationbee is a Bee that can trigger freedesktop.org
+// DBus notifications.
 package notificationbee
 
 import (

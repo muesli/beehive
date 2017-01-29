@@ -18,7 +18,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// beehive's EVA module.
+// Package efabee is a Bee that interfaces with the public EVA API.
 package efabee
 
 import (

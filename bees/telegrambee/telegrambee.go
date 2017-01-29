@@ -20,6 +20,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
+// Package telegrambee is a Bee that can connect to Telegram.
 package telegrambee
 
 import (

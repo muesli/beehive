@@ -20,7 +20,8 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// hellobee dummy module for beehive.
+// Package hellobee is an example for a Bee skeleton, designed to help you get
+// started with writing your own Bees.
 package hellobee
 
 import (

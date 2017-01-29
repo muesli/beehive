@@ -19,7 +19,7 @@
  *      Johannes Fürmann <johannes@weltraumpflege.org>
  */
 
-// beehive's SpaceAPI module.
+// Package spaceapibee is a Bee that can query a spaceapi server.
 package spaceapibee
 
 import (

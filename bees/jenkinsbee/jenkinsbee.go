@@ -20,6 +20,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
+// Package jenkinsbee is a Bee that can interface with a Jenkins server.
 package jenkinsbee
 
 import (

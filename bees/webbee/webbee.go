@@ -18,7 +18,8 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// beehive's web-module.
+// Package webbee is a Bee that starts an HTTP server and fires events for
+// incoming requests.
 package webbee
 
 import (

@@ -18,7 +18,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// beehive's Serial module.
+// Package serialbee is a Bee that can send & receive data on a serial port.
 package serialbee
 
 import (

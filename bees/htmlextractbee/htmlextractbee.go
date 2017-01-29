@@ -18,7 +18,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// beehive's Html Extraction module.
+// Package htmlextractbee is a Bee that can extract metadata from HTTP URLs.
 package htmlextractbee
 
 import (
