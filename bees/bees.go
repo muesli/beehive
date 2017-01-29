@@ -240,6 +240,102 @@ func BeeConfigs() []BeeConfig {
 	return bs
 }
 
+// Name returns the configured name for a bee.
+func (bee *Bee) Name() string {
+	return bee.config.Name
+}
+
+// Namespace returns the namespace for a bee.
+func (bee *Bee) Namespace() string {
+	return bee.config.Class
+}
+
+// Description returns the description for a bee.
+func (bee *Bee) Description() string {
+	return bee.config.Description
+}
+
+// SetDescription sets the description for a bee.
+func (bee *Bee) SetDescription(s string) {
+	bee.config.Description = s
+}
+
+// Config returns the config for a bee.
+func (bee *Bee) Config() BeeConfig {
+	return bee.config
+}
+
+// Options returns the options for a bee.
+func (bee *Bee) Options() BeeOptions {
+	return bee.config.Options
+}
+
+// SetOptions sets the options for a bee.
+func (bee *Bee) SetOptions(options BeeOptions) {
+	bee.config.Options = options
+}
+
+// SetSigChan sets the signaling channel for a bee.
+func (bee *Bee) SetSigChan(c chan bool) {
+	bee.SigChan = c
+}
+
+// WaitGroup returns the WaitGroup for a bee.
+func (bee *Bee) WaitGroup() *sync.WaitGroup {
+	return bee.waitGroup
+}
+
+// Run is the default, empty implementation of a Bee's Run method.
+func (bee *Bee) Run(chan Event) {
+}
+
+// Action is the default, empty implementation of a Bee's Action method.
+func (bee *Bee) Action(action Action) []Placeholder {
+	return []Placeholder{}
+}
+
+// IsRunning returns whether a Bee is currently running.
+func (bee *Bee) IsRunning() bool {
+	return bee.Running
+}
+
+// Start gets called when a Bee gets started.
+func (bee *Bee) Start() {
+	bee.Running = true
+}
+
+// Stop gracefully stops a Bee.
+func (bee *Bee) Stop() {
+	if !bee.IsRunning() {
+		return
+	}
+
+	close(bee.SigChan)
+	bee.waitGroup.Wait()
+	bee.Running = false
+	log.Println(bee.Name(), "stopped gracefully!")
+}
+
+// LastEvent returns the timestamp of the last triggered event.
+func (bee *Bee) LastEvent() time.Time {
+	return bee.lastEvent
+}
+
+// LastAction returns the timestamp of the last triggered action.
+func (bee *Bee) LastAction() time.Time {
+	return bee.lastAction
+}
+
+// LogEvent logs the last triggered event.
+func (bee *Bee) LogEvent() {
+	bee.lastEvent = time.Now()
+}
+
+// LogAction logs the last triggered action.
+func (bee *Bee) LogAction() {
+	bee.lastAction = time.Now()
+}
+
 // UUID generates a new unique ID.
 func UUID() string {
 	u, _ := uuid.NewV4()
