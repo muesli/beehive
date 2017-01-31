@@ -1,6 +1,8 @@
 beehive
 =======
 
+[![Join the chat at https://gitter.im/the_beehive/Lobby](https://badges.gitter.im/the_beehive/Lobby.svg)](https://gitter.im/the_beehive/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 beehive is an event and agent system, which allows you to create your own
 agents that perform automated tasks triggered by events and filters. It is
 modular, flexible and really easy to extend - for anyone. It has modules
