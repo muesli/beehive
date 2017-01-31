@@ -19,7 +19,7 @@ Connecting those bees with each other let's you create immensly useful agents.
 * Control your Hue lighting system
 * Notify you when a stock's price drops below a certain value
 
-![beehive's Logo](/assets/logo.png?raw=true)
+![beehive's Logo](/assets/logo_256.png?raw=true)
 
 ## Installation
 
