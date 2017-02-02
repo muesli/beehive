@@ -54,6 +54,11 @@ func (factory *SlackBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// LogoColor returns the preferred logo background color (used by the admin interface).
+func (factory *SlackBeeFactory) LogoColor() string {
+	return "#4b4b4b"
+}
+
 // Options returns the options available to configure this Bee.
 func (factory *SlackBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{

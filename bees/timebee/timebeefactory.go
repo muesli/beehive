@@ -56,6 +56,11 @@ func (factory *TimeBeeFactory) Image() string {
 	return "cronbee.png"
 }
 
+// LogoColor returns the preferred logo background color (used by the admin interface).
+func (factory *TimeBeeFactory) LogoColor() string {
+	return "#00aa4f"
+}
+
 // Options returns the options available to configure this Bee.
 func (factory *TimeBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{

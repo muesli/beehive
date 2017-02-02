@@ -39,6 +39,26 @@ func (factory *TransmissionBeeFactory) New(name, description string, options bee
 	return &bee
 }
 
+// Name returns the name of this Bee.
+func (factory *TransmissionBeeFactory) Name() string {
+	return "transmissionbee"
+}
+
+// Image returns the filename of an image for this Bee.
+func (factory *TransmissionBeeFactory) Image() string {
+	return factory.Name() + ".png"
+}
+
+// Description returns the description of this Bee.
+func (factory *TransmissionBeeFactory) Description() string {
+	return "A bee for adding torrents to a transmission server"
+}
+
+// LogoColor returns the preferred logo background color (used by the admin interface).
+func (factory *TransmissionBeeFactory) LogoColor() string {
+	return "#111111"
+}
+
 // Options returns the options available to configure this Bee.
 func (factory *TransmissionBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
@@ -85,21 +105,6 @@ func (factory *TransmissionBeeFactory) Actions() []bees.ActionDescriptor {
 		},
 	}}
 	return actions
-}
-
-// Name returns the name of this Bee.
-func (factory *TransmissionBeeFactory) Name() string {
-	return "transmissionbee"
-}
-
-// Image returns the filename of an image for this Bee.
-func (factory *TransmissionBeeFactory) Image() string {
-	return factory.Name() + ".png"
-}
-
-// Description returns the description of this Bee.
-func (factory *TransmissionBeeFactory) Description() string {
-	return "A bee for adding torrents to a transmission server"
 }
 
 func init() {

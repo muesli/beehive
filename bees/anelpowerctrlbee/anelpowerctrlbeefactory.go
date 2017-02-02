@@ -56,7 +56,7 @@ func (factory *AnelPowerCtrlBeeFactory) Image() string {
 
 // LogoColor returns the preferred logo background color (used by the admin interface).
 func (factory *AnelPowerCtrlBeeFactory) LogoColor() string {
-	return "#73d44c"
+	return "#231f20"
 }
 
 // Options returns the options available to configure this Bee.

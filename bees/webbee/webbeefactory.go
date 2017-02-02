@@ -54,6 +54,11 @@ func (factory *WebBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// LogoColor returns the preferred logo background color (used by the admin interface).
+func (factory *WebBeeFactory) LogoColor() string {
+	return "#223f5e"
+}
+
 // Options returns the options available to configure this Bee.
 func (factory *WebBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{

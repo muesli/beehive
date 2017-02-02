@@ -56,6 +56,11 @@ func (factory *NotificationBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// LogoColor returns the preferred logo background color (used by the admin interface).
+func (factory *NotificationBeeFactory) LogoColor() string {
+	return "#00aeef"
+}
+
 // Actions describes the available actions provided by this Bee.
 func (factory *NotificationBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{

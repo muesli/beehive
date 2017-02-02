@@ -55,6 +55,11 @@ func (factory *SpaceAPIBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// LogoColor returns the preferred logo background color (used by the admin interface).
+func (factory *SpaceAPIBeeFactory) LogoColor() string {
+	return "#edb112"
+}
+
 // Options returns the options available to configure this Bee.
 func (factory *SpaceAPIBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{

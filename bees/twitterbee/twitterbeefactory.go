@@ -55,6 +55,11 @@ func (factory *TwitterBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// LogoColor returns the preferred logo background color (used by the admin interface).
+func (factory *TwitterBeeFactory) LogoColor() string {
+	return "#00abec"
+}
+
 // Options returns the options available to configure this Bee.
 func (factory *TwitterBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{

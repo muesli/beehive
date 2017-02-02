@@ -54,6 +54,11 @@ func (factory *TelegramBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// LogoColor returns the preferred logo background color (used by the admin interface).
+func (factory *TelegramBeeFactory) LogoColor() string {
+	return "#003b66"
+}
+
 // Options returns the options available to configure this Bee.
 func (factory *TelegramBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{

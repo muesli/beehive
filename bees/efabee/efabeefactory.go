@@ -56,7 +56,7 @@ func (factory *EFABeeFactory) Image() string {
 
 // LogoColor returns the preferred logo background color (used by the admin interface).
 func (factory *EFABeeFactory) LogoColor() string {
-	return "#ef3e56"
+	return "#00aa4f"
 }
 
 // Options returns the options available to configure this Bee.

@@ -54,6 +54,11 @@ func (factory *TumblrBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// LogoColor returns the preferred logo background color (used by the admin interface).
+func (factory *TumblrBeeFactory) LogoColor() string {
+	return "#35465c"
+}
+
 // Options returns the options available to configure this Bee.
 func (factory *TumblrBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{

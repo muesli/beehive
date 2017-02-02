@@ -56,6 +56,11 @@ func (factory *JenkinsBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// LogoColor returns the preferred logo background color (used by the admin interface).
+func (factory *JenkinsBeeFactory) LogoColor() string {
+	return "#9571d6"
+}
+
 // Options returns the options available to configure this Bee.
 func (factory *JenkinsBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{

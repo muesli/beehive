@@ -57,6 +57,11 @@ func (factory *NagiosBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// LogoColor returns the preferred logo background color (used by the admin interface).
+func (factory *NagiosBeeFactory) LogoColor() string {
+	return "#7eb758"
+}
+
 // Options returns the options available to configure this Bee.
 func (factory *NagiosBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{

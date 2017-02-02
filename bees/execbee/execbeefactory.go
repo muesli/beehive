@@ -56,6 +56,11 @@ func (factory *ExecBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// LogoColor returns the preferred logo background color (used by the admin interface).
+func (factory *ExecBeeFactory) LogoColor() string {
+	return "#be1728"
+}
+
 // Events describes the available events provided by this Bee.
 func (factory *ExecBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{

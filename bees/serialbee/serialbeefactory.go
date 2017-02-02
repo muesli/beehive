@@ -54,6 +54,11 @@ func (factory *SerialBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// LogoColor returns the preferred logo background color (used by the admin interface).
+func (factory *SerialBeeFactory) LogoColor() string {
+	return "#73d44c"
+}
+
 // Options returns the options available to configure this Bee.
 func (factory *SerialBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{

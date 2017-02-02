@@ -54,6 +54,11 @@ func (factory *EmailBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// LogoColor returns the preferred logo background color (used by the admin interface).
+func (factory *EmailBeeFactory) LogoColor() string {
+	return "#00bbff"
+}
+
 // Options returns the options available to configure this Bee.
 func (factory *EmailBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{

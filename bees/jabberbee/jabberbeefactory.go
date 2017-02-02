@@ -54,6 +54,11 @@ func (factory *JabberBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// LogoColor returns the preferred logo background color (used by the admin interface).
+func (factory *JabberBeeFactory) LogoColor() string {
+	return "#63825e"
+}
+
 // Options returns the options available to configure this Bee.
 func (factory *JabberBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{

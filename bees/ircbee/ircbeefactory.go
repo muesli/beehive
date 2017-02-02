@@ -56,7 +56,7 @@ func (factory *IrcBeeFactory) Image() string {
 
 // LogoColor returns the preferred logo background color (used by the admin interface).
 func (factory *IrcBeeFactory) LogoColor() string {
-	return "#3274d0"
+	return "#ef3e56"
 }
 
 // Options returns the options available to configure this Bee.

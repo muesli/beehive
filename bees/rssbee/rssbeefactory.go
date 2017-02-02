@@ -54,6 +54,11 @@ func (factory *RSSBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// LogoColor returns the preferred logo background color (used by the admin interface).
+func (factory *RSSBeeFactory) LogoColor() string {
+	return "#ec7505"
+}
+
 // Options returns the options available to configure this Bee.
 func (factory *RSSBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{

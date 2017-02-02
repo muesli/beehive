@@ -34,7 +34,7 @@ func (factory *BeeFactory) Image() string {
 
 // LogoColor returns the default logo color.
 func (factory *BeeFactory) LogoColor() string {
-	return "#35465c"
+	return "#010000"
 }
 
 // Options returns the default empty options set.

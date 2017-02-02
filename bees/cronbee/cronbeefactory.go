@@ -56,6 +56,11 @@ func (factory *CronBeeFactory) Image() string {
 	return factory.Name() + ".png"
 }
 
+// LogoColor returns the preferred logo background color (used by the admin interface).
+func (factory *CronBeeFactory) LogoColor() string {
+	return "#aaaaaa"
+}
+
 // Options returns the options available to configure this Bee.
 func (factory *CronBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
