@@ -86,12 +86,12 @@ func (factory *CronBeeFactory) Options() []bees.BeeOptionDescriptor {
 		},
 		{
 			Name:        "day_of_month",
-			Description: "01-31 for a specific time; * for ignore)",
+			Description: "01-31 for a specific time; * for ignore",
 			Type:        "string",
 		},
 		{
 			Name:        "month",
-			Description: "01 - 12 for a specific time; * for ignore)",
+			Description: "01 - 12 for a specific time; * for ignore",
 			Type:        "string",
 		},
 	}

@@ -86,17 +86,17 @@ func (factory *TimeBeeFactory) Options() []bees.BeeOptionDescriptor {
 		},
 		{
 			Name:        "day_of_month",
-			Description: "01-31 for a specific time; -1 for ignore)",
+			Description: "01-31 for a specific time; -1 for ignore",
 			Type:        "int",
 		},
 		{
 			Name:        "month",
-			Description: "01 - 12 for a specific time; -1 for ignore)",
+			Description: "01-12 for a specific time; -1 for ignore",
 			Type:        "int",
 		},
 		{
 			Name:        "year",
-			Description: "2014 - 9999 for specific time (non-reoccuring); -1 for ignore (recommended)",
+			Description: "2014 - 9999 for specific time (non-recurring); -1 for ignore (recommended)",
 			Type:        "int",
 		},
 	}
