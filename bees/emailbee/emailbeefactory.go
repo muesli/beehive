@@ -32,26 +32,31 @@ type EmailBeeFactory struct {
 // New returns a new Bee instance configured with the supplied options.
 func (factory *EmailBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := EmailBee{
-		Bee: bees.NewBee(name, factory.Name(), description, options),
+		Bee: bees.NewBee(name, factory.ID(), description, options),
 	}
 	bee.ReloadOptions(options)
 
 	return &bee
 }
 
+// ID returns the ID of this Bee.
+func (factory *EmailBeeFactory) ID() string {
+	return "emailbee"
+}
+
 // Name returns the name of this Bee.
 func (factory *EmailBeeFactory) Name() string {
-	return "emailbee"
+	return "Email"
 }
 
 // Description returns the description of this Bee.
 func (factory *EmailBeeFactory) Description() string {
-	return "An email module for beehive"
+	return "Lets you send emails"
 }
 
 // Image returns the filename of an image for this Bee.
 func (factory *EmailBeeFactory) Image() string {
-	return factory.Name() + ".png"
+	return factory.ID() + ".png"
 }
 
 // LogoColor returns the preferred logo background color (used by the admin interface).

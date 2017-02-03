@@ -32,26 +32,31 @@ type JabberBeeFactory struct {
 // New returns a new Bee instance configured with the supplied options.
 func (factory *JabberBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := JabberBee{
-		Bee: bees.NewBee(name, factory.Name(), description, options),
+		Bee: bees.NewBee(name, factory.ID(), description, options),
 	}
 	bee.ReloadOptions(options)
 
 	return &bee
 }
 
+// ID returns the ID of this Bee.
+func (factory *JabberBeeFactory) ID() string {
+	return "jabberbee"
+}
+
 // Name returns the name of this Bee.
 func (factory *JabberBeeFactory) Name() string {
-	return "jabberbee"
+	return "Jabber / XMPP"
 }
 
 // Description returns the description of this Bee.
 func (factory *JabberBeeFactory) Description() string {
-	return "A Jabber module for beehive"
+	return "Connects to Jabber/XMPP"
 }
 
 // Image returns the filename of an image for this Bee.
 func (factory *JabberBeeFactory) Image() string {
-	return factory.Name() + ".png"
+	return factory.ID() + ".png"
 }
 
 // LogoColor returns the preferred logo background color (used by the admin interface).

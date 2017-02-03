@@ -32,26 +32,31 @@ type RSSBeeFactory struct {
 // New returns a new Bee instance configured with the supplied options.
 func (factory *RSSBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := RSSBee{
-		Bee: bees.NewBee(name, factory.Name(), description, options),
+		Bee: bees.NewBee(name, factory.ID(), description, options),
 	}
 	bee.ReloadOptions(options)
 
 	return &bee
 }
 
+// ID returns the ID of this Bee.
+func (factory *RSSBeeFactory) ID() string {
+	return "rssbee"
+}
+
 // Name returns the name of this Bee.
 func (factory *RSSBeeFactory) Name() string {
-	return "rssbee"
+	return "RSS Feeds"
 }
 
 // Description returns the description of this Bee.
 func (factory *RSSBeeFactory) Description() string {
-	return "A bee that manages RSS-feeds"
+	return "Reacts to RSS-feed updates"
 }
 
 // Image returns the filename of an image for this Bee.
 func (factory *RSSBeeFactory) Image() string {
-	return factory.Name() + ".png"
+	return factory.ID() + ".png"
 }
 
 // LogoColor returns the preferred logo background color (used by the admin interface).

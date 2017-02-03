@@ -32,26 +32,31 @@ type TelegramBeeFactory struct {
 // New returns a new Bee instance configured with the supplied options.
 func (factory *TelegramBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := TelegramBee{
-		Bee: bees.NewBee(name, factory.Name(), description, options),
+		Bee: bees.NewBee(name, factory.ID(), description, options),
 	}
 	bee.ReloadOptions(options)
 
 	return &bee
 }
 
+// ID returns the ID of this Bee.
+func (factory *TelegramBeeFactory) ID() string {
+	return "telegrambee"
+}
+
 // Name returns the name of this Bee.
 func (factory *TelegramBeeFactory) Name() string {
-	return "telegrambee"
+	return "Telegram"
 }
 
 // Description returns the description of this Bee.
 func (factory *TelegramBeeFactory) Description() string {
-	return "A Telegram bot bee"
+	return "Connects to Telegram"
 }
 
 // Image returns the filename of an image for this Bee.
 func (factory *TelegramBeeFactory) Image() string {
-	return factory.Name() + ".png"
+	return factory.ID() + ".png"
 }
 
 // LogoColor returns the preferred logo background color (used by the admin interface).

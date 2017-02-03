@@ -34,26 +34,31 @@ type JenkinsBeeFactory struct {
 // New returns a new Bee instance configured with the supplied options.
 func (factory *JenkinsBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := JenkinsBee{
-		Bee: bees.NewBee(name, factory.Name(), description, options),
+		Bee: bees.NewBee(name, factory.ID(), description, options),
 	}
 	bee.ReloadOptions(options)
 
 	return &bee
 }
 
+// ID returns the ID of this Bee.
+func (factory *JenkinsBeeFactory) ID() string {
+	return "jenkinsbee"
+}
+
 // Name returns the name of this Bee.
 func (factory *JenkinsBeeFactory) Name() string {
-	return "jenkinsbee"
+	return "Jenkins"
 }
 
 // Description returns the description of this Bee.
 func (factory *JenkinsBeeFactory) Description() string {
-	return "A bee that triggers and reads info from Jenkins-Builds"
+	return "Triggers builds on Jenkins and reacts to status changes"
 }
 
 // Image returns the filename of an image for this Bee.
 func (factory *JenkinsBeeFactory) Image() string {
-	return factory.Name() + ".png"
+	return factory.ID() + ".png"
 }
 
 // LogoColor returns the preferred logo background color (used by the admin interface).

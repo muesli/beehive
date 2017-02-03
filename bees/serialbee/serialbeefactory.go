@@ -32,26 +32,31 @@ type SerialBeeFactory struct {
 // New returns a new Bee instance configured with the supplied options.
 func (factory *SerialBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := SerialBee{
-		Bee: bees.NewBee(name, factory.Name(), description, options),
+		Bee: bees.NewBee(name, factory.ID(), description, options),
 	}
 	bee.ReloadOptions(options)
 
 	return &bee
 }
 
+// ID returns the ID of this Bee.
+func (factory *SerialBeeFactory) ID() string {
+	return "serialbee"
+}
+
 // Name returns the name of this Bee.
 func (factory *SerialBeeFactory) Name() string {
-	return "serialbee"
+	return "Serial Port"
 }
 
 // Description returns the description of this Bee.
 func (factory *SerialBeeFactory) Description() string {
-	return "A bee that talks serially"
+	return "Sends and receives data over a serial device"
 }
 
 // Image returns the filename of an image for this Bee.
 func (factory *SerialBeeFactory) Image() string {
-	return factory.Name() + ".png"
+	return factory.ID() + ".png"
 }
 
 // LogoColor returns the preferred logo background color (used by the admin interface).

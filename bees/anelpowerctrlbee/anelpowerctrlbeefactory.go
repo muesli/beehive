@@ -32,26 +32,31 @@ type AnelPowerCtrlBeeFactory struct {
 // New returns a new Bee instance configured with the supplied options.
 func (factory *AnelPowerCtrlBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := AnelPowerCtrlBee{
-		Bee: bees.NewBee(name, factory.Name(), description, options),
+		Bee: bees.NewBee(name, factory.ID(), description, options),
 	}
 	bee.ReloadOptions(options)
 
 	return &bee
 }
 
+// ID returns the ID of this Bee.
+func (factory *AnelPowerCtrlBeeFactory) ID() string {
+	return "anelpowerctrlbee"
+}
+
 // Name returns the name of this Bee.
 func (factory *AnelPowerCtrlBeeFactory) Name() string {
-	return "anelpowerctrlbee"
+	return "Anel PowerCtrl"
 }
 
 // Description returns the description of this Bee.
 func (factory *AnelPowerCtrlBeeFactory) Description() string {
-	return "A bee that controls Anel's PowerCtrl"
+	return "Controls Anel's PowerCtrl sockets"
 }
 
 // Image returns the filename of an image for this Bee.
 func (factory *AnelPowerCtrlBeeFactory) Image() string {
-	return factory.Name() + ".png"
+	return factory.ID() + ".png"
 }
 
 // LogoColor returns the preferred logo background color (used by the admin interface).

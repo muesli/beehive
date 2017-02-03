@@ -34,21 +34,26 @@ type TimeBeeFactory struct {
 // New returns a new Bee instance configured with the supplied options.
 func (factory *TimeBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := TimeBee{
-		Bee: bees.NewBee(name, factory.Name(), description, options),
+		Bee: bees.NewBee(name, factory.ID(), description, options),
 	}
 	bee.ReloadOptions(options)
 
 	return &bee
 }
 
+// ID returns the ID of this Bee.
+func (factory *TimeBeeFactory) ID() string {
+	return "timebee"
+}
+
 // Name returns the name of this Bee.
 func (factory *TimeBeeFactory) Name() string {
-	return "timebee"
+	return "Time"
 }
 
 // Description returns the description of this Bee.
 func (factory *TimeBeeFactory) Description() string {
-	return "A bee that triggers an event at a given time"
+	return "Triggers an event at a given time"
 }
 
 // Image returns the filename of an image for this Bee.

@@ -32,26 +32,31 @@ type HueBeeFactory struct {
 // New returns a new Bee instance configured with the supplied options.
 func (factory *HueBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := HueBee{
-		Bee: bees.NewBee(name, factory.Name(), description, options),
+		Bee: bees.NewBee(name, factory.ID(), description, options),
 	}
 	bee.ReloadOptions(options)
 
 	return &bee
 }
 
+// ID returns the ID of this Bee.
+func (factory *HueBeeFactory) ID() string {
+	return "huebee"
+}
+
 // Name returns the name of this Bee.
 func (factory *HueBeeFactory) Name() string {
-	return "huebee"
+	return "Philips Hue"
 }
 
 // Description returns the description of this Bee.
 func (factory *HueBeeFactory) Description() string {
-	return "A Philips hue module for beehive"
+	return "Controls Philips Hue lighting systems"
 }
 
 // Image returns the filename of an image for this Bee.
 func (factory *HueBeeFactory) Image() string {
-	return factory.Name() + ".png"
+	return factory.ID() + ".png"
 }
 
 // LogoColor returns the preferred logo background color (used by the admin interface).

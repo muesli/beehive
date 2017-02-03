@@ -32,26 +32,31 @@ type EFABeeFactory struct {
 // New returns a new Bee instance configured with the supplied options.
 func (factory *EFABeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := EFABee{
-		Bee: bees.NewBee(name, factory.Name(), description, options),
+		Bee: bees.NewBee(name, factory.ID(), description, options),
 	}
 	bee.ReloadOptions(options)
 
 	return &bee
 }
 
+// ID returns the ID of this Bee.
+func (factory *EFABeeFactory) ID() string {
+	return "efabee"
+}
+
 // Name returns the name of this Bee.
 func (factory *EFABeeFactory) Name() string {
-	return "efabee"
+	return "Public Transport"
 }
 
 // Description returns the description of this Bee.
 func (factory *EFABeeFactory) Description() string {
-	return "An EFA module for beehive"
+	return "Provides access to timetables for public transport"
 }
 
 // Image returns the filename of an image for this Bee.
 func (factory *EFABeeFactory) Image() string {
-	return factory.Name() + ".png"
+	return factory.ID() + ".png"
 }
 
 // LogoColor returns the preferred logo background color (used by the admin interface).

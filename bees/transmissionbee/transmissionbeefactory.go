@@ -32,26 +32,31 @@ type TransmissionBeeFactory struct {
 // New returns a new Bee instance configured with the supplied options.
 func (factory *TransmissionBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := TransmissionBee{
-		Bee: bees.NewBee(name, factory.Name(), description, options),
+		Bee: bees.NewBee(name, factory.ID(), description, options),
 	}
 	bee.ReloadOptions(options)
 
 	return &bee
 }
 
+// ID returns the ID of this Bee.
+func (factory *TransmissionBeeFactory) ID() string {
+	return "transmissionbee"
+}
+
 // Name returns the name of this Bee.
 func (factory *TransmissionBeeFactory) Name() string {
-	return "transmissionbee"
+	return "Transmission"
 }
 
 // Image returns the filename of an image for this Bee.
 func (factory *TransmissionBeeFactory) Image() string {
-	return factory.Name() + ".png"
+	return factory.ID() + ".png"
 }
 
 // Description returns the description of this Bee.
 func (factory *TransmissionBeeFactory) Description() string {
-	return "A bee for adding torrents to a transmission server"
+	return "Lets you add torrents to a Transmission server"
 }
 
 // LogoColor returns the preferred logo background color (used by the admin interface).

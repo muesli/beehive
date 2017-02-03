@@ -32,26 +32,31 @@ type WebBeeFactory struct {
 // New returns a new Bee instance configured with the supplied options.
 func (factory *WebBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := WebBee{
-		Bee: bees.NewBee(name, factory.Name(), description, options),
+		Bee: bees.NewBee(name, factory.ID(), description, options),
 	}
 	bee.ReloadOptions(options)
 
 	return &bee
 }
 
+// ID returns the ID of this Bee.
+func (factory *WebBeeFactory) ID() string {
+	return "webbee"
+}
+
 // Name returns the name of this Bee.
 func (factory *WebBeeFactory) Name() string {
-	return "webbee"
+	return "HTTP Server"
 }
 
 // Description returns the description of this Bee.
 func (factory *WebBeeFactory) Description() string {
-	return "A RESTful HTTP module for beehive"
+	return "Reacts to HTTP requests"
 }
 
 // Image returns the filename of an image for this Bee.
 func (factory *WebBeeFactory) Image() string {
-	return factory.Name() + ".png"
+	return factory.ID() + ".png"
 }
 
 // LogoColor returns the preferred logo background color (used by the admin interface).

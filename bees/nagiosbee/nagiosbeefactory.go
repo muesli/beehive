@@ -34,7 +34,7 @@ type NagiosBeeFactory struct {
 // New returns a new Bee instance configured with the supplied options.
 func (factory *NagiosBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := NagiosBee{
-		Bee: bees.NewBee(name, factory.Name(), description, options),
+		Bee: bees.NewBee(name, factory.ID(), description, options),
 	}
 	bee.services = make(map[string]map[string]service)
 	bee.ReloadOptions(options)
@@ -42,19 +42,24 @@ func (factory *NagiosBeeFactory) New(name, description string, options bees.BeeO
 	return &bee
 }
 
+// ID returns the ID of this Bee.
+func (factory *NagiosBeeFactory) ID() string {
+	return "nagiosbee"
+}
+
 // Name returns the name of this Bee.
 func (factory *NagiosBeeFactory) Name() string {
-	return "nagiosbee"
+	return "Nagios"
 }
 
 // Description returns the description of this Bee.
 func (factory *NagiosBeeFactory) Description() string {
-	return "A bee that fetches status changes from nagios-monitors."
+	return "Fetches status changes from Nagios"
 }
 
 // Image returns the filename of an image for this Bee.
 func (factory *NagiosBeeFactory) Image() string {
-	return factory.Name() + ".png"
+	return factory.ID() + ".png"
 }
 
 // LogoColor returns the preferred logo background color (used by the admin interface).
@@ -67,7 +72,7 @@ func (factory *NagiosBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
 			Name:        "url",
-			Description: "URL to the statusJson.php-script typically http://domain.com/nagios3/statusJson.php",
+			Description: "URL to the statusJson.php-script, typically http://domain.com/nagios3/statusJson.php",
 			Type:        "string",
 		},
 		{

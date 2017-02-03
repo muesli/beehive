@@ -32,26 +32,31 @@ type HTMLExtractBeeFactory struct {
 // New returns a new Bee instance configured with the supplied options.
 func (factory *HTMLExtractBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := HTMLExtractBee{
-		Bee: bees.NewBee(name, factory.Name(), description, options),
+		Bee: bees.NewBee(name, factory.ID(), description, options),
 	}
 	bee.ReloadOptions(options)
 
 	return &bee
 }
 
+// ID returns the ID of this Bee.
+func (factory *HTMLExtractBeeFactory) ID() string {
+	return "htmlextractbee"
+}
+
 // Name returns the name of this Bee.
 func (factory *HTMLExtractBeeFactory) Name() string {
-	return "htmlextractbee"
+	return "HTML Extraction"
 }
 
 // Description returns the description of this Bee.
 func (factory *HTMLExtractBeeFactory) Description() string {
-	return "A bee that extracts information from an arbitrary web page"
+	return "Extracts meta information from web pages"
 }
 
 // Image returns the filename of an image for this Bee.
 func (factory *HTMLExtractBeeFactory) Image() string {
-	return factory.Name() + ".png"
+	return factory.ID() + ".png"
 }
 
 // LogoColor returns the preferred logo background color (used by the admin interface).

@@ -54,6 +54,8 @@ func (factory *BeeFactory) Actions() []ActionDescriptor {
 
 // A BeeFactoryInterface is the interface that gets implemented by a BeeFactory.
 type BeeFactoryInterface interface {
+	// ID of the module
+	ID() string
 	// Name of the module
 	Name() string
 	// Description of the module
@@ -75,7 +77,7 @@ type BeeFactoryInterface interface {
 
 // RegisterFactory gets called by BeeFactories to register themselves.
 func RegisterFactory(factory BeeFactoryInterface) {
-	log.Println("Bee Factory ready:", factory.Name(), "-", factory.Description())
+	log.Println("Bee Factory ready:", factory.ID(), "-", factory.Description())
 	/* for _, ev := range factory.Events() {
 		log.Println("\tProvides event:", ev.Name, "-", ev.Description)
 		for _, opt := range ev.Options {
@@ -90,7 +92,7 @@ func RegisterFactory(factory BeeFactoryInterface) {
 	}
 	log.Println() */
 
-	factories[factory.Name()] = &factory
+	factories[factory.ID()] = &factory
 }
 
 // GetFactory returns the factory with a specific name.
