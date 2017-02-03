@@ -32,7 +32,7 @@ type HelloBeeFactory struct {
 // New returns a new Bee instance configured with the supplied options.
 func (factory *HelloBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
 	bee := HelloBee{
-		Bee: bees.NewBee(name, factory.Name(), description, options),
+		Bee: bees.NewBee(name, factory.ID(), description, options),
 	}
 	bee.ReloadOptions(options)
 
