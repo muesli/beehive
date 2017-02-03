@@ -39,9 +39,14 @@ func (factory *HelloBeeFactory) New(name, description string, options bees.BeeOp
 	return &bee
 }
 
+// ID returns the ID of this Bee.
+func (factory *HelloBeeFactory) ID() string {
+	return "hellobee"
+}
+
 // Name returns the name of this Bee.
 func (factory *HelloBeeFactory) Name() string {
-	return "hellobee"
+	return "Hello"
 }
 
 // Description returns the description of this Bee.
