@@ -124,6 +124,7 @@ func (mod *TwitterBee) Run(eventChan chan bees.Event) {
 	anaconda.SetConsumerSecret(mod.consumerSecret)
 	mod.twitterAPI = anaconda.NewTwitterApi(mod.accessToken, mod.accessTokenSecret)
 	mod.twitterAPI.ReturnRateLimitError(true)
+	defer mod.twitterAPI.Close()
 
 	// Test the credentials on startup
 	credentialsVerified := false
@@ -148,7 +149,7 @@ func (mod *TwitterBee) Run(eventChan chan bees.Event) {
 		mod.twitterMentions = mentions
 	}
 
-	// check twitter mentions every 60 seconds
+	// check twitter mentions every two minutes
 	for {
 		//FIXME: don't block
 		select {
@@ -195,11 +196,11 @@ func (mod *TwitterBee) Run(eventChan chan bees.Event) {
 					}
 
 					mod.evchan <- ev
-
 				} else {
 					break
 				}
 			}
+
 			mod.twitterMentions = newMentions
 		}
 	}
