@@ -91,7 +91,7 @@ func (mod *RSSBee) itemHandler(feed *rss.Feed, ch *rss.Channel, newitems []*rss.
 
 		newitemEvent := bees.Event{
 			Bee:  mod.Name(),
-			Name: "newitem",
+			Name: "new_item",
 			Options: []bees.Placeholder{
 				{
 					Name:  "title",

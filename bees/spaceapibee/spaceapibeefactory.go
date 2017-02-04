@@ -82,7 +82,7 @@ func (factory *SpaceAPIBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		{
 			Namespace:   factory.Name(),
-			Name:        "get_status",
+			Name:        "status",
 			Description: "Gets the Status of a LabAPI instance",
 			Options:     []bees.PlaceholderDescriptor{},
 		},
@@ -95,7 +95,7 @@ func (factory *SpaceAPIBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{
 			Namespace:   factory.Name(),
-			Name:        "query_result",
+			Name:        "result",
 			Description: "is triggered as soon as the query has been executed",
 			Options: []bees.PlaceholderDescriptor{
 				{

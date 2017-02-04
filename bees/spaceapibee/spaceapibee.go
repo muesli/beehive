@@ -46,7 +46,7 @@ func (mod *SpaceAPIBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 
 	switch action.Name {
-	case "get_status":
+	case "status":
 		type SpaceAPIResult struct {
 			State struct {
 				Open bool `json:"open"`
@@ -71,7 +71,7 @@ func (mod *SpaceAPIBee) Action(action bees.Action) []bees.Placeholder {
 
 		ev := bees.Event{
 			Bee:  mod.Name(),
-			Name: "query_result",
+			Name: "result",
 			Options: []bees.Placeholder{
 				{
 					Name:  "open",

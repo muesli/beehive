@@ -88,7 +88,7 @@ func (factory *RSSBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{
 			Namespace:   factory.Name(),
-			Name:        "newitem",
+			Name:        "new_item",
 			Description: "A new item has been received through the Feed",
 			Options: []bees.PlaceholderDescriptor{
 				{
