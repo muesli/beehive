@@ -23,6 +23,7 @@ package api
 
 import (
 	"net/http"
+	"os"
 	"path"
 
 	log "github.com/Sirupsen/logrus"
@@ -40,9 +41,22 @@ func configFromPathParam(req *restful.Request, resp *restful.Response) {
 	rootdir := "./config"
 
 	subpath := req.PathParameter("subpath")
-	if len(subpath) == 0 {
+	if _, err := os.Stat(path.Join(rootdir, subpath)); os.IsNotExist(err) || len(subpath) == 0 {
 		subpath = "index.html"
 	}
+	actual := path.Join(rootdir, subpath)
+
+	log.Printf("serving %s ... (from %s)\n", actual, req.PathParameter("subpath"))
+	http.ServeFile(
+		resp.ResponseWriter,
+		req.Request,
+		actual)
+}
+
+func assetFromPathParam(req *restful.Request, resp *restful.Response) {
+	rootdir := "./config/assets"
+
+	subpath := req.PathParameter("subpath")
 	actual := path.Join(rootdir, subpath)
 	log.Printf("serving %s ... (from %s)\n", actual, req.PathParameter("subpath"))
 	http.ServeFile(
@@ -81,6 +95,7 @@ func Run() {
 	ws := new(restful.WebService)
 	ws.Route(ws.GET("/config/").To(configFromPathParam))
 	ws.Route(ws.GET("/config/{subpath:*}").To(configFromPathParam))
+	ws.Route(ws.GET("/assets/{subpath:*}").To(assetFromPathParam))
 	ws.Route(ws.GET("/images/{subpath:*}").To(imageFromPathParam))
 	wsContainer.Add(ws)
 
