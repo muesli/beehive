@@ -86,7 +86,7 @@ func (mod *TwitterBee) Action(action bees.Action) []bees.Placeholder {
 			}
 			postedTweet = true
 
-			log.Printf("Attempting to paste \"%s\" to Twitter", status)
+			log.Printf("Attempting to post \"%s\" to Twitter", status)
 			_, err := mod.twitterAPI.PostTweet(status, v)
 			if err != nil {
 				log.Printf("Error posting to twitter %v", err)
