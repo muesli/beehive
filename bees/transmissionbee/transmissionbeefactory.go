@@ -102,11 +102,6 @@ func (factory *TransmissionBeeFactory) Actions() []bees.ActionDescriptor {
 				Type:        "string",
 				Mandatory:   true,
 			},
-			{
-				Name:        "command_prefix",
-				Description: "String that precedes the torrent URL/magnet (will be removed)",
-				Type:        "string",
-			},
 		},
 	}}
 	return actions

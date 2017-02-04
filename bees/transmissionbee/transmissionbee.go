@@ -24,7 +24,7 @@
 package transmissionbee
 
 import (
-	"strings"
+	"log"
 
 	"github.com/kr/pretty"
 	"github.com/odwrtw/transmission"
@@ -45,14 +45,11 @@ func (mod *TransmissionBee) Action(action bees.Action) []bees.Placeholder {
 	switch action.Name {
 	case "add_torrent":
 		torrentMsg := ""
-		commandPrefix := ""
 		action.Options.Bind("torrent", &torrentMsg)
-		action.Options.Bind("command_prefix", &commandPrefix)
 
-		torrentMsg = strings.TrimSpace(strings.Replace(torrentMsg, commandPrefix, "", 1))
 		_, err := mod.client.Add(torrentMsg)
 		if err != nil {
-			panic("Transmission: error adding torrent/magnet")
+			log.Panicf("Transmission: error adding torrent/magnet: %s", err)
 		}
 	}
 	return outs
