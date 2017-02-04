@@ -23,10 +23,11 @@ package templatefilter
 
 import (
 	"bytes"
-	"html/template"
 	"strings"
+	"text/template"
 
 	"github.com/muesli/beehive/filters"
+	"github.com/muesli/beehive/templatehelper"
 )
 
 // TemplateFilter is a template-based filter.
@@ -49,59 +50,12 @@ func (filter *TemplateFilter) Passes(data interface{}, value interface{}) bool {
 	case string:
 		var res bytes.Buffer
 
-		funcMap := template.FuncMap{
-			"Left": func(values ...interface{}) string {
-				return values[0].(string)[:values[1].(int)]
-			},
-			"Mid": func(values ...interface{}) string {
-				if len(values) > 2 {
-					return values[0].(string)[values[1].(int):values[2].(int)]
-				}
-				return values[0].(string)[values[1].(int):]
-			},
-			"Right": func(values ...interface{}) string {
-				return values[0].(string)[len(values[0].(string))-values[1].(int):]
-			},
-			"Last": func(values ...interface{}) string {
-				return values[0].([]string)[len(values[0].([]string))-1]
-			},
-			// strings functions
-			// "Compare":      strings.Compare, // 1.5+ only
-			"Contains":     strings.Contains,
-			"ContainsAny":  strings.ContainsAny,
-			"Count":        strings.Count,
-			"EqualFold":    strings.EqualFold,
-			"HasPrefix":    strings.HasPrefix,
-			"HasSuffix":    strings.HasSuffix,
-			"Index":        strings.Index,
-			"IndexAny":     strings.IndexAny,
-			"Join":         strings.Join,
-			"LastIndex":    strings.LastIndex,
-			"LastIndexAny": strings.LastIndexAny,
-			"Repeat":       strings.Repeat,
-			"Replace":      strings.Replace,
-			"Split":        strings.Split,
-			"SplitAfter":   strings.SplitAfter,
-			"SplitAfterN":  strings.SplitAfterN,
-			"SplitN":       strings.SplitN,
-			"Title":        strings.Title,
-			"ToLower":      strings.ToLower,
-			"ToTitle":      strings.ToTitle,
-			"ToUpper":      strings.ToUpper,
-			"Trim":         strings.Trim,
-			"TrimLeft":     strings.TrimLeft,
-			"TrimPrefix":   strings.TrimPrefix,
-			"TrimRight":    strings.TrimRight,
-			"TrimSpace":    strings.TrimSpace,
-			"TrimSuffix":   strings.TrimSuffix,
-		}
-
 		if strings.Index(v, "{{test") >= 0 {
 			v = strings.Replace(v, "{{test", "{{if", -1)
 			v += "true{{end}}"
 		}
 
-		tmpl, err := template.New("_" + v).Funcs(funcMap).Parse(v)
+		tmpl, err := template.New("_" + v).Funcs(templatehelper.FuncMap).Parse(v)
 		if err == nil {
 			err = tmpl.Execute(&res, data)
 		}

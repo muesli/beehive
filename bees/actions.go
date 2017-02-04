@@ -23,10 +23,11 @@ package bees
 
 import (
 	"bytes"
-	"strings"
 	"text/template"
 
 	log "github.com/Sirupsen/logrus"
+
+	"github.com/muesli/beehive/templatehelper"
 )
 
 // Action describes an action.
@@ -78,26 +79,7 @@ func execAction(action Action, opts map[string]interface{}) bool {
 		case string:
 			var value bytes.Buffer
 
-			funcMap := template.FuncMap{
-				"Left": func(values ...interface{}) string {
-					return values[0].(string)[:values[1].(int)]
-				},
-				"Mid": func(values ...interface{}) string {
-					if len(values) > 2 {
-						return values[0].(string)[values[1].(int):values[2].(int)]
-					}
-					return values[0].(string)[values[1].(int):]
-				},
-				"Right": func(values ...interface{}) string {
-					return values[0].(string)[len(values[0].(string))-values[1].(int):]
-				},
-				"Split": strings.Split,
-				"Last": func(values ...interface{}) string {
-					return values[0].([]string)[len(values[0].([]string))-1]
-				},
-			}
-
-			tmpl, err := template.New(action.Bee + "_" + action.Name + "_" + opt.Name).Funcs(funcMap).Parse(opt.Value.(string))
+			tmpl, err := template.New(action.Bee + "_" + action.Name + "_" + opt.Name).Funcs(templatehelper.FuncMap).Parse(opt.Value.(string))
 			if err == nil {
 				err = tmpl.Execute(&value, opts)
 			}
