@@ -63,7 +63,7 @@ func (factory *TimeBeeFactory) Image() string {
 
 // LogoColor returns the preferred logo background color (used by the admin interface).
 func (factory *TimeBeeFactory) LogoColor() string {
-	return "#00aa4f"
+	return "#b5ccda"
 }
 
 // Options returns the options available to configure this Bee.
