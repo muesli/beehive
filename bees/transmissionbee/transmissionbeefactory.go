@@ -69,21 +69,21 @@ func (factory *TransmissionBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
 			Name:        "url",
-			Description: "Transmission server URL",
+			Description: "Server URL",
 			Type:        "url",
 			Mandatory:   true,
+			Default:     "http://localhost:9091/transmission/rpc",
 		},
 		{
 			Name:        "username",
-			Description: "Transmission server username",
+			Description: "Username",
 			Type:        "string",
 			Mandatory:   true,
 		},
 		{
 			Name:        "password",
-			Description: "Transmission server password",
+			Description: "Password",
 			Type:        "string",
-			Mandatory:   true,
 		},
 	}
 	return opts
