@@ -47,6 +47,8 @@ As an example, let's wire up Beehive to send us an email whenever an RSS feed ge
 
 Now we will have to create a new Chain, which will wire up the two Bees we just created.
 
+![New Chain](https://github.com/muesli/beehive-docs/raw/master/screencaps/new_chain.gif)
+
 ## Manual Configuration
 
 The following paragraph is slightly outdated due to recent changes. We strongly recommend using the admin web-interface to configure Beehive.
