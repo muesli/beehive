@@ -52,7 +52,7 @@ func (factory *TwitterBeeFactory) Name() string {
 
 // Description returns the description of this Bee.
 func (factory *TwitterBeeFactory) Description() string {
-	return "Tweets and reacts to mentions on Twitter"
+	return "Tweets and reacts to events in your Twitter timeline"
 }
 
 // Image returns the filename of an image for this Bee.
@@ -129,6 +129,23 @@ func (factory *TwitterBeeFactory) Events() []bees.EventDescriptor {
 		},
 		{
 			Namespace:   factory.Name(),
+			Name:        "tweet",
+			Description: "is triggered whenever someone you follow tweets",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "username",
+					Description: "Twitter handle of the tweet's author",
+					Type:        "string",
+				},
+				{
+					Name:        "text",
+					Description: "text content of the tweet",
+					Type:        "string",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
 			Name:        "mention",
 			Description: "is triggered whenever someone mentions you on Twitter",
 			Options: []bees.PlaceholderDescriptor{
@@ -140,6 +157,40 @@ func (factory *TwitterBeeFactory) Events() []bees.EventDescriptor {
 				{
 					Name:        "text",
 					Description: "text content of the mention",
+					Type:        "string",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "like",
+			Description: "is triggered when someone likes one of your tweets",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "username",
+					Description: "Twitter handle of the user that liked your tweet",
+					Type:        "string",
+				},
+				{
+					Name:        "text",
+					Description: "Text of the liked tweet",
+					Type:        "string",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "unlike",
+			Description: "is triggered when someone un-likes one of your tweets",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "username",
+					Description: "Twitter handle of the user that liked your tweet",
+					Type:        "string",
+				},
+				{
+					Name:        "text",
+					Description: "Text of the liked tweet",
 					Type:        "string",
 				},
 			},

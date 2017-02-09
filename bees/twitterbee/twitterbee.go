@@ -24,7 +24,6 @@ package twitterbee
 
 import (
 	"net/url"
-	"strings"
 	"time"
 
 	"github.com/ChimeraCoder/anaconda"
@@ -42,8 +41,8 @@ type TwitterBee struct {
 	accessToken       string
 	accessTokenSecret string
 
-	twitterAPI      *anaconda.TwitterApi
-	twitterMentions []anaconda.Tweet
+	twitterAPI *anaconda.TwitterApi
+	self       anaconda.User
 
 	evchan chan bees.Event
 }
@@ -72,28 +71,13 @@ func (mod *TwitterBee) Action(action bees.Action) []bees.Placeholder {
 		status := ""
 		action.Options.Bind("status", &status)
 
-		postedTweet := false
-		for !postedTweet {
-			v := url.Values{}
+		v := url.Values{}
 
-			for _, mention := range mod.twitterMentions {
-				tmpMentionTime, _ := mention.CreatedAtTime()
-				if strings.Contains(status, "@"+mention.User.ScreenName) && time.Now().Sub(tmpMentionTime).Hours() < 2 {
-					log.Printf("This might be a reply to " + mention.User.ScreenName)
-					v.Set("in_reply_to_status_id", mention.IdStr)
-					break
-				}
-			}
-			postedTweet = true
-
-			log.Printf("Attempting to post \"%s\" to Twitter", status)
-			_, err := mod.twitterAPI.PostTweet(status, v)
-			if err != nil {
-				log.Printf("Error posting to twitter %v", err)
-				handleAnacondaError(err, "")
-			} else {
-				postedTweet = true
-			}
+		log.Printf("Attempting to post \"%s\" to Twitter", status)
+		_, err := mod.twitterAPI.PostTweet(status, v)
+		if err != nil {
+			log.Printf("Error posting to twitter %v", err)
+			handleAnacondaError(err, "")
 		}
 
 		ev := bees.Event{
@@ -134,74 +118,100 @@ func (mod *TwitterBee) Run(eventChan chan bees.Event) {
 		credentialsVerified = ok
 	}
 
-	// populate mentions initially
-	mentionsPopulated := false
-	for !mentionsPopulated {
-		v := url.Values{}
-		v.Set("count", "30")
+	var err error
+	mod.self, err = mod.twitterAPI.GetSelf(url.Values{})
+	handleAnacondaError(err, "Could not get own user object from Twitter API")
 
-		log.Println("Populating Mentions...")
-		mentions, err := mod.twitterAPI.GetMentionsTimeline(v)
-		handleAnacondaError(err, "Could not populate mentions initially")
-		if err == nil {
-			mentionsPopulated = true
+	mod.handleStream()
+}
+
+func (mod *TwitterBee) handleStreamEvent(item interface{}) {
+	switch status := item.(type) {
+	case anaconda.DirectMessage:
+		// log.Printf("DM: %s %s\n", status.Text, status.Sender.ScreenName)
+	case anaconda.Tweet:
+		// log.Printf("Tweet: %+v %s %s\n", status, status.Text, status.User.ScreenName)
+
+		ev := bees.Event{
+			Bee:  mod.Name(),
+			Name: "tweet",
+			Options: []bees.Placeholder{
+				{
+					Name:  "username",
+					Type:  "string",
+					Value: status.User.ScreenName,
+				},
+				{
+					Name:  "text",
+					Type:  "string",
+					Value: status.Text,
+				},
+			},
 		}
-		mod.twitterMentions = mentions
-	}
 
-	// check twitter mentions every two minutes
+		for _, mention := range status.Entities.User_mentions {
+			if mention.Screen_name == mod.self.ScreenName {
+				ev.Name = "mention"
+			}
+		}
+
+		mod.evchan <- ev
+
+	case anaconda.EventTweet:
+		// log.Printf("Event Tweet: %+v\n", status)
+
+		ev := bees.Event{
+			Bee:  mod.Name(),
+			Name: "",
+			Options: []bees.Placeholder{
+				{
+					Name:  "username",
+					Type:  "string",
+					Value: status.Source.ScreenName,
+				},
+				{
+					Name:  "text",
+					Type:  "string",
+					Value: status.TargetObject.Text,
+				},
+			},
+		}
+
+		switch status.Event.Event {
+		case "favorite":
+			ev.Name = "like"
+		case "unfavorite":
+			ev.Name = "unlike"
+		default:
+			log.Println("Unhandled event type", status.Event.Event)
+		}
+
+		if ev.Name != "" {
+			mod.evchan <- ev
+		}
+
+	case anaconda.LimitNotice:
+		log.Printf("Limit: %+v\n", status)
+	case anaconda.DisconnectMessage:
+		log.Printf("Disconnect: %+v\n", status)
+	case anaconda.StatusWithheldNotice:
+		log.Printf("Status Withheld: %+v\n", status)
+	case anaconda.Event:
+		log.Printf("Event: %+v\n", status)
+	default:
+		// log.Printf("Unhandled type %v\n", item)
+	}
+}
+
+func (mod *TwitterBee) handleStream() {
+	s := mod.twitterAPI.UserStream(url.Values{})
+
 	for {
-		//FIXME: don't block
 		select {
 		case <-mod.SigChan:
 			return
-
-		default:
-		}
-		time.Sleep(2 * time.Minute)
-
-		log.Println("Checking for new mentions...")
-		v := url.Values{}
-		v.Set("count", "30")
-		newMentions, err := mod.twitterAPI.GetMentionsTimeline(v)
-		if err != nil {
-			panic("Error: Could not get mentions")
-		}
-
-		// check if newest new mention is newer than newest old
-		newestNewTime, _ := newMentions[0].CreatedAtTime()
-		newestOldTime, _ := mod.twitterMentions[0].CreatedAtTime()
-
-		if newestNewTime.After(newestOldTime) {
-			log.Println("New mentions found!")
-			for i := 0; ; i++ {
-				tmpMention := newMentions[i]
-				tmpMentionTime, _ := tmpMention.CreatedAtTime()
-				if tmpMentionTime.After(newestOldTime) {
-					ev := bees.Event{
-						Bee:  mod.Name(),
-						Name: "mention",
-						Options: []bees.Placeholder{
-							{
-								Name:  "username",
-								Type:  "string",
-								Value: tmpMention.User.ScreenName,
-							},
-							{
-								Name:  "text",
-								Type:  "string",
-								Value: tmpMention.Text,
-							},
-						},
-					}
-
-					mod.evchan <- ev
-				} else {
-					break
-				}
-			}
-
-			mod.twitterMentions = newMentions
+		case item := <-s.C:
+			mod.handleStreamEvent(item)
 		}
 	}
 }
