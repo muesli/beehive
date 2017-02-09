@@ -29,7 +29,6 @@ import (
 	"strconv"
 	"strings"
 
-	log "github.com/Sirupsen/logrus"
 	telegram "gopkg.in/telegram-bot-api.v4"
 
 	"github.com/muesli/beehive/bees"
@@ -64,7 +63,7 @@ func (mod *TelegramBee) Action(action bees.Action) []bees.Placeholder {
 		msg := telegram.NewMessage(int64(cid), text)
 		_, err = mod.bot.Send(msg)
 		if err != nil {
-			log.Printf("Error sending message %v", err)
+			mod.Logf("Error sending message %v", err)
 		}
 	}
 
@@ -113,7 +112,7 @@ func (mod *TelegramBee) Run(eventChan chan bees.Event) {
 
 // Stop stops the running Bee.
 func (mod *TelegramBee) Stop() {
-	log.Println("Stopping the Telegram bee")
+	mod.Logln("Stopping the Telegram bee")
 }
 
 // ReloadOptions parses the config options and initializes the Bee.
@@ -125,7 +124,7 @@ func (mod *TelegramBee) ReloadOptions(options bees.BeeOptions) {
 	if err != nil {
 		panic("Authorization failed, make sure the Telegram API key is correct")
 	}
-	log.Printf("TELEGRAM: Authorized on account %s", bot.Self.UserName)
+	mod.Logf("TELEGRAM: Authorized on account %s", bot.Self.UserName)
 
 	mod.apiKey = apiKey
 	mod.bot = bot

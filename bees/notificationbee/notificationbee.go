@@ -27,7 +27,6 @@ package notificationbee
 import (
 	"strings"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/guelfey/go.dbus"
 
 	"github.com/muesli/beehive/bees"
@@ -88,7 +87,7 @@ func (mod *NotificationBee) Action(action bees.Action) []bees.Placeholder {
 				map[string]dbus.Variant{"urgency": dbus.MakeVariant(urgency)}, int32(5000))
 
 			if call.Err != nil {
-				log.Println("(" + string(urgency) + ") Failed to print message: " + text)
+				mod.Logln("(" + string(urgency) + ") Failed to print message: " + text)
 			}
 		}
 

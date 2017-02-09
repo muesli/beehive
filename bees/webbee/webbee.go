@@ -28,7 +28,6 @@ import (
 	"net/http"
 	"strings"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/hoisie/web"
 
 	"github.com/muesli/beehive/bees"
@@ -49,7 +48,7 @@ func (mod *WebBee) triggerJSONEvent(resp *[]byte) {
 	var payload interface{}
 	err := json.Unmarshal(*resp, &payload)
 	if err != nil {
-		log.Println("Error:", err)
+		mod.LogErrorf("Error: %s", err)
 		return
 	}
 
@@ -73,12 +72,12 @@ func (mod *WebBee) triggerJSONEvent(resp *[]byte) {
 	j := make(map[string]interface{})
 	err = json.Unmarshal(*resp, &j)
 	if err != nil {
-		log.Println("Error:", err)
+		mod.LogErrorf("Error: %s", err)
 		return
 	}
 
 	for k, v := range j {
-		log.Printf("POST JSON param: %s = %+v\n", k, v)
+		mod.Logf("POST JSON param: %s = %+v\n", k, v)
 
 		ph := bees.Placeholder{
 			Name:  k,
@@ -125,13 +124,13 @@ func (mod *WebBee) Action(action bees.Action) []bees.Placeholder {
 		buf := strings.NewReader(j)
 		resp, err := http.Post(url, "application/json", buf)
 		if err != nil {
-			log.Println("Error:", err)
+			mod.LogErrorf("Error: %s", err)
 			return outs
 		}
 
 		b, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			log.Println("Error:", err)
+			mod.LogErrorf("Error: %s", err)
 			return outs
 		}
 
@@ -159,7 +158,7 @@ func (mod *WebBee) getRequest(ctx *web.Context) {
 	}
 
 	for k, v := range ctx.Params {
-		log.Println("GET param:", k, "=", v)
+		mod.Logln("GET param:", k, "=", v)
 
 		ph := bees.Placeholder{
 			Name:  k,
@@ -176,7 +175,7 @@ func (mod *WebBee) getRequest(ctx *web.Context) {
 func (mod *WebBee) postRequest(ctx *web.Context) {
 	b, err := ioutil.ReadAll(ctx.Request.Body)
 	if err != nil {
-		log.Println("Error:", err)
+		mod.LogErrorf("Error: %s", err)
 		return
 	}
 

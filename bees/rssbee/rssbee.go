@@ -26,7 +26,6 @@ package rssbee
 import (
 	"time"
 
-	log "github.com/Sirupsen/logrus"
 	rss "github.com/jteeuwen/go-pkg-rss"
 
 	"github.com/muesli/beehive/bees"
@@ -55,7 +54,7 @@ func (mod *RSSBee) pollFeed(uri string, timeout int) {
 		}
 
 		if err := feed.Fetch(uri, nil); err != nil {
-			log.Printf("[e] %s: %s", uri, err)
+			mod.Logf("[e] %s: %s", uri, err)
 			return
 		}
 
@@ -152,7 +151,7 @@ func (mod *RSSBee) itemHandler(feed *rss.Feed, ch *rss.Channel, newitems []*rss.
 
 		mod.eventChan <- newitemEvent
 	}
-	log.Printf("%d new item(s) in %s\n", len(newitems), feed.Url)
+	mod.Logf("%d new item(s) in %s\n", len(newitems), feed.Url)
 }
 
 // Run executes the Bee's event loop.

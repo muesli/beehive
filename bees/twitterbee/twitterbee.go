@@ -27,7 +27,6 @@ import (
 	"time"
 
 	"github.com/ChimeraCoder/anaconda"
-	log "github.com/Sirupsen/logrus"
 
 	"github.com/muesli/beehive/bees"
 )
@@ -47,13 +46,13 @@ type TwitterBee struct {
 	evchan chan bees.Event
 }
 
-func handleAnacondaError(err error, msg string) {
+func (mod *TwitterBee) handleAnacondaError(err error, msg string) {
 	if err != nil {
 		isRateLimitError, nextWindow := err.(*anaconda.ApiError).RateLimitCheck()
 		if isRateLimitError {
-			log.Println("Oops, I exceeded the API rate limit!")
+			mod.Logln("Oops, I exceeded the API rate limit!")
 			waitPeriod := nextWindow.Sub(time.Now())
-			log.Printf("waiting %f seconds to next window!\n", waitPeriod.Seconds())
+			mod.Logf("waiting %f seconds to next window!\n", waitPeriod.Seconds())
 			time.Sleep(waitPeriod)
 		} else {
 			if msg != "" {
@@ -73,11 +72,11 @@ func (mod *TwitterBee) Action(action bees.Action) []bees.Placeholder {
 
 		v := url.Values{}
 
-		log.Printf("Attempting to post \"%s\" to Twitter", status)
+		mod.Logf("Attempting to post \"%s\" to Twitter", status)
 		_, err := mod.twitterAPI.PostTweet(status, v)
 		if err != nil {
-			log.Printf("Error posting to twitter %v", err)
-			handleAnacondaError(err, "")
+			mod.Logf("Error posting to twitter %v", err)
+			mod.handleAnacondaError(err, "")
 		}
 
 		ev := bees.Event{
@@ -114,13 +113,13 @@ func (mod *TwitterBee) Run(eventChan chan bees.Event) {
 	credentialsVerified := false
 	for !credentialsVerified {
 		ok, err := mod.twitterAPI.VerifyCredentials()
-		handleAnacondaError(err, "Could not verify Twitter API Credentials")
+		mod.handleAnacondaError(err, "Could not verify Twitter API Credentials")
 		credentialsVerified = ok
 	}
 
 	var err error
 	mod.self, err = mod.twitterAPI.GetSelf(url.Values{})
-	handleAnacondaError(err, "Could not get own user object from Twitter API")
+	mod.handleAnacondaError(err, "Could not get own user object from Twitter API")
 
 	mod.handleStream()
 }
@@ -128,9 +127,9 @@ func (mod *TwitterBee) Run(eventChan chan bees.Event) {
 func (mod *TwitterBee) handleStreamEvent(item interface{}) {
 	switch status := item.(type) {
 	case anaconda.DirectMessage:
-		// log.Printf("DM: %s %s\n", status.Text, status.Sender.ScreenName)
+		// mod.Logf("DM: %s %s\n", status.Text, status.Sender.ScreenName)
 	case anaconda.Tweet:
-		// log.Printf("Tweet: %+v %s %s\n", status, status.Text, status.User.ScreenName)
+		// mod.Logf("Tweet: %+v %s %s\n", status, status.Text, status.User.ScreenName)
 
 		ev := bees.Event{
 			Bee:  mod.Name(),
@@ -158,7 +157,7 @@ func (mod *TwitterBee) handleStreamEvent(item interface{}) {
 		mod.evchan <- ev
 
 	case anaconda.EventTweet:
-		// log.Printf("Event Tweet: %+v\n", status)
+		// mod.Logf("Event Tweet: %+v\n", status)
 
 		ev := bees.Event{
 			Bee:  mod.Name(),
@@ -183,7 +182,7 @@ func (mod *TwitterBee) handleStreamEvent(item interface{}) {
 		case "unfavorite":
 			ev.Name = "unlike"
 		default:
-			log.Println("Unhandled event type", status.Event.Event)
+			mod.Logln("Unhandled event type", status.Event.Event)
 		}
 
 		if ev.Name != "" {
@@ -191,15 +190,15 @@ func (mod *TwitterBee) handleStreamEvent(item interface{}) {
 		}
 
 	case anaconda.LimitNotice:
-		log.Printf("Limit: %+v\n", status)
+		mod.Logf("Limit: %+v\n", status)
 	case anaconda.DisconnectMessage:
-		log.Printf("Disconnect: %+v\n", status)
+		mod.Logf("Disconnect: %+v\n", status)
 	case anaconda.StatusWithheldNotice:
-		log.Printf("Status Withheld: %+v\n", status)
+		mod.Logf("Status Withheld: %+v\n", status)
 	case anaconda.Event:
-		log.Printf("Event: %+v\n", status)
+		mod.Logf("Event: %+v\n", status)
 	default:
-		// log.Printf("Unhandled type %v\n", item)
+		// mod.Logf("Unhandled type %v\n", item)
 	}
 }
 

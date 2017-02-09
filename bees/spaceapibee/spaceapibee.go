@@ -27,8 +27,6 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	log "github.com/Sirupsen/logrus"
-
 	"github.com/muesli/beehive/bees"
 )
 
@@ -57,14 +55,14 @@ func (mod *SpaceAPIBee) Action(action bees.Action) []bees.Placeholder {
 		// get json data
 		resp, err := http.Get(mod.url)
 		if err != nil {
-			log.Println("Error: SpaceAPI instance @ " + mod.url + " not reachable")
+			mod.Logln("Error: SpaceAPI instance @ " + mod.url + " not reachable")
 		} else {
 			defer resp.Body.Close()
 			body, _ := ioutil.ReadAll(resp.Body)
 
 			err = json.Unmarshal(body, apiState)
 			if err != nil {
-				log.Println("Sorry, couldn't unmarshal the JSON data from SpaceAPI Instance @ " + mod.url)
+				mod.Logln("Sorry, couldn't unmarshal the JSON data from SpaceAPI Instance @ " + mod.url)
 				apiState.State.Open = false
 			}
 		}

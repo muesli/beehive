@@ -25,7 +25,6 @@ import (
 	"strings"
 	"time"
 
-	log "github.com/Sirupsen/logrus"
 	irc "github.com/fluffle/goirc/client"
 
 	"github.com/muesli/beehive/bees"
@@ -203,11 +202,10 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 
 			if !connecting {
 				connecting = true
-				log.Println("Connecting to IRC:", mod.server)
+				mod.Logln("Connecting to IRC:", mod.server)
 				err := mod.client.Connect()
 				if err != nil {
-					log.Println("Failed to connect to IRC:", mod.server)
-					log.Println(err)
+					mod.Logln("Failed to connect to IRC:", mod.server, err)
 					connecting = false
 				}
 			}
@@ -215,12 +213,12 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 		select {
 		case status := <-mod.connectedState:
 			if status {
-				log.Println("Connected to IRC:", mod.server)
+				mod.Logln("Connected to IRC:", mod.server)
 				connecting = false
 				disconnected = false
 				mod.rejoin()
 			} else {
-				log.Println("Disconnected from IRC:", mod.server)
+				mod.Logln("Disconnected from IRC:", mod.server)
 				connecting = false
 				disconnected = true
 				break

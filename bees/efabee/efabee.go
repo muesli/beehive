@@ -24,7 +24,6 @@ package efabee
 import (
 	"time"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/muesli/goefa"
 
 	"github.com/muesli/beehive/bees"
@@ -52,19 +51,18 @@ func (mod *EFABee) Action(action bees.Action) []bees.Placeholder {
 		//FIXME get departures
 		_, station, err := mod.efa.FindStop(stop)
 		if err != nil {
-			log.Println("Stop does not exist or name is not unique!")
+			mod.Logln("Stop does not exist or name is not unique!")
 			return outs
 		}
-		log.Printf("Selected stop: %s (%d)\n\n",
-			station[0].Name, station[0].Id)
+		mod.Logf("Selected stop: %s (%d)\n\n", station[0].Name, station[0].Id)
 
 		departures, err := station[0].Departures(time.Now(), 3)
 		if err != nil {
-			log.Println("Could not retrieve departure times!")
+			mod.Logln("Could not retrieve departure times!")
 			return outs
 		}
 		for _, departure := range departures {
-			log.Printf("Route %-5s due in %-2d minute%s --> %s\n",
+			mod.Logf("Route %-5s due in %-2d minute%s --> %s\n",
 				departure.ServingLine.Number,
 				departure.Countdown,
 				"s",

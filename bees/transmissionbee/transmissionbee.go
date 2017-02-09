@@ -24,8 +24,6 @@
 package transmissionbee
 
 import (
-	"log"
-
 	"github.com/kr/pretty"
 	"github.com/odwrtw/transmission"
 
@@ -49,7 +47,7 @@ func (mod *TransmissionBee) Action(action bees.Action) []bees.Placeholder {
 
 		_, err := mod.client.Add(torrentMsg)
 		if err != nil {
-			log.Panicf("Transmission: error adding torrent/magnet: %s", err)
+			mod.LogErrorf("Transmission: error adding torrent/magnet: %s", err)
 		}
 	}
 	return outs

@@ -29,8 +29,6 @@ import (
 	"net/http"
 	"time"
 
-	log "github.com/Sirupsen/logrus"
-
 	"github.com/muesli/beehive/bees"
 )
 
@@ -96,7 +94,7 @@ func (mod *JenkinsBee) Run(cin chan bees.Event) {
 
 		request, err := http.NewRequest("GET", mod.url+"/api/json", nil)
 		if err != nil {
-			log.Println("Could not build request")
+			mod.Logln("Could not build request")
 			break
 		}
 		request.SetBasicAuth(mod.user, mod.password)
@@ -104,20 +102,20 @@ func (mod *JenkinsBee) Run(cin chan bees.Event) {
 		client := http.Client{}
 		resp, err := client.Do(request)
 		if err != nil {
-			log.Println("Could not call API on "+mod.url+"/api/json", err)
+			mod.Logln("Could not call API on "+mod.url+"/api/json", err)
 			continue
 		}
 
 		defer resp.Body.Close()
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			log.Println("Could not read data of API-Call")
+			mod.Logln("Could not read data of API-Call")
 			continue
 		}
 		rep := new(report)
 		err = json.Unmarshal(body, &rep)
 		if err != nil {
-			log.Println("Failed to unmarshal JSON")
+			mod.Logln("Failed to unmarshal JSON")
 			continue
 		}
 
@@ -143,12 +141,12 @@ func (mod *JenkinsBee) triggerBuild(jobname string) {
 	client := http.Client{}
 	request, err := http.NewRequest("GET", mod.url+"/job/"+jobname+"/build", nil)
 	if err != nil {
-		log.Println("Could not build request")
+		mod.Logln("Could not build request")
 		return
 	}
 	request.SetBasicAuth(mod.user, mod.password)
 	if _, err := client.Do(request); err != nil {
-		log.Println("Could not trigger build")
+		mod.Logln("Could not trigger build")
 	}
 }
 

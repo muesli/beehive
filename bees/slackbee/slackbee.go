@@ -28,7 +28,6 @@ import (
 	"os"
 	"strings"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/nlopes/slack"
 
 	"github.com/muesli/beehive/bees"
@@ -59,7 +58,7 @@ func (mod *SlackBee) Action(action bees.Action) []bees.Placeholder {
 				if cid != "" {
 					tos = append(tos, cid)
 				} else {
-					log.Printf("Slack: channel ID for %s not found\n", opt.Value.(string))
+					mod.Logf("Slack: channel ID for %s not found\n", opt.Value.(string))
 				}
 			}
 		}
@@ -68,11 +67,11 @@ func (mod *SlackBee) Action(action bees.Action) []bees.Placeholder {
 		for _, to := range tos {
 			_, _, err := mod.client.PostMessage(to, text, msgParams)
 			if err != nil {
-				log.Println("Slack: error posting message to the slack channel " + to)
+				mod.Logln("Slack: error posting message to the slack channel " + to)
 			}
 		}
 	default:
-		log.Printf("Slack: unknown action triggered in %s: %s\n", mod.Name(), action.Name)
+		mod.Logf("Slack: unknown action triggered in %s: %s\n", mod.Name(), action.Name)
 	}
 	return outs
 }
@@ -118,7 +117,7 @@ func (mod *SlackBee) findChannelID(name string, cache bool) string {
 	if cache {
 		mod.channels[name] = cid
 	}
-	log.Println("Channel map " + name + " " + cid)
+	mod.Logln("Channel map " + name + " " + cid)
 
 	return cid
 }
@@ -180,9 +179,9 @@ Loop:
 					}
 				}
 			case *slack.RTMError:
-				log.Printf("Slack: error %s\n", ev.Error())
+				mod.Logf("Slack: error %s\n", ev.Error())
 			case *slack.InvalidAuthEvent:
-				log.Println("Slack: invalid credentials")
+				mod.Logln("Slack: invalid credentials")
 				break Loop
 			default:
 				// Ignore other events..

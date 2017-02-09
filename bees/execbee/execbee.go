@@ -25,12 +25,9 @@ package execbee
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 	"os/exec"
 	"strings"
-
-	log "github.com/Sirupsen/logrus"
 
 	"github.com/muesli/beehive/bees"
 )
@@ -50,7 +47,7 @@ func (mod *ExecBee) Action(action bees.Action) []bees.Placeholder {
 	case "execute":
 		var command string
 		action.Options.Bind("command", &command)
-		log.Println("Executing locally: ", command)
+		mod.Logln("Executing locally: ", command)
 
 		go func() {
 			c := strings.Split(command, " ")
@@ -59,7 +56,7 @@ func (mod *ExecBee) Action(action bees.Action) []bees.Placeholder {
 			// read and print stdout
 			outReader, err := cmd.StdoutPipe()
 			if err != nil {
-				fmt.Fprintln(os.Stderr, "Error creating StdoutPipe for Cmd", err)
+				mod.LogFatal("Error creating StdoutPipe for Cmd", err)
 				return
 			}
 			outBuffer := []string{}
@@ -67,7 +64,7 @@ func (mod *ExecBee) Action(action bees.Action) []bees.Placeholder {
 			go func() {
 				for outScanner.Scan() {
 					foo := outScanner.Text()
-					log.Println("execbee: std: | ", foo)
+					mod.Logln("execbee: std: | ", foo)
 					outBuffer = append(outBuffer, foo)
 				}
 			}()
@@ -75,7 +72,7 @@ func (mod *ExecBee) Action(action bees.Action) []bees.Placeholder {
 			// read and print stderr
 			errReader, err := cmd.StderrPipe()
 			if err != nil {
-				fmt.Fprintln(os.Stderr, "Error creating StderrPipe for Cmd", err)
+				mod.LogFatal(os.Stderr, "Error creating StderrPipe for Cmd", err)
 				return
 			}
 			errBuffer := []string{}
@@ -83,19 +80,19 @@ func (mod *ExecBee) Action(action bees.Action) []bees.Placeholder {
 			go func() {
 				for errScanner.Scan() {
 					foo := errScanner.Text()
-					log.Println("execbee: err: | ", foo)
+					mod.Logln("execbee: err: | ", foo)
 					errBuffer = append(errBuffer, foo)
 				}
 			}()
 
 			err = cmd.Start()
 			if err != nil {
-				fmt.Fprintln(os.Stderr, "Error starting Cmd", err)
+				mod.LogFatal("Error starting Cmd", err)
 			}
 
 			err = cmd.Wait()
 			if err != nil {
-				fmt.Fprintln(os.Stderr, "Error waiting for Cmd", err)
+				mod.LogFatal("Error waiting for Cmd", err)
 			}
 
 			ev := bees.Event{

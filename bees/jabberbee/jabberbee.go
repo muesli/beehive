@@ -24,7 +24,6 @@ package jabberbee
 import (
 	"strings"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/mattn/go-xmpp"
 
 	"github.com/muesli/beehive/bees"
@@ -79,7 +78,7 @@ func (mod *JabberBee) Run(eventChan chan bees.Event) {
 
 	mod.client, err = options.NewClient()
 	if err != nil {
-		log.Fatal(err)
+		mod.LogFatal(err)
 	}
 
 	for {
@@ -93,7 +92,7 @@ func (mod *JabberBee) Run(eventChan chan bees.Event) {
 
 		chat, err := mod.client.Recv()
 		if err != nil {
-			log.Fatal(err)
+			mod.LogFatal(err)
 		}
 		switch v := chat.(type) {
 		case xmpp.Chat:

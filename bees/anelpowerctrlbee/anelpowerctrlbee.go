@@ -27,8 +27,6 @@ import (
 	"strconv"
 	"time"
 
-	log "github.com/Sirupsen/logrus"
-
 	"github.com/muesli/beehive/bees"
 )
 
@@ -45,13 +43,13 @@ type AnelPowerCtrlBee struct {
 func (mod *AnelPowerCtrlBee) anelSwitch(socket int, state bool) bool {
 	conn, err := net.ListenUDP("udp", &net.UDPAddr{Port: 0})
 	if err != nil {
-		log.Fatal(err)
+		mod.LogFatal(err)
 	}
 	conn.SetDeadline(time.Now().Add(3 * time.Second))
 
 	addr, err := net.ResolveUDPAddr("udp", mod.addr+":75")
 	if err != nil {
-		log.Fatal(err)
+		mod.LogFatal(err)
 	}
 
 	stateToken := "off"
@@ -62,7 +60,7 @@ func (mod *AnelPowerCtrlBee) anelSwitch(socket int, state bool) bool {
 
 	_, err = conn.WriteToUDP([]byte(b), addr)
 	if err != nil {
-		log.Fatal(err)
+		mod.LogFatal(err)
 	}
 
 	return true

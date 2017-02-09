@@ -40,8 +40,6 @@ import (
 	"net/http"
 	"time"
 
-	log "github.com/Sirupsen/logrus"
-
 	"github.com/muesli/beehive/bees"
 )
 
@@ -113,7 +111,7 @@ func (mod *NagiosBee) Run(cin chan bees.Event) {
 
 		request, err := http.NewRequest("GET", mod.url, nil)
 		if err != nil {
-			log.Println("Could not build request")
+			mod.Logln("Could not build request")
 			break
 		}
 		request.SetBasicAuth(mod.user, mod.password)
@@ -121,42 +119,38 @@ func (mod *NagiosBee) Run(cin chan bees.Event) {
 		client := http.Client{}
 		resp, err := client.Do(request)
 		if err != nil {
-			log.Println("Couldn't find status-JSON at " + mod.url)
+			mod.Logln("Couldn't find status-JSON at " + mod.url)
 			continue
 		}
 
 		defer resp.Body.Close()
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			log.Println("Could not read data from URL")
+			mod.Logln("Could not read data from URL")
 			continue
 		}
-		log.Println(string(body))
 		rep := new(report)
 		err = json.Unmarshal(body, &rep)
 		if err != nil {
-			log.Println("Failed to unmarshal JSON")
+			mod.Logln("Failed to unmarshal JSON")
 			continue
 		}
 
-		log.Println("Start crawling map", len(rep.Services))
+		mod.Logln("Start crawling map", len(rep.Services))
 		var oldService service
 		var ok bool
 		for hn, mp := range rep.Services {
 			snmap := make(map[string]service)
 			for sn, s := range mp {
-				log.Println(s)
+				mod.Logln(s)
 				if oldService, ok = mod.services[hn][sn]; !ok {
-					log.Println("jedesmaldarein")
 					mod.announceStatuschange(s)
 				} else {
 					if s.CurrentState != oldService.CurrentState {
-						log.Println("statuschange")
 						mod.announceStatuschange(s)
 					}
 				}
 				if s.CurrentState != s.LastHardState {
-					log.Println("hardstate_changed")
 					//TODO: Evaluate if good enough
 				}
 				snmap[sn] = rep.Services[hn][sn]

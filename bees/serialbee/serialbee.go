@@ -28,7 +28,6 @@ import (
 	"strings"
 	"time"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/huin/goserial"
 
 	"github.com/muesli/beehive/bees"
@@ -81,7 +80,7 @@ func (mod *SerialBee) Run(eventChan chan bees.Event) {
 	c := &goserial.Config{Name: mod.device, Baud: mod.baudrate}
 	mod.conn, err = goserial.OpenPort(c)
 	if err != nil {
-		log.Fatal(err)
+		mod.LogFatal(err)
 	}
 	time.Sleep(1 * time.Second)
 
