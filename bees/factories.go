@@ -21,8 +21,6 @@
 // Package bees is Beehive's central module system.
 package bees
 
-import log "github.com/Sirupsen/logrus"
-
 // A BeeFactory is the base struct to be embedded by other BeeFactories.
 type BeeFactory struct {
 }
@@ -77,7 +75,7 @@ type BeeFactoryInterface interface {
 
 // RegisterFactory gets called by BeeFactories to register themselves.
 func RegisterFactory(factory BeeFactoryInterface) {
-	log.Println("Bee Factory ready:", factory.ID(), "-", factory.Description())
+	// log.Println("Bee Factory ready:", factory.ID(), "-", factory.Description())
 	/* for _, ev := range factory.Events() {
 		log.Println("\tProvides event:", ev.Name, "-", ev.Description)
 		for _, opt := range ev.Options {

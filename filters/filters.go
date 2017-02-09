@@ -21,10 +21,6 @@
 // Package filters contains Beehive's filter system.
 package filters
 
-import (
-	log "github.com/Sirupsen/logrus"
-)
-
 // FilterInterface is an interface all Filters implement.
 type FilterInterface interface {
 	// Name of the filter
@@ -42,7 +38,7 @@ var (
 
 // RegisterFilter gets called by Filters to register themselves.
 func RegisterFilter(filter FilterInterface) {
-	log.Println("Filter bee ready:", filter.Name(), "-", filter.Description())
+	// log.Println("Filter bee ready:", filter.Name(), "-", filter.Description())
 	filters[filter.Name()] = &filter
 }
 

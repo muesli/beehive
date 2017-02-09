@@ -65,6 +65,11 @@ type BeeInterface interface {
 	LastAction() time.Time
 	LogAction()
 
+	Logln(args ...interface{})
+	Logf(format string, args ...interface{})
+	LogErrorf(format string, args ...interface{})
+	LogFatal(args ...interface{})
+
 	SetSigChan(c chan bool)
 	WaitGroup() *sync.WaitGroup
 
@@ -318,12 +323,39 @@ func (bee *Bee) LogAction() {
 	bee.lastAction = time.Now()
 }
 
+// Logln logs args
+func (bee *Bee) Logln(args ...interface{}) {
+	a := []interface{}{"[" + bee.Name() + "]:"}
+	for _, v := range args {
+		a = append(a, v)
+	}
+
+	log.Println(a...)
+}
+
+// Logf logs a formatted string
+func (bee *Bee) Logf(format string, args ...interface{}) {
+	log.Printf("[%s]: ", bee.Name())
+	log.Printf(format, args...)
+}
+
+// LogErrorf logs a formatted error string
+func (bee *Bee) LogErrorf(format string, args ...interface{}) {
+	log.Printf("[%s]: ", bee.Name())
+	log.Errorf(format, args...)
+}
+
+// LogFatal logs a fatal error
+func (bee *Bee) LogFatal(args ...interface{}) {
+	a := []interface{}{"[" + bee.Name() + "]:"}
+	for _, v := range args {
+		a = append(a, v)
+	}
+	log.Fatal(a...)
+}
+
 // UUID generates a new unique ID.
 func UUID() string {
 	u, _ := uuid.NewV4()
 	return u.String()
-}
-
-func init() {
-	log.Println("Waking the bees...")
 }
