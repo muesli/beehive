@@ -98,12 +98,38 @@ func (factory *TwitterBeeFactory) Actions() []bees.ActionDescriptor {
 		{
 			Namespace:   factory.Name(),
 			Name:        "tweet",
-			Description: "Update your status according to twitter",
+			Description: "Update your status according to Twitter",
 			Options: []bees.PlaceholderDescriptor{
 				{
 					Name:        "status",
 					Description: "Text of the Status to tweet, may be no longer than 140 characters",
-					Type:        "String",
+					Type:        "string",
+					Mandatory:   true,
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "follow",
+			Description: "Follows another user on Twitter",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "username",
+					Description: "Twitter handle of the user you want to follow",
+					Type:        "string",
+					Mandatory:   true,
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "unfollow",
+			Description: "Unfollows another user on Twitter",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "username",
+					Description: "Twitter handle of the user you want to unfollow",
+					Type:        "string",
 					Mandatory:   true,
 				},
 			},

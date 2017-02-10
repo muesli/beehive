@@ -68,15 +68,35 @@ func (mod *TwitterBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 	switch action.Name {
 	case "tweet":
-		status := ""
+		var status string
 		action.Options.Bind("status", &status)
-
-		v := url.Values{}
-
 		mod.Logf("Attempting to post \"%s\" to Twitter", status)
-		_, err := mod.twitterAPI.PostTweet(status, v)
+
+		_, err := mod.twitterAPI.PostTweet(status, url.Values{})
 		if err != nil {
-			mod.Logf("Error posting to twitter %v", err)
+			mod.Logf("Error posting to Twitter %v", err)
+			mod.handleAnacondaError(err, "")
+		}
+
+	case "follow":
+		var username string
+		action.Options.Bind("username", &username)
+		mod.Logf("Attempting to follow \"%s\" to Twitter", username)
+
+		_, err := mod.twitterAPI.FollowUser(username)
+		if err != nil {
+			mod.Logf("Error following user on Twitter %v", err)
+			mod.handleAnacondaError(err, "")
+		}
+
+	case "unfollow":
+		var username string
+		action.Options.Bind("username", &username)
+		mod.Logf("Attempting to unfollow \"%s\" to Twitter", username)
+
+		_, err := mod.twitterAPI.UnfollowUser(username)
+		if err != nil {
+			mod.Logf("Error unfollowing user on Twitter %v", err)
 			mod.handleAnacondaError(err, "")
 		}
 
