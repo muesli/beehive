@@ -177,8 +177,12 @@ func (mod *TwitterBee) handleStreamEvent(item interface{}) {
 		}
 
 		switch status.Event.Event {
+		case "favorited_retweet":
+			fallthrough
 		case "favorite":
 			ev.Name = "like"
+		case "unfavorited_retweet":
+			fallthrough
 		case "unfavorite":
 			ev.Name = "unlike"
 		default:
