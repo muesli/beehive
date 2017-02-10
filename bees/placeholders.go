@@ -38,6 +38,25 @@ type Placeholder struct {
 	Value interface{}
 }
 
+// SetValue sets a value in the Placeholder slice.
+func (ph *Placeholders) SetValue(name string, _type string, value interface{}) {
+	if ph.Value(name) == nil {
+		p := Placeholder{
+			Name:  name,
+			Type:  _type,
+			Value: value,
+		}
+		*ph = append(*ph, p)
+	} else {
+		for i := 0; i < len(*ph); i++ {
+			if (*ph)[i].Name == name {
+				(*ph)[i].Type = _type
+				(*ph)[i].Value = value
+			}
+		}
+	}
+}
+
 // Value retrieves a value from a Placeholder slice.
 func (ph Placeholders) Value(name string) interface{} {
 	for _, p := range ph {
