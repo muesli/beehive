@@ -185,6 +185,8 @@ func (mod *TwitterBee) handleStreamEvent(item interface{}) {
 			fallthrough
 		case "unfavorite":
 			ev.Name = "unlike"
+		case "retweeted_retweet":
+			ev.Name = "retweet"
 		default:
 			mod.Logln("Unhandled event type", status.Event.Event)
 		}

@@ -163,6 +163,23 @@ func (factory *TwitterBeeFactory) Events() []bees.EventDescriptor {
 		},
 		{
 			Namespace:   factory.Name(),
+			Name:        "retweet",
+			Description: "is triggered when someone retweets one of your tweets",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "username",
+					Description: "Twitter handle of the user that retweeted your tweet",
+					Type:        "string",
+				},
+				{
+					Name:        "text",
+					Description: "Text of the retweeted tweet",
+					Type:        "string",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
 			Name:        "like",
 			Description: "is triggered when someone likes one of your tweets",
 			Options: []bees.PlaceholderDescriptor{
