@@ -24,6 +24,7 @@ package twitterbee
 
 import (
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/ChimeraCoder/anaconda"
@@ -79,19 +80,6 @@ func (mod *TwitterBee) Action(action bees.Action) []bees.Placeholder {
 			mod.handleAnacondaError(err, "")
 		}
 
-		ev := bees.Event{
-			Bee:  mod.Name(),
-			Name: "call_finished",
-			Options: []bees.Placeholder{
-				{
-					Name:  "success",
-					Type:  "bool",
-					Value: true,
-				},
-			},
-		}
-		mod.evchan <- ev
-
 	default:
 		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
 	}
@@ -128,6 +116,24 @@ func (mod *TwitterBee) handleStreamEvent(item interface{}) {
 	switch status := item.(type) {
 	case anaconda.DirectMessage:
 		// mod.Logf("DM: %s %s\n", status.Text, status.Sender.ScreenName)
+		ev := bees.Event{
+			Bee:  mod.Name(),
+			Name: "direct_message",
+			Options: []bees.Placeholder{
+				{
+					Name:  "username",
+					Type:  "string",
+					Value: status.Sender.ScreenName,
+				},
+				{
+					Name:  "text",
+					Type:  "string",
+					Value: status.Text,
+				},
+			},
+		}
+		mod.evchan <- ev
+
 	case anaconda.Tweet:
 		// mod.Logf("Tweet: %+v %s %s\n", status, status.Text, status.User.ScreenName)
 
@@ -150,15 +156,31 @@ func (mod *TwitterBee) handleStreamEvent(item interface{}) {
 
 		for _, mention := range status.Entities.User_mentions {
 			if mention.Screen_name == mod.self.ScreenName {
-				ev.Name = "mention"
+				if status.RetweetedStatus != nil {
+					// someone retweeted a tweet from us
+					ev.Name = "retweet"
+				} else {
+					// someone mentioned us
+					ev.Name = "mention"
+				}
+				break
+			}
+		}
+
+		if status.User.ScreenName == mod.self.ScreenName {
+			if status.RetweetedStatus != nil {
+				// we retweeted a tweet
+				ev.Options.SetValue("username", "string", status.RetweetedStatus.User.ScreenName)
+				ev.Name = "retweeted"
+			} else {
+				// regular tweet
+				ev.Name = "tweeted"
 			}
 		}
 
 		mod.evchan <- ev
 
 	case anaconda.EventTweet:
-		// mod.Logf("Event Tweet: %+v\n", status)
-
 		ev := bees.Event{
 			Bee:  mod.Name(),
 			Name: "",
@@ -185,26 +207,42 @@ func (mod *TwitterBee) handleStreamEvent(item interface{}) {
 			fallthrough
 		case "unfavorite":
 			ev.Name = "unlike"
-		case "retweeted_retweet":
-			ev.Name = "retweet"
 		default:
 			mod.Logln("Unhandled event type", status.Event.Event)
+			mod.Logf("Event Tweet: %+v\n", status)
+			return
 		}
 
-		if ev.Name != "" {
-			mod.evchan <- ev
+		if status.Source.ScreenName == mod.self.ScreenName {
+			// If we're the source of this event, use the passive form of the event name
+			// and change the username to the original tweet author
+			ev.Options.SetValue("username", "string", status.TargetObject.User.ScreenName)
+
+			if strings.HasSuffix(ev.Name, "e") {
+				ev.Name += "d"
+			} else {
+				ev.Name += "ed"
+			}
 		}
+
+		mod.evchan <- ev
 
 	case anaconda.LimitNotice:
 		mod.Logf("Limit: %+v\n", status)
 	case anaconda.DisconnectMessage:
 		mod.Logf("Disconnect: %+v\n", status)
+	case anaconda.UserWithheldNotice:
+		mod.Logf("User Withheld: %+v\n", status)
 	case anaconda.StatusWithheldNotice:
 		mod.Logf("Status Withheld: %+v\n", status)
+	case anaconda.Friendship:
+		mod.Logf("Friendship: %s\n", status.Screen_name)
+	case anaconda.Relationship:
+		mod.Logf("Relationship: %s\n", status.Source.Screen_name)
 	case anaconda.Event:
 		mod.Logf("Event: %+v\n", status)
 	default:
-		// mod.Logf("Unhandled type %v\n", item)
+		// mod.Logf("Unhandled type %+v\n", item)
 	}
 }
 

@@ -117,13 +117,30 @@ func (factory *TwitterBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{
 			Namespace:   factory.Name(),
-			Name:        "call_finished",
-			Description: "is triggered as soon as the API call has been executed",
+			Name:        "direct_message",
+			Description: "is triggered when someone sends you a direct message",
 			Options: []bees.PlaceholderDescriptor{
 				{
-					Name:        "success",
-					Description: "Result of the API call",
-					Type:        "bool",
+					Name:        "username",
+					Description: "Twitter handle of the DM's author",
+					Type:        "string",
+				},
+				{
+					Name:        "text",
+					Description: "text content of the DM",
+					Type:        "string",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "tweeted",
+			Description: "is triggered when you tweeted something",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "text",
+					Description: "text content of the tweet",
+					Type:        "string",
 				},
 			},
 		},
@@ -163,6 +180,23 @@ func (factory *TwitterBeeFactory) Events() []bees.EventDescriptor {
 		},
 		{
 			Namespace:   factory.Name(),
+			Name:        "retweeted",
+			Description: "is triggered when you retweeted something",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "username",
+					Description: "Twitter handle of the user that you retweeted",
+					Type:        "string",
+				},
+				{
+					Name:        "text",
+					Description: "Text of the retweeted tweet",
+					Type:        "string",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
 			Name:        "retweet",
 			Description: "is triggered when someone retweets one of your tweets",
 			Options: []bees.PlaceholderDescriptor{
@@ -180,6 +214,23 @@ func (factory *TwitterBeeFactory) Events() []bees.EventDescriptor {
 		},
 		{
 			Namespace:   factory.Name(),
+			Name:        "liked",
+			Description: "is triggered when you liked something",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "username",
+					Description: "Twitter handle of the user that originally wrote the liked tweet",
+					Type:        "string",
+				},
+				{
+					Name:        "text",
+					Description: "Text of the liked tweet",
+					Type:        "string",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
 			Name:        "like",
 			Description: "is triggered when someone likes one of your tweets",
 			Options: []bees.PlaceholderDescriptor{
@@ -191,6 +242,23 @@ func (factory *TwitterBeeFactory) Events() []bees.EventDescriptor {
 				{
 					Name:        "text",
 					Description: "Text of the liked tweet",
+					Type:        "string",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "unliked",
+			Description: "is triggered when you unliked something",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "username",
+					Description: "Twitter handle of the user that originally wrote the unliked tweet",
+					Type:        "string",
+				},
+				{
+					Name:        "text",
+					Description: "Text of the unliked tweet",
 					Type:        "string",
 				},
 			},
