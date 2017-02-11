@@ -110,6 +110,8 @@ accepts all connections from the loopback device *only*.
 
 ## Development
 
+Need help? Want to hack on your own Hives? Join us on IRC (irc://freenode.net/#beehive) or [Gitter](https://gitter.im/the_beehive/Lobby).
+
 API docs can be found [here](http://godoc.org/github.com/muesli/beehive).
 
 [![Build Status](https://secure.travis-ci.org/muesli/beehive.png)](http://travis-ci.org/muesli/beehive)
