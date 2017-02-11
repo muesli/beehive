@@ -53,18 +53,6 @@ func configFromPathParam(req *restful.Request, resp *restful.Response) {
 		actual)
 }
 
-func assetFromPathParam(req *restful.Request, resp *restful.Response) {
-	rootdir := "./config/assets"
-
-	subpath := req.PathParameter("subpath")
-	actual := path.Join(rootdir, subpath)
-	log.Printf("serving %s ... (from %s)\n", actual, req.PathParameter("subpath"))
-	http.ServeFile(
-		resp.ResponseWriter,
-		req.Request,
-		actual)
-}
-
 func imageFromPathParam(req *restful.Request, resp *restful.Response) {
 	rootdir := "./assets/bees"
 
@@ -93,10 +81,9 @@ func Run() {
 	wsContainer := smolder.NewSmolderContainer(smolderConfig, nil, nil)
 	wsContainer.Router(restful.CurlyRouter{})
 	ws := new(restful.WebService)
-	ws.Route(ws.GET("/config/").To(configFromPathParam))
-	ws.Route(ws.GET("/config/{subpath:*}").To(configFromPathParam))
-	ws.Route(ws.GET("/assets/{subpath:*}").To(assetFromPathParam))
 	ws.Route(ws.GET("/images/{subpath:*}").To(imageFromPathParam))
+	ws.Route(ws.GET("/{subpath:*}").To(configFromPathParam))
+	ws.Route(ws.GET("/").To(configFromPathParam))
 	wsContainer.Add(ws)
 
 	func(resources ...smolder.APIResource) {
