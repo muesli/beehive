@@ -39,7 +39,7 @@ Run beehive --help to see a full list of options.
 
 ## Configuration
 
-Start Beehive and open http://localhost:8181/ in your browser. Note that Beehive will create a config file named "beehive.conf" in its current working directory, unless you specify a different file with the -config option.
+Start Beehive and open <http://localhost:8181/> in your browser. Note that Beehive will create a config file named "beehive.conf" in its current working directory, unless you specify a different file with the -config option.
 
 ### Creating Bees
 
