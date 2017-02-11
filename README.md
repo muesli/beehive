@@ -5,8 +5,8 @@ beehive is an event and agent system, which allows you to create your own
 agents that perform automated tasks triggered by events and filters. It is
 modular, flexible and really easy to extend - for anyone. It has modules
 (we call them *Bees*), so it can interface with, talk to, or retrieve
-information from Twitter, Tumblr, Email, IRC, Jabber, RSS, Jenkins, Hue - to name
-just a few. Check out the full list of [available Bees](https://github.com/muesli/beehive/wiki/Available-Bees)
+information from Twitter, Tumblr, Email, IRC, Jabber, RSS, Jenkins, Hue - to
+name just a few. Check out the full list of [available Bees](https://github.com/muesli/beehive/wiki/Available-Bees)
 in our Wiki.
 
 Connecting those Bees with each other let's you create immensly useful agents.
@@ -35,27 +35,60 @@ To compile it from source:
     go get -u -v
     go build
 
-Run beehive --help to see a full list of options.
+Run ```beehive --help``` to see a full list of options.
 
 ## Configuration
 
-Start Beehive and open <http://localhost:8181/> in your browser. Note that Beehive will create a config file named "beehive.conf" in its current working directory, unless you specify a different file with the -config option.
+Think of Hives as little plugins, extending Beehive's abilities with events you
+can react on and actions you can execute.
+
+Just as examples, there's a Twitter plugin that can
+ - react to someone you follow posting a tweet (an event)
+ - post a new tweet for you (an action)
+ - ...
+
+or an RSS plugin that let's you
+ - monitor RSS feeds and react on new feed items (another event)
+
+or an email plugin that gives you the ability to
+ - send emails (another action)
+
+Each Hive lets you spawn one or multiple Bees in it, all working independently
+from another. That allows you to create separate plugin instances, e.g. one
+email-Bee for your private mail account, and another one for your work email.
 
 ### Creating Bees
 
-As an example, let's wire up Beehive to send us an email whenever an RSS feed gets updated. The admin interface will present you with a list of available Hives. We will need to create two Bees here, one for the RSS feed and one for your email account.
+Sounds complicated? It's not! Just for fun, let's setup Beehive to send us an
+email whenever an RSS feed gets updated. Start ```beehive``` and open <http://localhost:8181/>
+in your browser. Note that Beehive will create a config file ```beehive.conf```
+in its current working directory, unless you specify a different file with the
+```-config``` option.
+
+The admin interface will present you with a list of available Hives. We will
+need to create two Bees here, one for the RSS feed and one for your email
+account.
 
 ![New Bees](https://github.com/muesli/beehive-docs/raw/master/screencaps/new_bees.gif)
 
 ### Setting up a Chain
 
-Now we will have to create a new Chain, which will wire up the two Bees we just created. First we pick the Bee & Event we want to react on, then we pick the Bee we want to execute an Action with. The RSS event provides us a whole set of parameters we can work with: the feed item's title, its links and description among others. You can manipulate and combine these values with a full templating language at your disposal. For example we can set the email's content to something like:
+Now we will have to create a new Chain, which will wire up the two Bees we just
+created. First we pick the Bee & Event we want to react on, then we pick the
+Bee we want to execute an Action with. The RSS event gives us a whole set of
+parameters we can work with: the feed item's title, its links and description
+among others. You can manipulate and combine these values with a full
+templating language at your disposal. For example we can set the email's
+content to something like:
 
 ```
 Title: {{.title}} - Link: {{index .links 0}}
 ```
 
-Whenever this action gets executed Beehive will replace ```{{.title}}``` with the RSS event's ```title``` value, which is the title of the feed item it retrieved. In the same manner ```{{index .links 0}}``` becomes the first URL of this event's ```links``` array.
+Whenever this action gets executed, Beehive will replace ```{{.title}}``` with
+the RSS event's ```title``` value, which is the title of the feed item it
+retrieved. In the same manner ```{{index .links 0}}``` becomes the first URL of
+this event's ```links``` array.
 
 ![New Chain](https://github.com/muesli/beehive-docs/raw/master/screencaps/new_chain.gif)
 
