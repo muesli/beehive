@@ -1,15 +1,15 @@
-beehive
+Beehive
 =======
 
-beehive is an event and agent system, which allows you to create your own
+Beehive is an event and agent system, which allows you to create your own
 agents that perform automated tasks triggered by events and filters. It is
 modular, flexible and really easy to extend - for anyone. It has modules
-(we call them *Bees*), so it can interface with, talk to, or retrieve
+(we call them *Hives*), so it can interface with, talk to, or retrieve
 information from Twitter, Tumblr, Email, IRC, Jabber, RSS, Jenkins, Hue - to
-name just a few. Check out the full list of [available Bees](https://github.com/muesli/beehive/wiki/Available-Bees)
+name just a few. Check out the full list of [available Hives](https://github.com/muesli/beehive/wiki/Available-Hives)
 in our Wiki.
 
-Connecting those Bees with each other let's you create immensly useful agents.
+Connecting those modules with each other let's you create immensly useful agents.
 
 #### Here are just a few examples of things Beehive could do for you:
 * Re-post tweets on your Tumblr blog
