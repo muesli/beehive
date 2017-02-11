@@ -3,7 +3,7 @@ Beehive
 
 Beehive is an event and agent system, which allows you to create your own
 agents that perform automated tasks triggered by events and filters. It is
-modular, flexible and really easy to extend - for anyone. It has modules
+modular, flexible and really easy to extend for anyone. It has modules
 (we call them *Hives*), so it can interface with, talk to, or retrieve
 information from Twitter, Tumblr, Email, IRC, Jabber, RSS, Jenkins, Hue - to
 name just a few. Check out the full list of [available Hives](https://github.com/muesli/beehive/wiki/Available-Hives)
@@ -94,9 +94,19 @@ this event's ```links``` array.
 
 That's it. Whenever the RSS-feed gets updated, Beehive will now send you an
 email! It's really easy to make various Bees work together seamlessly and do
-clever things for you.
+clever things for you. Try it yourself!
 
 You can find more information on how to configure beehive and examples [in our Wiki](https://github.com/muesli/beehive/wiki/Configuration).
+
+## Troubleshooting & Notes
+
+The web interface and other resources aren't currently embedded in the binary.
+Beehive tries to find those files in its current working directory, so it's
+currently recommended to start Beehive from within its git repository, if you
+plan to use the web interface.
+
+The web interface does *not* require authentication yet. Beehive currently
+accepts all connections from the loopback device *only*.
 
 ## Development
 
