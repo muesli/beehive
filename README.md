@@ -75,10 +75,10 @@ account.
 
 Now we will have to create a new Chain, which will wire up the two Bees we just
 created. First we pick the Bee & Event we want to react on, then we pick the
-Bee we want to execute an Action with. The RSS event gives us a whole set of
-parameters we can work with: the feed item's title, its links and description
-among others. You can manipulate and combine these values with a full
-templating language at your disposal. For example we can set the email's
+Bee we want to execute an Action with. The RSS-Bee's event gives us a whole set
+of parameters we can work with: the feed item's title, its links and
+description among others. You can manipulate and combine these parameters with
+a full templating language at your disposal. For example we can set the email's
 content to something like:
 
 ```
@@ -86,11 +86,15 @@ Title: {{.title}} - Link: {{index .links 0}}
 ```
 
 Whenever this action gets executed, Beehive will replace ```{{.title}}``` with
-the RSS event's ```title``` value, which is the title of the feed item it
+the RSS event's ```title``` parameter, which is the title of the feed item it
 retrieved. In the same manner ```{{index .links 0}}``` becomes the first URL of
 this event's ```links``` array.
 
 ![New Chain](https://github.com/muesli/beehive-docs/raw/master/screencaps/new_chain.gif)
+
+That's it. Whenever the RSS-feed gets updated, Beehive will now send you an
+email! It's really easy to make various Bees work together seamlessly and do
+clever things for you.
 
 You can find more information on how to configure beehive and examples [in our Wiki](https://github.com/muesli/beehive/wiki/Configuration).
 
