@@ -38,28 +38,6 @@ import (
 	_ "github.com/muesli/beehive/filters/template"
 
 	"github.com/muesli/beehive/bees"
-	_ "github.com/muesli/beehive/bees/anelpowerctrlbee"
-	_ "github.com/muesli/beehive/bees/cronbee"
-	_ "github.com/muesli/beehive/bees/efabee"
-	_ "github.com/muesli/beehive/bees/emailbee"
-	_ "github.com/muesli/beehive/bees/execbee"
-	_ "github.com/muesli/beehive/bees/htmlextractbee"
-	_ "github.com/muesli/beehive/bees/huebee"
-	_ "github.com/muesli/beehive/bees/ircbee"
-	_ "github.com/muesli/beehive/bees/jabberbee"
-	_ "github.com/muesli/beehive/bees/jenkinsbee"
-	_ "github.com/muesli/beehive/bees/nagiosbee"
-	_ "github.com/muesli/beehive/bees/notificationbee"
-	_ "github.com/muesli/beehive/bees/rssbee"
-	_ "github.com/muesli/beehive/bees/serialbee"
-	_ "github.com/muesli/beehive/bees/slackbee"
-	_ "github.com/muesli/beehive/bees/spaceapibee"
-	_ "github.com/muesli/beehive/bees/telegrambee"
-	_ "github.com/muesli/beehive/bees/timebee"
-	_ "github.com/muesli/beehive/bees/transmissionbee"
-	_ "github.com/muesli/beehive/bees/tumblrbee"
-	_ "github.com/muesli/beehive/bees/twitterbee"
-	_ "github.com/muesli/beehive/bees/webbee"
 )
 
 var (
