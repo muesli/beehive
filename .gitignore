@@ -30,3 +30,6 @@ beehive.conf
 .*.sw*
 *.sublime-project
 *.sublime-workspace
+
+# Jetbrains IDEs
+.idea

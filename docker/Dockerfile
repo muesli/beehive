@@ -12,8 +12,5 @@ WORKDIR /go/src/github.com/muesli/beehive
 # create a volume for the configuration persistence
 VOLUME /conf
 
-# Copy the default config file (users can use their own with docker's -v flag)
-COPY beehive.conf /conf/beehive.conf
-
 # This form of ENTRYPOINT allows  the beehive process can catch signals from docker stop or docker kill.
 ENTRYPOINT ["beehive", "-config", "/conf/beehive.conf"]
