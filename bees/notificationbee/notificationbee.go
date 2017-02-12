@@ -1,3 +1,5 @@
+// +build dragonfly freebsd linux netbsd openbsd solaris
+
 /*
  *    Copyright (C) 2014      Daniel 'grindhold' Brendle
  *                  2014-2017 Christian Muehlhaeuser
