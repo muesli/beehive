@@ -12,5 +12,5 @@ WORKDIR /go/src/github.com/muesli/beehive
 # create a volume for the configuration persistence
 VOLUME /conf
 
-# This form of ENTRYPOINT allows  the beehive process can catch signals from docker stop or docker kill.
+# This form of ENTRYPOINT allows the beehive process to catch signals from the `docker stop` command
 ENTRYPOINT ["beehive", "-config", "/conf/beehive.conf"]
