@@ -32,7 +32,7 @@ To install beehive, simply run:
 To compile it from source:
 
     cd $GOPATH/src/github.com/muesli/beehive
-    go get -u -v
+    go get -u
     go build
 
 Run ```beehive --help``` to see a full list of options.
