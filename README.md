@@ -9,13 +9,13 @@ information from Twitter, Tumblr, Email, IRC, Jabber, RSS, Jenkins, Hue - to
 name just a few. Check out the full list of [available Hives](https://github.com/muesli/beehive/wiki/Available-Hives)
 in our Wiki.
 
-Connecting those modules with each other let's you create immensly useful agents.
+Connecting those modules with each other lets you create immensly useful agents.
 
 #### Here are just a few examples of things Beehive could do for you:
 * Re-post tweets on your Tumblr blog
 * Forward incoming chat messages to your email account
 * Turn on the heating system if the temperature drops below a certain value
-* Run your own IRC bot that let's you trigger builds on a Jenkins CI
+* Run your own IRC bot that lets you trigger builds on a Jenkins CI
 * Control your Hue lighting system
 * Notify you when a stock's price drops below a certain value
 
@@ -47,7 +47,7 @@ Just as examples, there's a Twitter plugin that can
  - post a new tweet for you (an action)
  - ...
 
-or an RSS plugin that let's you
+or an RSS plugin that lets you
  - monitor RSS feeds and react on new feed items (another event)
 
 or an email plugin that gives you the ability to
