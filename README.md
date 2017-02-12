@@ -65,6 +65,10 @@ in your browser. Note that Beehive will create a config file ```beehive.conf```
 in its current working directory, unless you specify a different file with the
 ```-config``` option.
 
+Note: You currently have to start ```beehive``` from within $GOPATH/src/github.com/muesli/beehive
+in order for it to find all the resources for the admin interface. Also see the
+Troubleshooting & Notes section of this README.
+
 The admin interface will present you with a list of available Hives. We will
 need to create two Bees here, one for the RSS feed and one for your email
 account.
