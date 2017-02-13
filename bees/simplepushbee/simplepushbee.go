@@ -10,9 +10,9 @@ import (
 type SimplepushBee struct {
 	bees.Bee
 
-	key string
+	key      string
 	password string
-	salt string
+	salt     string
 }
 
 // Action triggers the action passed to it.
