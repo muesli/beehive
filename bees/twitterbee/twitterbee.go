@@ -171,6 +171,11 @@ func (mod *TwitterBee) handleStreamEvent(item interface{}) {
 					Type:  "string",
 					Value: status.Text,
 				},
+				{
+					Name:  "url",
+					Type:  "url",
+					Value: "https://twitter.com/statuses/" + status.IdStr,
+				},
 			},
 		}
 
@@ -214,6 +219,11 @@ func (mod *TwitterBee) handleStreamEvent(item interface{}) {
 					Name:  "text",
 					Type:  "string",
 					Value: status.TargetObject.Text,
+				},
+				{
+					Name:  "url",
+					Type:  "url",
+					Value: "https://twitter.com/statuses/" + status.TargetObject.IdStr,
 				},
 			},
 		}
