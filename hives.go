@@ -41,6 +41,7 @@ import (
 	_ "github.com/muesli/beehive/bees/timebee"
 	_ "github.com/muesli/beehive/bees/transmissionbee"
 	_ "github.com/muesli/beehive/bees/tumblrbee"
+	_ "github.com/muesli/beehive/bees/twiliobee"
 	_ "github.com/muesli/beehive/bees/twitterbee"
 	_ "github.com/muesli/beehive/bees/webbee"
 )
