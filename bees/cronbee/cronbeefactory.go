@@ -71,17 +71,17 @@ func (factory *CronBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
 			Name:        "second",
-			Description: "00-59 for a specific time; * for ignore",
+			Description: "00-59 for a specific second; * for ignore",
 			Type:        "string",
 		},
 		{
 			Name:        "minute",
-			Description: "00-59 for a specific time; * for ignore",
+			Description: "00-59 for a specific minute; * for ignore",
 			Type:        "string",
 		},
 		{
 			Name:        "hour",
-			Description: "00-23 for a specific time; * for ignore",
+			Description: "00-23 for a specific hour; * for ignore",
 			Type:        "string",
 		},
 		{
@@ -91,12 +91,12 @@ func (factory *CronBeeFactory) Options() []bees.BeeOptionDescriptor {
 		},
 		{
 			Name:        "day_of_month",
-			Description: "01-31 for a specific time; * for ignore",
+			Description: "01-31 for a specific day of the month; * for ignore",
 			Type:        "string",
 		},
 		{
 			Name:        "month",
-			Description: "01 - 12 for a specific time; * for ignore",
+			Description: "01 - 12 for a specific month; * for ignore",
 			Type:        "string",
 		},
 	}
