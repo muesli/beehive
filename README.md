@@ -114,7 +114,7 @@ accepts all connections from the loopback device *only*.
 
 ## Development
 
-Need help? Want to hack on your own Hives? Join us on IRC (irc://freenode.net/#beehive) or [Gitter](https://gitter.im/the_beehive/Lobby).
+Need help? Want to hack on your own Hives? Join us on IRC (irc://freenode.net/#beehive) or [Gitter](https://gitter.im/the_beehive/Lobby). Follow the bees on [Twitter](https://twitter.com/beehive_app)!
 
 API docs can be found [here](http://godoc.org/github.com/muesli/beehive).
 
