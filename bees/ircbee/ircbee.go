@@ -23,7 +23,6 @@ package ircbee
 
 import (
 	"strings"
-	"time"
 
 	irc "github.com/fluffle/goirc/client"
 
@@ -99,8 +98,6 @@ func (mod *IrcBee) Action(action bees.Action) []bees.Placeholder {
 	return outs
 }
 
-// ircbee specific impl
-
 func (mod *IrcBee) rejoin() {
 	for _, channel := range mod.channels {
 		mod.client.Join(channel)
@@ -152,7 +149,7 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 	mod.client.HandleFunc("PRIVMSG", func(conn *irc.Conn, line *irc.Line) {
 		channel := line.Args[0]
 		if channel == mod.client.Config().Me.Nick {
-			channel = line.Src // replies go via PM too.
+			channel = line.Src // replies go via PM too
 		}
 		msg := ""
 		if len(line.Args) > 1 {
@@ -190,11 +187,11 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 		eventChan <- ev
 	})
 
-	// loop on IRC dis/connected events
 	connecting := false
 	disconnected := true
 	waitForDisconnect := false
 	for {
+		// loop on IRC connection events
 		if disconnected {
 			if waitForDisconnect {
 				return
@@ -221,7 +218,6 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 				mod.Logln("Disconnected from IRC:", mod.server)
 				connecting = false
 				disconnected = true
-				break
 			}
 
 		case <-mod.SigChan:
@@ -229,9 +225,6 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 				mod.client.Quit()
 			}
 			waitForDisconnect = true
-
-		default:
-			time.Sleep(1 * time.Second)
 		}
 	}
 }
