@@ -22,6 +22,7 @@
 package bees
 
 import (
+	"fmt"
 	"sync"
 	"time"
 
@@ -335,14 +336,14 @@ func (bee *Bee) Logln(args ...interface{}) {
 
 // Logf logs a formatted string
 func (bee *Bee) Logf(format string, args ...interface{}) {
-	log.Printf("[%s]: ", bee.Name())
-	log.Printf(format, args...)
+	s := fmt.Sprintf(format, args...)
+	log.Printf("[%s]: %s", bee.Name(), s)
 }
 
 // LogErrorf logs a formatted error string
 func (bee *Bee) LogErrorf(format string, args ...interface{}) {
-	log.Printf("[%s]: ", bee.Name())
-	log.Errorf(format, args...)
+	s := fmt.Sprintf(format, args...)
+	log.Errorf("[%s]: %s", bee.Name(), s)
 }
 
 // LogFatal logs a fatal error
