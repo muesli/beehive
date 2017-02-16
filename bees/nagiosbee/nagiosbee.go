@@ -97,65 +97,68 @@ func (mod *NagiosBee) announceStatuschange(s service) {
 	mod.eventChan <- event
 }
 
+func (mod *NagiosBee) poll() {
+	request, err := http.NewRequest("GET", mod.url, nil)
+	if err != nil {
+		mod.LogErrorf("Could not build request: %s\n", err)
+		return
+	}
+	request.SetBasicAuth(mod.user, mod.password)
+
+	client := http.Client{}
+	resp, err := client.Do(request)
+	if err != nil {
+		mod.LogErrorf("Couldn't find status-JSON at %s: %s\n", mod.url, err)
+		return
+	}
+	defer resp.Body.Close()
+
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		mod.LogErrorf("Could not read data from API: %s\n", err)
+		return
+	}
+	rep := new(report)
+	err = json.Unmarshal(body, &rep)
+	if err != nil {
+		mod.LogErrorf("Failed to unmarshal JSON: %s\n", err)
+		return
+	}
+
+	// mod.Logln("Start crawling map", len(rep.Services))
+	var oldService service
+	var ok bool
+	for hn, mp := range rep.Services {
+		snmap := make(map[string]service)
+		for sn, s := range mp {
+			// mod.Logln(s)
+			if oldService, ok = mod.services[hn][sn]; !ok {
+				mod.announceStatuschange(s)
+			} else {
+				if s.CurrentState != oldService.CurrentState {
+					mod.announceStatuschange(s)
+				}
+			}
+			if s.CurrentState != s.LastHardState {
+				//TODO: Evaluate if good enough
+			}
+			snmap[sn] = rep.Services[hn][sn]
+		}
+		mod.services[hn] = snmap
+	}
+}
+
 // Run executes the Bee's event loop.
 func (mod *NagiosBee) Run(cin chan bees.Event) {
 	mod.eventChan = cin
+
 	for {
 		select {
 		case <-mod.SigChan:
 			return
 
-		default:
-		}
-		time.Sleep(10 * time.Second)
-
-		request, err := http.NewRequest("GET", mod.url, nil)
-		if err != nil {
-			mod.Logln("Could not build request")
-			break
-		}
-		request.SetBasicAuth(mod.user, mod.password)
-
-		client := http.Client{}
-		resp, err := client.Do(request)
-		if err != nil {
-			mod.Logln("Couldn't find status-JSON at " + mod.url)
-			continue
-		}
-
-		defer resp.Body.Close()
-		body, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			mod.Logln("Could not read data from URL")
-			continue
-		}
-		rep := new(report)
-		err = json.Unmarshal(body, &rep)
-		if err != nil {
-			mod.Logln("Failed to unmarshal JSON")
-			continue
-		}
-
-		mod.Logln("Start crawling map", len(rep.Services))
-		var oldService service
-		var ok bool
-		for hn, mp := range rep.Services {
-			snmap := make(map[string]service)
-			for sn, s := range mp {
-				mod.Logln(s)
-				if oldService, ok = mod.services[hn][sn]; !ok {
-					mod.announceStatuschange(s)
-				} else {
-					if s.CurrentState != oldService.CurrentState {
-						mod.announceStatuschange(s)
-					}
-				}
-				if s.CurrentState != s.LastHardState {
-					//TODO: Evaluate if good enough
-				}
-				snmap[sn] = rep.Services[hn][sn]
-			}
-			mod.services[hn] = snmap
+		case <-time.After(time.Duration(10 * time.Second)):
+			mod.poll()
 		}
 	}
 }
