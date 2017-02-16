@@ -75,13 +75,13 @@ func (factory *SimplepushBeeFactory) Options() []bees.BeeOptionDescriptor {
 		},
 		{
 			Name:        "password",
-			Description: "Password for end-to-end encryption (optional)",
+			Description: "Password for end-to-end encryption",
 			Type:        "string",
 			Mandatory:   false,
 		},
 		{
 			Name:        "salt",
-			Description: "Salt for end-to-end encryption (optional)",
+			Description: "Salt for end-to-end encryption",
 			Type:        "url",
 			Mandatory:   false,
 		},
@@ -105,7 +105,7 @@ func (factory *SimplepushBeeFactory) Actions() []bees.ActionDescriptor {
 			Options: []bees.PlaceholderDescriptor{
 				{
 					Name:        "title",
-					Description: "Title of push notification (optional)",
+					Description: "Title of push notification",
 					Type:        "string",
 					Mandatory:   false,
 				},
@@ -117,7 +117,7 @@ func (factory *SimplepushBeeFactory) Actions() []bees.ActionDescriptor {
 				},
 				{
 					Name:        "event",
-					Description: "Event id for customizing vibration and ringtone (optional)",
+					Description: "Event id for customizing vibration and ringtone",
 					Type:        "string",
 					Mandatory:   false,
 				},
