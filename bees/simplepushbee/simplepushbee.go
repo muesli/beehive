@@ -41,19 +41,17 @@ func (mod *SimplepushBee) Action(action bees.Action) []bees.Placeholder {
 
 	switch action.Name {
 	case "send":
-		title := ""
-		message := ""
-		event := ""
-
-		action.Options.Bind("title", &title)
-		action.Options.Bind("message", &message)
-		action.Options.Bind("event", &event)
-
-		if mod.password != "" {
-			simplepush.Send(simplepush.Message{mod.key, title, message, event, true, mod.password, mod.salt})
-		} else {
-			simplepush.Send(simplepush.Message{mod.key, title, message, event, false, "", ""})
+		sm := simplepush.Message{
+			SimplePushKey: mod.key,
+			Encrypt:       mod.password != "",
+			Password:      mod.password,
+			Salt:          mod.salt,
 		}
+		action.Options.Bind("title", &sm.Title)
+		action.Options.Bind("message", &sm.Message)
+		action.Options.Bind("event", &sm.Event)
+
+		simplepush.Send(sm)
 
 	default:
 		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
