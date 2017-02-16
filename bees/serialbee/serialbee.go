@@ -25,8 +25,6 @@ import (
 	"bytes"
 	"encoding/binary"
 	"io"
-	"strings"
-	"time"
 
 	"github.com/huin/goserial"
 
@@ -70,6 +68,44 @@ func (mod *SerialBee) Action(action bees.Action) []bees.Placeholder {
 	return outs
 }
 
+func (mod *SerialBee) handleEvents(eventChan chan bees.Event) error {
+	text := ""
+	c := []byte{0}
+	for {
+		_, err := mod.conn.Read(c)
+		if err != nil {
+			return err
+		}
+		if c[0] == 10 || c[0] == 13 {
+			break
+		}
+
+		text += string(c[0])
+	}
+
+	if len(text) > 0 {
+		ev := bees.Event{
+			Bee:  mod.Name(),
+			Name: "message",
+			Options: []bees.Placeholder{
+				{
+					Name:  "port",
+					Type:  "string",
+					Value: mod.device,
+				},
+				{
+					Name:  "text",
+					Type:  "string",
+					Value: text,
+				},
+			},
+		}
+		eventChan <- ev
+	}
+
+	return nil
+}
+
 // Run executes the Bee's event loop.
 func (mod *SerialBee) Run(eventChan chan bees.Event) {
 	if mod.baudrate == 0 || mod.device == "" {
@@ -82,54 +118,19 @@ func (mod *SerialBee) Run(eventChan chan bees.Event) {
 	if err != nil {
 		mod.LogFatal(err)
 	}
-	time.Sleep(1 * time.Second)
+	defer mod.conn.Close()
 
-	for {
-		//FIXME: don't block
-		select {
-		case <-mod.SigChan:
-			return
-
-		default:
-		}
-
-		text := ""
-		c := []byte{0}
+	go func() {
 		for {
-			_, err := mod.conn.Read(c)
-			if err != nil {
-				time.Sleep(1 * time.Second)
-				continue
+			if err := mod.handleEvents(eventChan); err != nil {
+				return
 			}
-			if c[0] == 10 || c[0] == 13 {
-				break
-			}
-
-			text += string(c[0])
 		}
+	}()
 
-		if len(text) > 0 {
-			text = strings.TrimSpace(text)
-
-			ev := bees.Event{
-				Bee:  mod.Name(),
-				Name: "message",
-				Options: []bees.Placeholder{
-					{
-						Name:  "port",
-						Type:  "string",
-						Value: mod.device,
-					},
-					{
-						Name:  "text",
-						Type:  "string",
-						Value: text,
-					},
-				},
-			}
-			eventChan <- ev
-		}
-		time.Sleep(1 * time.Second)
+	select {
+	case <-mod.SigChan:
+		return
 	}
 }
 
