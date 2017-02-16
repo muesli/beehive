@@ -65,7 +65,14 @@ func (mod *NotificationBee) Run(cin chan bees.Event) {
 	if err != nil {
 		panic(err)
 	}
+	defer mod.conn.Close()
+
 	mod.notifier = mod.conn.Object("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
+
+	select {
+	case <-mod.SigChan:
+		return
+	}
 }
 
 // Action triggers the action passed to it.
