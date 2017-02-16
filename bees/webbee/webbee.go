@@ -98,15 +98,11 @@ func (mod *WebBee) Run(cin chan bees.Event) {
 	web.Post(mod.path, mod.postRequest)
 
 	web.Run(mod.addr)
+	defer web.Close()
 
-	for {
-		select {
-		case <-mod.SigChan:
-			web.Close()
-			return
-
-		default:
-		}
+	select {
+	case <-mod.SigChan:
+		return
 	}
 }
 
