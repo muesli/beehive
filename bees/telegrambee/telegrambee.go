@@ -72,6 +72,14 @@ func (mod *TelegramBee) Action(action bees.Action) []bees.Placeholder {
 
 // Run executes the Bee's event loop.
 func (mod *TelegramBee) Run(eventChan chan bees.Event) {
+	var err error
+	mod.bot, err = telegram.NewBotAPI(mod.apiKey)
+	if err != nil {
+		mod.LogErrorf("Authorization failed, make sure the Telegram API key is correct: %s", err)
+		return
+	}
+	mod.Logf("Authorized on account %s", mod.bot.Self.UserName)
+
 	u := telegram.NewUpdate(0)
 	u.Timeout = 60
 
@@ -80,39 +88,39 @@ func (mod *TelegramBee) Run(eventChan chan bees.Event) {
 		panic(err)
 	}
 
-	for update := range updates {
-		if update.Message == nil || update.Message.Text == "" {
-			continue
-		}
+	for {
+		select {
+		case <-mod.SigChan:
+			return
+		case update := <-updates:
+			if update.Message == nil || update.Message.Text == "" {
+				continue
+			}
 
-		ev := bees.Event{
-			Bee:  mod.Name(),
-			Name: "message",
-			Options: []bees.Placeholder{
-				{
-					Name:  "text",
-					Type:  "string",
-					Value: update.Message.Text,
+			ev := bees.Event{
+				Bee:  mod.Name(),
+				Name: "message",
+				Options: []bees.Placeholder{
+					{
+						Name:  "text",
+						Type:  "string",
+						Value: update.Message.Text,
+					},
+					{
+						Name:  "chat_id",
+						Type:  "string",
+						Value: strconv.FormatInt(update.Message.Chat.ID, 10),
+					},
+					{
+						Name:  "user_id",
+						Type:  "string",
+						Value: strconv.Itoa(update.Message.From.ID),
+					},
 				},
-				{
-					Name:  "chat_id",
-					Type:  "string",
-					Value: strconv.FormatInt(update.Message.Chat.ID, 10),
-				},
-				{
-					Name:  "user_id",
-					Type:  "string",
-					Value: strconv.Itoa(update.Message.From.ID),
-				},
-			},
+			}
+			eventChan <- ev
 		}
-		eventChan <- ev
 	}
-}
-
-// Stop stops the running Bee.
-func (mod *TelegramBee) Stop() {
-	mod.Logln("Stopping the Telegram bee")
 }
 
 // ReloadOptions parses the config options and initializes the Bee.
@@ -120,14 +128,7 @@ func (mod *TelegramBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
 	apiKey := getAPIKey(&options)
-	bot, err := telegram.NewBotAPI(apiKey)
-	if err != nil {
-		panic("Authorization failed, make sure the Telegram API key is correct")
-	}
-	mod.Logf("TELEGRAM: Authorized on account %s", bot.Self.UserName)
-
 	mod.apiKey = apiKey
-	mod.bot = bot
 }
 
 // Gets the Bot's API key from a file, the recipe config or the
