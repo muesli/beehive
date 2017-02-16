@@ -114,7 +114,7 @@ func (mod *JabberBee) Run(eventChan chan bees.Event) {
 	var err error
 	mod.client, err = options.NewClient()
 	if err != nil {
-		mod.LogErrorf("Connection error: %s\n", err)
+		mod.LogErrorf("Connection error: %s", err)
 		return
 	}
 	defer mod.client.Close()

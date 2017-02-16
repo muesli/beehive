@@ -58,7 +58,7 @@ func (mod *SlackBee) Action(action bees.Action) []bees.Placeholder {
 				if cid != "" {
 					tos = append(tos, cid)
 				} else {
-					mod.Logf("Slack: channel ID for %s not found\n", opt.Value.(string))
+					mod.Logf("Error: channel ID for %s not found", opt.Value.(string))
 				}
 			}
 		}
@@ -67,12 +67,13 @@ func (mod *SlackBee) Action(action bees.Action) []bees.Placeholder {
 		for _, to := range tos {
 			_, _, err := mod.client.PostMessage(to, text, msgParams)
 			if err != nil {
-				mod.Logln("Slack: error posting message to the slack channel " + to)
+				mod.Logf("Error posting message to the slack channel %s: %s", to, err)
 			}
 		}
 	default:
-		mod.Logf("Slack: unknown action triggered in %s: %s\n", mod.Name(), action.Name)
+		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
 	}
+
 	return outs
 }
 
@@ -182,9 +183,9 @@ func (mod *SlackBee) Run(eventChan chan bees.Event) {
 					}
 				}
 			case *slack.RTMError:
-				mod.LogErrorf("Error: %s\n", ev.Error())
+				mod.LogErrorf("Error: %s", ev.Error())
 			case *slack.InvalidAuthEvent:
-				mod.LogErrorf("Error: invalid credentials\n")
+				mod.LogErrorf("Error: invalid credentials")
 				return
 			default:
 				// Ignore other events..
@@ -202,7 +203,8 @@ func (mod *SlackBee) ReloadOptions(options bees.BeeOptions) {
 	client := slack.New(apiKey)
 	_, err := client.AuthTest()
 	if err != nil {
-		panic("Slack: authentication failed!")
+		mod.LogErrorf("Error: authentication failed: %s", err)
+		return
 	}
 
 	mod.channels = map[string]string{}
@@ -225,7 +227,7 @@ func getAPIKey(options *bees.BeeOptions) string {
 	if strings.HasPrefix(apiKey, "file://") {
 		buf, err := ioutil.ReadFile(strings.TrimPrefix(apiKey, "file://"))
 		if err != nil {
-			panic("Slack: error reading API key file " + apiKey)
+			panic("Error reading API key file " + apiKey)
 		}
 		apiKey = string(buf)
 	}

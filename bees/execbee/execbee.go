@@ -80,7 +80,7 @@ func (mod *ExecBee) Action(action bees.Action) []bees.Placeholder {
 			go func() {
 				for errScanner.Scan() {
 					foo := errScanner.Text()
-					mod.Logln("execbee: err: | ", foo)
+					mod.Logln("Err: | ", foo)
 					errBuffer = append(errBuffer, foo)
 				}
 			}()

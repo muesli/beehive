@@ -83,7 +83,7 @@ func (mod *JenkinsBee) announceStatusChange(j Job) {
 func (mod *JenkinsBee) poll() {
 	request, err := http.NewRequest("GET", mod.url+"/api/json", nil)
 	if err != nil {
-		mod.LogErrorf("Could not build request: %s\n", err)
+		mod.LogErrorf("Could not build request: %s", err)
 		return
 	}
 	request.SetBasicAuth(mod.user, mod.password)
@@ -91,20 +91,20 @@ func (mod *JenkinsBee) poll() {
 	client := http.Client{}
 	resp, err := client.Do(request)
 	if err != nil {
-		mod.LogErrorf("Could not call API on %s/api/json: %s\n", mod.url, err)
+		mod.LogErrorf("Could not call API on %s/api/json: %s", mod.url, err)
 		return
 	}
 
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		mod.LogErrorf("Could not read data from API: %s\n", err)
+		mod.LogErrorf("Could not read data from API: %s", err)
 		return
 	}
 	rep := new(report)
 	err = json.Unmarshal(body, &rep)
 	if err != nil {
-		mod.LogErrorf("Failed to unmarshal JSON: %s\n", err)
+		mod.LogErrorf("Failed to unmarshal JSON: %s", err)
 		return
 	}
 
@@ -144,12 +144,12 @@ func (mod *JenkinsBee) triggerBuild(jobname string) {
 	client := http.Client{}
 	request, err := http.NewRequest("GET", mod.url+"/job/"+jobname+"/build", nil)
 	if err != nil {
-		mod.LogErrorf("Could not build request: %s\n", err)
+		mod.LogErrorf("Could not build request: %s", err)
 		return
 	}
 	request.SetBasicAuth(mod.user, mod.password)
 	if _, err := client.Do(request); err != nil {
-		mod.LogErrorf("Could not trigger build: %s\n", err)
+		mod.LogErrorf("Could not trigger build: %s", err)
 	}
 }
 

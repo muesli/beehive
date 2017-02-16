@@ -53,7 +53,7 @@ func (mod *TwitterBee) handleAnacondaError(err error, msg string) {
 		if isRateLimitError {
 			mod.Logln("Oops, I exceeded the API rate limit!")
 			waitPeriod := nextWindow.Sub(time.Now())
-			mod.Logf("waiting %f seconds to next window!\n", waitPeriod.Seconds())
+			mod.Logf("waiting %f seconds to next window!", waitPeriod.Seconds())
 			time.Sleep(waitPeriod)
 		} else {
 			if msg != "" {
@@ -135,7 +135,7 @@ func (mod *TwitterBee) Run(eventChan chan bees.Event) {
 func (mod *TwitterBee) handleStreamEvent(item interface{}) {
 	switch status := item.(type) {
 	case anaconda.DirectMessage:
-		// mod.Logf("DM: %s %s\n", status.Text, status.Sender.ScreenName)
+		// mod.Logf("DM: %s %s", status.Text, status.Sender.ScreenName)
 		ev := bees.Event{
 			Bee:  mod.Name(),
 			Name: "direct_message",
@@ -155,7 +155,7 @@ func (mod *TwitterBee) handleStreamEvent(item interface{}) {
 		mod.evchan <- ev
 
 	case anaconda.Tweet:
-		// mod.Logf("Tweet: %+v %s %s\n", status, status.Text, status.User.ScreenName)
+		// mod.Logf("Tweet: %+v %s %s", status, status.Text, status.User.ScreenName)
 
 		ev := bees.Event{
 			Bee:  mod.Name(),
@@ -239,7 +239,7 @@ func (mod *TwitterBee) handleStreamEvent(item interface{}) {
 			ev.Name = "unlike"
 		default:
 			mod.Logln("Unhandled event type", status.Event.Event)
-			mod.Logf("Event Tweet: %+v\n", status)
+			mod.Logf("Event Tweet: %+v", status)
 			return
 		}
 
@@ -258,21 +258,21 @@ func (mod *TwitterBee) handleStreamEvent(item interface{}) {
 		mod.evchan <- ev
 
 	case anaconda.LimitNotice:
-		mod.Logf("Limit: %+v\n", status)
+		mod.Logf("Limit: %+v", status)
 	case anaconda.DisconnectMessage:
-		mod.Logf("Disconnect: %+v\n", status)
+		mod.Logf("Disconnect: %+v", status)
 	case anaconda.UserWithheldNotice:
-		mod.Logf("User Withheld: %+v\n", status)
+		mod.Logf("User Withheld: %+v", status)
 	case anaconda.StatusWithheldNotice:
-		mod.Logf("Status Withheld: %+v\n", status)
+		mod.Logf("Status Withheld: %+v", status)
 	case anaconda.Friendship:
-		mod.Logf("Friendship: %s\n", status.Screen_name)
+		mod.Logf("Friendship: %s", status.Screen_name)
 	case anaconda.Relationship:
-		mod.Logf("Relationship: %s\n", status.Source.Screen_name)
+		mod.Logf("Relationship: %s", status.Source.Screen_name)
 	case anaconda.Event:
-		mod.Logf("Event: %+v\n", status)
+		mod.Logf("Event: %+v", status)
 	default:
-		// mod.Logf("Unhandled type %+v\n", item)
+		// mod.Logf("Unhandled type %+v", item)
 	}
 }
 

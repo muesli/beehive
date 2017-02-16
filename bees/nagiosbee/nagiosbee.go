@@ -100,7 +100,7 @@ func (mod *NagiosBee) announceStatuschange(s service) {
 func (mod *NagiosBee) poll() {
 	request, err := http.NewRequest("GET", mod.url, nil)
 	if err != nil {
-		mod.LogErrorf("Could not build request: %s\n", err)
+		mod.LogErrorf("Could not build request: %s", err)
 		return
 	}
 	request.SetBasicAuth(mod.user, mod.password)
@@ -108,20 +108,20 @@ func (mod *NagiosBee) poll() {
 	client := http.Client{}
 	resp, err := client.Do(request)
 	if err != nil {
-		mod.LogErrorf("Couldn't find status-JSON at %s: %s\n", mod.url, err)
+		mod.LogErrorf("Couldn't find status-JSON at %s: %s", mod.url, err)
 		return
 	}
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		mod.LogErrorf("Could not read data from API: %s\n", err)
+		mod.LogErrorf("Could not read data from API: %s", err)
 		return
 	}
 	rep := new(report)
 	err = json.Unmarshal(body, &rep)
 	if err != nil {
-		mod.LogErrorf("Failed to unmarshal JSON: %s\n", err)
+		mod.LogErrorf("Failed to unmarshal JSON: %s", err)
 		return
 	}
 

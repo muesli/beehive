@@ -131,7 +131,7 @@ func (mod *RSSBee) itemHandler(feed *rss.Feed, ch *rss.Channel, newitems []*rss.
 
 		mod.eventChan <- newitemEvent
 	}
-	mod.Logf("%d new item(s) in %s\n", len(newitems), feed.Url)
+	mod.Logf("%d new item(s) in %s", len(newitems), feed.Url)
 }
 
 func (mod *RSSBee) pollFeed(uri string, timeout int) {
