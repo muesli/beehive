@@ -150,6 +150,7 @@ func sendEvent(bee string, channel string, user string, text string, eventChan c
 // Run executes the Bee's event loop.
 func (mod *SlackBee) Run(eventChan chan bees.Event) {
 	rtm := mod.client.NewRTM()
+	defer rtm.Disconnect()
 
 	go rtm.ManageConnection()
 
@@ -158,9 +159,11 @@ func (mod *SlackBee) Run(eventChan chan bees.Event) {
 		mod.findChannelID(k, true)
 	}
 
-Loop:
 	for {
 		select {
+		case <-mod.SigChan:
+			return
+
 		case msg := <-rtm.IncomingEvents:
 			switch ev := msg.Data.(type) {
 			case *slack.MessageEvent:
@@ -179,10 +182,10 @@ Loop:
 					}
 				}
 			case *slack.RTMError:
-				mod.Logf("Slack: error %s\n", ev.Error())
+				mod.LogErrorf("Error: %s\n", ev.Error())
 			case *slack.InvalidAuthEvent:
-				mod.Logln("Slack: invalid credentials")
-				break Loop
+				mod.LogErrorf("Error: invalid credentials\n")
+				return
 			default:
 				// Ignore other events..
 				// fmt.Printf("Unexpected: %v\n", msg.Data)
