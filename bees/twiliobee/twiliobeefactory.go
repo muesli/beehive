@@ -48,22 +48,28 @@ func (factory *TwilioBeeFactory) LogoColor() string {
 func (factory *TwilioBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
-			Name:        "key",
-			Description: "Twilio key which you get after installing the app",
+			Name:        "account_sid",
+			Description: "Twilio account SID",
 			Type:        "string",
 			Mandatory:   true,
 		},
 		{
-			Name:        "password",
-			Description: "Password for end-to-end encryption (optional)",
+			Name:        "auth_token",
+			Description: "Twilio auth token",
 			Type:        "string",
-			Mandatory:   false,
+			Mandatory:   true,
 		},
 		{
-			Name:        "salt",
-			Description: "Salt for end-to-end encryption (optional)",
-			Type:        "url",
-			Mandatory:   false,
+			Name:        "from_number",
+			Description: "Phone number to send SMS messages from",
+			Type:        "string",
+			Mandatory:   true,
+		},
+		{
+			Name:        "to_number",
+			Description: "Phone number to send SMS messages to",
+			Type:        "string",
+			Mandatory:   true,
 		},
 	}
 	return opts
@@ -81,25 +87,13 @@ func (factory *TwilioBeeFactory) Actions() []bees.ActionDescriptor {
 		{
 			Namespace:   factory.Name(),
 			Name:        "send",
-			Description: "Sends a push notification",
+			Description: "Sends an SMS message",
 			Options: []bees.PlaceholderDescriptor{
 				{
-					Name:        "title",
-					Description: "Title of push notification (optional)",
-					Type:        "string",
-					Mandatory:   false,
-				},
-				{
-					Name:        "message",
-					Description: "Content of push notification",
+					Name:        "body",
+					Description: "Message body",
 					Type:        "string",
 					Mandatory:   true,
-				},
-				{
-					Name:        "event",
-					Description: "Event id for customizing vibration and ringtone (optional)",
-					Type:        "string",
-					Mandatory:   false,
 				},
 			},
 		},
