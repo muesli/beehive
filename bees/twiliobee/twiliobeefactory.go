@@ -31,7 +31,7 @@ func (factory *TwilioBeeFactory) Name() string {
 
 // Description returns the description of this Bee.
 func (factory *TwilioBeeFactory) Description() string {
-	return "Lets you send SMS messages to your phone"
+	return "Sends SMS messages"
 }
 
 // Image returns the filename of an image for this Bee.
@@ -41,7 +41,7 @@ func (factory *TwilioBeeFactory) Image() string {
 
 // LogoColor returns the preferred logo background color (used by the admin interface).
 func (factory *TwilioBeeFactory) LogoColor() string {
-	return "#ee3248"
+	return "#0d122b"
 }
 
 // Options returns the options available to configure this Bee.
