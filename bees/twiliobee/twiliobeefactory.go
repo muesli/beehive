@@ -75,12 +75,6 @@ func (factory *TwilioBeeFactory) Options() []bees.BeeOptionDescriptor {
 	return opts
 }
 
-// Events describes the available events provided by this Bee.
-func (factory *TwilioBeeFactory) Events() []bees.EventDescriptor {
-	events := []bees.EventDescriptor{}
-	return events
-}
-
 // Actions describes the available actions provided by this Bee.
 func (factory *TwilioBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
