@@ -2,8 +2,8 @@
 package twiliobee
 
 import (
-	"github.com/muesli/beehive/bees"
 	twilio "github.com/carlosdp/twiliogo"
+	"github.com/muesli/beehive/bees"
 )
 
 // TwilioBee is a Bee that is able to send SMS messages.
@@ -11,9 +11,9 @@ type TwilioBee struct {
 	bees.Bee
 
 	account_sid string
-	auth_token string
+	auth_token  string
 	from_number string
-  to_number string
+	to_number   string
 }
 
 // Action triggers the action passed to it.
@@ -26,8 +26,8 @@ func (mod *TwilioBee) Action(action bees.Action) []bees.Placeholder {
 
 		action.Options.Bind("body", &body)
 
-    client := twilio.NewClient(mod.account_sid, mod.auth_token)
-    twilio.NewMessage(client, mod.from_number, mod.to_number, twilio.Body(body))
+		client := twilio.NewClient(mod.account_sid, mod.auth_token)
+		twilio.NewMessage(client, mod.from_number, mod.to_number, twilio.Body(body))
 
 	default:
 		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
