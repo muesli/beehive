@@ -23,7 +23,8 @@ The [Slack](https://slack.com) bee can send and listen to messages in a Slack ch
          }
       ]
    }
-]```
+]
+```
 
 **apiKey**: Slack API Key. You can get one from https://api.slack.com/docs/oauth-test-tokens.
 
