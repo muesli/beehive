@@ -30,6 +30,7 @@ import (
 type TwilioBee struct {
 	bees.Bee
 
+	client      *twilio.TwilioClient
 	account_sid string
 	auth_token  string
 	from_number string
@@ -46,14 +47,18 @@ func (mod *TwilioBee) Action(action bees.Action) []bees.Placeholder {
 
 		action.Options.Bind("body", &body)
 
-		client := twilio.NewClient(mod.account_sid, mod.auth_token)
-		twilio.NewMessage(client, mod.from_number, mod.to_number, twilio.Body(body))
+		twilio.NewMessage(mod.client, mod.from_number, mod.to_number, twilio.Body(body))
 
 	default:
 		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
 	}
 
 	return outs
+}
+
+// Run executes the Bee's event loop.
+func (mod *TwilioBee) Run(eventChan chan bees.Event) {
+	mod.client = twilio.NewClient(mod.account_sid, mod.auth_token)
 }
 
 // ReloadOptions parses the config options and initializes the Bee.
