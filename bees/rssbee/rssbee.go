@@ -153,6 +153,25 @@ func (mod *RSSBee) pollFeed(uri string, timeout int) {
 	}
 }
 
+func (mod *RSSBee) pollFeed(uri string, timeout int) {
+	feed := rss.New(timeout, true, mod.chanHandler, mod.itemHandler)
+
+	wait := time.Duration(0)
+	for {
+		select {
+		case <-mod.SigChan:
+			return
+
+		case <-time.After(wait):
+			if err := feed.Fetch(uri, nil); err != nil {
+				mod.LogErrorf("%s: %s", uri, err)
+			}
+		}
+
+		wait = time.Duration(feed.SecondsTillUpdate() * 1e9)
+	}
+}
+
 // Run executes the Bee's event loop.
 func (mod *RSSBee) Run(cin chan bees.Event) {
 	mod.eventChan = cin
