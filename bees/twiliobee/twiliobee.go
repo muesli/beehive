@@ -44,10 +44,12 @@ func (mod *TwilioBee) Action(action bees.Action) []bees.Placeholder {
 	switch action.Name {
 	case "send":
 		body := ""
-
 		action.Options.Bind("body", &body)
 
-		twilio.NewMessage(mod.client, mod.from_number, mod.to_number, twilio.Body(body))
+		_, err := twilio.NewMessage(mod.client, mod.from_number, mod.to_number, twilio.Body(body))
+		if err != nil {
+			mod.LogErrorf("Error sending twilio SMS: %s", err)
+		}
 
 	default:
 		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
