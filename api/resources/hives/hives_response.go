@@ -94,7 +94,7 @@ func prepareHiveResponse(context smolder.APIContext, hive *bees.BeeFactoryInterf
 		ID:          (*hive).ID(),
 		Name:        (*hive).Name(),
 		Description: (*hive).Description(),
-		Image:       "http://localhost:8181/images/" + (*hive).Image(),
+		Image:       "/images/" + (*hive).Image(),
 		LogoColor:   (*hive).LogoColor(),
 		Options:     (*hive).Options(),
 		Events:      (*hive).Events(),
