@@ -29,11 +29,14 @@ import (
 
 // APIContext is polly's central context
 type APIContext struct {
+	Config smolder.APIConfig
 }
 
 // NewAPIContext returns a new polly context
 func (context *APIContext) NewAPIContext() smolder.APIContext {
-	ctx := &APIContext{}
+	ctx := &APIContext{
+		Config: context.Config,
+	}
 	return ctx
 }
 

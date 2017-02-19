@@ -21,12 +21,15 @@
 package hives
 
 import (
+	"net/url"
+	"path"
 	"sort"
 
 	restful "github.com/emicklei/go-restful"
-	"github.com/muesli/beehive/bees"
-
 	"github.com/muesli/smolder"
+
+	"github.com/muesli/beehive/api/context"
+	"github.com/muesli/beehive/bees"
 )
 
 // HiveResponse is the common response to 'hive' requests
@@ -88,13 +91,15 @@ func (r *HiveResponse) EmptyResponse() interface{} {
 	return nil
 }
 
-func prepareHiveResponse(context smolder.APIContext, hive *bees.BeeFactoryInterface) hiveInfoResponse {
-	//	ctx := context.(*context.APIContext)
+func prepareHiveResponse(ctx smolder.APIContext, hive *bees.BeeFactoryInterface) hiveInfoResponse {
+	u, _ := url.Parse(ctx.(*context.APIContext).Config.BaseURL)
+	u.Path = path.Join(u.Path, "images", (*hive).Image())
+
 	resp := hiveInfoResponse{
 		ID:          (*hive).ID(),
 		Name:        (*hive).Name(),
 		Description: (*hive).Description(),
-		Image:       "/images/" + (*hive).Image(),
+		Image:       u.String(),
 		LogoColor:   (*hive).LogoColor(),
 		Options:     (*hive).Options(),
 		Events:      (*hive).Events(),

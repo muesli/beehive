@@ -113,12 +113,13 @@ func Run() {
 	// to see what happens in the package, uncomment the following
 	//restful.TraceLogger(log.New(os.Stdout, "[restful] ", log.LstdFlags|log.Lshortfile))
 
-	context := &context.APIContext{}
-
 	// Setup web-service
 	smolderConfig := smolder.APIConfig{
 		BaseURL:    canonicalURL,
 		PathPrefix: "v1/",
+	}
+	context := &context.APIContext{
+		Config: smolderConfig,
 	}
 
 	wsContainer := smolder.NewSmolderContainer(smolderConfig, nil, nil)
