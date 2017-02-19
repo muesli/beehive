@@ -141,6 +141,32 @@ func (factory *TumblrBeeFactory) Actions() []bees.ActionDescriptor {
 				},
 			},
 		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "follow",
+			Description: "Follow a blog on Tumblr",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "blogname",
+					Description: "Blogname to follow",
+					Type:        "string",
+					Mandatory:   true,
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "unfollow",
+			Description: "Unfollow a blog on Tumblr",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "blogname",
+					Description: "Blogname to unfollow",
+					Type:        "string",
+					Mandatory:   true,
+				},
+			},
+		},
 	}
 	return actions
 }
