@@ -52,9 +52,12 @@ func (mod *TumblrBee) Action(action bees.Action) []bees.Placeholder {
 		action.Options.Bind("text", &text)
 
 		state := "published"
-		mod.client.CreateText(mod.blogname, map[string]string{
+		err := mod.client.CreateText(mod.blogname, map[string]string{
 			"body":  text,
 			"state": state})
+		if err != nil {
+			mod.LogErrorf("Failed to post text: %v", err)
+		}
 
 	case "post_quote":
 		quote := ""
@@ -63,10 +66,29 @@ func (mod *TumblrBee) Action(action bees.Action) []bees.Placeholder {
 		action.Options.Bind("source", &source)
 
 		state := "published"
-		mod.client.CreateQuote(mod.blogname, map[string]string{
+		err := mod.client.CreateQuote(mod.blogname, map[string]string{
 			"quote":  quote,
 			"source": source,
 			"state":  state})
+		if err != nil {
+			mod.LogErrorf("Failed to post quote: %v", err)
+		}
+
+	case "follow":
+		blogname := ""
+		action.Options.Bind("blogname", &blogname)
+
+		if err := mod.client.Follow(blogname); err != nil {
+			mod.LogErrorf("Failed to follow blog: %v", err)
+		}
+
+	case "unfollow":
+		blogname := ""
+		action.Options.Bind("blogname", &blogname)
+
+		if err := mod.client.Unfollow(blogname); err != nil {
+			mod.LogErrorf("Failed to unfollow blog: %v", err)
+		}
 
 	default:
 		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
