@@ -1,4 +1,4 @@
-// +build dragonfly freebsd linux netbsd openbsd solaris
+// +build dragonfly freebsd linux netbsd openbsd solaris darwin
 
 /*
  *    Copyright (C) 2014      Daniel 'grindhold' Brendle

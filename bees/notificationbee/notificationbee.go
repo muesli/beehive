@@ -1,4 +1,4 @@
-// +build dragonfly freebsd linux netbsd openbsd solaris
+// +build dragonfly freebsd linux netbsd openbsd solaris darwin
 
 /*
  *    Copyright (C) 2014      Daniel 'grindhold' Brendle
@@ -22,14 +22,11 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// Package notificationbee is a Bee that can trigger freedesktop.org
-// DBus notifications.
+// Package notificationbee is a Bee that can trigger desktop notifications.
 package notificationbee
 
 import (
 	"strings"
-
-	"github.com/guelfey/go.dbus"
 
 	"github.com/muesli/beehive/bees"
 )
@@ -54,21 +51,10 @@ var (
 // notifications.
 type NotificationBee struct {
 	bees.Bee
-	conn     *dbus.Conn
-	notifier *dbus.Object
 }
 
 // Run executes the Bee's event loop.
 func (mod *NotificationBee) Run(cin chan bees.Event) {
-	conn, err := dbus.SessionBus()
-	mod.conn = conn
-	if err != nil {
-		panic(err)
-	}
-	defer mod.conn.Close()
-
-	mod.notifier = mod.conn.Object("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
-
 	select {
 	case <-mod.SigChan:
 		return
@@ -91,13 +77,7 @@ func (mod *NotificationBee) Action(action bees.Action) []bees.Placeholder {
 		urgency, _ = urgencyMap[u]
 
 		if len(text) > 0 {
-			call := mod.notifier.Call("org.freedesktop.Notifications.Notify", 0, "", uint32(0),
-				"", "Beehive", text, []string{},
-				map[string]dbus.Variant{"urgency": dbus.MakeVariant(urgency)}, int32(5000))
-
-			if call.Err != nil {
-				mod.Logln("(" + string(urgency) + ") Failed to print message: " + text)
-			}
+			mod.execAction(text, urgency)
 		}
 
 	default:
