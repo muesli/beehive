@@ -33,7 +33,6 @@ func (mod *NotificationBee) execAction(text string, urgency uint32) {
 	if err != nil {
 		panic(err)
 	}
-	defer conn.Close()
 
 	notifier := conn.Object("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
 	call := notifier.Call("org.freedesktop.Notifications.Notify", 0, "", uint32(0),
