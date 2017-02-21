@@ -25,7 +25,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/google/go-github/github"
+	"github.com/muesli/go-github/github"
 
 	"github.com/muesli/beehive/bees"
 )

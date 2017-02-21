@@ -25,7 +25,7 @@ package githubbee
 import (
 	"time"
 
-	"github.com/google/go-github/github"
+	"github.com/muesli/go-github/github"
 	"golang.org/x/oauth2"
 
 	"github.com/muesli/beehive/bees"
