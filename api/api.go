@@ -54,6 +54,12 @@ const (
 	defaultURL  = "http://localhost:8181"
 )
 
+// CanonicalURL returns the canonical URL of the API
+func CanonicalURL() *url.URL {
+	u, _ := url.Parse(canonicalURL)
+	return u
+}
+
 func escapeURL(u string) string {
 	return strings.Replace(url.QueryEscape(u), "%2F", "/", -1)
 }
