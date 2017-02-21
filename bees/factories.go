@@ -21,6 +21,12 @@
 // Package bees is Beehive's central module system.
 package bees
 
+import (
+	"errors"
+
+	"golang.org/x/oauth2"
+)
+
 // A BeeFactory is the base struct to be embedded by other BeeFactories.
 type BeeFactory struct {
 }
@@ -33,6 +39,11 @@ func (factory *BeeFactory) Image() string {
 // LogoColor returns the default logo color.
 func (factory *BeeFactory) LogoColor() string {
 	return "#010000"
+}
+
+// OAuth2AccessToken returns the oauth2 access token.
+func (factory *BeeFactory) OAuth2AccessToken(id, secret, code string) (*oauth2.Token, error) {
+	return nil, errors.New("This Hive does not implement OAuth2")
 }
 
 // Options returns the default empty options set.
@@ -62,6 +73,9 @@ type BeeFactoryInterface interface {
 	Image() string
 	// A logo color for the module
 	LogoColor() string
+
+	// OAuth2AccessToken returns the oauth2 access token.
+	OAuth2AccessToken(id, secret, code string) (*oauth2.Token, error)
 
 	// Options supported by module
 	Options() []BeeOptionDescriptor
