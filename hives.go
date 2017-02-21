@@ -34,6 +34,7 @@ import (
 	_ "github.com/muesli/beehive/bees/jabberbee"
 	_ "github.com/muesli/beehive/bees/jenkinsbee"
 	_ "github.com/muesli/beehive/bees/nagiosbee"
+	_ "github.com/muesli/beehive/bees/pastebinbee"
 	_ "github.com/muesli/beehive/bees/rssbee"
 	_ "github.com/muesli/beehive/bees/serialbee"
 	_ "github.com/muesli/beehive/bees/simplepushbee"
