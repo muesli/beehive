@@ -27,7 +27,7 @@ import "github.com/deckarep/gosx-notifier"
 
 // Run executes the Bee's event loop.
 func (mod *NotificationBee) execAction(text string, urgency uint32) {
-	note := gosxnotifier.NewNotification(text)
-	note.Subtitle = "this is subtitle"
+	note := gosxnotifier.NewNotification("Beehive")
+	note.Title = text
 	note.Push()
 }
