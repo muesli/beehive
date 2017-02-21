@@ -23,6 +23,7 @@ package api
 
 import (
 	"bytes"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -35,6 +36,8 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/emicklei/go-restful"
 	"github.com/muesli/smolder"
+
+	bee "github.com/muesli/beehive/bees"
 
 	"github.com/muesli/beehive/api/context"
 	"github.com/muesli/beehive/api/resources/actions"
@@ -64,7 +67,7 @@ func escapeURL(u string) string {
 	return strings.Replace(url.QueryEscape(u), "%2F", "/", -1)
 }
 
-func configFromPathParam(req *restful.Request, resp *restful.Response) {
+func configHandler(req *restful.Request, resp *restful.Response) {
 	rootdir := "./config"
 
 	subpath := req.PathParameter("subpath")
@@ -102,7 +105,7 @@ func configFromPathParam(req *restful.Request, resp *restful.Response) {
 		bytes.NewReader(b))
 }
 
-func imageFromPathParam(req *restful.Request, resp *restful.Response) {
+func imageHandler(req *restful.Request, resp *restful.Response) {
 	rootdir := "./assets/bees"
 
 	subpath := req.PathParameter("subpath")
@@ -112,6 +115,46 @@ func imageFromPathParam(req *restful.Request, resp *restful.Response) {
 		resp.ResponseWriter,
 		req.Request,
 		actual)
+}
+
+func oauth2Handler(req *restful.Request, resp *restful.Response) {
+	errHTML := []byte("<html>Failed retrieving OAuth2 access-token. Please check your Beehive logs!</html>")
+
+	params := strings.Split(req.PathParameter("subpath"), "/")
+	log.Printf("OAuth2 callback received: %s", params)
+
+	if len(params) != 3 {
+		log.Errorln("OAuth2: Missing parameters:", params)
+		resp.Write(errHTML)
+		return
+	}
+
+	subpath := params[0]
+	id := params[1]
+	secret := params[2]
+	log.Printf("OAuth2 app ID: %s", id)
+	log.Printf("OAuth2 app secret: %s", secret)
+
+	code := req.QueryParameter("code")
+	log.Printf("OAuth2 code: %s", code)
+
+	f := bee.GetFactory(subpath)
+	if f == nil {
+		log.Errorln("OAuth2: No such hive:", subpath)
+		resp.Write(errHTML)
+		return
+	}
+	token, err := (*f).OAuth2AccessToken(id, secret, code)
+	if err != nil {
+		log.Errorln("OAuth2: This hive does not support OAuth2:", subpath)
+		resp.Write(errHTML)
+		return
+	}
+
+	s := fmt.Sprintf("<html>You're now logged in with %s!<br/><br/>Access token:<br/>"+
+		"<b>%s</b><br/><br/>"+
+		"Copy & paste this token into Beehive's admin interface. You can safely close this tab then.</html>", subpath, token.AccessToken)
+	resp.Write([]byte(s))
 }
 
 // Run sets up the restful API container and an HTTP server go-routine
@@ -131,9 +174,10 @@ func Run() {
 	wsContainer := smolder.NewSmolderContainer(smolderConfig, nil, nil)
 	wsContainer.Router(restful.CurlyRouter{})
 	ws := new(restful.WebService)
-	ws.Route(ws.GET("/images/{subpath:*}").To(imageFromPathParam))
-	ws.Route(ws.GET("/{subpath:*}").To(configFromPathParam))
-	ws.Route(ws.GET("/").To(configFromPathParam))
+	ws.Route(ws.GET("/images/{subpath:*}").To(imageHandler))
+	ws.Route(ws.GET("/oauth2/{subpath:*}").To(oauth2Handler))
+	ws.Route(ws.GET("/{subpath:*}").To(configHandler))
+	ws.Route(ws.GET("/").To(configHandler))
 	wsContainer.Add(ws)
 
 	func(resources ...smolder.APIResource) {
