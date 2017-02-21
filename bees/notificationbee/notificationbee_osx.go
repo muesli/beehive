@@ -23,7 +23,11 @@
 // Package notificationbee is a Bee that can trigger desktop notifications.
 package notificationbee
 
+import "github.com/deckarep/gosx-notifier"
+
 // Run executes the Bee's event loop.
 func (mod *NotificationBee) execAction(text string, urgency uint32) {
-	//FIXME: implement
+	note := gosxnotifier.NewNotification("Beehive")
+	note.Title = text
+	note.Push()
 }
