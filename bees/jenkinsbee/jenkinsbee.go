@@ -28,7 +28,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"time"
-
 	"github.com/muesli/beehive/bees"
 )
 
@@ -50,9 +49,14 @@ type report struct {
 
 // Job represents the JSON API response for a Jenkins job.
 type Job struct {
-	Name  string `json:"name"`
-	URL   string `json:"url"`
-	Color string `json:"color"`
+	Name      string    `json:"name"`
+	URL       string    `json:"url"`
+	Color     string    `json:"color"`
+	LastBuild LastBuild `json:"lastBuild"`
+}
+
+type LastBuild struct {
+	Building bool `json:"building"`
 }
 
 func (mod *JenkinsBee) announceStatusChange(j Job) {
@@ -80,8 +84,38 @@ func (mod *JenkinsBee) announceStatusChange(j Job) {
 	mod.eventChan <- event
 }
 
+func (mod *JenkinsBee) announceBuildStateChange(j Job) {
+	event := bees.Event{
+		Bee:  mod.Name(),
+		Name: "build_status_change",
+		Options: []bees.Placeholder{
+			{
+				Name:  "name",
+				Type:  "string",
+				Value: j.Name,
+			},
+			{
+				Name:  "url",
+				Type:  "string",
+				Value: j.URL,
+			},
+			{
+				Name:  "status",
+				Type:  "string",
+				Value: j.Color,
+			},
+			{
+				Name:  "building",
+				Type:  "bool",
+				Value: j.LastBuild.Building,
+			},
+		},
+	}
+	mod.eventChan <- event
+}
+
 func (mod *JenkinsBee) poll() {
-	request, err := http.NewRequest("GET", mod.url+"/api/json", nil)
+	request, err := http.NewRequest("GET", mod.url+"/api/json?tree=jobs[name,url,color,lastBuild[building]]", nil)
 	if err != nil {
 		mod.LogErrorf("Could not build request: %s", err)
 		return
@@ -119,6 +153,9 @@ func (mod *JenkinsBee) poll() {
 				// The status is different from last time
 				mod.announceStatusChange(rep.Jobs[job])
 			}
+			if oldState.LastBuild.Building != rep.Jobs[job].LastBuild.Building {
+				mod.announceBuildStateChange(rep.Jobs[job])
+			}
 		}
 		jobmap[rep.Jobs[job].Name] = rep.Jobs[job]
 	}
@@ -128,7 +165,6 @@ func (mod *JenkinsBee) poll() {
 // Run executes the Bee's event loop.
 func (mod *JenkinsBee) Run(cin chan bees.Event) {
 	mod.eventChan = cin
-
 	for {
 		select {
 		case <-mod.SigChan:
