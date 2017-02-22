@@ -33,13 +33,13 @@ import (
 
 // Urgency level iota
 const (
-	UrgencyLow      = uint32(iota)
-	UrgencyNormal   = uint32(iota)
-	UrgencyCritical = uint32(iota)
+	UrgencyLow = uint32(iota)
+	UrgencyNormal
+	UrgencyCritical
 )
 
 var (
-	urgencyMap map[string]uint32 = map[string]uint32{
+	urgencyMap = map[string]uint32{
 		"":         UrgencyNormal,
 		"normal":   UrgencyNormal,
 		"low":      UrgencyLow,
