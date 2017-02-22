@@ -114,6 +114,33 @@ func (factory *JenkinsBeeFactory) Events() []bees.EventDescriptor {
 				},
 			},
 		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "build_status_change",
+			Description: "the building status of a job has changed",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "name",
+					Description: "Name of the job",
+					Type:        "string",
+				},
+				{
+					Name:        "status",
+					Description: "Current status of the job ('red' or 'blue')",
+					Type:        "string",
+				},
+				{
+					Name:        "url",
+					Description: "URL of the affected job",
+					Type:        "string",
+				},
+				{
+					Name:        "building",
+					Description: "Build is started or Finished",
+					Type:        "bool",
+				},
+			},
+		},
 	}
 	return events
 }
