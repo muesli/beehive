@@ -109,6 +109,10 @@ Beehive tries to find those files in its current working directory, so it's
 currently recommended to start Beehive from within its git repository, if you
 plan to use the web interface.
 
+Should you still not be able to reach the web interface, check if the ```config```
+directory in the git repository is empty. If that's the case, make sure the
+git submodules get initialized by running ```git submodule update --init```.
+
 The web interface does *not* require authentication yet. Beehive currently
 accepts all connections from the loopback device *only*.
 
