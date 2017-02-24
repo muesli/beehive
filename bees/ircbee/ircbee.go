@@ -23,6 +23,7 @@ package ircbee
 
 import (
 	"crypto/tls"
+	"net"
 	"strings"
 
 	irc "github.com/fluffle/goirc/client"
@@ -137,7 +138,11 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 	cfg := irc.NewConfig(mod.nick, "beehive", "beehive")
 	cfg.SSL = mod.ssl
 	if mod.ssl {
-		cfg.SSLConfig = &tls.Config{ServerName: mod.server}
+		h, _, _ := net.SplitHostPort(mod.server)
+		if h == "" {
+			h = mod.server
+		}
+		cfg.SSLConfig = &tls.Config{ServerName: h}
 	}
 
 	cfg.Server = mod.server
