@@ -70,13 +70,7 @@ func (factory *WebBeeFactory) Options() []bees.BeeOptionDescriptor {
 		{
 			Name:        "address",
 			Description: "Which addr to listen on, eg: 0.0.0.0:12345",
-			Type:        "string",
-			Mandatory:   true,
-		},
-		{
-			Name:        "path",
-			Description: "Which path to expect GET/POST requests on, eg: /foobar",
-			Type:        "string",
+			Type:        "address",
 			Mandatory:   true,
 		},
 	}
@@ -88,65 +82,166 @@ func (factory *WebBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{
 			Namespace:   factory.Name(),
-			Name:        "post",
-			Description: "A POST call was received by the HTTP server",
-			Options: []bees.PlaceholderDescriptor{
-				{
-					Name:        "json",
-					Description: "JSON map received from caller",
-					Type:        "map",
-				},
-				{
-					Name:        "ip",
-					Description: "IP of the caller",
-					Type:        "string",
-				},
-			},
-		},
-		{
-			Namespace:   factory.Name(),
 			Name:        "get",
 			Description: "A GET call was received by the HTTP server",
 			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "remote_addr",
+					Description: "IP of the caller",
+					Type:        "address",
+				},
+				{
+					Name:        "url",
+					Description: "Request URL",
+					Type:        "url",
+				},
 				{
 					Name:        "query_params",
 					Description: "Map of query parameters received from caller",
 					Type:        "map",
 				},
 				{
-					Name:        "ip",
-					Description: "IP of the caller",
+					Name:        "data",
+					Description: "Raw request data",
 					Type:        "string",
+				},
+				{
+					Name:        "json",
+					Description: "JSON map received from caller",
+					Type:        "map",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "post",
+			Description: "A POST call was received by the HTTP server",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "remote_addr",
+					Description: "IP of the caller",
+					Type:        "address",
+				},
+				{
+					Name:        "url",
+					Description: "Request URL",
+					Type:        "url",
+				},
+				{
+					Name:        "query_params",
+					Description: "Map of query parameters received from caller",
+					Type:        "map",
+				},
+				{
+					Name:        "data",
+					Description: "Raw request data",
+					Type:        "string",
+				},
+				{
+					Name:        "json",
+					Description: "JSON map received from caller",
+					Type:        "map",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "put",
+			Description: "A PUT call was received by the HTTP server",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "remote_addr",
+					Description: "IP of the caller",
+					Type:        "address",
+				},
+				{
+					Name:        "url",
+					Description: "Request URL",
+					Type:        "url",
+				},
+				{
+					Name:        "query_params",
+					Description: "Map of query parameters received from caller",
+					Type:        "map",
+				},
+				{
+					Name:        "data",
+					Description: "Raw request data",
+					Type:        "string",
+				},
+				{
+					Name:        "json",
+					Description: "JSON map received from caller",
+					Type:        "map",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "patch",
+			Description: "A PATCH call was received by the HTTP server",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "remote_addr",
+					Description: "IP of the caller",
+					Type:        "address",
+				},
+				{
+					Name:        "url",
+					Description: "Request URL",
+					Type:        "url",
+				},
+				{
+					Name:        "query_params",
+					Description: "Map of query parameters received from caller",
+					Type:        "map",
+				},
+				{
+					Name:        "data",
+					Description: "Raw request data",
+					Type:        "string",
+				},
+				{
+					Name:        "json",
+					Description: "JSON map received from caller",
+					Type:        "map",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "delete",
+			Description: "A DELETE call was received by the HTTP server",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "remote_addr",
+					Description: "IP of the caller",
+					Type:        "address",
+				},
+				{
+					Name:        "url",
+					Description: "Request URL",
+					Type:        "url",
+				},
+				{
+					Name:        "query_params",
+					Description: "Map of query parameters received from caller",
+					Type:        "map",
+				},
+				{
+					Name:        "data",
+					Description: "Raw request data",
+					Type:        "string",
+				},
+				{
+					Name:        "json",
+					Description: "JSON map received from caller",
+					Type:        "map",
 				},
 			},
 		},
 	}
 	return events
-}
-
-// Actions describes the available actions provided by this Bee.
-func (factory *WebBeeFactory) Actions() []bees.ActionDescriptor {
-	actions := []bees.ActionDescriptor{
-		{
-			Namespace:   factory.Name(),
-			Name:        "post",
-			Description: "Does a POST request",
-			Options: []bees.PlaceholderDescriptor{
-				{
-					Name:        "json",
-					Description: "Data to send",
-					Type:        "string",
-				},
-				{
-					Name:        "url",
-					Description: "Where to connect to",
-					Type:        "string",
-					Mandatory:   true,
-				},
-			},
-		},
-	}
-	return actions
 }
 
 func init() {
