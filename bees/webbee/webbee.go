@@ -59,7 +59,7 @@ func (mod *WebBee) Run(cin chan bees.Event) {
 		if err != nil {
 			mod.LogErrorf("Server error: %v", err)
 		}
-		srv.Close()
+		// Go 1.8+: srv.Close()
 	}()
 
 	select {
