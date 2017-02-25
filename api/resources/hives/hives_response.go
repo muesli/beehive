@@ -61,7 +61,7 @@ func (r *HiveResponse) Init(context smolder.APIContext) {
 
 // AddHive adds a hive to the response
 func (r *HiveResponse) AddHive(hive *bees.BeeFactoryInterface) {
-	r.hives[(*hive).ID()] = hive
+	r.hives[(*hive).Name()] = hive
 }
 
 // Send responds to a request with http.StatusOK
