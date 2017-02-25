@@ -72,7 +72,7 @@ func (factory *JenkinsBeeFactory) Options() []bees.BeeOptionDescriptor {
 		{
 			Name:        "url",
 			Description: "The url the jenkins-installation is reachable at",
-			Type:        "string",
+			Type:        "url",
 			Mandatory:   true,
 		},
 		{
@@ -83,7 +83,7 @@ func (factory *JenkinsBeeFactory) Options() []bees.BeeOptionDescriptor {
 		{
 			Name:        "password",
 			Description: "HTTP auth password",
-			Type:        "string",
+			Type:        "password",
 		},
 	}
 	return opts

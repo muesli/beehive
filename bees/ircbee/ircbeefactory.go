@@ -70,7 +70,7 @@ func (factory *IrcBeeFactory) Options() []bees.BeeOptionDescriptor {
 		{
 			Name:        "address",
 			Description: "Hostname of IRC server, eg: irc.example.org:6667",
-			Type:        "url",
+			Type:        "address",
 			Mandatory:   true,
 		},
 		{
@@ -83,7 +83,7 @@ func (factory *IrcBeeFactory) Options() []bees.BeeOptionDescriptor {
 		{
 			Name:        "password",
 			Description: "Password to use to connect to IRC server",
-			Type:        "string",
+			Type:        "password",
 		},
 		{
 			Name:        "channels",

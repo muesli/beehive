@@ -120,14 +120,9 @@ func (factory *HTTPBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		{
 			Namespace:   factory.Name(),
-			Name:        "post",
-			Description: "Does a POST request",
+			Name:        "get",
+			Description: "Does a GET request",
 			Options: []bees.PlaceholderDescriptor{
-				{
-					Name:        "json",
-					Description: "Data to send",
-					Type:        "string",
-				},
 				{
 					Name:        "url",
 					Description: "Where to connect to",
@@ -138,9 +133,14 @@ func (factory *HTTPBeeFactory) Actions() []bees.ActionDescriptor {
 		},
 		{
 			Namespace:   factory.Name(),
-			Name:        "get",
-			Description: "Does a GET request",
+			Name:        "post",
+			Description: "Does a POST request",
 			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "json",
+					Description: "Data to send",
+					Type:        "string",
+				},
 				{
 					Name:        "url",
 					Description: "Where to connect to",

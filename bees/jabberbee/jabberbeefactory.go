@@ -82,7 +82,7 @@ func (factory *JabberBeeFactory) Options() []bees.BeeOptionDescriptor {
 		{
 			Name:        "password",
 			Description: "Password to use to connect to Jabber server",
-			Type:        "string",
+			Type:        "password",
 			Mandatory:   true,
 		},
 		{

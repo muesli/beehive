@@ -82,7 +82,7 @@ func (factory *AnelPowerCtrlBeeFactory) Options() []bees.BeeOptionDescriptor {
 		{
 			Name:        "password",
 			Description: "Password to use to connect to Anel PowerCtrl",
-			Type:        "string",
+			Type:        "password",
 			Mandatory:   true,
 		},
 	}

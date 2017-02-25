@@ -76,7 +76,7 @@ func (factory *SimplepushBeeFactory) Options() []bees.BeeOptionDescriptor {
 		{
 			Name:        "password",
 			Description: "Password for end-to-end encryption",
-			Type:        "string",
+			Type:        "password",
 			Mandatory:   false,
 		},
 		{

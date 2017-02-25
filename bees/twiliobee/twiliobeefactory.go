@@ -81,7 +81,7 @@ func (factory *TwilioBeeFactory) Options() []bees.BeeOptionDescriptor {
 		},
 		{
 			Name:        "from_number",
-      Description: "Phone number to send SMS messages from (ex: \"+15558675309\")",
+			Description: "Phone number to send SMS messages from (ex: \"+15558675309\")",
 			Type:        "string",
 			Mandatory:   true,
 		},
