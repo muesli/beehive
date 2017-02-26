@@ -129,6 +129,9 @@ func startBee(bee *BeeInterface, fatals int) {
 		return
 	}
 
+	(*bee).WaitGroup().Add(1)
+	defer (*bee).WaitGroup().Done()
+
 	defer func(bee *BeeInterface) {
 		if e := recover(); e != nil {
 			log.Println("Fatal bee event:", e, fatals)
@@ -136,7 +139,6 @@ func startBee(bee *BeeInterface, fatals int) {
 		}
 	}(bee)
 
-	defer (*bee).WaitGroup().Done()
 	(*bee).Run(eventsIn)
 }
 
@@ -197,7 +199,6 @@ func RestartBee(bee *BeeInterface) {
 	(*bee).Stop()
 
 	(*bee).SetSigChan(make(chan bool))
-	(*bee).WaitGroup().Add(1)
 	(*bee).Start()
 	go func(mod *BeeInterface) {
 		startBee(mod, 0)
@@ -223,7 +224,6 @@ func NewBee(name, factoryName, description string, options []BeeOption) Bee {
 		SigChan:   make(chan bool),
 		waitGroup: &sync.WaitGroup{},
 	}
-	b.waitGroup.Add(1)
 
 	return b
 }
