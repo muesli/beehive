@@ -30,11 +30,11 @@ import (
 type TwilioBee struct {
 	bees.Bee
 
-	client      *twilio.TwilioClient
-	account_sid string
-	auth_token  string
-	from_number string
-	to_number   string
+	client     *twilio.TwilioClient
+	accountsid string
+	authtoken  string
+	fromNumber string
+	toNumber   string
 }
 
 // Action triggers the action passed to it.
@@ -46,7 +46,7 @@ func (mod *TwilioBee) Action(action bees.Action) []bees.Placeholder {
 		body := ""
 		action.Options.Bind("body", &body)
 
-		_, err := twilio.NewMessage(mod.client, mod.from_number, mod.to_number, twilio.Body(body))
+		_, err := twilio.NewMessage(mod.client, mod.fromNumber, mod.toNumber, twilio.Body(body))
 		if err != nil {
 			mod.LogErrorf("Error sending twilio SMS: %s", err)
 		}
@@ -60,15 +60,15 @@ func (mod *TwilioBee) Action(action bees.Action) []bees.Placeholder {
 
 // Run executes the Bee's event loop.
 func (mod *TwilioBee) Run(eventChan chan bees.Event) {
-	mod.client = twilio.NewClient(mod.account_sid, mod.auth_token)
+	mod.client = twilio.NewClient(mod.accountsid, mod.authtoken)
 }
 
 // ReloadOptions parses the config options and initializes the Bee.
 func (mod *TwilioBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
-	options.Bind("account_sid", &mod.account_sid)
-	options.Bind("auth_token", &mod.auth_token)
-	options.Bind("from_number", &mod.from_number)
-	options.Bind("to_number", &mod.to_number)
+	options.Bind("account_sid", &mod.accountsid)
+	options.Bind("auth_token", &mod.authtoken)
+	options.Bind("from_number", &mod.fromNumber)
+	options.Bind("to_number", &mod.toNumber)
 }
