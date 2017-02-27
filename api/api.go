@@ -84,15 +84,15 @@ func configHandler(req *restful.Request, resp *restful.Response) {
 		return
 	}
 
+	if actual == "config/index.html" {
+		// Since we patch the content of the files, we must drop the integrity SHA-sums
+		// TODO: Would be nicer to recalculate them
+		re := regexp.MustCompile("integrity=\"([^\"]*)\"")
+		b = re.ReplaceAll(b, []byte{})
+	}
 	if defaultURL != canonicalURL {
 		// We're serving files on a non-default canonical URL
 		// Make sure the HTML we serve references API & assets with the correct URL
-		if actual == "config/index.html" {
-			// Since we patch the content of the files, we must drop the integrity SHA-sums
-			// TODO: Would be nicer to recalculate them
-			re := regexp.MustCompile("integrity=\"([^\"]*)\"")
-			b = re.ReplaceAll(b, []byte{})
-		}
 		b = bytes.Replace(b, []byte(defaultURL), []byte(canonicalURL), -1)
 		b = bytes.Replace(b, []byte(escapeURL(defaultURL)), []byte(escapeURL(canonicalURL)), -1)
 	}
