@@ -107,7 +107,7 @@ func main() {
 
 	// Wait for signals
 	ch := make(chan os.Signal, 1)
-	signal.Notify(ch, syscall.SIGHUP, syscall.SIGTERM, syscall.SIGINT, syscall.SIGKILL)
+	signal.Notify(ch, os.Interrupt, syscall.SIGHUP, syscall.SIGTERM, syscall.SIGKILL)
 
 	for s := range ch {
 		log.Println("Got signal:", s)
@@ -117,13 +117,14 @@ func main() {
 		case syscall.SIGHUP:
 			config = loadConfig()
 			bees.RestartBees(config.Bees)
+			bees.SetActions(config.Actions)
 			bees.SetChains(config.Chains)
 
 		case syscall.SIGTERM:
 			fallthrough
 		case syscall.SIGKILL:
 			fallthrough
-		case syscall.SIGINT:
+		case os.Interrupt:
 			abort = true
 			break
 		}
