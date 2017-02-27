@@ -27,7 +27,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ChimeraCoder/anaconda"
+	"github.com/muesli/anaconda"
 
 	"github.com/muesli/beehive/bees"
 )
