@@ -45,10 +45,11 @@ func (mod *EmailBee) Action(action bees.Action) []bees.Placeholder {
 	switch action.Name {
 	case "send":
 		var to, mailtext, subject string
-
+		var cType bool
 		action.Options.Bind("recipient", &to)
 		action.Options.Bind("text", &mailtext)
 		action.Options.Bind("subject", &subject)
+		action.Options.Bind("content-type", &cType)
 
 		var host string
 		var port int
@@ -64,7 +65,11 @@ func (mod *EmailBee) Action(action bees.Action) []bees.Placeholder {
 		m.SetHeader("From", mod.username)
 		m.SetHeader("To", to)
 		m.SetHeader("Subject", subject)
-		m.SetBody("text/html", mailtext)
+		if cType {
+			m.SetBody("text/plain", mailtext)
+		} else {
+			m.SetBody("text/html", mailtext)
+		}
 
 		s, _ := gomail.NewDialer(host, port, mod.username, mod.password).Dial()
 
