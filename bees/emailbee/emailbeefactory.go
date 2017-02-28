@@ -122,8 +122,8 @@ func (factory *EmailBeeFactory) Actions() []bees.ActionDescriptor {
 					Mandatory:   true,
 				},
 				{
-					Name:        "content-type",
-					Description: "Whether to use plain text, default(or empty) for HTML",
+					Name:        "HTML",
+					Description: "Whether to send email with HTML",
 					Type:        "bool",
 					Mandatory:   false,
 				},

@@ -22,6 +22,7 @@
 package emailbee
 
 import (
+	"regexp"
 	"strconv"
 	"strings"
 
@@ -44,12 +45,12 @@ func (mod *EmailBee) Action(action bees.Action) []bees.Placeholder {
 
 	switch action.Name {
 	case "send":
-		var to, mailtext, subject string
-		var cType bool
+		var to, mailText, subject string
+		var addOn bool
 		action.Options.Bind("recipient", &to)
-		action.Options.Bind("text", &mailtext)
+		action.Options.Bind("text", &mailText)
 		action.Options.Bind("subject", &subject)
-		action.Options.Bind("content-type", &cType)
+		action.Options.Bind("HTML", &addOn)
 
 		var host string
 		var port int
@@ -61,14 +62,17 @@ func (mod *EmailBee) Action(action bees.Action) []bees.Placeholder {
 			port = 587
 		}
 
+		re, _ := regexp.Compile("\\<[\\S\\s]+?\\>")
+		plainText := re.ReplaceAllString(mailText, "")
+
 		m := gomail.NewMessage()
 		m.SetHeader("From", mod.username)
 		m.SetHeader("To", to)
 		m.SetHeader("Subject", subject)
-		if cType {
-			m.SetBody("text/plain", mailtext)
-		} else {
-			m.SetBody("text/html", mailtext)
+		m.SetBody("text/plain", plainText)
+
+		if addOn {
+			m.AddAlternative("text/html", mailText)
 		}
 
 		s, _ := gomail.NewDialer(host, port, mod.username, mod.password).Dial()
