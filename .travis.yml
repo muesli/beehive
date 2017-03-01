@@ -14,6 +14,13 @@ go:
   - tip
 
 notifications:
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/860de7e374c89032863a
+    on_success: change
+    on_failure: always
+    on_start: never
+
   email:
     on_success: change
     on_failure: always
