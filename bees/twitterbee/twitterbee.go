@@ -49,16 +49,23 @@ type TwitterBee struct {
 
 func (mod *TwitterBee) handleAnacondaError(err error, msg string) {
 	if err != nil {
-		isRateLimitError, nextWindow := err.(*anaconda.ApiError).RateLimitCheck()
-		if isRateLimitError {
-			mod.Logln("Oops, I exceeded the API rate limit!")
-			waitPeriod := nextWindow.Sub(time.Now())
-			mod.Logf("waiting %f seconds to next window!", waitPeriod.Seconds())
-			time.Sleep(waitPeriod)
-		} else {
-			if msg != "" {
-				panic(msg)
+		switch e := err.(type) {
+		case *anaconda.ApiError:
+			isRateLimitError, nextWindow := e.RateLimitCheck()
+			if isRateLimitError {
+				mod.Logln("Oops, I exceeded the API rate limit!")
+				waitPeriod := nextWindow.Sub(time.Now())
+				mod.Logf("waiting %f seconds to next window!", waitPeriod.Seconds())
+				time.Sleep(waitPeriod)
+			} else {
+				if msg != "" {
+					mod.LogErrorf("Error: %s (%+v)", msg, err)
+					panic(msg)
+				}
 			}
+		default:
+			mod.LogErrorf("Error: %s (%+v)", msg, err)
+			panic(msg)
 		}
 	}
 }
