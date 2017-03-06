@@ -40,6 +40,8 @@ type TumblrBee struct {
 	consumerSecret string
 	token          string
 	tokenSecret    string
+
+	evchan chan bees.Event
 }
 
 // Action triggers the action passed to it.
@@ -57,7 +59,14 @@ func (mod *TumblrBee) Action(action bees.Action) []bees.Placeholder {
 			"state": state})
 		if err != nil {
 			mod.LogErrorf("Failed to post text: %v", err)
+			return outs
 		}
+		ev := bees.Event{
+			Bee:     mod.Name(),
+			Name:    "posted",
+			Options: []bees.Placeholder{},
+		}
+		mod.evchan <- ev
 
 	case "post_quote":
 		quote := ""
@@ -72,7 +81,14 @@ func (mod *TumblrBee) Action(action bees.Action) []bees.Placeholder {
 			"state":  state})
 		if err != nil {
 			mod.LogErrorf("Failed to post quote: %v", err)
+			return outs
 		}
+		ev := bees.Event{
+			Bee:     mod.Name(),
+			Name:    "posted",
+			Options: []bees.Placeholder{},
+		}
+		mod.evchan <- ev
 
 	case "follow":
 		blogname := ""
@@ -80,6 +96,7 @@ func (mod *TumblrBee) Action(action bees.Action) []bees.Placeholder {
 
 		if err := mod.client.Follow(blogname); err != nil {
 			mod.LogErrorf("Failed to follow blog: %v", err)
+			return outs
 		}
 
 	case "unfollow":
@@ -88,6 +105,7 @@ func (mod *TumblrBee) Action(action bees.Action) []bees.Placeholder {
 
 		if err := mod.client.Unfollow(blogname); err != nil {
 			mod.LogErrorf("Failed to unfollow blog: %v", err)
+			return outs
 		}
 
 	default:
@@ -95,6 +113,16 @@ func (mod *TumblrBee) Action(action bees.Action) []bees.Placeholder {
 	}
 
 	return outs
+}
+
+// Run executes the Bee's event loop.
+func (mod *TumblrBee) Run(eventChan chan bees.Event) {
+	mod.evchan = eventChan
+
+	select {
+	case <-mod.SigChan:
+		return
+	}
 }
 
 // ReloadOptions parses the config options and initializes the Bee.

@@ -107,6 +107,19 @@ func (factory *TumblrBeeFactory) Options() []bees.BeeOptionDescriptor {
 	return opts
 }
 
+// Events describes the available events provided by this Bee.
+func (factory *TumblrBeeFactory) Events() []bees.EventDescriptor {
+	events := []bees.EventDescriptor{
+		{
+			Namespace:   factory.Name(),
+			Name:        "posted",
+			Description: "is triggered when you posted something",
+			Options:     []bees.PlaceholderDescriptor{},
+		},
+	}
+	return events
+}
+
 // Actions describes the available actions provided by this Bee.
 func (factory *TumblrBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
