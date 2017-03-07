@@ -131,6 +131,57 @@ func (factory *IrcBeeFactory) Events() []bees.EventDescriptor {
 				},
 			},
 		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "join",
+			Description: "A user joined a channel",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "user",
+					Description: "The user that joined the channel",
+					Type:        "string",
+				},
+				{
+					Name:        "channel",
+					Description: "The channel the user joined",
+					Type:        "string",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "part",
+			Description: "A user left a channel",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "user",
+					Description: "The user that left the channel",
+					Type:        "string",
+				},
+				{
+					Name:        "channel",
+					Description: "The channel the user left",
+					Type:        "string",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "quit",
+			Description: "A user quits",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "user",
+					Description: "The user that quit",
+					Type:        "string",
+				},
+				{
+					Name:        "channel",
+					Description: "The channel where the quit was recognized",
+					Type:        "string",
+				},
+			},
+		},
 	}
 	return events
 }
