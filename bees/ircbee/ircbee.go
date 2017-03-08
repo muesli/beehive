@@ -125,6 +125,42 @@ func (mod *IrcBee) part(channel string) {
 	}
 }
 
+func (mod *IrcBee) statusChange(eventChan chan bees.Event,conn *irc.Conn, line *irc.Line) {
+	//Line.CMD eq Handler Name ex: JOIN
+	message := ""
+	switch line.Cmd {
+	case "JOIN":
+		message = "User joined to channel " + line.Args[0]
+	case "PART":
+		message = "User parted to channel " + line.Args[0]
+	case "QUIT":
+		message = "User quit from channel " + line.Args[0]
+	default:
+		mod.LogErrorf("Unknown command " + line.Cmd + " in statusChange")
+		return
+	}
+	mod.Logln(message)
+	channel := line.Args[0]
+	user := line.Src[:strings.Index(line.Src, "!")]
+	ev := bees.Event{
+		Bee:  mod.Name(),
+		Name: strings.ToLower(line.Cmd),
+		Options: []bees.Placeholder{
+			{
+				Name:  "channel",
+				Type:  "string",
+				Value: channel,
+			},
+			{
+				Name:  "user",
+				Type:  "string",
+				Value: user,
+			},
+		},
+	}
+	eventChan <- ev
+}
+
 // Run executes the Bee's event loop.
 func (mod *IrcBee) Run(eventChan chan bees.Event) {
 	if len(mod.server) == 0 {
@@ -156,6 +192,17 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 	mod.client.HandleFunc("disconnected", func(conn *irc.Conn, line *irc.Line) {
 		mod.connectedState <- false
 	})
+
+	mod.client.HandleFunc("JOIN", func(conn *irc.Conn, line *irc.Line) {
+		mod.statusChange(eventChan, conn, line)
+	})
+	mod.client.HandleFunc("PART", func(conn *irc.Conn, line *irc.Line) {
+		mod.statusChange(eventChan, conn, line)
+	})
+	mod.client.HandleFunc("QUIT", func(conn *irc.Conn, line *irc.Line) {
+		mod.statusChange(eventChan, conn, line)
+	})
+
 	mod.client.HandleFunc("PRIVMSG", func(conn *irc.Conn, line *irc.Line) {
 		channel := line.Args[0]
 		if channel == mod.client.Config().Me.Nick {
