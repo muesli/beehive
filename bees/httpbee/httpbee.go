@@ -25,6 +25,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"strings"
 
 	"github.com/muesli/beehive/bees"
@@ -54,12 +55,12 @@ func (mod *HTTPBee) Run(cin chan bees.Event) {
 func (mod *HTTPBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 
-	url := ""
-	action.Options.Bind("url", &url)
+	u := ""
+	action.Options.Bind("url", &u)
 
 	switch action.Name {
 	case "get":
-		resp, err := http.Get(url)
+		resp, err := http.Get(u)
 		if err != nil {
 			mod.LogErrorf("Error: %s", err)
 			return outs
@@ -75,23 +76,33 @@ func (mod *HTTPBee) Action(action bees.Action) []bees.Placeholder {
 		ev, err := mod.prepareResponseEvent(b)
 		if err == nil {
 			ev.Name = "get"
-			ev.Options.SetValue("url", "url", url)
+			ev.Options.SetValue("url", "url", u)
 			mod.eventChan <- ev
 		}
 
 	case "post":
-		j := ""
-		action.Options.Bind("json", &j)
+		var err error
+		var b []byte
+		var j string
+		var form url.Values
+		var resp *http.Response
 
-		buf := strings.NewReader(j)
-		resp, err := http.Post(url, "application/json", buf)
+		action.Options.Bind("json", &j)
+		action.Options.Bind("form", &form)
+
+		if j != "" {
+			buf := strings.NewReader(j)
+			resp, err = http.Post(u, "application/json", buf)
+		} else {
+			resp, err = http.PostForm(u, form)
+		}
 		if err != nil {
 			mod.LogErrorf("Error: %s", err)
 			return outs
 		}
 		defer resp.Body.Close()
 
-		b, err := ioutil.ReadAll(resp.Body)
+		b, err = ioutil.ReadAll(resp.Body)
 		if err != nil {
 			mod.LogErrorf("Error: %s", err)
 			return outs
@@ -100,7 +111,7 @@ func (mod *HTTPBee) Action(action bees.Action) []bees.Placeholder {
 		ev, err := mod.prepareResponseEvent(b)
 		if err == nil {
 			ev.Name = "post"
-			ev.Options.SetValue("url", "url", url)
+			ev.Options.SetValue("url", "url", u)
 			mod.eventChan <- ev
 		}
 

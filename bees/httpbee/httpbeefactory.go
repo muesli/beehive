@@ -138,7 +138,12 @@ func (factory *HTTPBeeFactory) Actions() []bees.ActionDescriptor {
 			Options: []bees.PlaceholderDescriptor{
 				{
 					Name:        "json",
-					Description: "Data to send",
+					Description: "JSON Data to send",
+					Type:        "string",
+				},
+				{
+					Name:        "form",
+					Description: "Form Data to send",
 					Type:        "string",
 				},
 				{
