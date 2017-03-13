@@ -51,11 +51,16 @@ type IrcBee struct {
 // Action triggers the action passed to it.
 func (mod *IrcBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
+	var sendFunc func(t, msg string)
 
 	switch action.Name {
 	case "notice":
+		sendFunc = mod.client.Notice
 		fallthrough
 	case "send":
+		if sendFunc == nil {
+			sendFunc = mod.client.Privmsg
+		}
 		tos := []string{}
 		text := ""
 		action.Options.Bind("text", &text)
@@ -70,7 +75,7 @@ func (mod *IrcBee) Action(action bees.Action) []bees.Placeholder {
 			if recv == "*" {
 				// special: send to all joined channels
 				for _, to := range mod.channels {
-					mod.client.Privmsg(to, text)
+					sendFunc(to, text)
 				}
 			} else {
 				// needs stripping hostname when sending to user!host
@@ -78,12 +83,7 @@ func (mod *IrcBee) Action(action bees.Action) []bees.Placeholder {
 					recv = recv[0:strings.Index(recv, "!")]
 				}
 
-				switch action.Name {
-				case "notice":
-					mod.client.Notice(recv, text)
-				case "send":
-					mod.client.Privmsg(recv, text)
-				}
+				sendFunc(recv, text)
 			}
 		}
 
