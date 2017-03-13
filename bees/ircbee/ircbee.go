@@ -53,6 +53,8 @@ func (mod *IrcBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 
 	switch action.Name {
+	case "notice":
+		fallthrough
 	case "send":
 		tos := []string{}
 		text := ""
@@ -76,7 +78,12 @@ func (mod *IrcBee) Action(action bees.Action) []bees.Placeholder {
 					recv = recv[0:strings.Index(recv, "!")]
 				}
 
-				mod.client.Privmsg(recv, text)
+				switch action.Name {
+				case "notice":
+					mod.client.Notice(recv, text)
+				case "send":
+					mod.client.Privmsg(recv, text)
+				}
 			}
 		}
 
@@ -125,7 +132,7 @@ func (mod *IrcBee) part(channel string) {
 	}
 }
 
-func (mod *IrcBee) statusChange(eventChan chan bees.Event,conn *irc.Conn, line *irc.Line) {
+func (mod *IrcBee) statusChange(eventChan chan bees.Event, conn *irc.Conn, line *irc.Line) {
 	//Line.CMD eq Handler Name ex: JOIN
 	message := ""
 	switch line.Cmd {
