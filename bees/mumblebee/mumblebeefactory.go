@@ -127,6 +127,103 @@ func (factory *MumbleBeeFactory) Events() []bees.EventDescriptor {
 				},
 			},
 		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "user_connected",
+			Description: "A user connected to the mumble server",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "user",
+					Description: "The name of the user",
+					Type:        "string",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "user_disconnected",
+			Description: "A user disconnected from the mumble server",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "user",
+					Description: "The name of the user",
+					Type:        "string",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "user_registered",
+			Description: "A user registered to mumble server",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "user",
+					Description: "The name of the user",
+					Type:        "string",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "user_kicked",
+			Description: "An admin kicked a user from the mumble server",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "user",
+					Description: "The name of the user",
+					Type:        "string",
+				},
+				{
+					Name:        "admin",
+					Description: "The name of the admin",
+					Type:        "string",
+				},
+				{
+					Name:        "message",
+					Description: "The message from the admin",
+					Type:        "string",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "user_banned",
+			Description: "An admin banned a user from connecting to the mumble server",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "user",
+					Description: "The name of the user",
+					Type:        "string",
+				},
+				{
+					Name:        "admin",
+					Description: "The name of the admin",
+					Type:        "string",
+				},
+				{
+					Name:        "message",
+					Description: "The message from the admin",
+					Type:        "string",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "user_changed_channel",
+			Description: "An user changed the channel",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "user",
+					Description: "The name of the user",
+					Type:        "string",
+				},
+				{
+					Name:        "channel",
+					Description: "The name of the channel the user moved to",
+					Type:        "string",
+				},
+			},
+		},
 	}
 	return events
 }

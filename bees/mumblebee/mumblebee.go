@@ -92,6 +92,9 @@ func (mod *MumbleBee) move(channel string) {
 	channel = strings.TrimSpace(channel)
 	if len(channel) > 0 {
 		channels := strings.Split(channel, "/")
+		if channels[0] == "Root" {
+			channels = channels[1:]
+		}
 		result := mod.client.Channels.Find(channels...)
 		if result != nil {
 			mod.client.Self.Move(result)
@@ -169,6 +172,91 @@ func (mod *MumbleBee) Run(eventChan chan bees.Event) {
 		},
 	})
 
+	config.Attach(gumbleutil.Listener{
+		UserChange: func(e *gumble.UserChangeEvent) {
+			eventType := ""
+			if e.Type.Has(gumble.UserChangeConnected) {
+				eventType = "user_connected"
+			} else if e.Type.Has(gumble.UserChangeDisconnected) {
+				eventType = "user_disconnected"
+			} else if e.Type.Has(gumble.UserChangeRegistered) {
+				eventType = "user_registered"
+			} else {
+				return
+			}
+			ev := bees.Event{
+				Bee:  mod.Name(),
+				Name: eventType,
+				Options: []bees.Placeholder{
+					{
+						Name:  "user",
+						Type:  "string",
+						Value: e.User.Name,
+					},
+				},
+			}
+			eventChan <- ev
+		},
+	})
+
+	config.Attach(gumbleutil.Listener{
+		UserChange: func(e *gumble.UserChangeEvent) {
+			eventType := ""
+			if e.Type.Has(gumble.UserChangeKicked) {
+				eventType = "user_banned"
+			} else if e.Type.Has(gumble.UserChangeBanned) {
+				eventType = "user_kicked"
+			} else {
+				return
+			}
+			ev := bees.Event{
+				Bee:  mod.Name(),
+				Name: eventType,
+				Options: []bees.Placeholder{
+					{
+						Name:  "user",
+						Type:  "string",
+						Value: e.User.Name,
+					},
+					{
+						Name:  "admin",
+						Type:  "string",
+						Value: e.Actor.Name,
+					},
+					{
+						Name:  "message",
+						Type:  "string",
+						Value: e.String,
+					},
+				},
+			}
+			eventChan <- ev
+		},
+	})
+
+	config.Attach(gumbleutil.Listener{
+		UserChange: func(e *gumble.UserChangeEvent) {
+			if e.Type.Has(gumble.UserChangeChannel) {
+				ev := bees.Event{
+					Bee:  mod.Name(),
+					Name: "user_changed_channel",
+					Options: []bees.Placeholder{
+						{
+							Name:  "user",
+							Type:  "string",
+							Value: e.User.Name,
+						},
+						{
+							Name:  "channel",
+							Type:  "string",
+							Value: strings.Join(gumbleutil.ChannelPath(e.User.Channel), "/"),
+						},
+					},
+				}
+				eventChan <- ev
+			}
+		},
+	})
 	/*/ ToDo: Use own client certs
 	if *certificateFile != "" {
 		if *keyFile == "" {
