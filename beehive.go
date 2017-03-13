@@ -58,10 +58,9 @@ func loadConfig() Config {
 	j, err := ioutil.ReadFile(configFile)
 	if err == nil {
 		err = json.Unmarshal(j, &config)
-	}
-
-	if err != nil {
-		// log.Fatal(err)
+		if err != nil {
+			log.Fatal("Error parsing config file: ", err)
+		}
 	}
 
 	return config
