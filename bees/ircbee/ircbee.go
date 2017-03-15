@@ -25,6 +25,7 @@ import (
 	"crypto/tls"
 	"net"
 	"strings"
+	"time"
 
 	irc "github.com/fluffle/goirc/client"
 
@@ -266,7 +267,7 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 				mod.Logln("Connecting to IRC:", mod.server)
 				err := mod.client.Connect()
 				if err != nil {
-					mod.Logln("Failed to connect to IRC:", mod.server, err)
+					mod.LogErrorf("Failed to connect to IRC: %s %v", mod.server, err)
 					connecting = false
 				}
 			}
@@ -289,6 +290,9 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 				mod.client.Quit()
 			}
 			waitForDisconnect = true
+
+		default:
+			time.Sleep(time.Second)
 		}
 	}
 }
