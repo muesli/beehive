@@ -61,19 +61,19 @@ func (c *CricketBee) announceCricketEvent(response gocricket.ResponseEvent) {
 	switch response.EventType {
 	case gocricket.EVENT_OUT:
 		c.beeEvt <- bees.Event{
-			Name:    "event_out",
+			Name:    "out",
 			Options: c.placeholderOptions(response),
 			Bee:     c.Name(),
 		}
 	case gocricket.EVENT_OVER_CHANGED:
 		c.beeEvt <- bees.Event{
-			Name:    "event_over_changed",
+			Name:    "over_changed",
 			Options: c.placeholderOptions(response),
 			Bee:     c.Name(),
 		}
 	case gocricket.EVENT_RUN_CHANGE:
 		c.beeEvt <- bees.Event{
-			Name:    "event_run_change",
+			Name:    "run_change",
 			Options: c.placeholderOptions(response),
 			Bee:     c.Name(),
 		}
@@ -90,6 +90,9 @@ func (c *CricketBee) Run(cin chan bees.Event) {
 		select {
 		case e := <-evt:
 			c.announceCricketEvent(e)
+
+		case <-c.SigChan:
+			return
 		}
 	}
 }

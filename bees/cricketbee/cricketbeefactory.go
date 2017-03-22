@@ -82,7 +82,7 @@ func (factory *CricketBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{
 			Namespace:   factory.Name(),
-			Name:        "event_out",
+			Name:        "out",
 			Description: "Event gets triggered on fall of wickets",
 			Options: []bees.PlaceholderDescriptor{
 				{
@@ -109,7 +109,7 @@ func (factory *CricketBeeFactory) Events() []bees.EventDescriptor {
 		},
 		{
 			Namespace:   factory.Name(),
-			Name:        "event_over_changed",
+			Name:        "over_changed",
 			Description: "Event will get triggered when overs get completed",
 			Options: []bees.PlaceholderDescriptor{
 				{
@@ -136,7 +136,7 @@ func (factory *CricketBeeFactory) Events() []bees.EventDescriptor {
 		},
 		{
 			Namespace:   factory.Name(),
-			Name:        "event_run_change",
+			Name:        "run_change",
 			Description: "Event gets triggered when there is any change in score",
 			Options: []bees.PlaceholderDescriptor{
 				{
