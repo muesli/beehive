@@ -275,6 +275,10 @@ func (bee *Bee) WaitGroup() *sync.WaitGroup {
 
 // Run is the default, empty implementation of a Bee's Run method.
 func (bee *Bee) Run(chan Event) {
+	select {
+	case <-bee.SigChan:
+		return
+	}
 }
 
 // Action is the default, empty implementation of a Bee's Action method.
