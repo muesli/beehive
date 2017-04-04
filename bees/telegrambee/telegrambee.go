@@ -29,7 +29,7 @@ import (
 	"strconv"
 	"strings"
 
-	telegram "gopkg.in/telegram-bot-api.v4"
+	telegram "github.com/go-telegram-bot-api/telegram-bot-api"
 
 	"github.com/muesli/beehive/bees"
 )
