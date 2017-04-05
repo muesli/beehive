@@ -83,7 +83,7 @@ func (factory *TransmissionBeeFactory) Options() []bees.BeeOptionDescriptor {
 		{
 			Name:        "password",
 			Description: "Password",
-			Type:        "string",
+			Type:        "password",
 		},
 	}
 	return opts
@@ -99,7 +99,7 @@ func (factory *TransmissionBeeFactory) Actions() []bees.ActionDescriptor {
 			{
 				Name:        "torrent",
 				Description: "URL of the Torrent to download",
-				Type:        "string",
+				Type:        "url",
 				Mandatory:   true,
 			},
 		},

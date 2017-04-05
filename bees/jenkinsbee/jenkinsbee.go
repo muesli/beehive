@@ -28,7 +28,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"time"
-
 	"github.com/muesli/beehive/bees"
 )
 
@@ -50,9 +49,14 @@ type report struct {
 
 // Job represents the JSON API response for a Jenkins job.
 type Job struct {
-	Name  string `json:"name"`
-	URL   string `json:"url"`
-	Color string `json:"color"`
+	Name      string    `json:"name"`
+	URL       string    `json:"url"`
+	Color     string    `json:"color"`
+	LastBuild LastBuild `json:"lastBuild"`
+}
+
+type LastBuild struct {
+	Building bool `json:"building"`
 }
 
 func (mod *JenkinsBee) announceStatusChange(j Job) {
@@ -80,6 +84,84 @@ func (mod *JenkinsBee) announceStatusChange(j Job) {
 	mod.eventChan <- event
 }
 
+func (mod *JenkinsBee) announceBuildStateChange(j Job) {
+	event := bees.Event{
+		Bee:  mod.Name(),
+		Name: "build_status_change",
+		Options: []bees.Placeholder{
+			{
+				Name:  "name",
+				Type:  "string",
+				Value: j.Name,
+			},
+			{
+				Name:  "url",
+				Type:  "string",
+				Value: j.URL,
+			},
+			{
+				Name:  "status",
+				Type:  "string",
+				Value: j.Color,
+			},
+			{
+				Name:  "building",
+				Type:  "bool",
+				Value: j.LastBuild.Building,
+			},
+		},
+	}
+	mod.eventChan <- event
+}
+
+func (mod *JenkinsBee) poll() {
+	request, err := http.NewRequest("GET", mod.url+"/api/json?tree=jobs[name,url,color,lastBuild[building]]", nil)
+	if err != nil {
+		mod.LogErrorf("Could not build request: %s", err)
+		return
+	}
+	request.SetBasicAuth(mod.user, mod.password)
+
+	client := http.Client{}
+	resp, err := client.Do(request)
+	if err != nil {
+		mod.LogErrorf("Could not call API on %s/api/json: %s", mod.url, err)
+		return
+	}
+
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		mod.LogErrorf("Could not read data from API: %s", err)
+		return
+	}
+	rep := new(report)
+	err = json.Unmarshal(body, &rep)
+	if err != nil {
+		mod.LogErrorf("Failed to unmarshal JSON: %s", err)
+		return
+	}
+
+	jobmap := make(map[string]Job)
+	for job := range rep.Jobs {
+		if oldState, ok := mod.Jobs[rep.Jobs[job].Name]; !ok {
+			// There is no record of this job
+			mod.announceStatusChange(rep.Jobs[job])
+		} else {
+			// There exists a record of this job
+			if oldState.Color != rep.Jobs[job].Color {
+				// The status is different from last time
+				mod.announceStatusChange(rep.Jobs[job])
+			}
+			if oldState.LastBuild.Building != rep.Jobs[job].LastBuild.Building {
+				mod.announceBuildStateChange(rep.Jobs[job])
+			}
+		}
+		jobmap[rep.Jobs[job].Name] = rep.Jobs[job]
+	}
+	mod.Jobs = jobmap
+}
+
 // Run executes the Bee's event loop.
 func (mod *JenkinsBee) Run(cin chan bees.Event) {
 	mod.eventChan = cin
@@ -88,52 +170,9 @@ func (mod *JenkinsBee) Run(cin chan bees.Event) {
 		case <-mod.SigChan:
 			return
 
-		default:
+		case <-time.After(time.Duration(10 * time.Second)):
+			mod.poll()
 		}
-		time.Sleep(10 * time.Second)
-
-		request, err := http.NewRequest("GET", mod.url+"/api/json", nil)
-		if err != nil {
-			mod.Logln("Could not build request")
-			break
-		}
-		request.SetBasicAuth(mod.user, mod.password)
-
-		client := http.Client{}
-		resp, err := client.Do(request)
-		if err != nil {
-			mod.Logln("Could not call API on "+mod.url+"/api/json", err)
-			continue
-		}
-
-		defer resp.Body.Close()
-		body, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			mod.Logln("Could not read data of API-Call")
-			continue
-		}
-		rep := new(report)
-		err = json.Unmarshal(body, &rep)
-		if err != nil {
-			mod.Logln("Failed to unmarshal JSON")
-			continue
-		}
-
-		jobmap := make(map[string]Job)
-		for job := range rep.Jobs {
-			if oldState, ok := mod.Jobs[rep.Jobs[job].Name]; !ok {
-				// There is no record of this job
-				mod.announceStatusChange(rep.Jobs[job])
-			} else {
-				// There exists a record of this job
-				if oldState.Color != rep.Jobs[job].Color {
-					// The status is different from last time
-					mod.announceStatusChange(rep.Jobs[job])
-				}
-			}
-			jobmap[rep.Jobs[job].Name] = rep.Jobs[job]
-		}
-		mod.Jobs = jobmap
 	}
 }
 
@@ -141,12 +180,12 @@ func (mod *JenkinsBee) triggerBuild(jobname string) {
 	client := http.Client{}
 	request, err := http.NewRequest("GET", mod.url+"/job/"+jobname+"/build", nil)
 	if err != nil {
-		mod.Logln("Could not build request")
+		mod.LogErrorf("Could not build request: %s", err)
 		return
 	}
 	request.SetBasicAuth(mod.user, mod.password)
 	if _, err := client.Do(request); err != nil {
-		mod.Logln("Could not trigger build")
+		mod.LogErrorf("Could not trigger build: %s", err)
 	}
 }
 

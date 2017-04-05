@@ -96,7 +96,7 @@ func (factory *TelegramBeeFactory) Events() []bees.EventDescriptor {
 				},
 				{
 					Name:        "user_id",
-					Description: "User ID  sending the message",
+					Description: "User ID sending the message",
 					Type:        "string",
 				},
 			},

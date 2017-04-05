@@ -42,26 +42,6 @@ type RSSBee struct {
 	eventChan chan bees.Event
 }
 
-func (mod *RSSBee) pollFeed(uri string, timeout int) {
-	feed := rss.New(timeout, true, mod.chanHandler, mod.itemHandler)
-
-	for {
-		select {
-		case <-mod.SigChan:
-			return
-
-		default:
-		}
-
-		if err := feed.Fetch(uri, nil); err != nil {
-			mod.Logf("[e] %s: %s", uri, err)
-			return
-		}
-
-		<-time.After(time.Duration(feed.SecondsTillUpdate() * 1e9))
-	}
-}
-
 func (mod *RSSBee) chanHandler(feed *rss.Feed, newchannels []*rss.Channel) {
 	//fmt.Printf("%d new channel(s) in %s\n", len(newchannels), feed.Url)
 }
@@ -151,7 +131,26 @@ func (mod *RSSBee) itemHandler(feed *rss.Feed, ch *rss.Channel, newitems []*rss.
 
 		mod.eventChan <- newitemEvent
 	}
-	mod.Logf("%d new item(s) in %s\n", len(newitems), feed.Url)
+	mod.Logf("%d new item(s) in %s", len(newitems), feed.Url)
+}
+
+func (mod *RSSBee) pollFeed(uri string, timeout int) {
+	feed := rss.New(timeout, true, mod.chanHandler, mod.itemHandler)
+
+	wait := time.Duration(0)
+	for {
+		select {
+		case <-mod.SigChan:
+			return
+
+		case <-time.After(wait):
+			if err := feed.Fetch(uri, nil); err != nil {
+				mod.LogErrorf("%s: %s", uri, err)
+			}
+		}
+
+		wait = time.Duration(feed.SecondsTillUpdate() * 1e9)
+	}
 }
 
 // Run executes the Bee's event loop.

@@ -65,6 +65,10 @@ in your browser. Note that Beehive will create a config file ```beehive.conf```
 in its current working directory, unless you specify a different file with the
 ```-config``` option.
 
+Note: You currently have to start ```beehive``` from within $GOPATH/src/github.com/muesli/beehive
+in order for it to find all the resources for the admin interface. Also see the
+Troubleshooting & Notes section of this README.
+
 The admin interface will present you with a list of available Hives. We will
 need to create two Bees here, one for the RSS feed and one for your email
 account.
@@ -105,12 +109,16 @@ Beehive tries to find those files in its current working directory, so it's
 currently recommended to start Beehive from within its git repository, if you
 plan to use the web interface.
 
+Should you still not be able to reach the web interface, check if the ```config```
+directory in the git repository is empty. If that's the case, make sure the
+git submodules get initialized by running ```git submodule update --init```.
+
 The web interface does *not* require authentication yet. Beehive currently
 accepts all connections from the loopback device *only*.
 
 ## Development
 
-Need help? Want to hack on your own Hives? Join us on IRC (irc://freenode.net/#beehive) or [Gitter](https://gitter.im/the_beehive/Lobby).
+Need help? Want to hack on your own Hives? Join us on IRC (irc://freenode.net/#beehive) or [Gitter](https://gitter.im/the_beehive/Lobby). Follow the bees on [Twitter](https://twitter.com/beehive_app)!
 
 API docs can be found [here](http://godoc.org/github.com/muesli/beehive).
 

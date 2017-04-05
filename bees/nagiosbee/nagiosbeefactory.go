@@ -74,6 +74,7 @@ func (factory *NagiosBeeFactory) Options() []bees.BeeOptionDescriptor {
 			Name:        "url",
 			Description: "URL to the statusJson.php-script, typically http://domain.com/nagios3/statusJson.php",
 			Type:        "string",
+			Mandatory:   true,
 		},
 		{
 			Name:        "user",

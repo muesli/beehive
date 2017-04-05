@@ -24,7 +24,7 @@ package htmlextractbee
 import (
 	"strings"
 
-	"github.com/advancedlogic/GoOse"
+	"github.com/Profpatsch/GoOse"
 
 	"github.com/muesli/beehive/bees"
 )
@@ -55,7 +55,7 @@ func (mod *HTMLExtractBee) Action(action bees.Action) []bees.Placeholder {
 
 		g := goose.New()
 		article, _ := g.ExtractFromURL(url)
-		article.Title = strings.TrimSpace(strings.Replace(article.Title, "\n", " ", -1))
+		article.Title = strings.TrimSpace(strings.Replace(article.TitleUnmodified, "\n", " ", -1))
 		if strings.HasPrefix(article.TopImage, "http://data:image") {
 			article.TopImage = ""
 		}

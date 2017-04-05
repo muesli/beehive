@@ -71,17 +71,17 @@ func (factory *TimeBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
 			Name:        "second",
-			Description: "00-59 for a specific time; -1 for ignore",
+			Description: "00-59 for a specific second; -1 for ignore",
 			Type:        "int",
 		},
 		{
 			Name:        "minute",
-			Description: "00-59 for a specific time; -1 for ignore",
+			Description: "00-59 for a specific minute; -1 for ignore",
 			Type:        "int",
 		},
 		{
 			Name:        "hour",
-			Description: "00-23 for a specific time; -1 for ignore",
+			Description: "00-23 for a specific hour; -1 for ignore",
 			Type:        "int",
 		},
 		{
@@ -91,17 +91,17 @@ func (factory *TimeBeeFactory) Options() []bees.BeeOptionDescriptor {
 		},
 		{
 			Name:        "day_of_month",
-			Description: "01-31 for a specific time; -1 for ignore",
+			Description: "01-31 for a specific day of the month; -1 for ignore",
 			Type:        "int",
 		},
 		{
 			Name:        "month",
-			Description: "01-12 for a specific time; -1 for ignore",
+			Description: "01-12 for a specific month; -1 for ignore",
 			Type:        "int",
 		},
 		{
 			Name:        "year",
-			Description: "2014 - 9999 for specific time (non-recurring); -1 for ignore (recommended)",
+			Description: "2014 - 9999 for specific year (non-recurring); -1 for ignore (recommended)",
 			Type:        "int",
 		},
 	}

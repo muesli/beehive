@@ -1,4 +1,4 @@
-// +build dragonfly freebsd linux netbsd openbsd solaris
+// +build dragonfly freebsd linux netbsd openbsd solaris darwin
 
 /*
  *    Copyright (C) 2014      Daniel 'grindhold' Brendle
@@ -65,7 +65,7 @@ func (factory *NotificationBeeFactory) Image() string {
 
 // LogoColor returns the preferred logo background color (used by the admin interface).
 func (factory *NotificationBeeFactory) LogoColor() string {
-	return "#00aeef"
+	return "#ffcc2a"
 }
 
 // Actions describes the available actions provided by this Bee.

@@ -70,7 +70,7 @@ func (factory *IrcBeeFactory) Options() []bees.BeeOptionDescriptor {
 		{
 			Name:        "address",
 			Description: "Hostname of IRC server, eg: irc.example.org:6667",
-			Type:        "url",
+			Type:        "address",
 			Mandatory:   true,
 		},
 		{
@@ -83,7 +83,7 @@ func (factory *IrcBeeFactory) Options() []bees.BeeOptionDescriptor {
 		{
 			Name:        "password",
 			Description: "Password to use to connect to IRC server",
-			Type:        "string",
+			Type:        "password",
 		},
 		{
 			Name:        "channels",
@@ -131,6 +131,57 @@ func (factory *IrcBeeFactory) Events() []bees.EventDescriptor {
 				},
 			},
 		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "join",
+			Description: "A user joined a channel",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "user",
+					Description: "The user that joined the channel",
+					Type:        "string",
+				},
+				{
+					Name:        "channel",
+					Description: "The channel the user joined",
+					Type:        "string",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "part",
+			Description: "A user left a channel",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "user",
+					Description: "The user that left the channel",
+					Type:        "string",
+				},
+				{
+					Name:        "channel",
+					Description: "The channel the user left",
+					Type:        "string",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "quit",
+			Description: "A user quits",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "user",
+					Description: "The user that quit",
+					Type:        "string",
+				},
+				{
+					Name:        "channel",
+					Description: "The channel where the quit was recognized",
+					Type:        "string",
+				},
+			},
+		},
 	}
 	return events
 }
@@ -142,6 +193,25 @@ func (factory *IrcBeeFactory) Actions() []bees.ActionDescriptor {
 			Namespace:   factory.Name(),
 			Name:        "send",
 			Description: "Sends a message to a channel or a private query",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "channel",
+					Description: "Which channel to send the message to",
+					Type:        "string",
+					Mandatory:   true,
+				},
+				{
+					Name:        "text",
+					Description: "Content of the message",
+					Type:        "string",
+					Mandatory:   true,
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "notice",
+			Description: "Sends a notice to a channel or a private query",
 			Options: []bees.PlaceholderDescriptor{
 				{
 					Name:        "channel",

@@ -22,6 +22,8 @@
 package ircbee
 
 import (
+	"crypto/tls"
+	"net"
 	"strings"
 	"time"
 
@@ -50,9 +52,16 @@ type IrcBee struct {
 // Action triggers the action passed to it.
 func (mod *IrcBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
+	var sendFunc func(t, msg string)
 
 	switch action.Name {
+	case "notice":
+		sendFunc = mod.client.Notice
+		fallthrough
 	case "send":
+		if sendFunc == nil {
+			sendFunc = mod.client.Privmsg
+		}
 		tos := []string{}
 		text := ""
 		action.Options.Bind("text", &text)
@@ -67,7 +76,7 @@ func (mod *IrcBee) Action(action bees.Action) []bees.Placeholder {
 			if recv == "*" {
 				// special: send to all joined channels
 				for _, to := range mod.channels {
-					mod.client.Privmsg(to, text)
+					sendFunc(to, text)
 				}
 			} else {
 				// needs stripping hostname when sending to user!host
@@ -75,7 +84,7 @@ func (mod *IrcBee) Action(action bees.Action) []bees.Placeholder {
 					recv = recv[0:strings.Index(recv, "!")]
 				}
 
-				mod.client.Privmsg(recv, text)
+				sendFunc(recv, text)
 			}
 		}
 
@@ -98,8 +107,6 @@ func (mod *IrcBee) Action(action bees.Action) []bees.Placeholder {
 
 	return outs
 }
-
-// ircbee specific impl
 
 func (mod *IrcBee) rejoin() {
 	for _, channel := range mod.channels {
@@ -126,6 +133,42 @@ func (mod *IrcBee) part(channel string) {
 	}
 }
 
+func (mod *IrcBee) statusChange(eventChan chan bees.Event, conn *irc.Conn, line *irc.Line) {
+	//Line.CMD eq Handler Name ex: JOIN
+	message := ""
+	switch line.Cmd {
+	case "JOIN":
+		message = "User joined to channel " + line.Args[0]
+	case "PART":
+		message = "User parted to channel " + line.Args[0]
+	case "QUIT":
+		message = "User quit from channel " + line.Args[0]
+	default:
+		mod.LogErrorf("Unknown command " + line.Cmd + " in statusChange")
+		return
+	}
+	mod.Logln(message)
+	channel := line.Args[0]
+	user := line.Src[:strings.Index(line.Src, "!")]
+	ev := bees.Event{
+		Bee:  mod.Name(),
+		Name: strings.ToLower(line.Cmd),
+		Options: []bees.Placeholder{
+			{
+				Name:  "channel",
+				Type:  "string",
+				Value: channel,
+			},
+			{
+				Name:  "user",
+				Type:  "string",
+				Value: user,
+			},
+		},
+	}
+	eventChan <- ev
+}
+
 // Run executes the Bee's event loop.
 func (mod *IrcBee) Run(eventChan chan bees.Event) {
 	if len(mod.server) == 0 {
@@ -138,6 +181,14 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 	// setup IRC client:
 	cfg := irc.NewConfig(mod.nick, "beehive", "beehive")
 	cfg.SSL = mod.ssl
+	if mod.ssl {
+		h, _, _ := net.SplitHostPort(mod.server)
+		if h == "" {
+			h = mod.server
+		}
+		cfg.SSLConfig = &tls.Config{ServerName: h}
+	}
+
 	cfg.Server = mod.server
 	cfg.Pass = mod.password
 	cfg.NewNick = func(n string) string { return n + "_" }
@@ -149,10 +200,21 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 	mod.client.HandleFunc("disconnected", func(conn *irc.Conn, line *irc.Line) {
 		mod.connectedState <- false
 	})
+
+	mod.client.HandleFunc("JOIN", func(conn *irc.Conn, line *irc.Line) {
+		mod.statusChange(eventChan, conn, line)
+	})
+	mod.client.HandleFunc("PART", func(conn *irc.Conn, line *irc.Line) {
+		mod.statusChange(eventChan, conn, line)
+	})
+	mod.client.HandleFunc("QUIT", func(conn *irc.Conn, line *irc.Line) {
+		mod.statusChange(eventChan, conn, line)
+	})
+
 	mod.client.HandleFunc("PRIVMSG", func(conn *irc.Conn, line *irc.Line) {
 		channel := line.Args[0]
 		if channel == mod.client.Config().Me.Nick {
-			channel = line.Src // replies go via PM too.
+			channel = line.Src // replies go via PM too
 		}
 		msg := ""
 		if len(line.Args) > 1 {
@@ -190,11 +252,11 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 		eventChan <- ev
 	})
 
-	// loop on IRC dis/connected events
 	connecting := false
 	disconnected := true
 	waitForDisconnect := false
 	for {
+		// loop on IRC connection events
 		if disconnected {
 			if waitForDisconnect {
 				return
@@ -205,7 +267,7 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 				mod.Logln("Connecting to IRC:", mod.server)
 				err := mod.client.Connect()
 				if err != nil {
-					mod.Logln("Failed to connect to IRC:", mod.server, err)
+					mod.LogErrorf("Failed to connect to IRC: %s %v", mod.server, err)
 					connecting = false
 				}
 			}
@@ -221,7 +283,6 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 				mod.Logln("Disconnected from IRC:", mod.server)
 				connecting = false
 				disconnected = true
-				break
 			}
 
 		case <-mod.SigChan:
@@ -231,7 +292,7 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 			waitForDisconnect = true
 
 		default:
-			time.Sleep(1 * time.Second)
+			time.Sleep(time.Second)
 		}
 	}
 }
@@ -245,6 +306,7 @@ func (mod *IrcBee) ReloadOptions(options bees.BeeOptions) {
 	options.Bind("password", &mod.password)
 	options.Bind("ssl", &mod.ssl)
 
+	mod.channels = []string{}
 	for _, channel := range options.Value("channels").([]interface{}) {
 		mod.channels = append(mod.channels, channel.(string))
 	}

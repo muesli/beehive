@@ -72,7 +72,7 @@ func (factory *JenkinsBeeFactory) Options() []bees.BeeOptionDescriptor {
 		{
 			Name:        "url",
 			Description: "The url the jenkins-installation is reachable at",
-			Type:        "string",
+			Type:        "url",
 			Mandatory:   true,
 		},
 		{
@@ -83,7 +83,7 @@ func (factory *JenkinsBeeFactory) Options() []bees.BeeOptionDescriptor {
 		{
 			Name:        "password",
 			Description: "HTTP auth password",
-			Type:        "string",
+			Type:        "password",
 		},
 	}
 	return opts
@@ -111,6 +111,33 @@ func (factory *JenkinsBeeFactory) Events() []bees.EventDescriptor {
 					Name:        "url",
 					Description: "URL of the affected job",
 					Type:        "string",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "build_status_change",
+			Description: "the building status of a job has changed",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "name",
+					Description: "Name of the job",
+					Type:        "string",
+				},
+				{
+					Name:        "status",
+					Description: "Current status of the job ('red' or 'blue')",
+					Type:        "string",
+				},
+				{
+					Name:        "url",
+					Description: "URL of the affected job",
+					Type:        "string",
+				},
+				{
+					Name:        "building",
+					Description: "Build is started or Finished",
+					Type:        "bool",
 				},
 			},
 		},

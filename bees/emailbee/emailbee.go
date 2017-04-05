@@ -22,10 +22,12 @@
 package emailbee
 
 import (
-	"net/smtp"
-	"strings"
+	"net"
+
+	"strconv"
 
 	"github.com/muesli/beehive/bees"
+	gomail "gopkg.in/gomail.v2"
 )
 
 // EmailBee is a Bee that is able to send emails.
@@ -43,18 +45,33 @@ func (mod *EmailBee) Action(action bees.Action) []bees.Placeholder {
 
 	switch action.Name {
 	case "send":
-		to := ""
-		text := ""
-		subject := ""
-
+		var to, plainText, htmlText, subject string
 		action.Options.Bind("recipient", &to)
-		action.Options.Bind("text", &text)
 		action.Options.Bind("subject", &subject)
+		action.Options.Bind("text", &plainText)
+		action.Options.Bind("html", &htmlText)
 
-		text = "Subject: " + subject + "\n\n" + text
-		auth := smtp.PlainAuth("", mod.username, mod.password, mod.server[:strings.Index(mod.server, ":")])
-		err := smtp.SendMail(mod.server, auth, mod.username, []string{to}, []byte(text))
+		m := gomail.NewMessage()
+		m.SetHeader("From", mod.username)
+		m.SetHeader("To", to)
+		m.SetHeader("Subject", subject)
+		if plainText != "" {
+			m.SetBody("text/plain", plainText)
+		}
+		if htmlText != "" {
+			m.SetBody("text/html", htmlText)
+		}
+
+		host, portstr, err := net.SplitHostPort(mod.server)
 		if err != nil {
+			host = mod.server
+			portstr = "587"
+		}
+		port, _ := strconv.Atoi(portstr)
+		s, _ := gomail.NewDialer(host, port, mod.username, mod.password).Dial()
+
+		// Send the email.
+		if err := gomail.Send(s, m); err != nil {
 			panic(err)
 		}
 

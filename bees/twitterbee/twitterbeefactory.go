@@ -80,7 +80,7 @@ func (factory *TwitterBeeFactory) Options() []bees.BeeOptionDescriptor {
 		},
 		{
 			Name:        "access_token",
-			Description: "Access token Twitter API",
+			Description: "Access token for Twitter API",
 			Type:        "string",
 		},
 		{
@@ -98,7 +98,7 @@ func (factory *TwitterBeeFactory) Actions() []bees.ActionDescriptor {
 		{
 			Namespace:   factory.Name(),
 			Name:        "tweet",
-			Description: "Update your status according to Twitter",
+			Description: "Posts a new tweet",
 			Options: []bees.PlaceholderDescriptor{
 				{
 					Name:        "status",
@@ -111,7 +111,7 @@ func (factory *TwitterBeeFactory) Actions() []bees.ActionDescriptor {
 		{
 			Namespace:   factory.Name(),
 			Name:        "follow",
-			Description: "Follows another user on Twitter",
+			Description: "Follows another user",
 			Options: []bees.PlaceholderDescriptor{
 				{
 					Name:        "username",
@@ -124,7 +124,7 @@ func (factory *TwitterBeeFactory) Actions() []bees.ActionDescriptor {
 		{
 			Namespace:   factory.Name(),
 			Name:        "unfollow",
-			Description: "Unfollows another user on Twitter",
+			Description: "Unfollows another user",
 			Options: []bees.PlaceholderDescriptor{
 				{
 					Name:        "username",
@@ -168,6 +168,11 @@ func (factory *TwitterBeeFactory) Events() []bees.EventDescriptor {
 					Description: "text content of the tweet",
 					Type:        "string",
 				},
+				{
+					Name:        "url",
+					Description: "URL of the tweet",
+					Type:        "url",
+				},
 			},
 		},
 		{
@@ -184,6 +189,11 @@ func (factory *TwitterBeeFactory) Events() []bees.EventDescriptor {
 					Name:        "text",
 					Description: "text content of the tweet",
 					Type:        "string",
+				},
+				{
+					Name:        "url",
+					Description: "URL of the tweet",
+					Type:        "url",
 				},
 			},
 		},
@@ -202,6 +212,11 @@ func (factory *TwitterBeeFactory) Events() []bees.EventDescriptor {
 					Description: "text content of the mention",
 					Type:        "string",
 				},
+				{
+					Name:        "url",
+					Description: "URL of the mention",
+					Type:        "url",
+				},
 			},
 		},
 		{
@@ -218,6 +233,11 @@ func (factory *TwitterBeeFactory) Events() []bees.EventDescriptor {
 					Name:        "text",
 					Description: "Text of the retweeted tweet",
 					Type:        "string",
+				},
+				{
+					Name:        "url",
+					Description: "URL of the retweeted tweet",
+					Type:        "url",
 				},
 			},
 		},
@@ -236,6 +256,11 @@ func (factory *TwitterBeeFactory) Events() []bees.EventDescriptor {
 					Description: "Text of the retweeted tweet",
 					Type:        "string",
 				},
+				{
+					Name:        "url",
+					Description: "URL of the retweeted tweet",
+					Type:        "url",
+				},
 			},
 		},
 		{
@@ -252,6 +277,11 @@ func (factory *TwitterBeeFactory) Events() []bees.EventDescriptor {
 					Name:        "text",
 					Description: "Text of the liked tweet",
 					Type:        "string",
+				},
+				{
+					Name:        "url",
+					Description: "URL of the liked tweet",
+					Type:        "url",
 				},
 			},
 		},
@@ -270,6 +300,11 @@ func (factory *TwitterBeeFactory) Events() []bees.EventDescriptor {
 					Description: "Text of the liked tweet",
 					Type:        "string",
 				},
+				{
+					Name:        "url",
+					Description: "URL of the liked tweet",
+					Type:        "url",
+				},
 			},
 		},
 		{
@@ -287,6 +322,11 @@ func (factory *TwitterBeeFactory) Events() []bees.EventDescriptor {
 					Description: "Text of the unliked tweet",
 					Type:        "string",
 				},
+				{
+					Name:        "url",
+					Description: "URL of the unliked tweet",
+					Type:        "url",
+				},
 			},
 		},
 		{
@@ -303,6 +343,11 @@ func (factory *TwitterBeeFactory) Events() []bees.EventDescriptor {
 					Name:        "text",
 					Description: "Text of the liked tweet",
 					Type:        "string",
+				},
+				{
+					Name:        "url",
+					Description: "URL of the liked tweet",
+					Type:        "url",
 				},
 			},
 		},

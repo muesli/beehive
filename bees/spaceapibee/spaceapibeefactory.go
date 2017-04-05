@@ -71,7 +71,7 @@ func (factory *SpaceAPIBeeFactory) Options() []bees.BeeOptionDescriptor {
 		{
 			Name:        "url",
 			Description: "URL to the SpaceAPI endpoint",
-			Type:        "string",
+			Type:        "url",
 		},
 	}
 	return opts

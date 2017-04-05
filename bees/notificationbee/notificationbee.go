@@ -1,4 +1,4 @@
-// +build dragonfly freebsd linux netbsd openbsd solaris
+// +build dragonfly freebsd linux netbsd openbsd solaris darwin
 
 /*
  *    Copyright (C) 2014      Daniel 'grindhold' Brendle
@@ -22,27 +22,24 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// Package notificationbee is a Bee that can trigger freedesktop.org
-// DBus notifications.
+// Package notificationbee is a Bee that can trigger desktop notifications.
 package notificationbee
 
 import (
 	"strings"
-
-	"github.com/guelfey/go.dbus"
 
 	"github.com/muesli/beehive/bees"
 )
 
 // Urgency level iota
 const (
-	UrgencyLow      = uint32(iota)
-	UrgencyNormal   = uint32(iota)
-	UrgencyCritical = uint32(iota)
+	UrgencyLow = uint32(iota)
+	UrgencyNormal
+	UrgencyCritical
 )
 
 var (
-	urgencyMap map[string]uint32 = map[string]uint32{
+	urgencyMap = map[string]uint32{
 		"":         UrgencyNormal,
 		"normal":   UrgencyNormal,
 		"low":      UrgencyLow,
@@ -54,18 +51,14 @@ var (
 // notifications.
 type NotificationBee struct {
 	bees.Bee
-	conn     *dbus.Conn
-	notifier *dbus.Object
 }
 
 // Run executes the Bee's event loop.
 func (mod *NotificationBee) Run(cin chan bees.Event) {
-	conn, err := dbus.SessionBus()
-	mod.conn = conn
-	if err != nil {
-		panic(err)
+	select {
+	case <-mod.SigChan:
+		return
 	}
-	mod.notifier = mod.conn.Object("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
 }
 
 // Action triggers the action passed to it.
@@ -84,13 +77,7 @@ func (mod *NotificationBee) Action(action bees.Action) []bees.Placeholder {
 		urgency, _ = urgencyMap[u]
 
 		if len(text) > 0 {
-			call := mod.notifier.Call("org.freedesktop.Notifications.Notify", 0, "", uint32(0),
-				"", "Beehive", text, []string{},
-				map[string]dbus.Variant{"urgency": dbus.MakeVariant(urgency)}, int32(5000))
-
-			if call.Err != nil {
-				mod.Logln("(" + string(urgency) + ") Failed to print message: " + text)
-			}
+			mod.execAction(text, urgency)
 		}
 
 	default:

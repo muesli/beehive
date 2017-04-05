@@ -40,6 +40,8 @@ type TumblrBee struct {
 	consumerSecret string
 	token          string
 	tokenSecret    string
+
+	evchan chan bees.Event
 }
 
 // Action triggers the action passed to it.
@@ -52,9 +54,19 @@ func (mod *TumblrBee) Action(action bees.Action) []bees.Placeholder {
 		action.Options.Bind("text", &text)
 
 		state := "published"
-		mod.client.CreateText(mod.blogname, map[string]string{
+		err := mod.client.CreateText(mod.blogname, map[string]string{
 			"body":  text,
 			"state": state})
+		if err != nil {
+			mod.LogErrorf("Failed to post text: %v", err)
+			return outs
+		}
+		ev := bees.Event{
+			Bee:     mod.Name(),
+			Name:    "posted",
+			Options: []bees.Placeholder{},
+		}
+		mod.evchan <- ev
 
 	case "post_quote":
 		quote := ""
@@ -63,10 +75,38 @@ func (mod *TumblrBee) Action(action bees.Action) []bees.Placeholder {
 		action.Options.Bind("source", &source)
 
 		state := "published"
-		mod.client.CreateQuote(mod.blogname, map[string]string{
+		err := mod.client.CreateQuote(mod.blogname, map[string]string{
 			"quote":  quote,
 			"source": source,
 			"state":  state})
+		if err != nil {
+			mod.LogErrorf("Failed to post quote: %v", err)
+			return outs
+		}
+		ev := bees.Event{
+			Bee:     mod.Name(),
+			Name:    "posted",
+			Options: []bees.Placeholder{},
+		}
+		mod.evchan <- ev
+
+	case "follow":
+		blogname := ""
+		action.Options.Bind("blogname", &blogname)
+
+		if err := mod.client.Follow(blogname); err != nil {
+			mod.LogErrorf("Failed to follow blog: %v", err)
+			return outs
+		}
+
+	case "unfollow":
+		blogname := ""
+		action.Options.Bind("blogname", &blogname)
+
+		if err := mod.client.Unfollow(blogname); err != nil {
+			mod.LogErrorf("Failed to unfollow blog: %v", err)
+			return outs
+		}
 
 	default:
 		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
@@ -77,9 +117,12 @@ func (mod *TumblrBee) Action(action bees.Action) []bees.Placeholder {
 
 // Run executes the Bee's event loop.
 func (mod *TumblrBee) Run(eventChan chan bees.Event) {
-	mod.client = gotumblr.NewTumblrRestClient(mod.consumerKey, mod.consumerSecret,
-		mod.token, mod.tokenSecret,
-		mod.callbackURL, "http://api.tumblr.com")
+	mod.evchan = eventChan
+
+	select {
+	case <-mod.SigChan:
+		return
+	}
 }
 
 // ReloadOptions parses the config options and initializes the Bee.
@@ -92,4 +135,8 @@ func (mod *TumblrBee) ReloadOptions(options bees.BeeOptions) {
 	options.Bind("consumer_secret", &mod.consumerSecret)
 	options.Bind("token", &mod.token)
 	options.Bind("token_secret", &mod.tokenSecret)
+
+	mod.client = gotumblr.NewTumblrRestClient(mod.consumerKey, mod.consumerSecret,
+		mod.token, mod.tokenSecret,
+		mod.callbackURL, "http://api.tumblr.com")
 }

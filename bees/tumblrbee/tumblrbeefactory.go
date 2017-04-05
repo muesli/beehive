@@ -107,6 +107,19 @@ func (factory *TumblrBeeFactory) Options() []bees.BeeOptionDescriptor {
 	return opts
 }
 
+// Events describes the available events provided by this Bee.
+func (factory *TumblrBeeFactory) Events() []bees.EventDescriptor {
+	events := []bees.EventDescriptor{
+		{
+			Namespace:   factory.Name(),
+			Name:        "posted",
+			Description: "is triggered when you posted something",
+			Options:     []bees.PlaceholderDescriptor{},
+		},
+	}
+	return events
+}
+
 // Actions describes the available actions provided by this Bee.
 func (factory *TumblrBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
@@ -138,6 +151,32 @@ func (factory *TumblrBeeFactory) Actions() []bees.ActionDescriptor {
 					Name:        "source",
 					Description: "Source of the Tumblr quote",
 					Type:        "string",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "follow",
+			Description: "Follow a blog on Tumblr",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "blogname",
+					Description: "Blogname to follow",
+					Type:        "string",
+					Mandatory:   true,
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "unfollow",
+			Description: "Unfollow a blog on Tumblr",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "blogname",
+					Description: "Blogname to unfollow",
+					Type:        "string",
+					Mandatory:   true,
 				},
 			},
 		},

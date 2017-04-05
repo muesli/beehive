@@ -47,7 +47,7 @@ func (mod *TransmissionBee) Action(action bees.Action) []bees.Placeholder {
 
 		_, err := mod.client.Add(torrentMsg)
 		if err != nil {
-			mod.LogErrorf("Transmission: error adding torrent/magnet: %s", err)
+			mod.LogErrorf("Error adding torrent/magnet: %s", err)
 		}
 	}
 	return outs

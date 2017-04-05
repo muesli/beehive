@@ -76,13 +76,13 @@ func (factory *EmailBeeFactory) Options() []bees.BeeOptionDescriptor {
 		{
 			Name:        "password",
 			Description: "Password used for SMTP auth",
-			Type:        "string",
+			Type:        "password",
 			Mandatory:   true,
 		},
 		{
 			Name:        "address",
 			Description: "Address of SMTP server, eg: smtp.myserver.com:587",
-			Type:        "url",
+			Type:        "address",
 			Mandatory:   true,
 		},
 	}
@@ -116,9 +116,14 @@ func (factory *EmailBeeFactory) Actions() []bees.ActionDescriptor {
 				},
 				{
 					Name:        "text",
-					Description: "Content of the email",
+					Description: "Content of the email using plain text",
 					Type:        "string",
 					Mandatory:   true,
+				},
+				{
+					Name:        "html",
+					Description: "Content of the email using HTML",
+					Type:        "string",
 				},
 			},
 		},

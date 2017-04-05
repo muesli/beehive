@@ -24,6 +24,7 @@ package bees
 import (
 	"errors"
 	"fmt"
+	"net/url"
 	"strconv"
 	"strings"
 )
@@ -195,6 +196,14 @@ func ConvertValue(v interface{}, dst interface{}) error {
 			*d, _ = strconv.Atoi(vt)
 		default:
 			panic(fmt.Sprintf("Unhandled type %+v for int conversion", vt))
+		}
+
+	case *url.Values:
+		switch vt := v.(type) {
+		case string:
+			*d, _ = url.ParseQuery(vt)
+		default:
+			panic(fmt.Sprintf("Unhandled type %+v for url.Values conversion", vt))
 		}
 
 	default:

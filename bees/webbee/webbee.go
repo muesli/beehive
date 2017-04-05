@@ -25,10 +25,9 @@ package webbee
 import (
 	"encoding/json"
 	"io/ioutil"
+	"net"
 	"net/http"
-	"strings"
-
-	"github.com/hoisie/web"
+	"net/url"
 
 	"github.com/muesli/beehive/bees"
 )
@@ -39,147 +38,84 @@ type WebBee struct {
 	bees.Bee
 
 	addr string
-	path string
 
 	eventChan chan bees.Event
-}
-
-func (mod *WebBee) triggerJSONEvent(resp *[]byte) {
-	var payload interface{}
-	err := json.Unmarshal(*resp, &payload)
-	if err != nil {
-		mod.LogErrorf("Error: %s", err)
-		return
-	}
-
-	ev := bees.Event{
-		Bee:  mod.Name(),
-		Name: "post",
-		Options: []bees.Placeholder{
-			{
-				Name:  "json",
-				Type:  "map",
-				Value: payload,
-			},
-			{
-				Name:  "ip",
-				Type:  "string",
-				Value: "tbd",
-			},
-		},
-	}
-
-	j := make(map[string]interface{})
-	err = json.Unmarshal(*resp, &j)
-	if err != nil {
-		mod.LogErrorf("Error: %s", err)
-		return
-	}
-
-	for k, v := range j {
-		mod.Logf("POST JSON param: %s = %+v\n", k, v)
-
-		ph := bees.Placeholder{
-			Name:  k,
-			Type:  "string",
-			Value: v,
-		}
-		ev.Options = append(ev.Options, ph)
-	}
-
-	mod.eventChan <- ev
 }
 
 // Run executes the Bee's event loop.
 func (mod *WebBee) Run(cin chan bees.Event) {
 	mod.eventChan = cin
 
-	web.Get(mod.path, mod.getRequest)
-	web.Post(mod.path, mod.postRequest)
+	srv := &http.Server{Addr: mod.addr, Handler: mod}
+	l, err := net.Listen("tcp", mod.addr)
+	if err != nil {
+		mod.LogErrorf("Can't listen on %s", mod.addr)
+		return
+	}
+	defer l.Close()
 
-	web.Run(mod.addr)
-
-	for {
-		select {
-		case <-mod.SigChan:
-			web.Close()
-			return
-
-		default:
+	go func() {
+		err := srv.Serve(l)
+		if err != nil {
+			mod.LogErrorf("Server error: %v", err)
 		}
+		// Go 1.8+: srv.Close()
+	}()
+
+	select {
+	case <-mod.SigChan:
+		return
 	}
 }
 
-// Action triggers the action passed to it.
-func (mod *WebBee) Action(action bees.Action) []bees.Placeholder {
-	outs := []bees.Placeholder{}
-
-	switch action.Name {
-	case "post":
-		url := ""
-		j := ""
-		action.Options.Bind("url", &url)
-		action.Options.Bind("json", &j)
-
-		buf := strings.NewReader(j)
-		resp, err := http.Post(url, "application/json", buf)
-		if err != nil {
-			mod.LogErrorf("Error: %s", err)
-			return outs
-		}
-
-		b, err := ioutil.ReadAll(resp.Body)
-		if err != nil {
-			mod.LogErrorf("Error: %s", err)
-			return outs
-		}
-
-		mod.triggerJSONEvent(&b)
-
-	default:
-		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
-	}
-
-	return outs
-}
-
-// getRequest gets called for incoming GET requests
-func (mod *WebBee) getRequest(ctx *web.Context) {
+func (mod *WebBee) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	ev := bees.Event{
-		Bee:  mod.Name(),
-		Name: "get",
+		Bee: mod.Name(),
 		Options: []bees.Placeholder{
 			{
-				Name:  "ip",
-				Type:  "string",
-				Value: "tbd",
+				Name:  "remote_addr",
+				Type:  "address",
+				Value: req.RemoteAddr,
+			},
+			{
+				Name:  "url",
+				Type:  "url",
+				Value: req.URL.String(),
 			},
 		},
 	}
 
-	for k, v := range ctx.Params {
-		mod.Logln("GET param:", k, "=", v)
+	params, err := url.ParseQuery(req.URL.String())
+	if err == nil {
+		ev.Options.SetValue("query_params", "map", params)
+	}
 
-		ph := bees.Placeholder{
-			Name:  k,
-			Type:  "string",
-			Value: v,
-		}
-		ev.Options = append(ev.Options, ph)
+	defer req.Body.Close()
+	b, err := ioutil.ReadAll(req.Body)
+	if err == nil {
+		ev.Options.SetValue("data", "string", string(b))
+	}
+
+	var payload interface{}
+	err = json.Unmarshal(b, &payload)
+	if err == nil {
+		ev.Options.SetValue("json", "map", payload)
+	}
+
+	switch req.Method {
+	case "GET":
+		ev.Name = "get"
+	case "POST":
+		ev.Name = "post"
+	case "PUT":
+		ev.Name = "put"
+	case "PATCH":
+		ev.Name = "patch"
+	case "DELETE":
+		ev.Name = "delete"
 	}
 
 	mod.eventChan <- ev
-}
-
-// postRequest gets called for incoming POST requests
-func (mod *WebBee) postRequest(ctx *web.Context) {
-	b, err := ioutil.ReadAll(ctx.Request.Body)
-	if err != nil {
-		mod.LogErrorf("Error: %s", err)
-		return
-	}
-
-	mod.triggerJSONEvent(&b)
 }
 
 // ReloadOptions parses the config options and initializes the Bee.
@@ -187,5 +123,4 @@ func (mod *WebBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
 	options.Bind("address", &mod.addr)
-	options.Bind("path", &mod.path)
 }

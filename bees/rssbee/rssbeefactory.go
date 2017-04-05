@@ -70,7 +70,7 @@ func (factory *RSSBeeFactory) Options() []bees.BeeOptionDescriptor {
 		{
 			Name:        "url",
 			Description: "URL of the RSS-feed you want to monitor",
-			Type:        "string",
+			Type:        "url",
 			Mandatory:   true,
 		},
 		{

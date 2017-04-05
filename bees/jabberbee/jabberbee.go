@@ -61,13 +61,48 @@ func (mod *JabberBee) Action(action bees.Action) []bees.Placeholder {
 	return outs
 }
 
+func (mod *JabberBee) handleEvents(eventChan chan bees.Event) error {
+	chat, err := mod.client.Recv()
+	if err != nil {
+		return err
+	}
+	switch v := chat.(type) {
+	case xmpp.Chat:
+		if len(v.Text) > 0 {
+			text := strings.TrimSpace(v.Text)
+
+			ev := bees.Event{
+				Bee:  mod.Name(),
+				Name: "message",
+				Options: []bees.Placeholder{
+					{
+						Name:  "user",
+						Type:  "string",
+						Value: v.Remote,
+					},
+					{
+						Name:  "text",
+						Type:  "string",
+						Value: text,
+					},
+				},
+			}
+			eventChan <- ev
+		}
+
+	case xmpp.Presence:
+		//fmt.Println(v.From, v.Show)
+	}
+
+	return nil
+}
+
 // Run executes the Bee's event loop.
 func (mod *JabberBee) Run(eventChan chan bees.Event) {
 	if len(mod.server) == 0 {
 		return
 	}
 
-	var err error
 	options := xmpp.Options{
 		Host:     mod.server,
 		User:     mod.user,
@@ -76,51 +111,25 @@ func (mod *JabberBee) Run(eventChan chan bees.Event) {
 		Debug:    false,
 	}
 
+	var err error
 	mod.client, err = options.NewClient()
 	if err != nil {
-		mod.LogFatal(err)
+		mod.LogErrorf("Connection error: %s", err)
+		return
 	}
+	defer mod.client.Close()
 
-	for {
-		select {
-		case <-mod.SigChan:
-			mod.client.Close()
-			return
-
-		default:
-		}
-
-		chat, err := mod.client.Recv()
-		if err != nil {
-			mod.LogFatal(err)
-		}
-		switch v := chat.(type) {
-		case xmpp.Chat:
-			if len(v.Text) > 0 {
-				text := strings.TrimSpace(v.Text)
-
-				ev := bees.Event{
-					Bee:  mod.Name(),
-					Name: "message",
-					Options: []bees.Placeholder{
-						{
-							Name:  "user",
-							Type:  "string",
-							Value: v.Remote,
-						},
-						{
-							Name:  "text",
-							Type:  "string",
-							Value: text,
-						},
-					},
-				}
-				eventChan <- ev
+	go func() {
+		for {
+			if err := mod.handleEvents(eventChan); err != nil {
+				return
 			}
-
-		case xmpp.Presence:
-			//fmt.Println(v.From, v.Show)
 		}
+	}()
+
+	select {
+	case <-mod.SigChan:
+		return
 	}
 }
 

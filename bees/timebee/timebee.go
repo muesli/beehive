@@ -24,7 +24,6 @@
 package timebee
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/muesli/beehive/bees"
@@ -52,7 +51,7 @@ func (mod *TimeBee) timer() {
 	mod.curTime.month = int(time.Now().Month())
 	mod.curTime.year = int(time.Now().Year())
 	if mod.second > 59 || mod.minute > 59 || mod.dayofweek > 6 || mod.dayofmonth > 31 || mod.month > 12 || mod.year > 9999 {
-		fmt.Println("Error: Date is invalid")
+		mod.LogErrorf("Error: Date is invalid")
 		return
 	}
 	if mod.curTime.second != mod.second && mod.second != -1 {

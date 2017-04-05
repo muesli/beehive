@@ -42,28 +42,24 @@ func (mod *CronBee) Run(eventChan chan bees.Event) {
 	mod.eventChan = eventChan
 	timer := cron.ParseInput(mod.input)
 	for {
-		//FIXME: don't block
 		select {
 		case <-mod.SigChan:
 			return
 
-		default:
-		}
-
-		//fmt.Println(timer.NextEvent())
-		time.Sleep(timer.DurationUntilNextEvent())
-		event := bees.Event{
-			Bee:  mod.Name(),
-			Name: "time",
-			Options: []bees.Placeholder{
-				{
-					Name:  "timestamp",
-					Type:  "string",
-					Value: timer.GetNextEvent(),
+		case <-time.After(timer.DurationUntilNextEvent()):
+			event := bees.Event{
+				Bee:  mod.Name(),
+				Name: "time",
+				Options: []bees.Placeholder{
+					{
+						Name:  "timestamp",
+						Type:  "string",
+						Value: timer.GetNextEvent(),
+					},
 				},
-			},
+			}
+			mod.eventChan <- event
 		}
-		mod.eventChan <- event
 	}
 }
 
