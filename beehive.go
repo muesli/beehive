@@ -97,12 +97,12 @@ func main() {
 
 	config := loadConfig()
 
-	// Initialize bees
-	bees.StartBees(config.Bees)
 	// Load actions from config
 	bees.SetActions(config.Actions)
 	// Load chains from config
 	bees.SetChains(config.Chains)
+	// Initialize bees
+	bees.StartBees(config.Bees)
 
 	// Wait for signals
 	ch := make(chan os.Signal, 1)
