@@ -21,7 +21,7 @@ Connecting those modules with each other lets you create immensly useful agents.
 
 ![beehive's Logo](/assets/logo_256.png?raw=true)
 
-## Installation
+## Build it
 
 Make sure you have a working Go environment. See the [install instructions](http://golang.org/doc/install.html).
 
@@ -32,10 +32,73 @@ To install beehive, simply run:
 To compile it from source:
 
     cd $GOPATH/src/github.com/muesli/beehive
+    go submodule update --init
     go get -u
     go build
 
 Run ```beehive --help``` to see a full list of options.
+
+## Run it
+
+### Locally
+
+Start `beehive` and open http://localhost:8181 in your browser. Note that Beehive will create a config file beehive.conf in its current working directory, unless you specify a different file with the `-config` option.
+
+### Remotely (Linux)
+
+You can run beehive on a remote Linux server (Raspberry Pi servers are great!). To do this, we'll need to copy the `assets` and `config` directories from the beehive source directory to the remote server.
+
+1. Create a directory on the remote server to store everything (`/home/myuser/beehive` for example).
+2. After following the building instrutions, copy the `beehive` binary, the `assets` and `config` directories to the directory in the remote server you created in the previous step.
+
+Step 2 is important, otherwise beehive won't be able to access the assets and you'll see a blank web page or missing images when trying to configure it.
+
+### Option 1: bind to localhost and forward port via SSH
+
+Login to the remote server and run beehive:
+
+```
+remote-server$ cd /home/myuser/beehive
+remote-server$ ./beehive --config beehive.conf
+```
+
+Access the admin interface remotely forwarding the connections via SSH:
+
+```
+ssh -L8181:localhost:8181 -N myuser@my-server-ip
+```
+
+Fire up a browser and go to http://localhost:8181
+
+### Option 2: use a proxy server like Caddy to add basic auth (no TLS, insecure)
+
+You can use something like [Caddy](https://caddyserver.com) to easily proxy beehive and add basic authentication.
+
+Login to the remote server and run beehive:
+
+```
+remote-server$ cd /home/myuser/beehive
+remote-server$ ./beehive --bind 127.0.0.1:8182 --canonicalurl http://my-server:8182 --config beehive.conf
+```
+
+Run Caddy with the following Caddy file:
+
+```
+# Caddyfile for beehive
+:8181
+basicauth / admin secret
+proxy / localhost:8182
+```
+
+```
+caddy --conf Caddyfile
+```
+
+Fire up a browser and go to http://my-server:8181, it'll ask you for the username and password configured in the Caddyfile (user: admin, password: secret).
+
+If your server has a public IP, you could easily benefit from Caddy's [automatic HTTPS feature](https://caddyserver.com/docs/automatic-https).
+
+NGINX, HAProxy and Apache are other (albeit more complex options).
 
 ## Configuration
 
