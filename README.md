@@ -25,17 +25,19 @@ Connecting those modules with each other lets you create immensly useful agents.
 
 Make sure you have a working Go environment. See the [install instructions](http://golang.org/doc/install.html).
 
-To install beehive, simply run:
+### From source
+
+The recommended way is to fetch the sources and run make:
 
     go get github.com/muesli/beehive
-
-To compile it from source:
-
     cd $GOPATH/src/github.com/muesli/beehive
-    go get -u
-    go build
+    make
 
-Run ```beehive --help``` to see a full list of options.
+You can build and install the `beehive` binary like other Go binaries out there (`go get -u`)
+but you'll need to make sure beehive can find the assets (images, javascript, css, etc).
+See the Troubleshooting/Notes section for additional details.
+
+Run `beehive --help` to see a full list of options.
 
 ## Configuration
 
@@ -104,10 +106,10 @@ You can find more information on how to configure beehive and examples [in our W
 
 ## Troubleshooting & Notes
 
-The web interface and other resources aren't currently embedded in the binary.
-Beehive tries to find those files in its current working directory, so it's
-currently recommended to start Beehive from within its git repository, if you
-plan to use the web interface.
+The web interface and other resources are embedded in the binary by default.
+When using `make noembed`, Beehive tries to find those files
+in its current working directory, so it's currently recommended to start Beehive from
+within its git repository, if you plan to use the web interface.
 
 Should you still not be able to reach the web interface, check if the ```config```
 directory in the git repository is empty. If that's the case, make sure the
