@@ -70,7 +70,7 @@ func (factory *HueBeeFactory) Options() []bees.BeeOptionDescriptor {
 		{
 			Name:        "address",
 			Description: "Address of the Hue bridge, eg: 192.168.0.1",
-			Type:        "url",
+			Type:        "address",
 			Mandatory:   true,
 		},
 		{
