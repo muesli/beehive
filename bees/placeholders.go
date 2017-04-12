@@ -25,6 +25,7 @@ import (
 	"errors"
 	"fmt"
 	"net/url"
+	"reflect"
 	"strconv"
 	"strings"
 )
@@ -97,7 +98,7 @@ func ConvertValue(v interface{}, dst interface{}) error {
 		case int:
 			*d = strconv.FormatInt(int64(vt), 10)
 		default:
-			panic(fmt.Sprintf("Unhandled type %+v for string conversion", vt))
+			panic(fmt.Sprintf("Unhandled type %+v for string conversion", reflect.TypeOf(vt)))
 		}
 
 	case *[]string:
@@ -107,7 +108,7 @@ func ConvertValue(v interface{}, dst interface{}) error {
 		case string:
 			*d = strings.Split(vt, ",")
 		default:
-			panic(fmt.Sprintf("Unhandled type %+v for []string conversion", vt))
+			panic(fmt.Sprintf("Unhandled type %+v for []string conversion", reflect.TypeOf(vt)))
 		}
 
 	case *bool:
@@ -130,7 +131,7 @@ func ConvertValue(v interface{}, dst interface{}) error {
 		case float64:
 			*d = vt > 0
 		default:
-			panic(fmt.Sprintf("Unhandled type %+v for bool conversion", vt))
+			panic(fmt.Sprintf("Unhandled type %+v for bool conversion", reflect.TypeOf(vt)))
 		}
 
 	case *float64:
@@ -163,7 +164,7 @@ func ConvertValue(v interface{}, dst interface{}) error {
 			x, _ := strconv.Atoi(vt)
 			*d = float64(x)
 		default:
-			panic(fmt.Sprintf("Unhandled type %+v for float64 conversion", vt))
+			panic(fmt.Sprintf("Unhandled type %+v for float64 conversion", reflect.TypeOf(vt)))
 		}
 
 	case *int:
@@ -195,7 +196,7 @@ func ConvertValue(v interface{}, dst interface{}) error {
 		case string:
 			*d, _ = strconv.Atoi(vt)
 		default:
-			panic(fmt.Sprintf("Unhandled type %+v for int conversion", vt))
+			panic(fmt.Sprintf("Unhandled type %+v for int conversion", reflect.TypeOf(vt)))
 		}
 
 	case *url.Values:
@@ -203,11 +204,11 @@ func ConvertValue(v interface{}, dst interface{}) error {
 		case string:
 			*d, _ = url.ParseQuery(vt)
 		default:
-			panic(fmt.Sprintf("Unhandled type %+v for url.Values conversion", vt))
+			panic(fmt.Sprintf("Unhandled type %+v for url.Values conversion", reflect.TypeOf(vt)))
 		}
 
 	default:
-		panic(fmt.Sprintf("Unhandled dst type %+v", dst))
+		panic(fmt.Sprintf("Unhandled dst type %+v", reflect.TypeOf(dst)))
 	}
 
 	return nil
