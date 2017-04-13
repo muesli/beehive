@@ -103,6 +103,11 @@ func ConvertValue(v interface{}, dst interface{}) error {
 
 	case *[]string:
 		switch vt := v.(type) {
+		case []interface{}:
+			*d = []string{}
+			for _, v := range vt {
+				*d = append(*d, v.(string))
+			}
 		case []string:
 			*d = vt
 		case string:
