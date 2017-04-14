@@ -115,9 +115,10 @@ func main() {
 		switch s {
 		case syscall.SIGHUP:
 			config = loadConfig()
-			bees.RestartBees(config.Bees)
+			bees.StopBees()
 			bees.SetActions(config.Actions)
 			bees.SetChains(config.Chains)
+			bees.StartBees(config.Bees)
 
 		case syscall.SIGTERM:
 			fallthrough
