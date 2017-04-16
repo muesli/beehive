@@ -210,6 +210,25 @@ func (factory *IrcBeeFactory) Actions() []bees.ActionDescriptor {
 		},
 		{
 			Namespace:   factory.Name(),
+			Name:        "notice",
+			Description: "Sends a notice to a channel or a private query",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "channel",
+					Description: "Which channel to send the message to",
+					Type:        "string",
+					Mandatory:   true,
+				},
+				{
+					Name:        "text",
+					Description: "Content of the message",
+					Type:        "string",
+					Mandatory:   true,
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
 			Name:        "join",
 			Description: "Joins a channel",
 			Options: []bees.PlaceholderDescriptor{

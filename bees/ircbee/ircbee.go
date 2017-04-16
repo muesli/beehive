@@ -25,6 +25,7 @@ import (
 	"crypto/tls"
 	"net"
 	"strings"
+	"time"
 
 	irc "github.com/fluffle/goirc/client"
 
@@ -51,9 +52,16 @@ type IrcBee struct {
 // Action triggers the action passed to it.
 func (mod *IrcBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
+	var sendFunc func(t, msg string)
 
 	switch action.Name {
+	case "notice":
+		sendFunc = mod.client.Notice
+		fallthrough
 	case "send":
+		if sendFunc == nil {
+			sendFunc = mod.client.Privmsg
+		}
 		tos := []string{}
 		text := ""
 		action.Options.Bind("text", &text)
@@ -68,7 +76,7 @@ func (mod *IrcBee) Action(action bees.Action) []bees.Placeholder {
 			if recv == "*" {
 				// special: send to all joined channels
 				for _, to := range mod.channels {
-					mod.client.Privmsg(to, text)
+					sendFunc(to, text)
 				}
 			} else {
 				// needs stripping hostname when sending to user!host
@@ -76,7 +84,7 @@ func (mod *IrcBee) Action(action bees.Action) []bees.Placeholder {
 					recv = recv[0:strings.Index(recv, "!")]
 				}
 
-				mod.client.Privmsg(recv, text)
+				sendFunc(recv, text)
 			}
 		}
 
@@ -125,7 +133,7 @@ func (mod *IrcBee) part(channel string) {
 	}
 }
 
-func (mod *IrcBee) statusChange(eventChan chan bees.Event,conn *irc.Conn, line *irc.Line) {
+func (mod *IrcBee) statusChange(eventChan chan bees.Event, conn *irc.Conn, line *irc.Line) {
 	//Line.CMD eq Handler Name ex: JOIN
 	message := ""
 	switch line.Cmd {
@@ -259,7 +267,7 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 				mod.Logln("Connecting to IRC:", mod.server)
 				err := mod.client.Connect()
 				if err != nil {
-					mod.Logln("Failed to connect to IRC:", mod.server, err)
+					mod.LogErrorf("Failed to connect to IRC: %s %v", mod.server, err)
 					connecting = false
 				}
 			}
@@ -282,6 +290,9 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 				mod.client.Quit()
 			}
 			waitForDisconnect = true
+
+		default:
+			time.Sleep(time.Second)
 		}
 	}
 }

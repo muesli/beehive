@@ -1,4 +1,6 @@
-FROM golang:1.7
+FROM golang:1.8
+
+LABEL authors="Gabriel Alacchi: alacchi.g@gmail.com, Christian Muehlhaeuser: muesli@gmail.com"
 
 # Expose the application port
 EXPOSE 8181
@@ -13,4 +15,5 @@ WORKDIR /go/src/github.com/muesli/beehive
 VOLUME /conf
 
 # This form of ENTRYPOINT allows the beehive process to catch signals from the `docker stop` command
-ENTRYPOINT ["beehive", "-config", "/conf/beehive.conf"]
+ENTRYPOINT ["beehive", "-config", "/conf/beehive.conf", "-bind", "0.0.0.0:8181"]
+

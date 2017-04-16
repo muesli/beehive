@@ -29,7 +29,7 @@ import (
 	"strconv"
 	"strings"
 
-	telegram "gopkg.in/telegram-bot-api.v4"
+	telegram "github.com/go-telegram-bot-api/telegram-bot-api"
 
 	"github.com/muesli/beehive/bees"
 )
@@ -55,12 +55,12 @@ func (mod *TelegramBee) Action(action bees.Action) []bees.Placeholder {
 		action.Options.Bind("chat_id", &chatID)
 		action.Options.Bind("text", &text)
 
-		cid, err := strconv.Atoi(chatID)
+		cid, err := strconv.ParseInt(chatID, 10, 64)
 		if err != nil {
 			panic("Invalid telegram chat ID")
 		}
 
-		msg := telegram.NewMessage(int64(cid), text)
+		msg := telegram.NewMessage(cid, text)
 		_, err = mod.bot.Send(msg)
 		if err != nil {
 			mod.Logf("Error sending message %v", err)
