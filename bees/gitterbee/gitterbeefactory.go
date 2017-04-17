@@ -53,7 +53,7 @@ func (factory *GitterBeeFactory) Name() string {
 
 // Description returns the desciption of this Bee.
 func (factory *GitterBeeFactory) Description() string {
-	return "React and interact with Gitter"
+	return "Interact with Gitter"
 }
 
 // Image returns the filename of an image for this Bee.
@@ -70,15 +70,15 @@ func (factory *GitterBeeFactory) LogoColor() string {
 func (factory *GitterBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
-			Name:        "accessToken",
+			Name:        "access_token",
 			Description: "Your Gitter access token",
 			Type:        "string",
 			Mandatory:   true,
 		},
 		{
-			Name:        "room",
-			Description: "Room to overwatch",
-			Type:        "string",
+			Name:        "rooms",
+			Description: "Rooms to join",
+			Type:        "[]string",
 			Mandatory:   false,
 		},
 	}
@@ -89,56 +89,62 @@ func (factory *GitterBeeFactory) Options() []bees.BeeOptionDescriptor {
 func (factory *GitterBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{
-		// 	Namespace:   factory.Name(),
-		// 	Name:        "roomMessages",
-		// 	Description: "Receive new room messages",
-		// 	Options: []bees.PlaceholderDescriptor{
-		// 		{
-		// 			Name:        "ID",
-		// 			Description: "ID of a message",
-		// 			Type:        "string",
-		// 		},
-		// 		{
-		// 			Name:        "text",
-		// 			Description: "Text contents of a message",
-		// 			Type:        "string",
-		// 		},
-		// 		{
-		// 			Name:        "username",
-		// 			Description: "Username",
-		// 			Type:        "string",
-		// 		},
-		// 		{
-		// 			Name:        "readBy",
-		// 			Description: "Number of users who have read the message",
-		// 			Type:        "int",
-		// 		},
-		// 	},
-		// },
-		// {
-		// 	Namespace:   factory.Name(),
-		// 	Name:        "mention",
-		// 	Description: "Mentions inside of a message",
-		// 	Options: []bees.PlaceholderDescriptor{
-		// 		{
-		// 			Name:        "mention",
-		// 			Description: "Username of the user who has been mentioned",
-		// 			Type:        "string",
-		// 		},
-		// 	},
-		// },
-		// {
-		// 	Namespace:   factory.Name(),
-		// 	Name:        "Issue",
-		// 	Description: "Issue referenced in a message",
-		// 	Options: []bees.PlaceholderDescriptor{
-		// 		{
-		// 			Name:        "issue",
-		// 			Description: "Number of the issue",
-		// 			Type:        "int",
-		// 		},
-		// 	},
+			Namespace:   factory.Name(),
+			Name:        "message",
+			Description: "New message received",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "id",
+					Description: "ID of the message",
+					Type:        "string",
+				},
+				{
+					Name:        "text",
+					Description: "Text content of the message",
+					Type:        "string",
+				},
+				{
+					Name:        "username",
+					Description: "Username who sent the message",
+					Type:        "string",
+				},
+				{
+					Name:        "room",
+					Description: "Room the message was received in",
+					Type:        "string",
+				},
+				{
+					Name:        "read_by",
+					Description: "Number of users who have read the message",
+					Type:        "int",
+				},
+			},
 		},
+		/*		{
+									Namespace:   factory.Name(),
+									Name:        "mention",
+									Description: "Mentions inside of a message",
+									Options: []bees.PlaceholderDescriptor{
+										{
+											Name:        "mention",
+											Description: "Username of the user who has been
+				mentioned",
+											Type:        "string",
+										},
+									},
+								},
+								{
+									Namespace:   factory.Name(),
+									Name:        "issue",
+									Description: "Issue referenced in a message",
+									Options: []bees.PlaceholderDescriptor{
+										{
+											Name:        "issue",
+											Description: "Number of the issue",
+											Type:        "int",
+										},
+									},
+								},*/
 	}
 
 	return events
@@ -149,12 +155,12 @@ func (factory *GitterBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		{
 			Namespace:   factory.Name(),
-			Name:        "sendMessage",
+			Name:        "send",
 			Description: "Sends a message into a room",
 			Options: []bees.PlaceholderDescriptor{
 				{
 					Name:        "room",
-					Description: "Message room",
+					Description: "Which room to sent the message to",
 					Type:        "string",
 					Mandatory:   true,
 				},
@@ -168,7 +174,7 @@ func (factory *GitterBeeFactory) Actions() []bees.ActionDescriptor {
 		},
 		{
 			Namespace:   factory.Name(),
-			Name:        "joinRoom",
+			Name:        "join",
 			Description: "Join a room on gitter",
 			Options: []bees.PlaceholderDescriptor{
 				{
@@ -181,7 +187,7 @@ func (factory *GitterBeeFactory) Actions() []bees.ActionDescriptor {
 		},
 		{
 			Namespace:   factory.Name(),
-			Name:        "leaveRoom",
+			Name:        "leave",
 			Description: "Leave a room on gitter",
 			Options: []bees.PlaceholderDescriptor{
 				{
@@ -192,19 +198,6 @@ func (factory *GitterBeeFactory) Actions() []bees.ActionDescriptor {
 				},
 			},
 		},
-		// {
-		// 	Namespace:   factory.Name(),
-		// 	Name:        "getRoomMessages",
-		// 	Description: "Get a rooms messages",
-		// 	Options: []bees.PlaceholderDescriptor{
-		// 		{
-		// 			Name:        "room",
-		// 			Description: "Room to check for messages",
-		// 			Type:        "string",
-		// 			Mandatory:   true,
-		// 		},
-		// 	},
-		// },
 	}
 
 	return actions

@@ -37,7 +37,8 @@ type GitterBee struct {
 	userID    string
 
 	accessToken string
-	room        string
+	rooms       []string
+	roomChans   map[string]chan interface{}
 }
 
 // Action triggers the actions passed to it.
@@ -45,7 +46,7 @@ func (mod *GitterBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 	switch action.Name {
 
-	case "sendMessage":
+	case "send":
 		var room string
 		var message string
 
@@ -55,50 +56,32 @@ func (mod *GitterBee) Action(action bees.Action) []bees.Placeholder {
 		roomID, err := mod.client.GetRoomId(room)
 		if err != nil {
 			mod.LogErrorf("Failed to fetch room ID from uri:", err)
+			return outs
 		}
 
 		if err = mod.client.SendMessage(roomID, message); err != nil {
 			mod.LogErrorf("Failed to send message:", err)
+			return outs
 		}
 
-	case "joinRoom":
+	case "join":
 		var room string
 		action.Options.Bind("room", &room)
 
-		roomID, err := mod.client.GetRoomId(room)
-		if err != nil {
-			mod.LogErrorf("Failed to fetch room ID from uri: %v", err)
-		}
+		mod.join(room)
 
-		if _, err := mod.client.JoinRoom(roomID, mod.userID); err != nil {
-			mod.LogErrorf("Failed to join room: %v", err)
-		}
-		mod.Logln("Successfully joined room:", room)
-
-	case "leaveRoom":
+	case "leave":
 		var room string
 		action.Options.Bind("room", &room)
 
-		roomID, err := mod.client.GetRoomId(room)
-		if err != nil {
-			mod.LogErrorf("Failed to fetch room ID from uri: %v", err)
+		ch, ok := mod.roomChans[room]
+		if !ok {
+			mod.LogErrorf("Can't leave this room: %s", room)
+			return outs
 		}
 
-		if err := mod.client.LeaveRoom(roomID, mod.userID); err != nil {
-			mod.LogErrorf("Failed to leave Room: %v", err)
-		}
-		mod.Logln("Successfully leaved room:", room)
-
-	// case "getRoomMessages":
-	// 	var room string
-	// 	action.Options.Bind("room", &room)
-
-	// 	roomID, err := mod.client.GetRoomId(room)
-	// 	if err != nil {
-	// 		mod.LogErrorf("Failed to fetch room ID from uri: %v", err)
-	// 	}
-
-	// 	mod.getRoomMessages(roomID)
+		mod.Logln("Closing room stream", room)
+		close(ch)
 
 	default:
 		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
@@ -109,114 +92,116 @@ func (mod *GitterBee) Action(action bees.Action) []bees.Placeholder {
 
 // Run executes the Bee's event loop.
 func (mod *GitterBee) Run(eventChan chan bees.Event) {
+	mod.eventChan = eventChan
 
 	mod.client = gitter.New(mod.accessToken)
 	user, err := mod.client.GetUser()
 	if err != nil {
 		mod.LogErrorf("Failed to fetch current user: %v", err)
+		return
 	}
 	mod.userID = user.ID
 
-	// Getting the roomID from the uri as a string in order to pass it to getRoomMessages()
-	// roomID, err := mod.client.GetRoomId(mod.room)
-	// if err != nil {
-	// 	mod.LogErrorf("Failed to fetch room ID: %v", err)
-	// }
+	for _, room := range mod.rooms {
+		mod.join(room)
+	}
 
-	// mod.eventChan = eventChan
-
-	// timeout := time.Duration(time.Second * 10) // TODO: Look after api limits!
-	// for {
-	// 	select {
-	// 	case <-mod.SigChan:
-	// 		return
-	// 	case <-time.After(timeout):
-	// 		mod.getRoomMessages(roomID)
-	// 	}
-	// 	timeout = time.Duration(time.Second * 10)
-	// }
+	select {
+	case <-mod.SigChan:
+		for room, ch := range mod.roomChans {
+			mod.Logln("Closing room stream", room)
+			close(ch)
+		}
+		return
+	}
 }
 
-// getRoomMessages receives unread messages
-// func (mod *GitterBee) getRoomMessages(room string) {
+func (mod *GitterBee) join(room string) error {
+	mod.Logln("Joining room", room)
 
-// 	messages, err := mod.client.GetMessages(room, nil) // TODO: Look after params, maybe theres something useful
-// 	if err != nil {
-// 		mod.LogErrorf("Failed to fetch messages: %v", err)
-// 	}
-// 	// Parsing the messages into the bees event chan
-// 	for _, v := range messages {
-// 		if v.Unread == true {
-// 			mod.Logln("Unread messages in room:", room)
-// 			ev := bees.Event{
-// 				Bee:  mod.Name(),
-// 				Name: "roomMessages",
-// 				Options: []bees.Placeholder{
-// 					{
-// 						Name:  "ID",
-// 						Type:  "string",
-// 						Value: v.ID,
-// 					},
-// 					{
-// 						Name:  "test",
-// 						Type:  "string",
-// 						Value: v.Text,
-// 					},
-// 					{
-// 						Name:  "username",
-// 						Type:  "string",
-// 						Value: v.From.Username,
-// 					},
-// 					{
-// 						Name:  "readBy",
-// 						Type:  "int",
-// 						Value: v.ReadBy,
-// 					},
-// 				},
-// 			}
-// 			mod.eventChan <- ev
+	roomID, err := mod.client.GetRoomId(room)
+	if err != nil {
+		mod.LogErrorf("Failed to fetch room ID: %v", err)
+		return err
+	}
+	r, err := mod.client.JoinRoom(roomID, mod.userID)
+	if err != nil {
+		mod.LogErrorf("Failed to join room: %v", err)
+		return err
+	}
 
-// 			if v.Mentions != nil {
-// 				for _, mention := range v.Mentions {
-// 					ev := bees.Event{
-// 						Bee:  mod.Name(),
-// 						Name: "mention",
-// 						Options: []bees.Placeholder{
-// 							{
-// 								Name:  "mention",
-// 								Type:  "string",
-// 								Value: mention.ScreenName,
-// 							},
-// 						},
-// 					}
-// 					mod.eventChan <- ev
-// 				}
-// 			}
+	sigchan := make(chan interface{})
+	mod.roomChans[room] = sigchan
 
-// 			if v.Issues != nil {
-// 				for _, issue := range v.Issues {
-// 					ev := bees.Event{
-// 						Bee:  mod.Name(),
-// 						Name: "issue",
-// 						Options: []bees.Placeholder{
-// 							{
-// 								Name:  "issue",
-// 								Type:  "int",
-// 								Value: issue.Number,
-// 							},
-// 						},
-// 					}
-// 					mod.eventChan <- ev
-// 				}
-// 			}
-// 		}
-// 	}
-// }
+	stream := mod.client.Stream(r.ID)
+	defer stream.Close()
+	go mod.client.Listen(stream)
+
+	go func() {
+		for {
+			select {
+			case <-sigchan:
+				mod.Logln("Exiting", room)
+				return
+
+			case event := <-stream.Event:
+				switch ev := event.Data.(type) {
+				case *gitter.MessageReceived:
+					mod.handleMessage(room, &ev.Message)
+				case *gitter.GitterConnectionClosed:
+					// connection was closed
+					mod.LogErrorf("Connection closed")
+					go mod.join(room)
+					return
+				}
+			}
+		}
+	}()
+
+	return nil
+}
+
+func (mod *GitterBee) handleMessage(room string, v *gitter.Message) {
+	ev := bees.Event{
+		Bee:  mod.Name(),
+		Name: "message",
+		Options: []bees.Placeholder{
+			{
+				Name:  "id",
+				Type:  "string",
+				Value: v.ID,
+			},
+			{
+				Name:  "text",
+				Type:  "string",
+				Value: v.Text,
+			},
+			{
+				Name:  "username",
+				Type:  "string",
+				Value: v.From.Username,
+			},
+			{
+				Name:  "room",
+				Type:  "string",
+				Value: room,
+			},
+			{
+				Name:  "read_by",
+				Type:  "int",
+				Value: v.ReadBy,
+			},
+		},
+	}
+	mod.eventChan <- ev
+}
 
 // ReloadOptions parses the config options and initializes the Bee.
 func (mod *GitterBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
-	options.Bind("accessToken", &mod.accessToken)
-	options.Bind("room", &mod.room)
+	options.Bind("access_token", &mod.accessToken)
+	options.Bind("rooms", &mod.rooms)
+
+	mod.roomChans = make(map[string]chan interface{})
 }
