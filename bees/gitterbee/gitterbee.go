@@ -23,6 +23,8 @@
 package gitterbee
 
 import (
+	"fmt"
+
 	gitter "github.com/sromku/go-gitter"
 
 	"github.com/muesli/beehive/bees"
@@ -74,14 +76,12 @@ func (mod *GitterBee) Action(action bees.Action) []bees.Placeholder {
 		var room string
 		action.Options.Bind("room", &room)
 
-		ch, ok := mod.roomChans[room]
-		if !ok {
-			mod.LogErrorf("Can't leave this room: %s", room)
-			return outs
+		err := mod.leave(room)
+		if err != nil {
+			mod.LogErrorf("Can't leave room:", err)
+		} else {
+			mod.Logln("Closed room stream", room)
 		}
-
-		mod.Logln("Closing room stream", room)
-		close(ch)
 
 	default:
 		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
@@ -94,6 +94,7 @@ func (mod *GitterBee) Action(action bees.Action) []bees.Placeholder {
 func (mod *GitterBee) Run(eventChan chan bees.Event) {
 	mod.eventChan = eventChan
 
+	mod.roomChans = make(map[string]chan interface{})
 	mod.client = gitter.New(mod.accessToken)
 	user, err := mod.client.GetUser()
 	if err != nil {
@@ -108,9 +109,8 @@ func (mod *GitterBee) Run(eventChan chan bees.Event) {
 
 	select {
 	case <-mod.SigChan:
-		for room, ch := range mod.roomChans {
-			mod.Logln("Closing room stream", room)
-			close(ch)
+		for room := range mod.roomChans {
+			mod.leave(room)
 		}
 		return
 	}
@@ -161,6 +161,18 @@ func (mod *GitterBee) join(room string) error {
 	return nil
 }
 
+func (mod *GitterBee) leave(room string) error {
+	ch, ok := mod.roomChans[room]
+	if !ok {
+		return fmt.Errorf("Unknown room: %s", room)
+	}
+
+	mod.Logln("Closing room", room)
+	close(ch)
+	delete(mod.roomChans, room)
+	return nil
+}
+
 func (mod *GitterBee) handleMessage(room string, v *gitter.Message) {
 	ev := bees.Event{
 		Bee:  mod.Name(),
@@ -202,6 +214,4 @@ func (mod *GitterBee) ReloadOptions(options bees.BeeOptions) {
 
 	options.Bind("access_token", &mod.accessToken)
 	options.Bind("rooms", &mod.rooms)
-
-	mod.roomChans = make(map[string]chan interface{})
 }
