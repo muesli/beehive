@@ -31,6 +31,7 @@ import (
 	_ "github.com/muesli/beehive/bees/execbee"
 	_ "github.com/muesli/beehive/bees/facebookbee"
 	_ "github.com/muesli/beehive/bees/githubbee"
+	_ "github.com/muesli/beehive/bees/gitterbee"
 	_ "github.com/muesli/beehive/bees/htmlextractbee"
 	_ "github.com/muesli/beehive/bees/httpbee"
 	_ "github.com/muesli/beehive/bees/huebee"
