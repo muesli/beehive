@@ -24,10 +24,8 @@ package api
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"net/url"
-	"os"
 	"path"
 	"regexp"
 	"strings"
@@ -67,22 +65,39 @@ func escapeURL(u string) string {
 	return strings.Replace(url.QueryEscape(u), "%2F", "/", -1)
 }
 
-func configHandler(req *restful.Request, resp *restful.Response) {
-	rootdir := "./config"
+// Try to read a local/embedded asset. Gracefully fail and read index.html if
+// if not found.
+func readAssetOrIndex(path string) ([]byte, error) {
+	b, err := Asset(path)
+	if err != nil {
+		b, err = Asset("config/index.html")
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return b, nil
+}
+
+func assetHandler(req *restful.Request, resp *restful.Response) {
+	var rootdir string
+	if strings.HasPrefix(req.Request.URL.Path, "/images/") {
+		rootdir = "./assets/bees"
+	} else {
+		rootdir = "./config"
+	}
 
 	subpath := req.PathParameter("subpath")
-	if _, err := os.Stat(path.Join(rootdir, subpath)); os.IsNotExist(err) || len(subpath) == 0 {
-		subpath = "index.html"
-	}
 	actual := path.Join(rootdir, subpath)
-	log.Printf("serving %s ... (from %s)", actual, req.PathParameter("subpath"))
 
-	b, err := ioutil.ReadFile(actual)
+	b, err := readAssetOrIndex(actual)
 	if err != nil {
 		log.Errorln("Failed reading", actual)
 		http.Error(resp.ResponseWriter, "Failed reading file", http.StatusInternalServerError)
 		return
 	}
+
+	log.Printf("serving %s ... (from %s)", actual, req.PathParameter("subpath"))
 
 	if actual == "config/index.html" {
 		// Since we patch the content of the files, we must drop the integrity SHA-sums
@@ -103,18 +118,6 @@ func configHandler(req *restful.Request, resp *restful.Response) {
 		actual,
 		time.Now(),
 		bytes.NewReader(b))
-}
-
-func imageHandler(req *restful.Request, resp *restful.Response) {
-	rootdir := "./assets/bees"
-
-	subpath := req.PathParameter("subpath")
-	actual := path.Join(rootdir, subpath)
-	log.Printf("serving %s ... (from %s)", actual, req.PathParameter("subpath"))
-	http.ServeFile(
-		resp.ResponseWriter,
-		req.Request,
-		actual)
 }
 
 func oauth2Handler(req *restful.Request, resp *restful.Response) {
@@ -174,10 +177,10 @@ func Run() {
 	wsContainer := smolder.NewSmolderContainer(smolderConfig, nil, nil)
 	wsContainer.Router(restful.CurlyRouter{})
 	ws := new(restful.WebService)
-	ws.Route(ws.GET("/images/{subpath:*}").To(imageHandler))
+	ws.Route(ws.GET("/images/{subpath:*}").To(assetHandler))
 	ws.Route(ws.GET("/oauth2/{subpath:*}").To(oauth2Handler))
-	ws.Route(ws.GET("/{subpath:*}").To(configHandler))
-	ws.Route(ws.GET("/").To(configHandler))
+	ws.Route(ws.GET("/{subpath:*}").To(assetHandler))
+	ws.Route(ws.GET("/").To(assetHandler))
 	wsContainer.Add(ws)
 
 	func(resources ...smolder.APIResource) {

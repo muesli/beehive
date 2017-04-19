@@ -33,3 +33,6 @@ beehive.conf
 
 # Jetbrains IDEs
 .idea
+
+# Embedded assets
+api/bindata.go
