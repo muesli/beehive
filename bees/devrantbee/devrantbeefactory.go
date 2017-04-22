@@ -74,52 +74,57 @@ func (factory *DevrantBeeFactory) Events() []bees.EventDescriptor {
 			Description: "is triggered after rants were fetched",
 			Options: []bees.PlaceholderDescriptor{
 				{
-					Name:        "ID",
+					Name:        "Id",
 					Description: "ID of a rant",
 					Type:        "int",
 				},
 				{
-					Name:        "text",
+					Name:        "Text",
 					Description: "Text of a rant",
 					Type:        "string",
 				},
 				{
-					Name:        "upvotes",
+					Name:        "Upvotes",
 					Description: "Sum of upvotes",
 					Type:        "int",
 				},
 				{
-					Name:        "downvotes",
+					Name:        "Downvotes",
 					Description: "Sum of downvotes",
 					Type:        "int",
 				},
 				{
-					Name:        "score",
+					Name:        "Score",
 					Description: "Current score of a rant",
 					Type:        "int",
 				},
 				{
-					Name:        "created_time",
+					Name:        "CreatedTime",
 					Description: "Creation time of a rant",
 					Type:        "int",
 				},
 				{
-					Name:        "num_comments",
+					Name:        "NumComments",
 					Description: "Number of comments",
 					Type:        "int",
 				},
 				{
-					Name:        "user_id",
+					Name:        "Tags",
+					Description: "Tagged tags",
+					Type:        "[]string",
+				},
+				{
+					Name:        "UserId",
 					Description: "ID of the user who posted the rant",
 					Type:        "int",
 				},
 				{
-					Name:        "username",
+					Name:        "UserUsername",
 					Description: "Username of the ranter",
 					Type:        "string",
 				},
 				{
-					Name:        "user_score",
+					Name:        "UserScore",
 					Description: "Total user score",
 					Type:        "int",
 				},

@@ -25,6 +25,8 @@ package devrantbee
 import (
 	"github.com/jayeshsolanki93/devgorant"
 
+	"reflect"
+
 	"github.com/muesli/beehive/bees"
 )
 
@@ -81,61 +83,30 @@ func (mod *DevrantBee) Action(action bees.Action) []bees.Placeholder {
 }
 
 func (mod *DevrantBee) triggerEvent(rant devgorant.RantModel) {
+	v := reflect.ValueOf(rant)
+	names := make([]string, v.NumField())
+	types := make([]string, v.NumField())
+	values := make([]interface{}, v.NumField())
+
+	opts := make([]bees.Placeholder, v.NumField())
+
+	for i := 0; i < v.NumField(); i++ {
+		names[i] = v.Type().Field(i).Name
+		types[i] = v.Field(i).Type().String()
+		values[i] = v.Field(i).Interface()
+
+		// Parsing the values into a bees.Placeholder struct
+		opts[i] = bees.Placeholder{
+			Name:  names[i],
+			Type:  types[i],
+			Value: values[i],
+		}
+	}
+
 	ev := bees.Event{
-		Bee:  mod.Name(),
-		Name: "rant",
-		Options: []bees.Placeholder{
-			{
-				Name:  "ID",
-				Type:  "int",
-				Value: rant.Id,
-			},
-			{
-				Name:  "text",
-				Type:  "string",
-				Value: rant.Text,
-			},
-			{
-				Name:  "upvotes",
-				Type:  "int",
-				Value: rant.Upvotes,
-			},
-			{
-				Name:  "downvotes",
-				Type:  "int",
-				Value: rant.Downvotes,
-			},
-			{
-				Name:  "score",
-				Type:  "int",
-				Value: rant.Score,
-			},
-			{
-				Name:  "created_time",
-				Type:  "int",
-				Value: rant.CreatedTime,
-			},
-			{
-				Name:  "num_comments",
-				Type:  "int",
-				Value: rant.NumComments,
-			},
-			{
-				Name:  "user_id",
-				Type:  "int",
-				Value: rant.UserId,
-			},
-			{
-				Name:  "username",
-				Type:  "string",
-				Value: rant.UserUsername,
-			},
-			{
-				Name:  "user_score",
-				Type:  "int",
-				Value: rant.UserScore,
-			},
-		},
+		Bee:     mod.Name(),
+		Name:    "rant",
+		Options: opts,
 	}
 	mod.evchan <- ev
 }
