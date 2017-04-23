@@ -1,4 +1,4 @@
-all: embed
+all: test embed
 
 submodule:
 	git submodule update --init
@@ -16,8 +16,11 @@ embed: submodule go-bindata generate build
 build:
 	go build
 
+test:
+	go test -v ./...
+
 get-deps:
-	go get -u
+	go get -t -v ./...
 
 clean:
 	rm -f beehive
