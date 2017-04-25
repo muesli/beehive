@@ -14,6 +14,9 @@ go-bindata:
 embed: submodule go-bindata generate build
 
 build:
+	go build --ldflags '-s -w'
+
+debug: submodule go-bindata generate
 	go build
 
 test:
