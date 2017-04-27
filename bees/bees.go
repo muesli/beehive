@@ -126,6 +126,7 @@ func GetBees() []*BeeInterface {
 func startBee(bee *BeeInterface, fatals int) {
 	if fatals >= 3 {
 		log.Println("Terminating evil bee", (*bee).Name(), "after", fatals, "failed tries!")
+		(*bee).Stop()
 		return
 	}
 
@@ -135,7 +136,7 @@ func startBee(bee *BeeInterface, fatals int) {
 	defer func(bee *BeeInterface) {
 		if e := recover(); e != nil {
 			log.Println("Fatal bee event:", e, fatals)
-			startBee(bee, fatals+1)
+			go startBee(bee, fatals+1)
 		}
 	}(bee)
 
@@ -301,6 +302,7 @@ func (bee *Bee) Stop() {
 	if !bee.IsRunning() {
 		return
 	}
+	log.Println(bee.Name(), "stopping gracefully!")
 
 	close(bee.SigChan)
 	bee.waitGroup.Wait()
