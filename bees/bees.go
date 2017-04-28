@@ -358,7 +358,7 @@ func (bee *Bee) LogFatal(args ...interface{}) {
 	for _, v := range args {
 		a = append(a, v)
 	}
-	log.Fatal(a...)
+	log.Panicln(a...)
 }
 
 // UUID generates a new unique ID.
