@@ -60,7 +60,11 @@ func (mod *FacebookBee) Run(eventChan chan bees.Event) {
 		case <-mod.SigChan:
 			return
 		case <-time.After(time.Duration(timeout)):
-			since = mod.handleStream(since)
+			var err error
+			since, err = mod.handleStream(since)
+			if err != nil {
+				panic(err)
+			}
 		}
 
 		timeout = time.Minute
@@ -123,7 +127,7 @@ func (mod *FacebookBee) handleStreamEvent(item map[string]interface{}) {
 	}
 }
 
-func (mod *FacebookBee) handleStream(since string) string {
+func (mod *FacebookBee) handleStream(since string) (string, error) {
 	conf := &oauth2.Config{
 		ClientID:     mod.clientID,
 		ClientSecret: mod.clientSecret,
@@ -158,9 +162,8 @@ func (mod *FacebookBee) handleStream(since string) string {
 		if e, ok := err.(*facebook.Error); ok {
 			mod.LogErrorf("Error: [message:%v] [type:%v] [code:%v] [subcode:%v]",
 				e.Message, e.Type, e.Code, e.ErrorSubcode)
-			return since
 		}
-		mod.LogErrorf(err.Error())
+		return since, err
 	}
 
 	// mod.Logln("Result:", res)
@@ -174,10 +177,10 @@ func (mod *FacebookBee) handleStream(since string) string {
 		su, _ := url.Parse(res.Get("paging.previous").(string))
 		s := su.Query().Get("since")
 		if s != "" {
-			return s
+			return s, nil
 		}
 	}
-	return since
+	return since, nil
 }
 
 // ReloadOptions parses the config options and initializes the Bee.
