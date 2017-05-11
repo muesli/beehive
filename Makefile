@@ -6,7 +6,7 @@ submodule:
 noembed: submodule build
 
 generate:
-	go-bindata --pkg api -o api/bindata.go --ignore \\.git assets/... config/...
+	go-bindata --tags embed --pkg api -o api/bindata.go --ignore \\.git assets/... config/...
 
 go-bindata:
 	[ -f $(shell go env GOPATH)/bin/go-bindata ] || go get -u github.com/jteeuwen/go-bindata/go-bindata
@@ -14,10 +14,10 @@ go-bindata:
 embed: submodule go-bindata generate build
 
 build:
-	go build --ldflags '-s -w'
+	go build -tags 'embed' -ldflags '-s -w'
 
 debug: submodule go-bindata generate
-	go build
+	go build -tags 'embed'
 
 test:
 	go test -v ./...
