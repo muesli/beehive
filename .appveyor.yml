@@ -12,8 +12,6 @@ install:
     - echo %GOPATH%
     - go version
     - go env
-    - go get -d ./...
 
 build_script:
-    - go test -v -cpu=2 ./...
- 
+    - make debug
