@@ -1,3 +1,6 @@
 [submodule "config"]
 	path = config
 	url = https://github.com/muesli/beehive-admin-dist.git
+[submodule "vendor"]
+	path = vendor
+	url = https://github.com/muesli/beehive-vendor.git
