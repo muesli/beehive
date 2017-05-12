@@ -1,4 +1,4 @@
-all: test embed
+all: embed
 
 submodule:
 	git submodule update --init
@@ -16,11 +16,11 @@ embed: submodule go-bindata generate build
 build:
 	go build -tags 'embed' -ldflags '-s -w'
 
-debug: submodule go-bindata generate
+debug: submodule test go-bindata generate
 	go build -tags 'embed'
 
 test:
-	go test -v ./...
+	go test -v $(shell go list ./... | grep -v vendor/)
 
 get-deps:
 	go get -t -v ./...
