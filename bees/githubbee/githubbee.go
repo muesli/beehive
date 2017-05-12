@@ -23,9 +23,10 @@
 package githubbee
 
 import (
+	"context"
 	"time"
 
-	"github.com/muesli/go-github/github"
+	"github.com/google/go-github/github"
 	"golang.org/x/oauth2"
 
 	"github.com/muesli/beehive/bees"
@@ -45,13 +46,14 @@ type GitHubBee struct {
 
 // Action triggers the actions passed to it.
 func (mod *GitHubBee) Action(action bees.Action) []bees.Placeholder {
+	ctx := context.Background()
 	outs := []bees.Placeholder{}
 	switch action.Name {
 	case "follow":
 		var user string
 		action.Options.Bind("username", &user)
 
-		if _, err := mod.client.Users.Follow(user); err != nil {
+		if _, err := mod.client.Users.Follow(ctx, user); err != nil {
 			mod.LogErrorf("Failed to follow user: %v", err)
 		}
 
@@ -59,7 +61,7 @@ func (mod *GitHubBee) Action(action bees.Action) []bees.Placeholder {
 		var user string
 		action.Options.Bind("username", &user)
 
-		if _, err := mod.client.Users.Unfollow(user); err != nil {
+		if _, err := mod.client.Users.Unfollow(ctx, user); err != nil {
 			mod.LogErrorf("Failed to follow user: %v", err)
 		}
 
@@ -69,7 +71,7 @@ func (mod *GitHubBee) Action(action bees.Action) []bees.Placeholder {
 		action.Options.Bind("owner", &user)
 		action.Options.Bind("repository", &repo)
 
-		if _, err := mod.client.Activity.Star(user, repo); err != nil {
+		if _, err := mod.client.Activity.Star(ctx, user, repo); err != nil {
 			mod.LogErrorf("Failed to star repository: %v", err)
 		}
 
@@ -79,7 +81,7 @@ func (mod *GitHubBee) Action(action bees.Action) []bees.Placeholder {
 		action.Options.Bind("owner", &user)
 		action.Options.Bind("repository", &repo)
 
-		if _, err := mod.client.Activity.Unstar(user, repo); err != nil {
+		if _, err := mod.client.Activity.Unstar(ctx, user, repo); err != nil {
 			mod.LogErrorf("Failed to unstar repository: %v", err)
 		}
 
@@ -120,7 +122,7 @@ func (mod *GitHubBee) getRepositoryEvents(owner, repo string, since time.Time) {
 		opts := &github.ListOptions{
 			Page: page,
 		}
-		events, _, err := mod.client.Activity.ListRepositoryEvents(owner, repo, opts)
+		events, _, err := mod.client.Activity.ListRepositoryEvents(context.Background(), owner, repo, opts)
 		if err != nil {
 			mod.LogErrorf("Failed to fetch events: %v", err)
 			return
