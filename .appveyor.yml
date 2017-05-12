@@ -12,6 +12,7 @@ install:
     - echo %GOPATH%
     - go version
     - go env
+    - git submodule update --init
 
 build_script:
-    - make debug
+    - go build
