@@ -67,16 +67,17 @@ func escapeURL(u string) string {
 
 // Try to read a local/embedded asset. Gracefully fail and read index.html if
 // if not found.
-func readAssetOrIndex(path string) ([]byte, error) {
+func readAssetOrIndex(path string) (string, []byte, error) {
 	b, err := Asset(path)
 	if err != nil {
-		b, err = Asset("config/index.html")
+		path = "config/index.html"
+		b, err = Asset(path)
 		if err != nil {
-			return nil, err
+			return path, nil, err
 		}
 	}
 
-	return b, nil
+	return path, b, nil
 }
 
 func assetHandler(req *restful.Request, resp *restful.Response) {
@@ -88,18 +89,16 @@ func assetHandler(req *restful.Request, resp *restful.Response) {
 	}
 
 	subpath := req.PathParameter("subpath")
-	actual := path.Join(rootdir, subpath)
-
-	b, err := readAssetOrIndex(actual)
+	sourceFile, b, err := readAssetOrIndex(path.Join(rootdir, subpath))
 	if err != nil {
-		log.Errorln("Failed reading", actual)
+		log.Errorln("Failed reading", sourceFile)
 		http.Error(resp.ResponseWriter, "Failed reading file", http.StatusInternalServerError)
 		return
 	}
 
-	log.Printf("serving %s ... (from %s)", actual, req.PathParameter("subpath"))
+	log.Printf("serving %s ... (from %s)", sourceFile, req.PathParameter("subpath"))
 
-	if actual == "config/index.html" {
+	if sourceFile == "config/index.html" {
 		// Since we patch the content of the files, we must drop the integrity SHA-sums
 		// TODO: Would be nicer to recalculate them
 		re := regexp.MustCompile("integrity=\"([^\"]*)\"")
@@ -115,7 +114,7 @@ func assetHandler(req *restful.Request, resp *restful.Response) {
 	http.ServeContent(
 		resp.ResponseWriter,
 		req.Request,
-		actual,
+		sourceFile,
 		time.Now(),
 		bytes.NewReader(b))
 }
