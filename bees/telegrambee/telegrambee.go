@@ -28,6 +28,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
+	"time"
 
 	telegram "github.com/go-telegram-bot-api/telegram-bot-api"
 
@@ -115,6 +116,11 @@ func (mod *TelegramBee) Run(eventChan chan bees.Event) {
 						Name:  "user_id",
 						Type:  "string",
 						Value: strconv.Itoa(update.Message.From.ID),
+					},
+					{
+						Name:  "timestamp",
+						Type:  "string",
+						Value: strconv.FormatInt(time.Now().Unix(), 10),
 					},
 				},
 			}

@@ -99,6 +99,11 @@ func (factory *TelegramBeeFactory) Events() []bees.EventDescriptor {
 					Description: "User ID sending the message",
 					Type:        "string",
 				},
+				{
+					Name:        "timestamp",
+					Description: "Timestamp (seconds since epoch)",
+					Type:        "string",
+				},
 			},
 		},
 	}
