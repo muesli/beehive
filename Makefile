@@ -1,4 +1,4 @@
-BEEHIVE_VERSION=0.3
+BEEHIVE_VERSION=0.2.99
 COMMIT_SHA=$(shell git rev-parse --short HEAD)
 
 all: embed
