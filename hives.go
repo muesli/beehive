@@ -30,6 +30,7 @@ import (
 	_ "github.com/muesli/beehive/bees/emailbee"
 	_ "github.com/muesli/beehive/bees/execbee"
 	_ "github.com/muesli/beehive/bees/facebookbee"
+	_ "github.com/muesli/beehive/bees/fsnotifybee"
 	_ "github.com/muesli/beehive/bees/githubbee"
 	_ "github.com/muesli/beehive/bees/gitterbee"
 	_ "github.com/muesli/beehive/bees/htmlextractbee"
