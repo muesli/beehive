@@ -338,18 +338,21 @@ func (bee *Bee) Logln(args ...interface{}) {
 	}
 
 	log.Println(a...)
+	Log(bee.Name(), fmt.Sprintln(args...), 0)
 }
 
 // Logf logs a formatted string
 func (bee *Bee) Logf(format string, args ...interface{}) {
 	s := fmt.Sprintf(format, args...)
 	log.Printf("[%s]: %s", bee.Name(), s)
+	Log(bee.Name(), s, 0)
 }
 
 // LogErrorf logs a formatted error string
 func (bee *Bee) LogErrorf(format string, args ...interface{}) {
 	s := fmt.Sprintf(format, args...)
 	log.Errorf("[%s]: %s", bee.Name(), s)
+	Log(bee.Name(), s, 1)
 }
 
 // LogFatal logs a fatal error
@@ -359,6 +362,7 @@ func (bee *Bee) LogFatal(args ...interface{}) {
 		a = append(a, v)
 	}
 	log.Panicln(a...)
+	Log(bee.Name(), fmt.Sprintln(args...), 2)
 }
 
 // UUID generates a new unique ID.
