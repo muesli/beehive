@@ -23,7 +23,7 @@ Connecting those modules with each other lets you create immensly useful agents.
 
 ## Installation
 
-Make sure you have a working Go environment. See the [install instructions](http://golang.org/doc/install.html).
+Beehive requires Go 1.7 or higher. Make sure you have a working Go environment. See the [install instructions](http://golang.org/doc/install.html).
 
 ### From source
 
