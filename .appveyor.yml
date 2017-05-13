@@ -13,9 +13,12 @@ install:
     - go version
     - go env
     - git submodule update --init
-    - go get -t -d (go list ./... `
-      |? { -not $_.Contains('/vendor/') })
+    - ps: |
+        go.exe get -t -d (go.exe list ./... `
+        |? { -not $_.Contains('/vendor/') })
 
 build_script:
-    - go test -v -cpu=2 ./...
+    - ps: |
+        go.exe test -v -cpu=2 (go.exe list ./... `
+        |? { -not $_.Contains('/vendor/') })
     - go build
