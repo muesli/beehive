@@ -16,7 +16,7 @@ embed: submodule go-bindata generate build
 build:
 	go build -tags 'embed' -ldflags '-s -w'
 
-debug: submodule test go-bindata generate
+debug: submodule go-bindata generate
 	go build -tags 'embed'
 
 test:

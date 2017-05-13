@@ -21,4 +21,4 @@ notifications:
     on_success: change
     on_failure: always
 
-script: make get-deps debug
+script: make get-deps debug test
