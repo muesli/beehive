@@ -25,6 +25,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"os/signal"
@@ -41,7 +42,8 @@ import (
 )
 
 var (
-	configFile string
+	configFile  string
+	versionFlag bool
 )
 
 // Config contains an entire configuration set for Beehive
@@ -88,8 +90,23 @@ func main() {
 		},
 	})
 
+	app.AddFlags([]app.CliFlag{
+		{
+			V:     &versionFlag,
+			Name:  "version",
+			Value: false,
+			Desc:  "Beehive version",
+		},
+	})
+
 	// Parse command-line args for all registered bees
 	app.Run()
+
+	if versionFlag {
+		fmt.Printf("Beehive %s (%s)\n", Version, CommitSHA)
+		os.Exit(0)
+	}
+
 	api.Run()
 
 	log.Println()
