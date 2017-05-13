@@ -13,6 +13,8 @@ install:
     - go version
     - go env
     - git submodule update --init
+    - go get -d -v ./...
 
 build_script:
+    - go test -v -cpu=2 ./...
     - go build
