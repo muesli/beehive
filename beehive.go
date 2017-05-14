@@ -89,9 +89,6 @@ func main() {
 			Value: "./beehive.conf",
 			Desc:  "Config-file to use",
 		},
-	})
-
-	app.AddFlags([]app.CliFlag{
 		{
 			V:     &versionFlag,
 			Name:  "version",
@@ -152,7 +149,7 @@ func main() {
 		}
 	}
 
-	// Save chains to config
+	// Save actions & chains to config
 	log.Println("Storing config...")
 	config.Bees = bees.BeeConfigs()
 	config.Chains = bees.GetChains()
