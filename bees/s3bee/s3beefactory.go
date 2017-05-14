@@ -46,7 +46,7 @@ func (factory *S3BeeFactory) ID() string {
 
 // Name returns the name of this Bee.
 func (factory *S3BeeFactory) Name() string {
-	return "S3Bee"
+	return "Amazon S3"
 }
 
 // Description returns the description of this Bee.
