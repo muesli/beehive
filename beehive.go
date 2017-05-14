@@ -32,6 +32,7 @@ import (
 	"syscall"
 
 	log "github.com/Sirupsen/logrus"
+	"github.com/mattn/go-colorable"
 
 	"github.com/muesli/beehive/api"
 	"github.com/muesli/beehive/app"
@@ -157,4 +158,9 @@ func main() {
 	config.Chains = bees.GetChains()
 	config.Actions = bees.GetActions()
 	saveConfig(config)
+}
+
+func init() {
+	log.SetFormatter(&log.TextFormatter{ForceColors: true})
+	log.SetOutput(colorable.NewColorableStdout())
 }
