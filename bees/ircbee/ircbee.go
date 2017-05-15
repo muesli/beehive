@@ -301,9 +301,5 @@ func (mod *IrcBee) ReloadOptions(options bees.BeeOptions) {
 	options.Bind("nick", &mod.nick)
 	options.Bind("password", &mod.password)
 	options.Bind("ssl", &mod.ssl)
-
-	mod.channels = []string{}
-	for _, channel := range options.Value("channels").([]interface{}) {
-		mod.channels = append(mod.channels, channel.(string))
-	}
+	options.Bind("channels", &mod.channels)
 }
