@@ -39,5 +39,11 @@ func execFilter(filter string, opts map[string]interface{}) bool {
 	f := *filters.GetFilter("template")
 	log.Println("\tExecuting filter:", filter)
 
+	defer func() {
+		if e := recover(); e != nil {
+			log.Println("Fatal filter event:", e)
+		}
+	}()
+
 	return f.Passes(opts, filter)
 }
