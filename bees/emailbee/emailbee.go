@@ -23,7 +23,7 @@ package emailbee
 
 import (
 	"net"
-
+	"regexp"
 	"strconv"
 
 	"github.com/muesli/beehive/bees"
@@ -55,9 +55,12 @@ func (mod *EmailBee) Action(action bees.Action) []bees.Placeholder {
 		m.SetHeader("From", mod.username)
 		m.SetHeader("To", to)
 		m.SetHeader("Subject", subject)
-		if plainText != "" {
-			m.SetBody("text/plain", plainText)
-		}
+
+		// remove the HTML tags, such as <html></html> and so on
+		re, _ := regexp.Compile("\\<[\\S\\s]+?\\>")
+		plainText = re.ReplaceAllString(plainText, "")
+		m.SetBody("text/plain", plainText)
+
 		if htmlText != "" {
 			m.SetBody("text/html", htmlText)
 		}

@@ -50,16 +50,31 @@ func (r *ChainResource) Delete(context smolder.APIContext, request *restful.Requ
 
 	found := false
 	chains := []bees.Chain{}
+	actions := []bees.Action{}
+	actionsList := []string{}
+
 	for _, v := range bees.GetChains() {
 		if v.Name == id {
 			found = true
+			actionsList = v.Actions
 		} else {
 			chains = append(chains, v)
 		}
 	}
 
 	if found {
+		for _, k := range bees.GetActions() {
+			for _, t := range actionsList {
+				// Delete the Action belongs to the chain
+				if t == k.ID {
+					continue
+				} else {
+					actions = append(actions, k)
+				}
+			}
+		}
 		bees.SetChains(chains)
+		bees.SetActions(actions)
 		resp.Send(response)
 	} else {
 		r.NotFound(request, response)

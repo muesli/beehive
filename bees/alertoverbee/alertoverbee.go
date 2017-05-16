@@ -57,7 +57,7 @@ func (mod *AlertOverBee) Action(action bees.Action) []bees.Placeholder {
 		// the message must be plain text, so
 		// remove the HTML tags, such as <html></html> and so on
 		re, _ := regexp.Compile("\\<[\\S\\s]+?\\>")
-		content = re.ReplaceAllString(content, "\n")
+		content = re.ReplaceAllString(content, "")
 
 		data := url.Values{
 			"source":   {mod.source},
