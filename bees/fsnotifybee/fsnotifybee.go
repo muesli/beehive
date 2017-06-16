@@ -64,7 +64,7 @@ func (mod *FSNotifyBee) ReloadOptions(options bees.BeeOptions) {
 func sendEvent(bee, etype, path string, eventChan chan bees.Event) {
 	event := bees.Event{
 		Bee:  bee,
-		Name: "event",
+		Name: "fsevent",
 		Options: []bees.Placeholder{
 			{
 				Name:  "type",
