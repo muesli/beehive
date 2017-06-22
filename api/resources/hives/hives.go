@@ -47,3 +47,8 @@ func (r *HiveResource) Register(container *restful.Container, config smolder.API
 
 	r.Init(container, r)
 }
+
+// Returns returns the model that will be returned
+func (r *HiveResource) Returns() interface{} {
+	return HiveResponse{}
+}

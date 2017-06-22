@@ -49,3 +49,13 @@ func (r *ChainResource) Register(container *restful.Container, config smolder.AP
 
 	r.Init(container, r)
 }
+
+// Reads returns the model that will be read by POST, PUT & PATCH operations
+func (r *ChainResource) Reads() interface{} {
+	return ChainPostStruct{}
+}
+
+// Returns returns the model that will be returned
+func (r *ChainResource) Returns() interface{} {
+	return ChainResponse{}
+}
