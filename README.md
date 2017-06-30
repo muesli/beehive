@@ -39,6 +39,10 @@ See the Troubleshooting/Notes section for additional details.
 
 Run `beehive --help` to see a full list of options.
 
+### Deployment Tools
+ - [Dockerfile](docker)
+ - [Ansible](https://github.com/morbidick/ansible-role-beehive)
+
 ## Configuration
 
 Think of Hives as little plugins, extending Beehive's abilities with events you
