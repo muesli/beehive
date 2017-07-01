@@ -45,7 +45,7 @@ var (
 			return values[0].([]string)[len(values[0].([]string))-1]
 		},
 		// strings functions
-		// "Compare":      strings.Compare, // 1.5+ only
+		"Compare":      strings.Compare, // 1.5+ only
 		"Contains":     strings.Contains,
 		"ContainsAny":  strings.ContainsAny,
 		"Count":        strings.Count,
