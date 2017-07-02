@@ -23,6 +23,7 @@ package main
 import (
 	_ "github.com/muesli/beehive/bees/alertoverbee"
 	_ "github.com/muesli/beehive/bees/anelpowerctrlbee"
+	_ "github.com/muesli/beehive/bees/cleverbotbee"
 	_ "github.com/muesli/beehive/bees/cricketbee"
 	_ "github.com/muesli/beehive/bees/cronbee"
 	_ "github.com/muesli/beehive/bees/devrantbee"
