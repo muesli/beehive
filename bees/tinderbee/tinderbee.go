@@ -56,7 +56,7 @@ func (mod *TinderBee) Action(action bees.Action) []bees.Placeholder {
 
 	case "get_user":
 		var userID string
-		action.Options.Bind("userID", &userID)
+		action.Options.Bind("user_id", &userID)
 
 		user, err := mod.client.GetUser(userID)
 		if err != nil {
@@ -69,7 +69,7 @@ func (mod *TinderBee) Action(action bees.Action) []bees.Placeholder {
 	case "send_message":
 		var userID string
 		var text string
-		action.Options.Bind("userID", &userID)
+		action.Options.Bind("user_id", &userID)
 		action.Options.Bind("text", &text)
 
 		err := mod.client.SendMessage(userID, text)
@@ -123,6 +123,6 @@ func (mod *TinderBee) Run(eventChan chan bees.Event) {
 func (mod *TinderBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
-	options.Bind("userID", &mod.userID)
-	options.Bind("userToken", &mod.userToken)
+	options.Bind("user_id", &mod.userID)
+	options.Bind("user_token", &mod.userToken)
 }

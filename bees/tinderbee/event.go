@@ -32,7 +32,7 @@ func (mod *TinderBee) TriggerUpdateEvent(update *tinder.UpdatesResponse) {
 			Name: "update",
 			Options: []bees.Placeholder{
 				{
-					Name:  "ID",
+					Name:  "id",
 					Type:  "string",
 					Value: v.ID,
 				},
@@ -52,7 +52,7 @@ func (mod *TinderBee) TriggerUpdateEvent(update *tinder.UpdatesResponse) {
 					Value: v.MessageCount,
 				},
 				{
-					Name:  "person_ID",
+					Name:  "person_id",
 					Type:  "string",
 					Value: v.Person.ID,
 				},
@@ -134,7 +134,7 @@ func (mod *TinderBee) TriggerUserEvents(user *tinder.UserResponse) {
 				Value: user.Results.CommonFriends,
 			},
 			{
-				Name:  "ID",
+				Name:  "id",
 				Type:  "string",
 				Value: user.Results.ID,
 			},
@@ -186,7 +186,7 @@ func (mod *TinderBee) TriggerRecommendationsEvent(recs *tinder.RecommendationsRe
 			Name: "recommendation",
 			Options: []bees.Placeholder{
 				{
-					Name:  "ID",
+					Name:  "id",
 					Type:  "string",
 					Value: v.ID,
 				},

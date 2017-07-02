@@ -68,13 +68,13 @@ func (factory *TinderBeeFactory) LogoColor() string {
 func (factory *TinderBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
-			Name:        "userID",
+			Name:        "user_id",
 			Description: "Your facebook user ID",
 			Type:        "string",
 			Mandatory:   true,
 		},
 		{
-			Name:        "userToken",
+			Name:        "user_token",
 			Description: "Your facebook user token",
 			Type:        "string",
 			Mandatory:   true,
@@ -92,7 +92,7 @@ func (factory *TinderBeeFactory) Events() []bees.EventDescriptor {
 			Description: "is triggered after fetching updates",
 			Options: []bees.PlaceholderDescriptor{
 				{
-					Name:        "ID",
+					Name:        "id",
 					Description: "Update ID",
 					Type:        "string",
 				},
@@ -112,7 +112,7 @@ func (factory *TinderBeeFactory) Events() []bees.EventDescriptor {
 					Type:        "int",
 				},
 				{
-					Name:        "person_ID",
+					Name:        "person_id",
 					Description: "Tinder User ID",
 					Type:        "string",
 				},
@@ -184,7 +184,7 @@ func (factory *TinderBeeFactory) Events() []bees.EventDescriptor {
 					Type:        "[]string",
 				},
 				{
-					Name:        "ID",
+					Name:        "id",
 					Description: "user ID",
 					Type:        "string",
 				},
@@ -223,10 +223,10 @@ func (factory *TinderBeeFactory) Events() []bees.EventDescriptor {
 		{
 			Namespace:   factory.Name(),
 			Name:        "recommendation",
-			Description: "is triggered after you've fetch recommendations",
+			Description: "is triggered after you've fetched recommendations",
 			Options: []bees.PlaceholderDescriptor{
 				{
-					Name:        "ID",
+					Name:        "id",
 					Description: "recommendations user ID",
 					Type:        "string",
 				},
@@ -288,7 +288,7 @@ func (factory *TinderBeeFactory) Actions() []bees.ActionDescriptor {
 			Description: "Fetches user information",
 			Options: []bees.PlaceholderDescriptor{
 				{
-					Name:        "userID",
+					Name:        "user_id",
 					Description: "User id of the user to search",
 					Type:        "string",
 					Mandatory:   true,
@@ -301,13 +301,13 @@ func (factory *TinderBeeFactory) Actions() []bees.ActionDescriptor {
 			Description: "Sends messag eto desired userID",
 			Options: []bees.PlaceholderDescriptor{
 				{
-					Name:        "userID",
+					Name:        "user_id",
 					Description: "User id from the recipient",
 					Type:        "string",
 					Mandatory:   true,
 				},
 				{
-					Name:        "test",
+					Name:        "text",
 					Description: "Contents of the message",
 					Type:        "string",
 					Mandatory:   true,
