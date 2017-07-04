@@ -45,14 +45,19 @@ func (mod *EmailBee) Action(action bees.Action) []bees.Placeholder {
 
 	switch action.Name {
 	case "send":
-		var to, plainText, htmlText, subject string
+		var from, to, plainText, htmlText, subject string
+		action.Options.Bind("sender", &from)
 		action.Options.Bind("recipient", &to)
 		action.Options.Bind("subject", &subject)
 		action.Options.Bind("text", &plainText)
 		action.Options.Bind("html", &htmlText)
 
 		m := gomail.NewMessage()
-		m.SetHeader("From", mod.username)
+		if len(from) > 0 {
+			m.SetHeader("From", from)
+		} else {
+			m.SetHeader("From", mod.username)
+		}
 		m.SetHeader("To", to)
 		m.SetHeader("Subject", subject)
 		if plainText != "" {

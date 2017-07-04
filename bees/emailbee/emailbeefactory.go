@@ -104,6 +104,11 @@ func (factory *EmailBeeFactory) Actions() []bees.ActionDescriptor {
 			Description: "Sends an email",
 			Options: []bees.PlaceholderDescriptor{
 				{
+					Name:        "sender",
+					Description: "email address of the sender",
+					Type:        "string",
+				},
+				{
 					Name:        "recipient",
 					Description: "email address of the recipient",
 					Type:        "string",
