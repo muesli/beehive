@@ -62,7 +62,7 @@ func (factory *CleverbotBeeFactory) Image() string {
 
 // LogoColor returns the preferred logo background color (used by the admin interface).
 func (factory *CleverbotBeeFactory) LogoColor() string {
-	return "#33f3ff"
+	return "#448CCB"
 }
 
 // Options returns the options available to configure this Bee.
