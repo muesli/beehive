@@ -61,7 +61,7 @@ func (factory *TinderBeeFactory) Image() string {
 
 // LogoColor returns the preferred logo background color (used by the admin interface).
 func (factory *TinderBeeFactory) LogoColor() string {
-	return "#35465c"
+	return "#FF8742"
 }
 
 // Options returns the options available to configure this Bee.
