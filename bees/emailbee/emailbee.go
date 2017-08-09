@@ -26,8 +26,8 @@ import (
 
 	"strconv"
 
+	"github.com/go-gomail/gomail"
 	"github.com/muesli/beehive/bees"
-	gomail "gopkg.in/gomail.v2"
 )
 
 // EmailBee is a Bee that is able to send emails.
