@@ -21,8 +21,6 @@
 package actions
 
 import (
-	"net/http"
-
 	"github.com/emicklei/go-restful"
 	"github.com/muesli/beehive/bees"
 	"github.com/muesli/smolder"
@@ -53,21 +51,11 @@ func (r *ActionResource) PostParams() []*restful.Parameter {
 }
 
 // Post processes an incoming POST (create) request
-func (r *ActionResource) Post(context smolder.APIContext, request *restful.Request, response *restful.Response) {
+func (r *ActionResource) Post(context smolder.APIContext, data interface{}, request *restful.Request, response *restful.Response) {
 	resp := ActionResponse{}
 	resp.Init(context)
 
-	pps := ActionPostStruct{}
-	err := request.ReadEntity(&pps)
-	if err != nil {
-		smolder.ErrorResponseHandler(request, response, smolder.NewErrorResponse(
-			http.StatusBadRequest,
-			false,
-			"Can't parse POST data",
-			"ActionResource POST"))
-		return
-	}
-
+	pps := data.(ActionPostStruct)
 	action := bees.Action{
 		ID:      bees.UUID(),
 		Bee:     pps.Action.Bee,

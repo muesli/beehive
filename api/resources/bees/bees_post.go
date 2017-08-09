@@ -53,21 +53,11 @@ func (r *BeeResource) PostParams() []*restful.Parameter {
 }
 
 // Post processes an incoming POST (create) request
-func (r *BeeResource) Post(context smolder.APIContext, request *restful.Request, response *restful.Response) {
+func (r *BeeResource) Post(context smolder.APIContext, data interface{}, request *restful.Request, response *restful.Response) {
 	resp := BeeResponse{}
 	resp.Init(context)
 
-	pps := BeePostStruct{}
-	err := request.ReadEntity(&pps)
-	if err != nil {
-		smolder.ErrorResponseHandler(request, response, smolder.NewErrorResponse(
-			422, // Go 1.7+: http.StatusUnprocessableEntity,
-			false,
-			"Can't parse POST data",
-			"BeeResource POST"))
-		return
-	}
-
+	pps := data.(BeePostStruct)
 	c, err := bees.NewBeeConfig(pps.Bee.Name, pps.Bee.Namespace, pps.Bee.Description, pps.Bee.Options)
 	if err != nil {
 		smolder.ErrorResponseHandler(request, response, smolder.NewErrorResponse(

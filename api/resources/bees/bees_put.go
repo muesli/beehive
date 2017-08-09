@@ -21,17 +21,10 @@
 package bees
 
 import (
-	"net/http"
-
 	"github.com/emicklei/go-restful"
 	"github.com/muesli/beehive/bees"
 	"github.com/muesli/smolder"
 )
-
-// BeePutStruct holds all values of an incoming PUT request
-type BeePutStruct struct {
-	BeePostStruct
-}
 
 // PutAuthRequired returns true because all requests need authentication
 func (r *BeeResource) PutAuthRequired() bool {
@@ -49,21 +42,11 @@ func (r *BeeResource) PutParams() []*restful.Parameter {
 }
 
 // Put processes an incoming PUT (update) request
-func (r *BeeResource) Put(context smolder.APIContext, request *restful.Request, response *restful.Response) {
+func (r *BeeResource) Put(context smolder.APIContext, data interface{}, request *restful.Request, response *restful.Response) {
 	resp := BeeResponse{}
 	resp.Init(context)
 
-	pps := BeePutStruct{}
-	err := request.ReadEntity(&pps)
-	if err != nil {
-		smolder.ErrorResponseHandler(request, response, smolder.NewErrorResponse(
-			http.StatusBadRequest,
-			false,
-			"Can't parse PUT data",
-			"BeeResource PUT"))
-		return
-	}
-
+	pps := data.(BeePostStruct)
 	id := request.PathParameter("bee-id")
 	bee := bees.GetBee(id)
 	if bee == nil {

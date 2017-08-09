@@ -59,3 +59,10 @@ func (r *ChainResource) Reads() interface{} {
 func (r *ChainResource) Returns() interface{} {
 	return ChainResponse{}
 }
+
+// Validate checks an incoming request for data errors
+func (r *ChainResource) Validate(context smolder.APIContext, data interface{}, request *restful.Request) error {
+	//	ps := data.(*ChainPostStruct)
+	// FIXME
+	return nil
+}

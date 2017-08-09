@@ -53,21 +53,11 @@ func (r *ChainResource) PostParams() []*restful.Parameter {
 }
 
 // Post processes an incoming POST (create) request
-func (r *ChainResource) Post(context smolder.APIContext, request *restful.Request, response *restful.Response) {
+func (r *ChainResource) Post(context smolder.APIContext, data interface{}, request *restful.Request, response *restful.Response) {
 	resp := ChainResponse{}
 	resp.Init(context)
 
-	pps := ChainPostStruct{}
-	err := request.ReadEntity(&pps)
-	if err != nil {
-		smolder.ErrorResponseHandler(request, response, smolder.NewErrorResponse(
-			422, // Go 1.7+: http.StatusUnprocessableEntity,
-			false,
-			"Can't parse POST data",
-			"ChainResource POST"))
-		return
-	}
-
+	pps := data.(ChainPostStruct)
 	dupe := bees.GetChain(pps.Chain.Name)
 	if dupe != nil {
 		smolder.ErrorResponseHandler(request, response, smolder.NewErrorResponse(

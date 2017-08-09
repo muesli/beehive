@@ -60,3 +60,10 @@ func (r *BeeResource) Reads() interface{} {
 func (r *BeeResource) Returns() interface{} {
 	return BeeResponse{}
 }
+
+// Validate checks an incoming request for data errors
+func (r *BeeResource) Validate(context smolder.APIContext, data interface{}, request *restful.Request) error {
+	//	ps := data.(*BeePostStruct)
+	// FIXME
+	return nil
+}

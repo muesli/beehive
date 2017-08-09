@@ -58,3 +58,10 @@ func (r *ActionResource) Reads() interface{} {
 func (r *ActionResource) Returns() interface{} {
 	return ActionResponse{}
 }
+
+// Validate checks an incoming request for data errors
+func (r *ActionResource) Validate(context smolder.APIContext, data interface{}, request *restful.Request) error {
+	//	ps := data.(*ActionPostStruct)
+	// FIXME
+	return nil
+}
