@@ -63,7 +63,7 @@ func (filter *TemplateFilter) Passes(data interface{}, value interface{}) bool {
 			panic(err)
 		}
 
-		return res.String() == "true"
+		return strings.TrimSpace(res.String()) == "true"
 	}
 
 	return false
