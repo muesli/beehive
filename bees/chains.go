@@ -21,7 +21,7 @@
 // Package bees is Beehive's central module system.
 package bees
 
-import log "github.com/Sirupsen/logrus"
+import log "github.com/sirupsen/logrus"
 
 // ChainElement is an element in a Chain
 type ChainElement struct {

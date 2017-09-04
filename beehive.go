@@ -31,8 +31,8 @@ import (
 	"os/signal"
 	"syscall"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/mattn/go-colorable"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/muesli/beehive/api"
 	"github.com/muesli/beehive/app"

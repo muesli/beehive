@@ -31,9 +31,9 @@ import (
 	"strings"
 	"time"
 
-	log "github.com/Sirupsen/logrus"
 	"github.com/emicklei/go-restful"
 	"github.com/muesli/smolder"
+	log "github.com/sirupsen/logrus"
 
 	bee "github.com/muesli/beehive/bees"
 

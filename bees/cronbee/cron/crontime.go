@@ -33,7 +33,7 @@ import (
 	"container/list"
 	"time"
 
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
 
 type crontime struct {

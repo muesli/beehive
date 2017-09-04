@@ -28,7 +28,7 @@ import (
 	"strconv"
 	"strings"
 
-	log "github.com/Sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
 
 // ParseInput parses the input and returns a pointer to the generated datastructure.
