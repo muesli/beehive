@@ -55,7 +55,7 @@ func (r *ActionResource) Post(context smolder.APIContext, data interface{}, requ
 	resp := ActionResponse{}
 	resp.Init(context)
 
-	pps := data.(ActionPostStruct)
+	pps := data.(*ActionPostStruct)
 	action := bees.Action{
 		ID:      bees.UUID(),
 		Bee:     pps.Action.Bee,

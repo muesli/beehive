@@ -57,7 +57,7 @@ func (r *ChainResource) Post(context smolder.APIContext, data interface{}, reque
 	resp := ChainResponse{}
 	resp.Init(context)
 
-	pps := data.(ChainPostStruct)
+	pps := data.(*ChainPostStruct)
 	dupe := bees.GetChain(pps.Chain.Name)
 	if dupe != nil {
 		smolder.ErrorResponseHandler(request, response, smolder.NewErrorResponse(

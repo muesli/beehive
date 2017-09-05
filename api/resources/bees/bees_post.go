@@ -57,7 +57,7 @@ func (r *BeeResource) Post(context smolder.APIContext, data interface{}, request
 	resp := BeeResponse{}
 	resp.Init(context)
 
-	pps := data.(BeePostStruct)
+	pps := data.(*BeePostStruct)
 	c, err := bees.NewBeeConfig(pps.Bee.Name, pps.Bee.Namespace, pps.Bee.Description, pps.Bee.Options)
 	if err != nil {
 		smolder.ErrorResponseHandler(request, response, smolder.NewErrorResponse(

@@ -46,7 +46,7 @@ func (r *BeeResource) Put(context smolder.APIContext, data interface{}, request 
 	resp := BeeResponse{}
 	resp.Init(context)
 
-	pps := data.(BeePostStruct)
+	pps := data.(*BeePostStruct)
 	id := request.PathParameter("bee-id")
 	bee := bees.GetBee(id)
 	if bee == nil {

@@ -53,7 +53,7 @@ func (r *BeeResource) Register(container *restful.Container, config smolder.APIC
 
 // Reads returns the model that will be read by POST, PUT & PATCH operations
 func (r *BeeResource) Reads() interface{} {
-	return BeePostStruct{}
+	return &BeePostStruct{}
 }
 
 // Returns returns the model that will be returned

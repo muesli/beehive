@@ -51,7 +51,7 @@ func (r *ActionResource) Register(container *restful.Container, config smolder.A
 
 // Reads returns the model that will be read by POST, PUT & PATCH operations
 func (r *ActionResource) Reads() interface{} {
-	return ActionPostStruct{}
+	return &ActionPostStruct{}
 }
 
 // Returns returns the model that will be returned
