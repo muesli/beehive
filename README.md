@@ -66,12 +66,12 @@ email-Bee for your private mail account, and another one for your work email.
 ### Creating Bees
 
 Sounds complicated? It's not! Just for fun, let's setup Beehive to send us an
-email whenever an RSS feed gets updated. Start ```beehive``` and open <http://localhost:8181/>
-in your browser. Note that Beehive will create a config file ```beehive.conf```
+email whenever an RSS feed gets updated. Start `beehive` and open <http://localhost:8181/>
+in your browser. Note that Beehive will create a config file `beehive.conf`
 in its current working directory, unless you specify a different file with the
-```-config``` option.
+`-config` option.
 
-Note: You currently have to start ```beehive``` from within $GOPATH/src/github.com/muesli/beehive
+Note: You currently have to start `beehive` from within $GOPATH/src/github.com/muesli/beehive
 in order for it to find all the resources for the admin interface. Also see the
 Troubleshooting & Notes section of this README.
 
@@ -95,10 +95,10 @@ content to something like:
 Title: {{.title}} - Link: {{index .links 0}}
 ```
 
-Whenever this action gets executed, Beehive will replace ```{{.title}}``` with
-the RSS event's ```title``` parameter, which is the title of the feed item it
-retrieved. In the same manner ```{{index .links 0}}``` becomes the first URL of
-this event's ```links``` array.
+Whenever this action gets executed, Beehive will replace `{{.title}}` with
+the RSS event's `title` parameter, which is the title of the feed item it
+retrieved. In the same manner `{{index .links 0}}` becomes the first URL of
+this event's `links` array.
 
 ![New Chain](https://github.com/muesli/beehive-docs/raw/master/screencaps/new_chain.gif)
 
@@ -115,9 +115,9 @@ When using `make noembed`, Beehive tries to find those files
 in its current working directory, so it's currently recommended to start Beehive from
 within its git repository, if you plan to use the web interface.
 
-Should you still not be able to reach the web interface, check if the ```config```
+Should you still not be able to reach the web interface, check if the `config`
 directory in the git repository is empty. If that's the case, make sure the
-git submodules get initialized by running ```git submodule update --init```.
+git submodules get initialized by running `git submodule update --init`.
 
 The web interface does *not* require authentication yet. Beehive currently
 accepts all connections from the loopback device *only*.
