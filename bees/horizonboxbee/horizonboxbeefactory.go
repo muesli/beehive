@@ -51,7 +51,7 @@ func (factory *HorizonBoxBeeFactory) Name() string {
 
 // Description returns the description of this Bee.
 func (factory *HorizonBoxBeeFactory) Description() string {
-	return "A module observing the state of a UnityMedia HorizonBox for beehive"
+	return "A bee observing the state of a UnityMedia HorizonBox"
 }
 
 // // Image returns the filename of an image for this Bee.
