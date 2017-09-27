@@ -34,6 +34,7 @@ import (
 	_ "github.com/muesli/beehive/bees/fsnotifybee"
 	_ "github.com/muesli/beehive/bees/githubbee"
 	_ "github.com/muesli/beehive/bees/gitterbee"
+	_ "github.com/muesli/beehive/bees/horizonboxbee"
 	_ "github.com/muesli/beehive/bees/htmlextractbee"
 	_ "github.com/muesli/beehive/bees/httpbee"
 	_ "github.com/muesli/beehive/bees/huebee"
