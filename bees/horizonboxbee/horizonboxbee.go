@@ -41,6 +41,7 @@ type HorizonBoxBee struct {
 	address  string
 	user     string
 	password string
+	interval int
 
 	State     HorizonBoxBeeState
 	eventChan chan bees.Event
@@ -140,7 +141,7 @@ func (mod *HorizonBoxBee) Run(cin chan bees.Event) {
 		case <-mod.SigChan:
 			return
 
-		case <-time.After(time.Duration(10 * time.Second)):
+		case <-time.After(time.Duration(mod.interval) * time.Second):
 			mod.poll()
 		}
 	}
@@ -158,4 +159,5 @@ func (mod *HorizonBoxBee) ReloadOptions(options bees.BeeOptions) {
 	options.Bind("address", &mod.address)
 	options.Bind("user", &mod.user)
 	options.Bind("password", &mod.password)
+	options.Bind("interval", &mod.interval)
 }

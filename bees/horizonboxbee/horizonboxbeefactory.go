@@ -84,6 +84,13 @@ func (factory *HorizonBoxBeeFactory) Options() []bees.BeeOptionDescriptor {
 			Type:        "password",
 			Mandatory:   true,
 		},
+		{
+			Name:        "interval",
+			Description: "State polling interval in seconds",
+			Type:        "int",
+			Default:     60,
+			Mandatory:   true,
+		},
 	}
 	return opts
 }
