@@ -56,7 +56,7 @@ func (mod *HorizonBoxBee) poll() {
 
 	req, err := http.NewRequest("POST", "http://"+mod.address+"/cgi-bin/sendResult.cgi?section=login", strings.NewReader(v.Encode()))
 	if err != nil {
-		mod.LogErrorf("http.NewRequest() error: %v\n", err)
+		mod.LogErrorf("http.NewRequest() error: %v", err)
 		return
 	}
 	req.Header.Add("Content-Type", "application/x-www-form-urlencoded; charset=utf-8")
@@ -68,7 +68,7 @@ func (mod *HorizonBoxBee) poll() {
 
 	resp, err := c.Do(req)
 	if err != nil {
-		mod.LogErrorf("Could not connect to: %s", mod.address, err)
+		mod.LogErrorf("Could not connect to %s: %v", mod.address, err)
 		return
 	}
 
