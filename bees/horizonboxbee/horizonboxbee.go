@@ -147,11 +147,6 @@ func (mod *HorizonBoxBee) Run(cin chan bees.Event) {
 	}
 }
 
-// Action triggers the action passed to it.
-func (mod *HorizonBoxBee) Action(action bees.Action) []bees.Placeholder {
-	return []bees.Placeholder{}
-}
-
 // ReloadOptions parses the config options and initializes the Bee.
 func (mod *HorizonBoxBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
