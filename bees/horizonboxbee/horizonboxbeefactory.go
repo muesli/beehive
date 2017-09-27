@@ -118,7 +118,7 @@ func (factory *HorizonBoxBeeFactory) Events() []bees.EventDescriptor {
 				{
 					Name:        "new_external_ip",
 					Description: "The new external ip",
-					Type:        "string",
+					Type:        "address",
 				},
 			},
 		},

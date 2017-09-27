@@ -110,7 +110,7 @@ func (mod *HorizonBoxBee) announceIpChange(ip string) {
 		Options: []bees.Placeholder{
 			{
 				Name:  "new_external_ip",
-				Type:  "string",
+				Type:  "address",
 				Value: ip,
 			},
 		},
