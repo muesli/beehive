@@ -1,0 +1,26 @@
+#!/bin/bash
+# Build "native" desktop app using nativefier
+# https://github.com/jiahaog/nativefier
+set -e
+
+if !which nativefier >/dev/null 2>&1; then
+  echo "nativefier not found!" >&2
+  echo "npm install -g nativifier" >&2
+  exit 1
+fi
+
+export BASE_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")/../" && pwd )"
+export OS_NAME=$(node -e "console.log(os.platform())")
+export OS_ARCH=$(node -e "console.log(os.arch())")
+
+if [ ! -f $BASE_PATH/script/build-app-$OS_NAME ]; then
+  echo "$OS_NAME is not currently supported." >&2
+  exit 1
+fi
+
+if [ ! -f beehive ]; then
+  echo "Run 'make embed' first." >&2
+  exit 1
+fi
+
+$BASE_PATH/script/build-app-$OS_NAME

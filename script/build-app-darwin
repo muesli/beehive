@@ -1,0 +1,70 @@
+#!/bin/bash
+set -e
+
+cleanup_macos() {
+  if [ -f "$icns_file" ]; then
+    rm -f $icns_file
+  fi
+}
+
+trap cleanup_macos EXIT
+
+ELECTRON_VERSION=${ELECTRON_VERSION:-1.6.14}
+BIN_PATH=build/app/Beehive-$OS_NAME-$OS_ARCH/Beehive.app/Contents/MacOS
+RES_PATH=build/app/Beehive-$OS_NAME-$OS_ARCH/Beehive.app/Contents/Resources
+icns_file=$($BASE_PATH/script/build-icns)
+nativefier -e $ELECTRON_VERSION --icon $icns_file --name Beehive http://localhost:8181 $BASE_PATH/build/app
+mkdir -p $RES_PATH
+cp beehive $BIN_PATH/beehived
+chmod +x $BIN_PATH/beehived
+mv $BIN_PATH/Beehive $BIN_PATH/Beehive.bin
+
+cat > $BIN_PATH/Beehive << "EOF"
+#!/bin/bash
+set -e
+
+BASE_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd )"
+RES_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")/../Resources" && pwd )"
+LIBRARY_PATH=$HOME/Library/Application\ Support/Beehive
+LA_PLIST=$HOME/Library/LaunchAgents/com.github.muesli.beehive.plist
+mkdir -p "$LIBRARY_PATH"
+cp $RES_PATH/launchagent.plist $LA_PLIST
+sed -i '' s/@@user@@/$USER/ $LA_PLIST
+sed -i '' s,@@bin_path@@,$BASE_PATH/beehived, $LA_PLIST
+launchctl load $LA_PLIST
+# Wait a bit for beehived to be ready
+for i in $(seq 20); do
+  s=$(curl -s -o /dev/null -w "%{http_code}" localhost:8181)
+  [ "$s" = 200 ] && break
+  sleep 0.1
+done
+$BASE_PATH/Beehive.bin
+EOF
+chmod +x build/app/Beehive-$OS_NAME-$OS_ARCH/Beehive.app/Contents/MacOS/Beehive
+
+cat > $RES_PATH/launchagent.plist << "EOF"
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.muesli.beehive</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>@@bin_path@@</string>
+    <string>--config</string>
+    <string>/Users/@@user@@/Library/Application Support/Beehive/beehive.conf</string>
+  </array>
+
+  <key>KeepAlive</key>
+  <true/>
+
+  <key>LowPriorityIO</key>
+  <true/>
+
+  <key>ProcessType</key>
+  <string>Background</string>
+</dict>
+</plist>
+EOF
