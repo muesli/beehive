@@ -24,7 +24,8 @@ package openweathermapbee
 
 import (
 	"github.com/muesli/beehive/bees"
-	owm "github.com/penguwin/openweathermap"
+
+	owm "github.com/briandowns/openweathermap"
 )
 
 // OpenweathermapBee is a Bee that can chat with cleverbot
