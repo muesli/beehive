@@ -23,7 +23,8 @@ package openweathermapbee
 
 import (
 	"github.com/muesli/beehive/bees"
-	owm "github.com/penguwin/openweathermap"
+
+	owm "github.com/briandowns/openweathermap"
 )
 
 // TriggerCurrentWeatherEvent triggers all current weather events
