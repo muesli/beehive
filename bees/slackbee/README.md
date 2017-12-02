@@ -26,7 +26,7 @@ The [Slack](https://slack.com) bee can send and listen to messages in a Slack ch
 ]
 ```
 
-**apiKey**: Slack API Key. You can get one from https://api.slack.com/docs/oauth-test-tokens.
+**apiKey**: Slack API Key. You can get one from <https://api.slack.com/docs/oauth-test-tokens>.
 
 The API key can be added to the recipe/config as-is, via environment variable (`env://MY_API_KEY`) or read from a file (`file:///Users/rubiojr/.slack_key`).
 
@@ -59,4 +59,4 @@ The API key can be added to the recipe/config as-is, via environment variable (`
 
 ## Credits
 
-Slack logo: https://remoteworkspain.slack.com/brand-guidelines
+Slack logo: <https://remoteworkspain.slack.com/brand-guidelines>

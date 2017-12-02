@@ -34,7 +34,7 @@ The [Twilio](https://twilio.com) bee can send SMS messages to a phone.
 ]
 ```
 
-**account_sid** and **auth_token**: Twilio Account SID and Authentication Token. You can sign up and get them from https://www.twilio.com/try-twilio.
+**account_sid** and **auth_token**: Twilio Account SID and Authentication Token. You can sign up and get them from <https://www.twilio.com/try-twilio>.
 
 These can be added to the recipe/config as-is (`XXXXXXXX`), via environment variable (`env://MY_ACCOUNT_SID`) or read from a file (`file:///home/james//.twilio_config`).
 
@@ -63,4 +63,4 @@ These can be added to the recipe/config as-is (`XXXXXXXX`), via environment vari
 
 ## Credits
 
-Twilio logo: https://www.twilio.com/press
+Twilio logo: <https://www.twilio.com/press>
