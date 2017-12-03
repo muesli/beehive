@@ -1,6 +1,7 @@
-# FSNotify bee
+# FSNotify Bee
 
-Monitors filesystem paths and sends events when files are created, removed or modified.
+Monitors filesystem paths and sends events when files are created, removed or
+modified.
 
 ## Configuration
 

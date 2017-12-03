@@ -1,8 +1,10 @@
-# AlertOver bee
+# AlertOver Bee
 
-This bee can push notification to your iOS or Android device or extension in Chrome as an action to some event.
+This bee can push notification to your iOS or Android device or extension in
+Chrome as an action to some event.
 
-You can get your **SOURCE-KEY** and **RECEIVER-KEY** from: <https://www.alertover.com/pages/api>
+You can get your **SOURCE-KEY** and **RECEIVER-KEY** from:
+<https://www.alertover.com/pages/api>
 
 ## APP
 
@@ -12,9 +14,11 @@ You can get your **SOURCE-KEY** and **RECEIVER-KEY** from: <https://www.alertove
 
 ## Configuration
 
-The SOURCE-KEY, RECEIVER-KEY and message content are mandatory. If the message's title is empty, it would be replaced by AlertOver.
+The SOURCE-KEY, RECEIVER-KEY and message content are mandatory. If the
+message's title is empty, it would be replaced by AlertOver.
 
-The priority of the message is option, 0 for normal and 1 for emergency, 0 and 1 is string.
+The priority of the message is option, 0 for normal and 1 for emergency, 0 and
+1 is string.
 
 ### Options
 

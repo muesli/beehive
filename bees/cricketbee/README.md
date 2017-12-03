@@ -1,4 +1,4 @@
-# Cricket bee
+# Cricket Bee
 
 ## Options
 

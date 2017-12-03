@@ -1,4 +1,4 @@
-# Pastebin bee
+# Pastebin Bee
 
 This bee can post some text on pastebin as an action to some event.
 
@@ -6,7 +6,8 @@ You can get your **api developer key** from: <http://pastebin.com/api>
 
 ## Configuration
 
-Due to admin interface limitations here are available options for exposure and expiration of the paste:
+Due to admin interface limitations here are available options for exposure and
+expiration of the paste:
 
 - exposure:
 
