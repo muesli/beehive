@@ -17,5 +17,4 @@ WORKDIR /go/src/github.com/muesli/beehive
 VOLUME /conf
 
 # This form of ENTRYPOINT allows the beehive process to catch signals from the `docker stop` command
-ENTRYPOINT ["beehive", "-config", "/conf/beehive.conf", "-bind", "0.0.0.0:8181", "-canonicalurl", ${CANONICAL_URL}]
-
+ENTRYPOINT beehive -config /conf/beehive.conf -bind 0.0.0.0:8181 -canonicalurl ${CANONICAL_URL}
