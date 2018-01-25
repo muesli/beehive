@@ -34,7 +34,7 @@ type EFABee struct {
 	bees.Bee
 
 	Provider string
-	efa      *goefa.EFAProvider
+	efa      *goefa.Provider
 
 	eventChan chan bees.Event
 }
@@ -49,12 +49,12 @@ func (mod *EFABee) Action(action bees.Action) []bees.Placeholder {
 		action.Options.Bind("stop", &stop)
 
 		//FIXME get departures
-		_, station, err := mod.efa.FindStop(stop)
+		station, err := mod.efa.FindStop(stop)
 		if err != nil {
 			mod.Logln("Stop does not exist or name is not unique!")
 			return outs
 		}
-		mod.Logf("Selected stop: %s (%d)", station[0].Name, station[0].Id)
+		mod.Logf("Selected stop: %s (%d)", station[0].Name, station[0].ID)
 
 		departures, err := station[0].Departures(time.Now(), 3)
 		if err != nil {
@@ -62,11 +62,17 @@ func (mod *EFABee) Action(action bees.Action) []bees.Placeholder {
 			return outs
 		}
 		for _, departure := range departures {
+			destStop, err := mod.efa.Stop(departure.ServingLine.DestStopID)
+			if err != nil {
+				mod.Logln("Could not retrieve destination stop")
+				return outs
+			}
+
 			mod.Logf("Route %-5s due in %-2d minute%s --> %s",
 				departure.ServingLine.Number,
-				departure.Countdown,
+				departure.CountDown,
 				"s",
-				departure.ServingLine.Direction)
+				destStop.Name)
 
 			ev := bees.Event{
 				Bee:  mod.Name(),
@@ -80,7 +86,7 @@ func (mod *EFABee) Action(action bees.Action) []bees.Placeholder {
 					{
 						Name:  "eta",
 						Type:  "int",
-						Value: departure.Countdown,
+						Value: departure.CountDown,
 					},
 					{
 						Name:  "etatime",
@@ -95,7 +101,7 @@ func (mod *EFABee) Action(action bees.Action) []bees.Placeholder {
 					{
 						Name:  "destination",
 						Type:  "string",
-						Value: departure.ServingLine.Direction,
+						Value: destStop.Name,
 					},
 				},
 			}
@@ -119,5 +125,5 @@ func (mod *EFABee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
 	options.Bind("provider", &mod.Provider)
-	mod.efa, _ = goefa.ProviderFromJson(mod.Provider)
+	mod.efa = goefa.NewProvider(mod.Provider, true)
 }

@@ -69,8 +69,8 @@ func (factory *EFABeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
 			Name:        "provider",
-			Description: "Provider-ID for the EFA API, e.g. 'avv'",
-			Type:        "string",
+			Description: "Base URL for the EFA API, e.g. 'http://efa.mvv-muenchen.de/mvv/'",
+			Type:        "url",
 			Mandatory:   true,
 		},
 	}
