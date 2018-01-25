@@ -54,7 +54,7 @@ func (bee *S3Bee) Action(action bees.Action) []bees.Placeholder {
 			objectPath = filepath.Base(path)
 		}
 
-		_, err := bee.client.FPutObject(bucket, objectPath, path, mime.TypeByExtension(filepath.Ext(path)))
+		_, err := bee.client.FPutObject(bucket, objectPath, path, minio.PutObjectOptions{ContentType: mime.TypeByExtension(filepath.Ext(path))})
 		if err != nil {
 			bee.LogFatal(err)
 		}
