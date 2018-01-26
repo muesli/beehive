@@ -1,4 +1,4 @@
-# Twilio bee
+# Twilio Bee
 
 The [Twilio](https://twilio.com) bee can send SMS messages to a phone.
 
@@ -34,17 +34,22 @@ The [Twilio](https://twilio.com) bee can send SMS messages to a phone.
 ]
 ```
 
-**account_sid** and **auth_token**: Twilio Account SID and Authentication Token. You can sign up and get them from https://www.twilio.com/try-twilio.
+**account_sid** and **auth_token**: Twilio Account SID and Authentication
+Token. You can sign up and get them from <https://www.twilio.com/try-twilio>.
 
-These can be added to the recipe/config as-is (`XXXXXXXX`), via environment variable (`env://MY_ACCOUNT_SID`) or read from a file (`file:///home/james//.twilio_config`).
+These can be added to the recipe/config as-is (`XXXXXXXX`), via environment
+variable (`env://MY_ACCOUNT_SID`) or read from a file
+(`file:///home/james//.twilio_config`).
 
-**from_number**: Your Twilio phone number. Must be in the format `+15558675309`.
+**from_number**: Your Twilio phone number. Must be in the format
+`+15558675309`.
 
 **to_number**: The phone number to send an SMS message to.
 
 ### Actions
 
-**send**: send an SMS message. Needs the body of the message to send. You can use interpolation to send somthing from the event received:
+**send**: send an SMS message. Needs the body of the message to send. You can
+use interpolation to send somthing from the event received:
 
 ```json
 "Actions": [
@@ -63,4 +68,4 @@ These can be added to the recipe/config as-is (`XXXXXXXX`), via environment vari
 
 ## Credits
 
-Twilio logo: https://www.twilio.com/press
+Twilio logo: <https://www.twilio.com/press>
