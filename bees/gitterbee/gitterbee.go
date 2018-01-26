@@ -61,7 +61,7 @@ func (mod *GitterBee) Action(action bees.Action) []bees.Placeholder {
 			return outs
 		}
 
-		if err = mod.client.SendMessage(roomID, message); err != nil {
+		if _, err = mod.client.SendMessage(roomID, message); err != nil {
 			mod.LogErrorf("Failed to send message:", err)
 			return outs
 		}
