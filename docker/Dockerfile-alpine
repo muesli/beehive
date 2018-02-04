@@ -7,7 +7,6 @@ ENV URL=http://localhost:8181
 
 # Install dependencies and beehive
 RUN apk add --no-cache git build-base --no-cache && \
-    go get github.com/muesli/beehive && \
     rm -rf /var/cache/apk/* &&\ 
     go get github.com/muesli/beehive
     
