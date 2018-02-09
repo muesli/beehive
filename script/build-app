@@ -5,7 +5,7 @@ set -e
 
 if !which nativefier >/dev/null 2>&1; then
   echo "nativefier not found!" >&2
-  echo "npm install -g nativifier" >&2
+  echo "npm install -g nativefier" >&2
   exit 1
 fi
 
