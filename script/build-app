@@ -12,6 +12,7 @@ fi
 export BASE_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")/../" && pwd )"
 export OS_NAME=$(node -e "console.log(os.platform())")
 export OS_ARCH=$(node -e "console.log(os.arch())")
+export ELECTRON_VERSION=${ELECTRON_VERSION:-1.8.2}
 
 if [ ! -f $BASE_PATH/script/build-app-$OS_NAME ]; then
   echo "$OS_NAME is not currently supported." >&2

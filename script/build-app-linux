@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+
+cleanup_linux() {
+  true
+}
+
+trap cleanup_linux EXIT
+
+nativefier -e $ELECTRON_VERSION --name Beehive http://localhost:8181 build/app
+mkdir -p build/app
+cp beehive build/app
+chmod +x build/app/beehive

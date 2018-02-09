@@ -9,7 +9,6 @@ cleanup_macos() {
 
 trap cleanup_macos EXIT
 
-ELECTRON_VERSION=${ELECTRON_VERSION:-1.6.14}
 BIN_PATH=build/app/Beehive-$OS_NAME-$OS_ARCH/Beehive.app/Contents/MacOS
 RES_PATH=build/app/Beehive-$OS_NAME-$OS_ARCH/Beehive.app/Contents/Resources
 icns_file=$($BASE_PATH/script/build-icns)
