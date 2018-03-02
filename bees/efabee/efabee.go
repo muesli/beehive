@@ -1,5 +1,5 @@
 /*
- *    Copyright (C) 2014-2017 Christian Muehlhaeuser
+ *    Copyright (C) 2014-2018 Christian Muehlhaeuser
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License as published
@@ -44,6 +44,93 @@ func (mod *EFABee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 
 	switch action.Name {
+	case "directions":
+		var originParam, destParam string
+		action.Options.Bind("origin", &originParam)
+		action.Options.Bind("destination", &destParam)
+
+		origin, err := mod.efa.FindStop(originParam)
+		if err != nil {
+			mod.Logln("Origin does not exist or name is not unique!")
+			return outs
+		}
+		mod.Logf("Selected origin: %s (%d)", origin[0].Name, origin[0].ID)
+
+		destination, err := mod.efa.FindStop(destParam)
+		if err != nil {
+			mod.Logln("Destination does not exist or name is not unique!")
+			return outs
+		}
+		mod.Logf("Selected destination: %s (%d)", destination[0].Name, destination[0].ID)
+
+		routes, err := mod.efa.Route(origin[0].ID, destination[0].ID, time.Now())
+		for _, route := range routes {
+			mod.Logf("Trip duration: %s, %d transfers\n", route.ArrivalTime.Sub(route.DepartureTime), len(route.Trips)-1)
+			for _, trip := range route.Trips {
+				origin, err := mod.efa.Stop(trip.OriginID)
+				if err != nil {
+					mod.LogErrorf("%s", err)
+					return outs
+				}
+				dest, err := mod.efa.Stop(trip.DestinationID)
+				if err != nil {
+					mod.LogErrorf("%s", err)
+					return outs
+				}
+
+				ev := bees.Event{
+					Bee:  mod.Name(),
+					Name: "trip",
+					Options: []bees.Placeholder{
+						{
+							Name:  "mottype",
+							Type:  "string",
+							Value: trip.MeansOfTransport.MotType.String(),
+						},
+						{
+							Name:  "arrival_time",
+							Type:  "string",
+							Value: trip.ArrivalTime.Format("15:04"),
+						},
+						{
+							Name:  "departure_time",
+							Type:  "string",
+							Value: trip.DepartureTime.Format("15:04"),
+						},
+						{
+							Name:  "route",
+							Type:  "string",
+							Value: trip.MeansOfTransport.Number,
+						},
+						{
+							Name:  "origin",
+							Type:  "string",
+							Value: origin.Name,
+						},
+						{
+							Name:  "destination",
+							Type:  "string",
+							Value: dest.Name,
+						},
+						{
+							Name:  "origin_platform",
+							Type:  "string",
+							Value: trip.OriginPlatform,
+						},
+						{
+							Name:  "destination_platform",
+							Type:  "string",
+							Value: trip.DestinationPlatform,
+						},
+					},
+				}
+				mod.eventChan <- ev
+			}
+
+			// only post one trip for now
+			break
+		}
+
 	case "departures":
 		stop := ""
 		action.Options.Bind("stop", &stop)

@@ -1,5 +1,5 @@
 /*
- *    Copyright (C) 2014-2017 Christian Muehlhaeuser
+ *    Copyright (C) 2014-2018 Christian Muehlhaeuser
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License as published
@@ -112,6 +112,53 @@ func (factory *EFABeeFactory) Events() []bees.EventDescriptor {
 				},
 			},
 		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "trip",
+			Description: "A trip between two stops has been retrieved",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "arrival_time",
+					Description: "Expected time of arrival in minutes",
+					Type:        "string",
+				},
+				{
+					Name:        "departure_time",
+					Description: "Expected departure time",
+					Type:        "string",
+				},
+				{
+					Name:        "route",
+					Description: "Route number",
+					Type:        "string",
+				},
+				{
+					Name:        "origin",
+					Description: "Origin",
+					Type:        "string",
+				},
+				{
+					Name:        "destination",
+					Description: "Destination",
+					Type:        "string",
+				},
+				{
+					Name:        "origin_platform",
+					Description: "Origin Platform",
+					Type:        "string",
+				},
+				{
+					Name:        "destination_platform",
+					Description: "Destination Platform",
+					Type:        "string",
+				},
+				{
+					Name:        "mottype",
+					Description: "Transportation type",
+					Type:        "string",
+				},
+			},
+		},
 	}
 	return events
 }
@@ -127,6 +174,25 @@ func (factory *EFABeeFactory) Actions() []bees.ActionDescriptor {
 				{
 					Name:        "stop",
 					Description: "The stop you want departures for",
+					Type:        "string",
+					Mandatory:   true,
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "directions",
+			Description: "Retrieves directions to get from A to B",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "origin",
+					Description: "Where to depart from",
+					Type:        "string",
+					Mandatory:   true,
+				},
+				{
+					Name:        "destination",
+					Description: "Where to travel to",
 					Type:        "string",
 					Mandatory:   true,
 				},
