@@ -177,6 +177,12 @@ func (factory *EFABeeFactory) Actions() []bees.ActionDescriptor {
 					Type:        "string",
 					Mandatory:   true,
 				},
+				{
+					Name:        "amount",
+					Description: "The amount of departures you want (Default: 3)",
+					Type:        "int",
+					Mandatory:   false,
+				},
 			},
 		},
 		{

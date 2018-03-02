@@ -133,7 +133,9 @@ func (mod *EFABee) Action(action bees.Action) []bees.Placeholder {
 
 	case "departures":
 		stop := ""
+		amount := 3
 		action.Options.Bind("stop", &stop)
+		action.Options.Bind("amount", &amount)
 
 		//FIXME get departures
 		station, err := mod.efa.FindStop(stop)
@@ -143,7 +145,7 @@ func (mod *EFABee) Action(action bees.Action) []bees.Placeholder {
 		}
 		mod.Logf("Selected stop: %s (%d)", station[0].Name, station[0].ID)
 
-		departures, err := station[0].Departures(time.Now(), 3)
+		departures, err := station[0].Departures(time.Now(), amount)
 		if err != nil {
 			mod.Logln("Could not retrieve departure times!")
 			return outs
