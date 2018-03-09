@@ -147,16 +147,16 @@
   revision = "7e72d56770d0bd0c46a5ddea914202f14ab1e8a8"
 
 [[projects]]
-  name = "github.com/go-gomail/gomail"
-  packages = ["."]
-  revision = "41f3572897373c5538c50a2402db15db079fa4fd"
-  version = "2.0.0"
-
-[[projects]]
   name = "github.com/go-ini/ini"
   packages = ["."]
   revision = "32e4c1e6bc4e7d0d8451aa6b75200d19e37a536a"
   version = "v1.32.0"
+
+[[projects]]
+  name = "github.com/go-mail/mail"
+  packages = ["."]
+  revision = "63235f23494bf20d713a585bce40b2a0675c2f77"
+  version = "2.2.0"
 
 [[projects]]
   name = "github.com/go-telegram-bot-api/telegram-bot-api"
@@ -494,6 +494,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "6d43314e4eadb74d401adb63cad24697fa2d9b7e8ba87a8674dd6b34e8ca4de4"
+  inputs-digest = "2d1f2598e4ed430668b5210033548ac818350bf08c202514622bd12a5bbeac87"
   solver-name = "gps-cdcl"
   solver-version = 1

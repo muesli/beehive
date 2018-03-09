@@ -78,10 +78,6 @@
   name = "github.com/glaxx/go_pastebin"
 
 [[constraint]]
-  name = "github.com/go-gomail/gomail"
-  version = "2.0.0"
-
-[[constraint]]
   name = "github.com/go-telegram-bot-api/telegram-bot-api"
   version = "4.6.1"
 
