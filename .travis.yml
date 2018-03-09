@@ -11,6 +11,14 @@ go:
   - "1.10.x"
   - tip
 
+env:
+  - DEP_VERSION=0.4.1
+
+before_install:
+  # Download the dep binary to the bin folder in $GOPATH
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then curl -sL https://github.com/golang/dep/releases/download/v${DEP_VERSION}/dep-linux-amd64 -o $GOPATH/bin/dep; chmod +x $GOPATH/bin/dep; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install dep; fi
+
 notifications:
   webhooks:
     urls:
