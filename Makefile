@@ -26,7 +26,7 @@ test:
 	go test -v $(shell go list ./... | grep -v vendor/)
 
 get-deps:
-	go get -t -d $(shell go list ./... | grep -v vendor/)
+	dep ensure
 
 clean:
 	rm -f beehive
