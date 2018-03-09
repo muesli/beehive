@@ -26,7 +26,7 @@ package rssbee
 import (
 	"time"
 
-	rss "github.com/jteeuwen/go-pkg-rss"
+	rss "github.com/muesli/go-pkg-rss"
 
 	"github.com/muesli/beehive/bees"
 )
