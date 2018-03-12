@@ -12,7 +12,8 @@ go:
   - tip
 
 env:
-  - DEP_VERSION=0.4.1
+  global:
+    - DEP_VERSION=0.4.1
 
 before_install:
   # Download the dep binary to the bin folder in $GOPATH
