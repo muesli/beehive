@@ -29,11 +29,13 @@ Beehive requires Go 1.7 or higher. Make sure you have a working Go environment. 
 
 The recommended way is to fetch the sources and run make:
 
-    go get github.com/muesli/beehive
-    cd $GOPATH/src/github.com/muesli/beehive
+    git clone https://github.com/muesli/beehive.git
+    cd beehive
+    make get-deps
     make
 
-You can build and install the `beehive` binary like other Go binaries out there (`go get -u`)
+This requires [dep](https://github.com/golang/dep) to be installed on your system.
+You can build and install the `beehive` binary like other Go binaries out there (`go get`)
 but you'll need to make sure beehive can find the assets (images, javascript, css, etc).
 See the Troubleshooting/Notes section for additional details.
 
