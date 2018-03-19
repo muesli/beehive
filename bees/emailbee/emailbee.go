@@ -26,7 +26,7 @@ import (
 
 	"strconv"
 
-	"github.com/go-gomail/gomail"
+	"github.com/go-mail/mail"
 	"github.com/muesli/beehive/bees"
 )
 
@@ -52,7 +52,7 @@ func (mod *EmailBee) Action(action bees.Action) []bees.Placeholder {
 		action.Options.Bind("text", &plainText)
 		action.Options.Bind("html", &htmlText)
 
-		m := gomail.NewMessage()
+		m := mail.NewMessage()
 		if len(from) > 0 {
 			m.SetHeader("From", from)
 		} else {
@@ -73,10 +73,10 @@ func (mod *EmailBee) Action(action bees.Action) []bees.Placeholder {
 			portstr = "587"
 		}
 		port, _ := strconv.Atoi(portstr)
-		s, _ := gomail.NewDialer(host, port, mod.username, mod.password).Dial()
+		s, _ := mail.NewDialer(host, port, mod.username, mod.password).Dial()
 
 		// Send the email.
-		if err := gomail.Send(s, m); err != nil {
+		if err := mail.Send(s, m); err != nil {
 			panic(err)
 		}
 
