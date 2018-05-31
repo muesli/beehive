@@ -27,16 +27,16 @@ Beehive requires Go 1.8 or higher. Make sure you have a working Go environment. 
 
 ### From source
 
-The recommended way is to fetch the sources and run make:
+The recommended way is to fetch the sources and run make. This requires [dep](https://github.com/golang/dep)
+to be installed on your system.
 
     git clone https://github.com/muesli/beehive.git
     cd beehive
     make get-deps
     make
 
-This requires [dep](https://github.com/golang/dep) to be installed on your system.
 You can build and install the `beehive` binary like other Go binaries out there (`go get`)
-but you'll need to make sure beehive can find the assets (images, javascript, css, etc).
+but you'll need to make sure Beehive can find the assets (images, javascript, css, etc).
 See the Troubleshooting/Notes section for additional details.
 
 Run `beehive --help` to see a full list of options.
@@ -108,7 +108,7 @@ That's it. Whenever the RSS-feed gets updated, Beehive will now send you an
 email! It's really easy to make various Bees work together seamlessly and do
 clever things for you. Try it yourself!
 
-You can find more information on how to configure beehive and examples [in our Wiki](https://github.com/muesli/beehive/wiki/Configuration).
+You can find more information on how to configure Beehive and examples [in our Wiki](https://github.com/muesli/beehive/wiki/Configuration).
 
 ## Troubleshooting & Notes
 
