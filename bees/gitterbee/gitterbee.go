@@ -57,12 +57,12 @@ func (mod *GitterBee) Action(action bees.Action) []bees.Placeholder {
 
 		roomID, err := mod.client.GetRoomId(room)
 		if err != nil {
-			mod.LogErrorf("Failed to fetch room ID from uri:", err)
+			mod.LogErrorf("Failed to fetch room ID from uri: %v", err)
 			return outs
 		}
 
 		if _, err = mod.client.SendMessage(roomID, message); err != nil {
-			mod.LogErrorf("Failed to send message:", err)
+			mod.LogErrorf("Failed to send message: %v", err)
 			return outs
 		}
 
@@ -70,7 +70,9 @@ func (mod *GitterBee) Action(action bees.Action) []bees.Placeholder {
 		var room string
 		action.Options.Bind("room", &room)
 
-		mod.join(room)
+		if err := mod.join(room); err != nil {
+			mod.LogErrorf("Failed to join room: %v", err)
+		}
 
 	case "leave":
 		var room string
@@ -78,9 +80,9 @@ func (mod *GitterBee) Action(action bees.Action) []bees.Placeholder {
 
 		err := mod.leave(room)
 		if err != nil {
-			mod.LogErrorf("Can't leave room:", err)
+			mod.LogErrorf("Can't leave room: %v", err)
 		} else {
-			mod.Logln("Closed room stream", room)
+			mod.Logln("Left room:", room)
 		}
 
 	default:
