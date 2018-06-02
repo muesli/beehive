@@ -106,12 +106,12 @@ func (factory *mastodonBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{
 			Namespace:   factory.Name(),
-			Name:        "toot_send",
-			Description: "A toot has been send",
+			Name:        "toot_sent",
+			Description: "A toot has been sent",
 			Options: []bees.PlaceholderDescriptor{
 				{
 					Name:        "text",
-					Description: "Text of the toot that has been send",
+					Description: "Text of the toot that has been sent",
 					Type:        "string",
 				},
 			},

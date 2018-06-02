@@ -63,10 +63,10 @@ func (mod *mastodonBee) Action(action bees.Action) []bees.Placeholder {
 			mod.LogErrorf("Error sending toot: %v", err)
 		}
 
-		// Handle back 'toot_send' event
+		// Handle back 'toot_sent' event
 		ev := bees.Event{
 			Bee:  mod.Name(),
-			Name: "toot_send",
+			Name: "toot_sent",
 			Options: []bees.Placeholder{
 				{
 					Name:  "text",
