@@ -253,6 +253,30 @@ func (factory *IrcBeeFactory) Actions() []bees.ActionDescriptor {
 				},
 			},
 		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "kick",
+			Description: "Kicks a user from a channel",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "user",
+					Description: "User to kick",
+					Type:        "string",
+					Mandatory:   true,
+				},
+				{
+					Name:        "channel",
+					Description: "Channel to kick from",
+					Type:        "string",
+					Mandatory:   true,
+				},
+				{
+					Name:        "message",
+					Description: "Kick message",
+					Type:        "string",
+				},
+			},
+		},
 	}
 	return actions
 }

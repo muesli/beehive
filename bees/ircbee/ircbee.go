@@ -101,6 +101,13 @@ func (mod *IrcBee) Action(action bees.Action) []bees.Placeholder {
 			}
 		}
 
+	case "kick":
+		var c, n, m string
+		action.Options.Bind("channel", &c)
+		action.Options.Bind("user", &n)
+		action.Options.Bind("message", &m)
+		mod.client.Kick(c, n, m)
+
 	default:
 		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
 	}
