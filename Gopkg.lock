@@ -249,6 +249,12 @@
   version = "v0.0.3"
 
 [[projects]]
+  name = "github.com/mattn/go-mastodon"
+  packages = ["."]
+  revision = "730317321abbdea25c96311c94eee46ca253dfc9"
+  version = "v0.0.2"
+
+[[projects]]
   branch = "master"
   name = "github.com/mattn/go-xmpp"
   packages = ["."]
@@ -395,6 +401,12 @@
   version = "v1.0.1"
 
 [[projects]]
+  name = "github.com/tomnomnom/linkheader"
+  packages = ["."]
+  revision = "6953a30d444317754766fccdd3f7f000edc874f6"
+  version = "0.1.0"
+
+[[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["ssh/terminal"]
@@ -494,6 +506,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "2d1f2598e4ed430668b5210033548ac818350bf08c202514622bd12a5bbeac87"
+  inputs-digest = "c967d6e9f5f74a75d281b6bb0d7fdc428f5978ff9d54b22ad55fa1c6c7020aeb"
   solver-name = "gps-cdcl"
   solver-version = 1
