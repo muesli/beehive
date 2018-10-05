@@ -37,7 +37,7 @@ type MixcloudBee struct {
 	baseUrl      string
 	feed         string
 
-	client       mixcloud.Client
+	client       *mixcloud.Client
 	lastUpdate   time.Time
 
 	eventChan chan bees.Event
@@ -46,32 +46,57 @@ type MixcloudBee struct {
 // Poll a Mixcloud Cloudcasts feed
 func (mod *MixcloudBee) pollFeed(feed string) {
 	for {
-		time.Sleep(20*time.Second)
+		mod.Logln("Parsing feed")
 		var allCloudcastsData []mixcloud.CloudcastData
 		var opt mixcloud.ListOptions
 		opt.Since = mod.lastUpdate
 		opt.Until = time.Now()
 		mod.lastUpdate = opt.Until
-		cloudcasts, err := mod.client.GetCloudcasts("zanjradio", &opt)
+		mod.Logln("Since", opt.Since, "Until", opt.Until)
+		cloudcasts, err := mod.client.GetCloudcasts(mod.feed, &opt)
 		if err != nil {
-			continue
+			mod.LogErrorf("Error:", err)
+			break
 		}
 		allCloudcastsData = append(allCloudcastsData, cloudcasts.Data...)
 		nextUrl := cloudcasts.Paging.NextURL
 		for {
+			if nextUrl == "" {
+				break
+			}
 			// the following line is necessary to always create a new object, else just some values would be overwritten
 			// and missing values would stay the same as before
 			cloudcasts = mixcloud.Cloudcasts{}
 			err := mod.client.GetPage(nextUrl, &cloudcasts)
+			allCloudcastsData = append(allCloudcastsData, cloudcasts.Data...)
 			if err != nil {
-				continue
-			}
-			nextUrl = cloudcasts.Paging.NextURL
-			if nextUrl == "" {
+				mod.LogErrorf("Error:", err)
 				break
 			}
-			allCloudcastsData = append(allCloudcastsData, cloudcasts.Data...)
+			nextUrl = cloudcasts.Paging.NextURL
 		}
+
+		for _, cloudcast := range allCloudcastsData {
+			newCloudcastEvent := bees.Event{
+				Bee:  mod.Name(),
+				Name: "new_cloudcast",
+				Options: []bees.Placeholder{
+					{
+						Name:  "name",
+						Type:  "string",
+						Value: cloudcast.Name,
+					},
+					{
+						Name:  "url",
+						Type:  "string",
+						Value: cloudcast.URL,
+					},
+				},
+			}
+			mod.Logln("Event new_cloudcast", newCloudcastEvent)
+			mod.eventChan <- newCloudcastEvent
+		}
+		time.Sleep(25 * time.Second)
 	}
 }
 
@@ -79,7 +104,7 @@ func (mod *MixcloudBee) pollFeed(feed string) {
 // Run executes the Bee's event loop.
 func (mod *MixcloudBee) Run(cin chan bees.Event) {
 	mod.eventChan = cin
-
+	mod.Logln("Mixcloudbee starting to run")
 	mod.pollFeed(mod.feed)
 }
 
@@ -90,5 +115,5 @@ func (mod *MixcloudBee) ReloadOptions(options bees.BeeOptions) {
 	options.Bind("baseUrl", &mod.baseUrl)
 	options.Bind("feed", &mod.feed)
 
-	&mod.client = mixcloud.NewClient(nil)
+	mod.client = mixcloud.NewClient(nil)
 }

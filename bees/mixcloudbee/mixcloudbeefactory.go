@@ -41,7 +41,7 @@ func (factory *MixcloudBeeFactory) New(name, description string, options bees.Be
 
 // ID returns the ID of this Bee.
 func (factory *MixcloudBeeFactory) ID() string {
-	return "Mixcloudbee"
+	return "mixcloudbee"
 }
 
 // Name returns the name of this Bee.
@@ -61,7 +61,7 @@ func (factory *MixcloudBeeFactory) Image() string {
 
 // LogoColor returns the preferred logo background color (used by the admin interface).
 func (factory *MixcloudBeeFactory) LogoColor() string {
-	return "#003b66"
+	return "#52aad8"
 }
 
 // Options returns the options available to configure this Bee.
