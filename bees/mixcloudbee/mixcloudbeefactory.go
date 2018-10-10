@@ -68,12 +68,6 @@ func (factory *MixcloudBeeFactory) LogoColor() string {
 func (factory *MixcloudBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
-			Name:        "baseUrl",
-			Description: "Mixcloud API Base URL",
-			Type:        "string",
-			Mandatory:   true,
-		},
-		{
 			Name:        "feed",
 			Description: "Feed to follow",
 			Type:        "string",
@@ -99,6 +93,11 @@ func (factory *MixcloudBeeFactory) Events() []bees.EventDescriptor {
 				{
 					Name:		"url",
 					Description:"Cloudcast URL",
+					Type:       "string",
+				},
+				{
+					Name:       "slug",
+					Description:"Cloudcast Slug",
 					Type:       "string",
 				},
 			},

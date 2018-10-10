@@ -91,6 +91,11 @@ func (mod *MixcloudBee) pollFeed(feed string) {
 						Type:  "string",
 						Value: cloudcast.URL,
 					},
+					{
+						Name:  "slug",
+						Type:  "string",
+						Value: cloudcast.Slug,
+					},
 				},
 			}
 			mod.Logln("Event new_cloudcast", newCloudcastEvent)
