@@ -109,7 +109,8 @@ func (mod *MixcloudBee) pollFeed(feed string) {
 // Run executes the Bee's event loop.
 func (mod *MixcloudBee) Run(cin chan bees.Event) {
 	mod.eventChan = cin
-	mod.Logln("Mixcloudbee starting to run")
+
+	time.Sleep(10 * time.Second)
 	mod.pollFeed(mod.feed)
 }
 
