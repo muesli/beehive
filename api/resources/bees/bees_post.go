@@ -23,6 +23,7 @@ package bees
 import (
 	"github.com/emicklei/go-restful"
 	"github.com/muesli/beehive/bees"
+	"github.com/muesli/beehive/cfg"
 	"github.com/muesli/smolder"
 )
 
@@ -68,6 +69,7 @@ func (r *BeeResource) Post(context smolder.APIContext, data interface{}, request
 	}
 
 	bee := bees.StartBee(c)
+	cfg.SaveCurrentConfig()
 	resp.AddBee(bee)
 
 	resp.Send(response)

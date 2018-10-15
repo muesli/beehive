@@ -23,6 +23,7 @@ package chains
 import (
 	"github.com/emicklei/go-restful"
 	"github.com/muesli/beehive/bees"
+	"github.com/muesli/beehive/cfg"
 	"github.com/muesli/smolder"
 )
 
@@ -60,6 +61,7 @@ func (r *ChainResource) Delete(context smolder.APIContext, request *restful.Requ
 
 	if found {
 		bees.SetChains(chains)
+		cfg.SaveCurrentConfig()
 		resp.Send(response)
 	} else {
 		r.NotFound(request, response)

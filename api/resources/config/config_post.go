@@ -1,5 +1,5 @@
 /*
- *    Copyright (C) 2017 Christian Muehlhaeuser
+ *    Copyright (C) 2019 Sergio Rubio
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License as published
@@ -15,59 +15,43 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  *    Authors:
- *      Christian Muehlhaeuser <muesli@gmail.com>
+ *      Sergio Rubio <sergio@rubio.im>
  */
 
-package actions
+package config
 
 import (
 	"github.com/emicklei/go-restful"
-	"github.com/muesli/beehive/bees"
 	"github.com/muesli/beehive/cfg"
 	"github.com/muesli/smolder"
 )
 
-// ActionPostStruct holds all values of an incoming POST request
-type ActionPostStruct struct {
-	Action struct {
-		Bee     string            `json:"bee"`
-		Name    string            `json:"name"`
-		Options bees.Placeholders `json:"options"`
-	} `json:"action"`
+// ConfigPostStruct holds all values of an incoming POST request
+type ConfigPostStruct struct {
+	Config struct {
+		Name string `json:"name"`
+	} `json:"config"`
 }
 
 // PostAuthRequired returns true because all requests need authentication
-func (r *ActionResource) PostAuthRequired() bool {
+func (r *ConfigResource) PostAuthRequired() bool {
 	return false
 }
 
 // PostDoc returns the description of this API endpoint
-func (r *ActionResource) PostDoc() string {
-	return "create a new action"
+func (r *ConfigResource) PostDoc() string {
+	return "create a new config"
 }
 
 // PostParams returns the parameters supported by this API endpoint
-func (r *ActionResource) PostParams() []*restful.Parameter {
+func (r *ConfigResource) PostParams() []*restful.Parameter {
 	return nil
 }
 
 // Post processes an incoming POST (create) request
-func (r *ActionResource) Post(context smolder.APIContext, data interface{}, request *restful.Request, response *restful.Response) {
-	resp := ActionResponse{}
-	resp.Init(context)
-
-	pps := data.(*ActionPostStruct)
-	action := bees.Action{
-		ID:      bees.UUID(),
-		Bee:     pps.Action.Bee,
-		Name:    pps.Action.Name,
-		Options: pps.Action.Options,
-	}
-	actions := append(bees.GetActions(), action)
-	bees.SetActions(actions)
-
+func (r *ConfigResource) Post(context smolder.APIContext, data interface{}, request *restful.Request, response *restful.Response) {
 	cfg.SaveCurrentConfig()
-
-	resp.AddAction(&action)
+	resp := ConfigResponse{}
+	resp.Init(context)
 	resp.Send(response)
 }

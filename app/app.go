@@ -35,7 +35,9 @@ type CliFlag struct {
 }
 
 var (
-	appflags []CliFlag
+	appflags    []CliFlag
+	configFile  string
+	versionFlag bool
 )
 
 // AddFlags adds CliFlags to appflags

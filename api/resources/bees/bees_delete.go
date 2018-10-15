@@ -23,6 +23,7 @@ package bees
 import (
 	"github.com/emicklei/go-restful"
 	"github.com/muesli/beehive/bees"
+	"github.com/muesli/beehive/cfg"
 	"github.com/muesli/smolder"
 )
 
@@ -55,6 +56,7 @@ func (r *BeeResource) Delete(context smolder.APIContext, request *restful.Reques
 
 	go func() {
 		bees.DeleteBee(bee)
+		cfg.SaveCurrentConfig()
 	}()
 
 	resp.Send(response)
