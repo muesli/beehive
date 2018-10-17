@@ -85,8 +85,9 @@ func (mod *WebBee) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		},
 	}
 
-	params, err := url.ParseQuery(req.URL.String())
+	u, err := url.ParseRequestURI(req.RequestURI)
 	if err == nil {
+		params := u.Query()
 		ev.Options.SetValue("query_params", "map", params)
 	}
 
