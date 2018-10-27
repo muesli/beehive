@@ -1,74 +1,54 @@
-Beehive
-=======
-
-## Docker Installation
+# Beehive Docker Container
 
 You can install beehive with docker if you'd prefer not to set up a working Go environment.
 
-Make sure you have docker installed. See the [install instructions](https://docs.docker.com/engine/getstarted/step_one/).
+Make sure you have docker installed. See the [install instructions](https://docs.docker.com/get-started/).
 
-### Using a prebuilt container image
+## Building your own container image
 
-The simplest way to set up beehive with docker is to simply pull a prebuilt image.
+Make sure to change into the directory that contains the `Dockerfile`.
+It is sufficient to copy the file to an empty directory on your local filesystem.
+You can also clone the repository with git and cd into the `docker` directory.
 
-    docker pull gabrielalacchi/beehive
-
-### Building your own container image (skip if using a prebuilt image)
-
-Make sure you're currently in the docker directory of the repository.
-You can simply clone the repository with git and cd into the directory.
-
-
-    git clone https://github.com/muesli/beehive.git
-    cd beehive/docker
-
-Alternatively if you have the package installed with `go get` you can navigate
-to `$GOPATH/src/github.com/muesli/beehive/docker`
-
-Either way once you're there you can build the docker container
+To start building the image, execute the following command:
 
     docker build -t beehive .
 
-If you'd like to push the image up to docker.io so that you can use it elsewhere, you need
-to namespace it with your docker.io username.
+## Running beehive in a container
 
-    docker build -t <username>/beehive .
-    docker push <username>/beehive
+Once the image build process was finished, you can spin up the container with this command:
 
-## Running a container
+    docker run --name beehive -d -p 8181:8181 beehive
 
-Once you have the image on your machine, it's time to spin up an instance of it!
-Of course if you built the container yourself without adding your username, leave out
-the `<username>/` in this command.
-
-    docker run --name beehive -d -p 8181:8181 <username>/beehive
-
-The `--name` parameter will give your container a name so that you can easily reference it with future commands.
-The `-d` flag specifies that the container should be run as a daemon.
+The `--name` parameter will give your container a name so that you can easily reference it with future commands.  
+The `-d` flag instructs docker to detatch from the container once it was started.  
 The `-p` parameter tells docker to map port 8181 on the host machine to port 8181 in the container.
-You can expose as many ports as is necessary. If you're running http server bees then you may need to
-add additional flags so that those servers can be seen by your machine: `-p 8181:8181 -p 12345:12345 ... -p 34343:34343`
 
-If ever you want to stop the container, run the following
+By default, the beehive daemon will bind on port 8181 and expects to be accessed via `http://localhost:8181`.
+You may want to specify your own parameters to the daemon by just appending them like so:
 
-    docker stop beehive
+    docker run --name beehive -d -p 8181:8181 beehive -bind 0.0.0.0:8181 -canonicalurl https://mydomain.tld
 
-Then you can start it again with
+You could then use a reverse proxy to dispatch requests to `https://mydomain.tld` to your container.
 
-    docker start beehive
+## Upgrading to a newer beehive version
 
-#### Note
+To update to the latest beehive version (i.e. the `HEAD` this repository) you can simply 1) stop and remove your existing container and 2) re-build the image rebuild the image via
 
-This container will store the `beehive.conf` file in a persistent volume.
-As long as you use `docker stop` / `docker start` to stop/start the container
-the configuration will persist.
+    docker build --no-cache -t beehive .
 
-If you'd like to have the container use an old config file, you can mount it as
-a volume with `docker run`. 
+After the new image was built, you can then again execute the `docker run` command as explained above and profit from new features.
+In order to not loose your configuration (bees & chains) each time you upgrade the container, you can mount a local beehive.conf file to the container which will then be used to persist any configuration on your local filesystem. To do that, simply adapt the `docker run` command as follows.
 
-Suppose you had a config file stored in `/path/to/beehive.conf` then when running the container use
+    docker run --name beehive -d -p 8181:8181 -v /path/to/beehive.conf:/app/beehive.conf beehive
 
-    docker run -d -p 8181:8181 -v /path/to/beehive.conf:/conf/beehive.conf <username>/beehive
+### Useful commands
 
-This will tell docker to put your config file at `/conf/beehive.conf` within the container's filesystem.
-Thus beehive will startup using your configuration file.
+| Intend | Command |
+| ------ | ------- |
+| Stop the running container | `docker stop beehive` |
+| Start the container (e.g. after reboot) | `docker start beehive` |
+| Follow log output of the beehive container | `docker logs -f beehive` |
+| Remove the container (e.g. to re-create a container with different parameters) | `docker rm beehive` |
+| Remove the container and any persisted configuration (i.e. your bees and chains) | `docker rm beehive -v` |
+| Remove old images that are not referenced by a (stopped or running) container | `docker image prune` |
