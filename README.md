@@ -6,8 +6,8 @@ agents that perform automated tasks triggered by events and filters. It is
 modular, flexible and really easy to extend for anyone. It has modules
 (we call them *Hives*), so it can interface with, talk to, or retrieve
 information from Twitter, Tumblr, Email, IRC, Jabber, RSS, Jenkins, Hue - to
-name just a few. Check out the full list of [available Hives](https://github.com/muesli/beehive/wiki/Available-Hives)
-in our Wiki.
+name just a few. Check out the full list of
+[available Hives](https://github.com/muesli/beehive/wiki/Available-Hives) in our Wiki.
 
 Connecting those modules with each other lets you create immensly useful agents.
 
@@ -23,13 +23,23 @@ Connecting those modules with each other lets you create immensly useful agents.
 
 ## Installation
 
-Beehive requires Go 1.8 or higher. Make sure you have a working Go environment. See the [install instructions](http://golang.org/doc/install.html).
+Beehive requires Go 1.8 or higher. Make sure you have a working Go environment.
+See the [installation instructions of Go](http://golang.org/doc/install.html).
 
 ### From source
 
-The recommended way is to fetch the sources and run make. This requires [dep](https://github.com/golang/dep)
-to be installed on your system.
+The recommended way is to fetch the sources and run make.
+This requires [dep](https://github.com/golang/dep) to be installed on your system.
 
+If the `$GOPATH` environment variable is empty (`echo $GOPATH`), set it with:
+    
+    # Set the $GOPATH environment variable for the active shell
+    export GOPATH="/your/go/path"
+
+Create the directory tree `$GOPATH/src/github.com/muesli/` and run this script:
+
+    cd $GOPATH/src/github.com/muesli/
+    # GNU Git should download the sources in the beehive/ directory
     git clone https://github.com/muesli/beehive.git
     cd beehive
     make get-deps
@@ -37,9 +47,10 @@ to be installed on your system.
 
 You can build and install the `beehive` binary like other Go binaries out there (`go get`)
 but you'll need to make sure Beehive can find the assets (images, javascript, css, etc).
-See the Troubleshooting/Notes section for additional details.
+See the [Troubleshooting & Notes](#TAndN) section for additional details.
 
-Run `beehive --help` to see a full list of options.
+Run `beehive --help` to see a full list of options (in particular to set the
+access port of the administrative interface and the URL from which you can visit Beehive).
 
 ### Deployment Tools
  - [Dockerfile](docker)
@@ -73,9 +84,9 @@ in your browser. Note that Beehive will create a config file `beehive.conf`
 in its current working directory, unless you specify a different file with the
 `-config` option.
 
-Note: You currently have to start `beehive` from within $GOPATH/src/github.com/muesli/beehive
-in order for it to find all the resources for the admin interface. Also see the
-Troubleshooting & Notes section of this README.
+**Note**: you currently have to install Beehive in `$GOPATH/src/github.com/muesli/beehive`
+and start `beehive` from there in order for it to find all the resources for the admin interface.
+Also see the [Troubleshooting & Notes](#TAndN) section of this README.
 
 The admin interface will present you with a list of available Hives. We will
 need to create two Bees here, one for the RSS feed and one for your email
@@ -108,7 +119,10 @@ That's it. Whenever the RSS-feed gets updated, Beehive will now send you an
 email! It's really easy to make various Bees work together seamlessly and do
 clever things for you. Try it yourself!
 
-You can find more information on how to configure Beehive and examples [in our Wiki](https://github.com/muesli/beehive/wiki/Configuration).
+You can find more information on how to configure Beehive and examples
+[in our Wiki](https://github.com/muesli/beehive/wiki/Configuration).
+
+<a name="TAndN"></a>
 
 ## Troubleshooting & Notes
 
@@ -121,12 +135,15 @@ Should you still not be able to reach the web interface, check if the `config`
 directory in the git repository is empty. If that's the case, make sure the
 git submodules get initialized by running `git submodule update --init`.
 
-The web interface does *not* require authentication yet. Beehive currently
-accepts all connections from the loopback device *only*.
+The web interface does *not* require authentication yet. Beehive by default
+accepts all connections from the loopback device *only* (if you allow remote
+access, **do not forget to configure the firewall** to allow access only from trusted hosts).
 
 ## Development
 
-Need help? Want to hack on your own Hives? Join us on IRC (irc://freenode.net/#beehive) or [Gitter](https://gitter.im/the_beehive/Lobby). Follow the bees on [Twitter](https://twitter.com/beehive_app)!
+Need help? Want to hack on your own Hives? Join us on IRC (irc://freenode.net/#beehive)
+or [Gitter](https://gitter.im/the_beehive/Lobby).
+Follow the bees on [Twitter](https://twitter.com/beehive_app)!
 
 [![GoDoc](https://godoc.org/github.com/golang/gddo?status.svg)](https://godoc.org/github.com/muesli/beehive)
 [![Build Status](https://travis-ci.org/muesli/beehive.svg?branch=master)](https://travis-ci.org/muesli/beehive)
