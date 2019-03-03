@@ -67,12 +67,7 @@ func (mod *SocketBee) Action(action bees.Action) []bees.Placeholder {
 			log.Panicln(err)
 		}
 
-		la, err := net.ResolveUDPAddr("udp", "0:0")
-		if err != nil {
-			log.Panicln(err)
-		}
-
-		conn, err := net.DialUDP("udp", la, sa)
+		conn, err := net.DialUDP("udp", nil, sa)
 		if err != nil {
 			log.Panicln(err)
 		}
