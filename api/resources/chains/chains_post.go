@@ -60,10 +60,9 @@ func (r *ChainResource) Post(context smolder.APIContext, data interface{}, reque
 	pps := data.(*ChainPostStruct)
 	dupe := bees.GetChain(pps.Chain.Name)
 	if dupe != nil {
-		smolder.ErrorResponseHandler(request, response, smolder.NewErrorResponse(
+		smolder.ErrorResponseHandler(request, response, nil, smolder.NewErrorResponse(
 			422, // Go 1.7+: http.StatusUnprocessableEntity,
-			false,
-			"A Chain with that name exists already",
+			nil,
 			"ChainResource POST"))
 		return
 	}
