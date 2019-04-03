@@ -51,6 +51,7 @@ import (
 	_ "github.com/muesli/beehive/bees/s3bee"
 	_ "github.com/muesli/beehive/bees/serialbee"
 	_ "github.com/muesli/beehive/bees/simplepushbee"
+	_ "github.com/muesli/beehive/bees/slackbee"
 	_ "github.com/muesli/beehive/bees/socketbee"
 	_ "github.com/muesli/beehive/bees/spaceapibee"
 	_ "github.com/muesli/beehive/bees/telegrambee"
