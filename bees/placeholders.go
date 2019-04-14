@@ -28,6 +28,7 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // Placeholders is an array of Placeholder.
@@ -204,6 +205,18 @@ func ConvertValue(v interface{}, dst interface{}) error {
 			panic(fmt.Sprintf("Unhandled type %+v for int conversion", reflect.TypeOf(vt)))
 		}
 
+	case *time.Time:
+		switch vt := v.(type) {
+		case time.Time:
+			*d = vt
+		case int:
+			*d = time.Unix(int64(vt), 0)
+		case int64:
+			*d = time.Unix(vt, 0)
+		default:
+			panic(fmt.Sprintf("Unhandled type %+v for time.Time conversion", reflect.TypeOf(vt)))	
+		}
+		
 	case *url.Values:
 		switch vt := v.(type) {
 		case string:
