@@ -3,7 +3,8 @@ package cfg
 import (
 	"encoding/json"
 	"io/ioutil"
-	"log"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/muesli/beehive/bees"
 )
@@ -43,6 +44,7 @@ func SaveConfig(c Config) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Println("Configuration saved")
 }
 
 func SaveCurrentConfig() {
