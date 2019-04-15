@@ -22,6 +22,7 @@
 package templatehelper
 
 import (
+	"regexp"
 	"strings"
 	"text/template"
 )
@@ -31,6 +32,10 @@ var (
 	FuncMap = template.FuncMap{
 		"Left": func(values ...interface{}) string {
 			return values[0].(string)[:values[1].(int)]
+		},
+		"Matches": func(values ...interface{}) bool {
+			ok, _ := regexp.MatchString(values[1].(string), values[0].(string))
+			return ok
 		},
 		"Mid": func(values ...interface{}) string {
 			if len(values) > 2 {
