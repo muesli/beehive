@@ -22,6 +22,7 @@
 package bees
 
 import log "github.com/sirupsen/logrus"
+import "runtime/debug"
 
 // An Event describes an event including its parameters.
 type Event struct {
@@ -56,7 +57,7 @@ func handleEvents() {
 		go func() {
 			defer func() {
 				if e := recover(); e != nil {
-					log.Println("Fatal chain event:", e)
+					log.Printf("Fatal chain event: %s %s", e, debug.Stack())
 				}
 			}()
 
