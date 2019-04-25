@@ -1,10 +1,10 @@
 builds:
-  - 
+  -
     binary: beehive
     ldflags: -s -w -X main.Version={{ .Version }} -X main.CommitSHA={{ .Commit }}
 sign:
   artifacts: checksum
-archive:
+archives:
   replacements:
     darwin: Darwin
     linux: Linux
