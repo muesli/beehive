@@ -25,6 +25,10 @@ debug: submodule go-bindata generate
 test:
 	go test -v $(shell go list ./... | grep -v vendor/)
 
+release:
+	@./tools/release.sh
+
 clean:
 	rm -f beehive
-.PHONY: clean embed go-bindata noembed generate submodule build all
+
+.PHONY: clean embed go-bindata noembed generate submodule build all release
