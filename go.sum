@@ -26,6 +26,7 @@ github.com/carlosdp/twiliogo v0.0.0-20140102225436-f61c8230fa91 h1:fIflfwVZsOHJD
 github.com/carlosdp/twiliogo v0.0.0-20140102225436-f61c8230fa91/go.mod h1:pAxCBpjl/0JxYZlWGP/Dyi8f/LQSCQD2WAsG/iNzqQ8=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
+github.com/deckarep/gosx-notifier v0.0.0-20180201035817-e127226297fb h1:6S+TKObz6+Io2c8IOkcbK4Sz7nj6RpEVU7TkvmsZZcw=
 github.com/deckarep/gosx-notifier v0.0.0-20180201035817-e127226297fb/go.mod h1:wf3nKtOnQqCp7kp9xB7hHnNlZ6m3NoiOxjrB9hFRq4Y=
 github.com/dustin/go-humanize v0.0.0-20171111073723-bb3d318650d4/go.mod h1:HtrtbFcZ19U5GC7JDqmcUSB87Iq5E25KnS6fMYU6eOk=
 github.com/dustin/go-jsonpointer v0.0.0-20160814072949-ba0abeacc3dc h1:tP7tkU+vIsEOKiK+l/NSLN4uUtkyuxc6hgYpQeCWAeI=
@@ -66,8 +67,8 @@ github.com/guelfey/go.dbus v0.0.0-20131113121618-f6a3a2366cc3 h1:fngCxKbvZdctIsW
 github.com/guelfey/go.dbus v0.0.0-20131113121618-f6a3a2366cc3/go.mod h1:0CNX5Cvi77WEH8llpfZ/ieuqyceb1cnO5//b5zzsnF8=
 github.com/huandu/facebook v2.1.2+incompatible h1:APtODfdBm89WyxkAhP2rZlDvPFJv21fQccS1dRFkTdU=
 github.com/huandu/facebook v2.1.2+incompatible/go.mod h1:wJogp9rhXUUjDuhx6ZaR5Eylx3dsJmy0zyFRaPYUq5g=
-github.com/huin/goserial v0.0.0-20121012073615-7b90efdb22b1 h1:v6symRpmVeKVUqq1grXnDDtus+lmQufUhgZ/lgMr4nU=
-github.com/huin/goserial v0.0.0-20121012073615-7b90efdb22b1/go.mod h1:x4wgpgRJT44loaDTf8/wWCkvTlhrKlVlaHATk7Leqlw=
+github.com/jacobsa/go-serial v0.0.0-20180131005756-15cf729a72d4 h1:G2ztCwXov8mRvP0ZfjE6nAlaCX2XbykaeHdbT6KwDz0=
+github.com/jacobsa/go-serial v0.0.0-20180131005756-15cf729a72d4/go.mod h1:2RvX5ZjVtsznNZPEt4xwJXNJrM3VTZoQf7V6gk0ysvs=
 github.com/jayeshsolanki93/devgorant v0.0.0-20160810172004-69fb03e5c3b1 h1:+rPUGcMtKybxck9IKclxodfetCoCD2eSBEzPMZgc2ZA=
 github.com/jayeshsolanki93/devgorant v0.0.0-20160810172004-69fb03e5c3b1/go.mod h1:C2TzmYXoz+ck9q8+lWXSkyba/l+eyKC39pw98R9MrhA=
 github.com/jaytaylor/html2text v0.0.0-20190408195923-01ec452cbe43 h1:jTkyeF7NZ5oIr0ESmcrpiDgAfoidCBF4F5kJhjtaRwE=

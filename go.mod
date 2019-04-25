@@ -39,7 +39,7 @@ require (
 	github.com/gorilla/websocket v1.2.0
 	github.com/guelfey/go.dbus v0.0.0-20131113121618-f6a3a2366cc3
 	github.com/huandu/facebook v2.1.2+incompatible
-	github.com/huin/goserial v0.0.0-20121012073615-7b90efdb22b1
+	github.com/jacobsa/go-serial v0.0.0-20180131005756-15cf729a72d4
 	github.com/jayeshsolanki93/devgorant v0.0.0-20160810172004-69fb03e5c3b1
 	github.com/jaytaylor/html2text v0.0.0-20190408195923-01ec452cbe43 // indirect
 	github.com/kr/pretty v0.0.0-20160823170715-cfb55aafdaf3

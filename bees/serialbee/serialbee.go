@@ -26,7 +26,7 @@ import (
 	"encoding/binary"
 	"io"
 
-	"github.com/huin/goserial"
+	"github.com/jacobsa/go-serial/serial"
 
 	"github.com/muesli/beehive/bees"
 )
@@ -113,8 +113,12 @@ func (mod *SerialBee) Run(eventChan chan bees.Event) {
 	}
 
 	var err error
-	c := &goserial.Config{Name: mod.device, Baud: mod.baudrate}
-	mod.conn, err = goserial.OpenPort(c)
+
+	options := serial.OpenOptions{
+		PortName: mod.device,
+		BaudRate: uint(mod.baudrate),
+	}
+	mod.conn, err = serial.Open(options)
 	if err != nil {
 		mod.LogFatal(err)
 	}
