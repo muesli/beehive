@@ -23,16 +23,14 @@ Connecting those modules with each other lets you create immensly useful agents.
 
 ## Installation
 
-Beehive requires Go 1.8 or higher. Make sure you have a working Go environment. See the [install instructions](http://golang.org/doc/install.html).
+Beehive requires Go 1.11 or higher. Make sure you have a working Go environment. See the [install instructions](http://golang.org/doc/install.html).
 
 ### From source
 
-The recommended way is to fetch the sources and run make. This requires [dep](https://github.com/golang/dep)
-to be installed on your system.
+The recommended way is to fetch the sources and run make.
 
     git clone https://github.com/muesli/beehive.git
     cd beehive
-    make get-deps
     make
 
 You can build and install the `beehive` binary like other Go binaries out there (`go get`)
