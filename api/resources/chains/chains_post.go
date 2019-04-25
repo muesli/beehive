@@ -21,6 +21,8 @@
 package chains
 
 import (
+	"errors"
+
 	"github.com/emicklei/go-restful"
 	"github.com/muesli/beehive/bees"
 	"github.com/muesli/smolder"
@@ -62,7 +64,7 @@ func (r *ChainResource) Post(context smolder.APIContext, data interface{}, reque
 	if dupe != nil {
 		smolder.ErrorResponseHandler(request, response, nil, smolder.NewErrorResponse(
 			422, // Go 1.7+: http.StatusUnprocessableEntity,
-			nil,
+			errors.New("A Chain with that name exists already"),
 			"ChainResource POST"))
 		return
 	}
