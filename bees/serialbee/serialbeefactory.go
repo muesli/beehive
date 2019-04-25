@@ -1,3 +1,8 @@
+// +build !darwin
+
+// FIXME: This bee doesn't build on macOS
+// XXX: https://gist.github.com/prologic/b5fa148410a26f917b4d944b72d847c0
+
 /*
  *    Copyright (C) 2014-2017 Christian Muehlhaeuser
  *
