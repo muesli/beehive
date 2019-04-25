@@ -13,6 +13,10 @@ matrix:
   allow_failures:
     - go: tip
 
+env:
+  global:
+    GO111MODULES=on
+
 notifications:
   webhooks:
     urls:
