@@ -25,7 +25,6 @@ package execbee
 
 import (
 	"bufio"
-	"os"
 	"os/exec"
 	"strings"
 
@@ -72,7 +71,7 @@ func (mod *ExecBee) Action(action bees.Action) []bees.Placeholder {
 			// read and print stderr
 			errReader, err := cmd.StderrPipe()
 			if err != nil {
-				mod.LogFatal(os.Stderr, "Error creating StderrPipe for Cmd", err)
+				mod.LogFatal("Error creating StderrPipe for Cmd", err)
 				return
 			}
 			errBuffer := []string{}
