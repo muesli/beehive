@@ -60,9 +60,8 @@ func (r *BeeResource) Post(context smolder.APIContext, data interface{}, request
 	pps := data.(*BeePostStruct)
 	c, err := bees.NewBeeConfig(pps.Bee.Name, pps.Bee.Namespace, pps.Bee.Description, pps.Bee.Options)
 	if err != nil {
-		smolder.ErrorResponseHandler(request, response, smolder.NewErrorResponse(
+		smolder.ErrorResponseHandler(request, response, err, smolder.NewErrorResponse(
 			422, // Go 1.7+: http.StatusUnprocessableEntity,
-			false,
 			err,
 			"BeeResource POST"))
 		return

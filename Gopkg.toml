@@ -130,12 +130,12 @@
   name = "github.com/muesli/goefa"
 
 [[constraint]]
-  branch = "master"
+  revision = "e6752d792454819bc63dec1a7a6f04bd7d539c7c"
   name = "github.com/muesli/smolder"
 
 [[constraint]]
   name = "github.com/nlopes/slack"
-  version = "0.2.0"
+  version = "0.5.0"
 
 [[constraint]]
   branch = "master"

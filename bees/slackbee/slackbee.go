@@ -66,7 +66,7 @@ func (mod *SlackBee) Action(action bees.Action) []bees.Placeholder {
 		msgParams := slack.NewPostMessageParameters()
 		msgParams.LinkNames = 1
 		for _, to := range tos {
-			_, _, err := mod.client.PostMessage(to, text, msgParams)
+			_, _, err := mod.client.PostMessage(to, slack.MsgOptionText(text, false), slack.MsgOptionPostMessageParameters(msgParams))
 			if err != nil {
 				mod.Logf("Error posting message to the slack channel %s: %s", to, err)
 			}
