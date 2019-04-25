@@ -9,6 +9,7 @@ vendor/
 # Folders
 _obj
 _test
+/dist
 
 # Architecture specific extensions/prefixes
 *.[568vq]
