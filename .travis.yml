@@ -15,7 +15,7 @@ matrix:
 
 env:
   global:
-    GO111MODULES=on
+    GO111MODULE=on
 
 notifications:
   webhooks:
