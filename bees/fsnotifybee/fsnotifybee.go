@@ -32,7 +32,7 @@ type FSNotifyBee struct {
 func (mod *FSNotifyBee) Run(eventChan chan bees.Event) {
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
-		mod.LogFatal("error: could not create the fswatcher: %v", err)
+		mod.LogFatal("error: could not create the fswatcher:", err)
 	}
 	defer watcher.Close()
 
