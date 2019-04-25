@@ -29,7 +29,7 @@
   branch = "master"
   name = "github.com/Profpatsch/GoOse"
   packages = ["."]
-  revision = "4cc7fcdd3b6a26785ac22508423a22ca440e19a9"
+  revision = "da5de31b9bd216a162b56e8ce4f04f926d8c0289"
 
 [[projects]]
   name = "github.com/PuerkitoBio/goquery"
@@ -273,12 +273,6 @@
   name = "github.com/mitchellh/go-homedir"
   packages = ["."]
   revision = "b8bc1bf767474819792c23f32d8286a45736f1c6"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/mnzt/tinder"
-  packages = ["."]
-  revision = "825278cc6a519c8d829ac33b87359a95222ff3f9"
 
 [[projects]]
   branch = "master"
