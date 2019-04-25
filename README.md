@@ -23,7 +23,8 @@ Connecting those modules with each other lets you create immensly useful agents.
 
 ## Installation
 
-Beehive requires Go 1.11 or higher. Make sure you have a working Go environment. See the [install instructions](http://golang.org/doc/install.html).
+Beehive requires Go 1.11 or higher. Make sure you have a working Go environment.
+See the [install instructions](http://golang.org/doc/install.html).
 
 ### From source
 
@@ -71,9 +72,10 @@ in your browser. Note that Beehive will create a config file `beehive.conf`
 in its current working directory, unless you specify a different file with the
 `-config` option.
 
-Note: You currently have to start `beehive` from within $GOPATH/src/github.com/muesli/beehive
-in order for it to find all the resources for the admin interface. Also see the
-Troubleshooting & Notes section of this README.
+Note: If you built Beehive with `go build` instead of `make` you will have to
+start `beehive` from within its source directory in order for it to find all the
+resources for the admin interface. Also see the Troubleshooting & Notes section
+of this README.
 
 The admin interface will present you with a list of available Hives. We will
 need to create two Bees here, one for the RSS feed and one for your email
@@ -106,25 +108,32 @@ That's it. Whenever the RSS-feed gets updated, Beehive will now send you an
 email! It's really easy to make various Bees work together seamlessly and do
 clever things for you. Try it yourself!
 
-You can find more information on how to configure Beehive and examples [in our Wiki](https://github.com/muesli/beehive/wiki/Configuration).
+You can find more information on how to configure Beehive and examples
+[in our Wiki](https://github.com/muesli/beehive/wiki/Configuration).
 
 ## Troubleshooting & Notes
 
 The web interface and other resources are embedded in the binary by default.
 When using `make noembed`, Beehive tries to find those files
-in its current working directory, so it's currently recommended to start Beehive from
-within its git repository, if you plan to use the web interface.
+in its current working directory, so it's currently recommended to start Beehive
+from within its git repository, if you plan to use the web interface.
 
 Should you still not be able to reach the web interface, check if the `config`
 directory in the git repository is empty. If that's the case, make sure the
 git submodules get initialized by running `git submodule update --init`.
 
-The web interface does *not* require authentication yet. Beehive currently
+The web interface does *not* require authentication yet. Beehive by default
 accepts all connections from the loopback device *only*.
+
+If you want to bind Beehive to a different interface/address, run Beehive with
+the `-bind` and `-canonicalurl` parameters. For example:
+
+    beehive -bind "192.168.0.1:8181" -canonicalurl "http://192.168.0.1:8181"
 
 ## Development
 
-Need help? Want to hack on your own Hives? Join us on IRC (irc://freenode.net/#beehive) or [Gitter](https://gitter.im/the_beehive/Lobby). Follow the bees on [Twitter](https://twitter.com/beehive_app)!
+Need help? Want to hack on your own Hives? Join us on IRC (irc://freenode.net/#beehive) or [Gitter](https://gitter.im/the_beehive/Lobby).
+Follow the bees on [Twitter](https://twitter.com/beehive_app)!
 
 [![GoDoc](https://godoc.org/github.com/golang/gddo?status.svg)](https://godoc.org/github.com/muesli/beehive)
 [![Build Status](https://travis-ci.org/muesli/beehive.svg?branch=master)](https://travis-ci.org/muesli/beehive)
