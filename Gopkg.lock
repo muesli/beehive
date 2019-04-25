@@ -320,7 +320,7 @@
   branch = "master"
   name = "github.com/muesli/smolder"
   packages = ["."]
-  revision = "423bef4a5d716f17545693f95291e9d87a8fa149"
+  revision = "e6752d792454819bc63dec1a7a6f04bd7d539c7c"
 
 [[projects]]
   name = "github.com/nlopes/slack"
