@@ -6,6 +6,7 @@ clone_folder: c:\gopath\src\github.com\muesli\beehive
 
 environment:
   GOPATH: c:\gopath
+  GO111MODULE: on
 
 install:
     - echo %PATH%
