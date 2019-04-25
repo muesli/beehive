@@ -2,6 +2,10 @@ builds:
   -
     binary: beehive
     ldflags: -s -w -X main.Version={{ .Version }} -X main.CommitSHA={{ .Commit }}
+    goos:
+      - linux
+      - darwin
+      - windows
 sign:
   artifacts: checksum
 archives:
