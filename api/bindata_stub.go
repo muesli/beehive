@@ -1,7 +1,7 @@
 // +build !embed
 
-// go-bindata (https://github.com/jteeuwen/go-bindata) stub
-// so beehive works also without embedded assets.
+// go-bindata (https://github.com/kevinburke/go-bindata) stub
+// so beehive also works without embedded assets.
 package api
 
 import "io/ioutil"
