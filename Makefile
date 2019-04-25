@@ -25,9 +25,6 @@ debug: submodule go-bindata generate
 test:
 	go test -v $(shell go list ./... | grep -v vendor/)
 
-get-deps:
-	dep ensure
-
 clean:
 	rm -f beehive
-.PHONY: clean embed go-bindata get-deps noembed generate submodule build all
+.PHONY: clean embed go-bindata noembed generate submodule build all
