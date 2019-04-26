@@ -56,7 +56,7 @@ func (factory *SocketBeeFactory) Description() string {
 
 // Image returns the filename of an image for this Bee.
 func (factory *SocketBeeFactory) Image() string {
-	return "socketbee.png"
+	return factory.ID() + ".png"
 }
 
 // LogoColor returns the preferred logo background color (used by the admin interface).

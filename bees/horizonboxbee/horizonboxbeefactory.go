@@ -54,10 +54,10 @@ func (factory *HorizonBoxBeeFactory) Description() string {
 	return "A bee observing the state of a UnityMedia HorizonBox"
 }
 
-// // Image returns the filename of an image for this Bee.
-// func (factory *HorizonBoxBeeFactory) Image() string {
-// 	return factory.ID() + ".png"
-// }
+// Image returns the filename of an image for this Bee.
+func (factory *HorizonBoxBeeFactory) Image() string {
+	return factory.ID() + ".png"
+}
 
 // LogoColor returns the preferred logo background color (used by the admin interface).
 func (factory *HorizonBoxBeeFactory) LogoColor() string {
