@@ -18,6 +18,7 @@
  *    Authors:
  *      Dominik Schmidt <domme@tomahawk-player.org>
  *      Christian Muehlhaeuser <muesli@gmail.com>
+ *      Matthias Krauser <matthias@krauser.eu>
  */
 
 // Package execbee is a Bee that can launch external processes.
@@ -25,6 +26,7 @@ package execbee
 
 import (
 	"bufio"
+	"io"
 	"os/exec"
 	"strings"
 
@@ -45,12 +47,29 @@ func (mod *ExecBee) Action(action bees.Action) []bees.Placeholder {
 	switch action.Name {
 	case "execute":
 		var command string
+		var stdin string
+
 		action.Options.Bind("command", &command)
+		action.Options.Bind("stdin", &stdin)
 		mod.Logln("Executing locally: ", command)
 
 		go func() {
 			c := strings.Split(command, " ")
 			cmd := exec.Command(c[0], c[1:]...)
+
+			if stdin != "" {
+				stdinPipe, err := cmd.StdinPipe()
+
+				if err != nil {
+					mod.LogFatal("Error creating stdinPipe for Cmd", err)
+					return
+				}
+
+				go func() {
+					io.WriteString(stdinPipe, stdin)
+					stdinPipe.Close()
+				}()
+			}
 
 			// read and print stdout
 			outReader, err := cmd.StdoutPipe()

@@ -18,6 +18,7 @@
  *    Authors:
  *      Dominik Schmidt <domme@tomahawk-player.org>
  *      Christian Muehlhaeuser <muesli@gmail.com>
+ *      Matthias Krauser <matthias@krauser.eu>
  */
 
 package execbee
@@ -103,6 +104,12 @@ func (factory *ExecBeeFactory) Actions() []bees.ActionDescriptor {
 					Description: "command to be executed",
 					Type:        "string",
 					Mandatory:   true,
+				},
+				{
+					Name:        "stdin",
+					Description: "stdin-Data for the command",
+					Type:        "string",
+					Mandatory:   false,
 				},
 			},
 		},
