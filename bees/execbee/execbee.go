@@ -66,9 +66,8 @@ func (mod *ExecBee) Action(action bees.Action) []bees.Placeholder {
 				}
 
 				go func() {
-					mod.Logf("StdIn" + stdin)
-					defer stdinPipe.Close()
 					io.WriteString(stdinPipe, stdin)
+					stdinPipe.Close()
 				}()
 			}
 

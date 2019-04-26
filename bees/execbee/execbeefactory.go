@@ -104,7 +104,8 @@ func (factory *ExecBeeFactory) Actions() []bees.ActionDescriptor {
 					Description: "command to be executed",
 					Type:        "string",
 					Mandatory:   true,
-				}, {
+				},
+				{
 					Name:        "stdin",
 					Description: "stdin-Data for the command",
 					Type:        "string",
