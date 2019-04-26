@@ -47,12 +47,12 @@ func (factory *OpenweathermapBeeFactory) ID() string {
 
 // Name returns the name of this Bee.
 func (factory *OpenweathermapBeeFactory) Name() string {
-	return "Openweathermap"
+	return "OpenWeatherMap"
 }
 
 // Description returns the description of this Bee.
 func (factory *OpenweathermapBeeFactory) Description() string {
-	return "Interacts with openweathermap"
+	return "Retrieves weather information from openweathermap.org"
 }
 
 // Image returns the filename of an image for this Bee.
