@@ -18,7 +18,7 @@ RUN make embed
 FROM alpine
 
 RUN apk update && \
-    apk add --no-cache ca-certificates && \
+    apk add --no-cache ca-certificates tzdata && \
     update-ca-certificates
 
 COPY --from=builder /go/beehive/beehive /go/bin/beehive
