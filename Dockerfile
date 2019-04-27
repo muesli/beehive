@@ -4,7 +4,7 @@ LABEL authors="Gabriel Alacchi: alacchi.g@gmail.com, Christian Muehlhaeuser: mue
 
 # Install git & make
 # Git is required for fetching the dependencies
-RUN apk update && apk add --no-cache git make
+RUN apk update && apk add --no-cache git make ca-certificates
 
 # Set the working directory for the container
 WORKDIR /go/beehive
@@ -14,6 +14,9 @@ COPY . .
 RUN make
 
 FROM alpine
+
+RUN apk update && apk add --no-cache ca-certificates
+
 COPY --from=builder /go/beehive/beehive /go/bin/beehive
 
 # Where the admin interface will be served from
