@@ -40,6 +40,9 @@ See the Troubleshooting/Notes section for additional details.
 
 Run `beehive --help` to see a full list of options.
 
+### Packages
+ - ArchLinux: beehive ([AUR](https://aur.archlinux.org/packages/beehive/))
+
 ### Deployment Tools
  - [Dockerfile](docker)
  - [Ansible](https://github.com/morbidick/ansible-role-beehive)
