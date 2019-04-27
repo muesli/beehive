@@ -31,4 +31,4 @@ release:
 clean:
 	rm -f beehive
 
-.PHONY: clean embed go-bindata noembed generate submodule build all release
+.PHONY: clean embed go-bindata noembed generate submodule build release all
