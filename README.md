@@ -44,7 +44,7 @@ Run `beehive --help` to see a full list of options.
  - ArchLinux: beehive ([AUR](https://aur.archlinux.org/packages/beehive/))
 
 ### Deployment Tools
- - [Dockerfile](docker)
+ - Docker: `docker run --name beehive -d -p 8181:8181 fribbledom/beehive`
  - [Ansible](https://github.com/morbidick/ansible-role-beehive)
 
 ## Configuration

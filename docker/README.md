@@ -11,13 +11,12 @@ Make sure you have docker installed. See the [install instructions](https://docs
 
 The simplest way to set up beehive with docker is to simply pull a prebuilt image.
 
-    docker pull gabrielalacchi/beehive
+    docker pull fribbledom/beehive
 
 ### Building your own container image (skip if using a prebuilt image)
 
 Make sure you're currently in the docker directory of the repository.
 You can simply clone the repository with git and cd into the directory.
-
 
     git clone https://github.com/muesli/beehive.git
     cd beehive/docker
@@ -64,7 +63,7 @@ As long as you use `docker stop` / `docker start` to stop/start the container
 the configuration will persist.
 
 If you'd like to have the container use an old config file, you can mount it as
-a volume with `docker run`. 
+a volume with `docker run`.
 
 Suppose you had a config file stored in `/path/to/beehive.conf` then when running the container use
 
