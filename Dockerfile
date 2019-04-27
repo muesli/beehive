@@ -11,7 +11,7 @@ WORKDIR /go/beehive
 
 # Build the binary
 COPY . .
-RUN make
+RUN make embed
 
 FROM alpine
 
