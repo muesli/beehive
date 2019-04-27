@@ -1,20 +1,20 @@
-FROM golang:1.8
+FROM golang:1.11-alpine
 
-LABEL authors="Gabriel Alacchi: alacchi.g@gmail.com, Christian Muehlhaeuser: muesli@gmail.com"
+RUN apk add -U --no-cache curl git make g++ && \
+    curl "https://raw.githubusercontent.com/golang/dep/master/install.sh" | sh && \
+    go get -d -v github.com/muesli/beehive && \
+    cd ${GOPATH}/src/github.com/muesli/beehive && \
+    make get-deps && \
+    make
 
-ENV CANONICAL_URL=http://localhost:8181
 
-# Expose the application port
-EXPOSE 8181
+FROM alpine:3.8
 
-# Install beehive
-RUN go get github.com/muesli/beehive
+RUN apk add -U --no-cache ca-certificates
 
-# Set the working directory for the container
-WORKDIR /go/src/github.com/muesli/beehive
+WORKDIR /app
 
-# create a volume for the configuration persistence
-VOLUME /conf
+COPY --from=0 /go/src/github.com/muesli/beehive/beehive .
 
-# This form of ENTRYPOINT allows the beehive process to catch signals from the `docker stop` command
-ENTRYPOINT beehive -config /conf/beehive.conf -bind 0.0.0.0:8181 -canonicalurl ${CANONICAL_URL}
+ENTRYPOINT ["./beehive"]
+CMD ["-bind", "0.0.0.0:8181", "-canonicalurl", "http://localhost:8181"]
