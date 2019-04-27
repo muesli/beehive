@@ -23,7 +23,7 @@ builds:
     flags:
       - -tags=embed
     hooks:
-      pre: go-bindata --tags embed --pkg api -o api/bindata.go --ignore .git assets/... config/...
+      pre: go-bindata --tags embed --pkg api -o api/bindata.go --ignore config/.git assets/... config/...
 sign:
   artifacts: checksum
 archives:
