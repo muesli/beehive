@@ -4,7 +4,7 @@ COMMIT_SHA=$(shell git rev-parse --short HEAD)
 all: submodule embed
 
 submodule:
-	git submodule update --init
+	[ -d .git ] && git submodule update --init || true
 
 noembed: submodule build
 
