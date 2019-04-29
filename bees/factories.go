@@ -51,6 +51,11 @@ func (factory *BeeFactory) Options() []BeeOptionDescriptor {
 	return []BeeOptionDescriptor{}
 }
 
+// States returns the default empty states set.
+func (factory *BeeFactory) States() []StateDescriptor {
+	return []StateDescriptor{}
+}
+
 // Events returns the default empty events set.
 func (factory *BeeFactory) Events() []EventDescriptor {
 	return []EventDescriptor{}
@@ -79,6 +84,8 @@ type BeeFactoryInterface interface {
 
 	// Options supported by module
 	Options() []BeeOptionDescriptor
+	// States provided by module
+	States() []StateDescriptor
 	// Events defined by module
 	Events() []EventDescriptor
 	// Actions supported by module

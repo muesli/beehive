@@ -47,6 +47,7 @@ type HiveInfoResponse struct {
 	Image       string                     `json:"image"`
 	LogoColor   string                     `json:"logocolor"`
 	Options     []bees.BeeOptionDescriptor `json:"options"`
+	States      []bees.StateDescriptor     `json:"states"`
 	Events      []bees.EventDescriptor     `json:"events"`
 	Actions     []bees.ActionDescriptor    `json:"actions"`
 }
@@ -102,6 +103,7 @@ func PrepareHiveResponse(ctx smolder.APIContext, hive *bees.BeeFactoryInterface)
 		Image:       u.String(),
 		LogoColor:   (*hive).LogoColor(),
 		Options:     (*hive).Options(),
+		States:      (*hive).States(),
 		Events:      (*hive).Events(),
 		Actions:     (*hive).Actions(),
 	}
