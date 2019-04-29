@@ -55,7 +55,7 @@ func (mod *MixcloudBee) pollFeed(feed string) {
 		mod.Logln("Since", opt.Since, "Until", opt.Until)
 		cloudcasts, err := mod.client.GetCloudcasts(mod.feed, &opt)
 		if err != nil {
-			mod.LogErrorf("Error:", err)
+			mod.LogErrorf("Error getting Cloudcasts: %s", err)
 			break
 		}
 		allCloudcastsData = append(allCloudcastsData, cloudcasts.Data...)
@@ -70,7 +70,7 @@ func (mod *MixcloudBee) pollFeed(feed string) {
 			err := mod.client.GetPage(nextUrl, &cloudcasts)
 			allCloudcastsData = append(allCloudcastsData, cloudcasts.Data...)
 			if err != nil {
-				mod.LogErrorf("Error:", err)
+				mod.LogErrorf("Error getting next Cloudcast page: %s", err)
 				break
 			}
 			nextUrl = cloudcasts.Paging.NextURL
