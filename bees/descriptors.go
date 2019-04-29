@@ -54,6 +54,13 @@ type BeeOptionDescriptor struct {
 	Mandatory   bool
 }
 
+// StateDescriptor describes a State provided by a Bee.
+type StateDescriptor struct {
+	Name        string
+	Description string
+	Type        string
+}
+
 // GetActionDescriptor returns the ActionDescriptor matching an action.
 func GetActionDescriptor(action *Action) ActionDescriptor {
 	bee := GetBee(action.Bee)

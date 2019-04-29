@@ -94,6 +94,7 @@ func execChains(event *Event) {
 		for _, opt := range event.Options {
 			m[opt.Name] = opt.Value
 		}
+		ctx.FillMap(m)
 
 		failed := false
 		log.Println("Executing chain:", c.Name, "-", c.Description)
