@@ -46,7 +46,7 @@ type LogSorter []LogMessage
 
 func (a LogSorter) Len() int           { return len(a) }
 func (a LogSorter) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
-func (a LogSorter) Less(i, j int) bool { return a[i].Timestamp.Before(a[j].Timestamp) }
+func (a LogSorter) Less(i, j int) bool { return !a[i].Timestamp.Before(a[j].Timestamp) }
 
 // NewLogMessage returns a newly composed LogMessage
 func NewLogMessage(bee string, message string, messageType uint) LogMessage {
