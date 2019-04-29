@@ -37,6 +37,7 @@ require (
 	github.com/gopherjs/gopherjs v0.0.0-20190430165422-3e4dfb77656c // indirect
 	github.com/guelfey/go.dbus v0.0.0-20131113121618-f6a3a2366cc3
 	github.com/huandu/facebook v2.3.1+incompatible
+	github.com/horrendus/go-mixcloud v0.0.0-20190427074402-c2164c9e194c
 	github.com/jacobsa/go-serial v0.0.0-20180131005756-15cf729a72d4
 	github.com/jayeshsolanki93/devgorant v0.0.0-20160810172004-69fb03e5c3b1
 	github.com/jaytaylor/html2text v0.0.0-20190408195923-01ec452cbe43 // indirect

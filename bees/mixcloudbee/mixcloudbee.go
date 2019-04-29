@@ -25,7 +25,7 @@ package mixcloudbee
 import (
 	"time"
 
-	"github.com/horrendus/go-mixcloud/mixcloud"
+	"github.com/horrendus/go-mixcloud"
 
 	"github.com/muesli/beehive/bees"
 )
@@ -34,11 +34,11 @@ import (
 type MixcloudBee struct {
 	bees.Bee
 
-	baseUrl      string
-	feed         string
+	baseUrl string
+	feed    string
 
-	client       *mixcloud.Client
-	lastUpdate   time.Time
+	client     *mixcloud.Client
+	lastUpdate time.Time
 
 	eventChan chan bees.Event
 }
@@ -104,7 +104,6 @@ func (mod *MixcloudBee) pollFeed(feed string) {
 		time.Sleep(25 * time.Second)
 	}
 }
-
 
 // Run executes the Bee's event loop.
 func (mod *MixcloudBee) Run(cin chan bees.Event) {
