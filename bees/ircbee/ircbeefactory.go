@@ -1,5 +1,5 @@
 /*
- *    Copyright (C) 2014-2017 Christian Muehlhaeuser
+ *    Copyright (C) 2014-2019 Christian Muehlhaeuser
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License as published
@@ -96,6 +96,23 @@ func (factory *IrcBeeFactory) Options() []bees.BeeOptionDescriptor {
 			Description: "Use SSL for IRC connection",
 			Default:     false,
 			Type:        "bool",
+		},
+	}
+	return opts
+}
+
+// States returns the state values provided by this Bee.
+func (factory *IrcBeeFactory) States() []bees.StateDescriptor {
+	opts := []bees.StateDescriptor{
+		{
+			Name:        "connected",
+			Description: "Whether this bee is currently connected to IRC",
+			Type:        "bool",
+		},
+		{
+			Name:        "channels",
+			Description: "Which channels this bee is currently connected to",
+			Type:        "[]string",
 		},
 	}
 	return opts

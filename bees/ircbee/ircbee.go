@@ -1,5 +1,5 @@
 /*
- *    Copyright (C) 2014-2017 Christian Muehlhaeuser
+ *    Copyright (C) 2014-2019 Christian Muehlhaeuser
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License as published
@@ -255,12 +255,14 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 		eventChan <- ev
 	})
 
-	connecting := false
-	disconnected := true
 	waitForDisconnect := false
+	connecting := false
+	connected := false
+	mod.ContextSet("connected", &connected)
+
 	for {
 		// loop on IRC connection events
-		if disconnected {
+		if !connected {
 			if waitForDisconnect {
 				return
 			}
@@ -280,12 +282,12 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 			if status {
 				mod.Logln("Connected to IRC:", mod.server)
 				connecting = false
-				disconnected = false
+				connected = true
 				mod.rejoin()
 			} else {
 				mod.Logln("Disconnected from IRC:", mod.server)
 				connecting = false
-				disconnected = true
+				connected = false
 			}
 
 		case <-mod.SigChan:
@@ -309,4 +311,6 @@ func (mod *IrcBee) ReloadOptions(options bees.BeeOptions) {
 	options.Bind("password", &mod.password)
 	options.Bind("ssl", &mod.ssl)
 	options.Bind("channels", &mod.channels)
+
+	mod.ContextSet("channels", &mod.channels)
 }
