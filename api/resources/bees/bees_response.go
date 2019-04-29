@@ -25,9 +25,10 @@ import (
 	"time"
 
 	restful "github.com/emicklei/go-restful"
-	"github.com/muesli/beehive/bees"
-
 	"github.com/muesli/smolder"
+
+	"github.com/muesli/beehive/api/resources/hives"
+	"github.com/muesli/beehive/bees"
 )
 
 // BeeResponse is the common response to 'bee' requests
@@ -36,6 +37,9 @@ type BeeResponse struct {
 
 	Bees []beeInfoResponse `json:"bees,omitempty"`
 	bees map[string]*bees.BeeInterface
+
+	Hives []hives.HiveInfoResponse `json:"hives,omitempty"`
+	hives map[string]*bees.BeeFactoryInterface
 }
 
 type beeInfoResponse struct {
@@ -55,11 +59,20 @@ func (r *BeeResponse) Init(context smolder.APIContext) {
 	r.Context = context
 
 	r.bees = make(map[string]*bees.BeeInterface)
+	r.hives = make(map[string]*bees.BeeFactoryInterface)
 }
 
 // AddBee adds a bee to the response
 func (r *BeeResponse) AddBee(bee *bees.BeeInterface) {
 	r.bees[(*bee).Name()] = bee
+
+	hive := bees.GetFactory((*bee).Namespace())
+	if hive == nil {
+		panic("Hive for Bee not found")
+	}
+
+	r.hives[(*hive).Name()] = hive
+	r.Hives = append(r.Hives, hives.PrepareHiveResponse(r.Context, hive))
 }
 
 // Send responds to a request with http.StatusOK

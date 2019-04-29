@@ -36,11 +36,11 @@ import (
 type HiveResponse struct {
 	smolder.Response
 
-	Hives []hiveInfoResponse `json:"hives,omitempty"`
+	Hives []HiveInfoResponse `json:"hives,omitempty"`
 	hives map[string]*bees.BeeFactoryInterface
 }
 
-type hiveInfoResponse struct {
+type HiveInfoResponse struct {
 	ID          string                     `json:"id"`
 	Name        string                     `json:"name"`
 	Description string                     `json:"description"`
@@ -73,7 +73,7 @@ func (r *HiveResponse) Send(response *restful.Response) {
 	sort.Strings(keys)
 
 	for _, k := range keys {
-		r.Hives = append(r.Hives, prepareHiveResponse(r.Context, r.hives[k]))
+		r.Hives = append(r.Hives, PrepareHiveResponse(r.Context, r.hives[k]))
 	}
 
 	r.Response.Send(response)
@@ -85,17 +85,17 @@ func (r *HiveResponse) EmptyResponse() interface{} {
 		var out struct {
 			Hives interface{} `json:"hives"`
 		}
-		out.Hives = []hiveInfoResponse{}
+		out.Hives = []HiveInfoResponse{}
 		return out
 	}
 	return nil
 }
 
-func prepareHiveResponse(ctx smolder.APIContext, hive *bees.BeeFactoryInterface) hiveInfoResponse {
+func PrepareHiveResponse(ctx smolder.APIContext, hive *bees.BeeFactoryInterface) HiveInfoResponse {
 	u, _ := url.Parse(ctx.(*context.APIContext).Config.BaseURL)
 	u.Path = path.Join(u.Path, "images", (*hive).Image())
 
-	resp := hiveInfoResponse{
+	resp := HiveInfoResponse{
 		ID:          (*hive).ID(),
 		Name:        (*hive).Name(),
 		Description: (*hive).Description(),
