@@ -141,6 +141,17 @@ func (mod *PrometheusBee) Action(action bees.Action) []bees.Placeholder {
 		} else {
 			c.Inc()
 		}
+	case "counter_add":
+		var label string
+		var value float64
+		action.Options.Bind("label", &label)
+		action.Options.Bind("value", &value)
+		c, err := mod.counter.GetMetricWithLabelValues(label)
+		if err != nil {
+			mod.LogErrorf("Error adding to counter: %v", err)
+		} else {
+			c.Add(value)
+		}
 	case "gauge_set":
 		var label string
 		var value float64
@@ -152,7 +163,77 @@ func (mod *PrometheusBee) Action(action bees.Action) []bees.Placeholder {
 		} else {
 			g.Set(value)
 		}
-
+	case "gauge_inc":
+		var label string
+		action.Options.Bind("label", &label)
+		g, err := mod.gauge.GetMetricWithLabelValues(label)
+		if err != nil {
+			mod.LogErrorf("Error incrementing gauge: %v", err)
+		} else {
+			g.Inc()
+		}
+	case "gauge_dec":
+		var label string
+		action.Options.Bind("label", &label)
+		g, err := mod.gauge.GetMetricWithLabelValues(label)
+		if err != nil {
+			mod.LogErrorf("Error decrementing gauge: %v", err)
+		} else {
+			g.Dec()
+		}
+	case "gauge_add":
+		var label string
+		var value float64
+		action.Options.Bind("label", &label)
+		action.Options.Bind("value", &value)
+		g, err := mod.gauge.GetMetricWithLabelValues(label)
+		if err != nil {
+			mod.LogErrorf("Error adding to gauge: %v", err)
+		} else {
+			g.Add(value)
+		}
+	case "gauge_sub":
+		var label string
+		var value float64
+		action.Options.Bind("label", &label)
+		action.Options.Bind("value", &value)
+		g, err := mod.gauge.GetMetricWithLabelValues(label)
+		if err != nil {
+			mod.LogErrorf("Error subtracting from gauge: %v", err)
+		} else {
+			g.Sub(value)
+		}
+	case "gauge_set_to_current_time":
+		var label string
+		action.Options.Bind("label", &label)
+		g, err := mod.gauge.GetMetricWithLabelValues(label)
+		if err != nil {
+			mod.LogErrorf("Error setting gauge to current time: %v", err)
+		} else {
+			g.SetToCurrentTime()
+		}
+	case "histogram_observe":
+		var label string
+		var value float64
+		action.Options.Bind("label", &label)
+		action.Options.Bind("value", &value)
+		h, err := mod.histogram.GetMetricWithLabelValues(label)
+		if err != nil {
+			mod.LogErrorf("Error observing value for histogram: %v", err)
+		} else {
+			h.Observe(value)
+		}
+	case "summary_observe":
+		var label string
+		var value float64
+		action.Options.Bind("label", &label)
+		action.Options.Bind("value", &value)
+		s, err := mod.summary.GetMetricWithLabelValues(label)
+		if err != nil {
+			mod.LogErrorf("Error observing value for summary: %v", err)
+		} else {
+			s.Observe(value)
+		}
 	default:
 		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
 	}
