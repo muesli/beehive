@@ -34,9 +34,11 @@ beehive.conf
 .*.sw*
 *.sublime-project
 *.sublime-workspace
+.vscode/
 
 # Jetbrains IDEs
 .idea
 
 # Embedded assets
 api/bindata.go
+

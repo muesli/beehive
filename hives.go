@@ -46,6 +46,7 @@ import (
 	_ "github.com/muesli/beehive/bees/nagiosbee"
 	_ "github.com/muesli/beehive/bees/openweathermapbee"
 	_ "github.com/muesli/beehive/bees/pastebinbee"
+	_ "github.com/muesli/beehive/bees/prometheusbee"
 	_ "github.com/muesli/beehive/bees/pushoverbee"
 	_ "github.com/muesli/beehive/bees/rssbee"
 	_ "github.com/muesli/beehive/bees/s3bee"
