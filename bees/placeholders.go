@@ -167,7 +167,7 @@ func ConvertValue(v interface{}, dst interface{}) error {
 		case float32:
 			*d = float64(vt)
 		case string:
-			x, _ := strconv.Atoi(vt)
+			x, _ := strconv.ParseFloat(vt, 64)
 			*d = float64(x)
 		default:
 			panic(fmt.Sprintf("Unhandled type %+v for float64 conversion", reflect.TypeOf(vt)))
@@ -214,9 +214,9 @@ func ConvertValue(v interface{}, dst interface{}) error {
 		case int64:
 			*d = time.Unix(vt, 0)
 		default:
-			panic(fmt.Sprintf("Unhandled type %+v for time.Time conversion", reflect.TypeOf(vt)))	
+			panic(fmt.Sprintf("Unhandled type %+v for time.Time conversion", reflect.TypeOf(vt)))
 		}
-		
+
 	case *url.Values:
 		switch vt := v.(type) {
 		case string:
