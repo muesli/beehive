@@ -20,8 +20,8 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// Package prometheusbee is an example for a Bee skeleton, designed to help you get
-// started with writing your own Bees.
+// Package prometheusbee is a bee designed to expose metrics for scraping
+// by Prometheus.
 package prometheusbee
 
 import (
@@ -31,8 +31,8 @@ import (
 	"net/http"
 )
 
-// PrometheusBee is an example for a Bee skeleton, designed to help you get started
-// with writing your own Bees.
+// PrometheusBee is a bee designed to expose metrics for scraping
+// by Prometheus.
 type PrometheusBee struct {
 	bees.Bee
 
