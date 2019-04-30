@@ -1,5 +1,5 @@
 /*
- *    Copyright (C) 2019 	  CalmBit
+ *    Copyright (C) 2019 CalmBit
  *                  2014-2019 Christian Muehlhaeuser
  *
  *    This program is free software: you can redistribute it and/or modify
@@ -64,7 +64,7 @@ func (mod *PrometheusBee) Run(eventChan chan bees.Event) {
 	err := prometheus.Register(mod.counter)
 	if err != nil {
 		mod.LogErrorf("Error registering counter vector: %v", err)
-		return
+		panic("Unable to start Prometheus due to counter initialization failure")
 	}
 
 	// Gauge vector registration
@@ -79,7 +79,7 @@ func (mod *PrometheusBee) Run(eventChan chan bees.Event) {
 	err = prometheus.Register(mod.gauge)
 	if err != nil {
 		mod.LogErrorf("Error registering gauge vector: %v", err)
-		return
+		panic("Unable to start Prometheus due to gauge initialization failure")
 	}
 
 	// Histogram vector registration
@@ -94,7 +94,7 @@ func (mod *PrometheusBee) Run(eventChan chan bees.Event) {
 	err = prometheus.Register(mod.histogram)
 	if err != nil {
 		mod.LogErrorf("Error registering histogram vector: %v", err)
-		return
+		panic("Unable to start Prometheus due to histogram initialization failure")
 	}
 
 	// Summary vector registration
@@ -109,7 +109,7 @@ func (mod *PrometheusBee) Run(eventChan chan bees.Event) {
 	err = prometheus.Register(mod.summary)
 	if err != nil {
 		mod.LogErrorf("Error registering summary vector: %v", err)
-		return
+		panic("Unable to start Prometheus due to summary initialization failure")
 	}
 
 	// Now, to serve everything up:

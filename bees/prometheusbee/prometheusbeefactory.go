@@ -1,5 +1,6 @@
 /*
- *    Copyright (C) 2014-2017 Christian Muehlhaeuser
+ *    Copyright (C) 2019 CalmBit
+ *                  2014-2019 Christian Muehlhaeuser
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License as published
@@ -15,6 +16,7 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  *    Authors:
+ *      CalmBit <calmbit@posteo.net>
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
