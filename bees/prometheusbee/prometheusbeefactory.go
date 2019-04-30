@@ -95,7 +95,7 @@ func (factory *PrometheusBeeFactory) Options() []bees.BeeOptionDescriptor {
 			Default:     "histogram_vec",
 		},
 		{
-			Name:        "summary_Vec_name",
+			Name:        "summary_vec_name",
 			Description: "The name of the summary vector",
 			Type:        "string",
 			Mandatory:   true,

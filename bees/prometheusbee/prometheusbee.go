@@ -54,14 +54,14 @@ func (mod *PrometheusBee) Run(eventChan chan bees.Event) {
 
 	// Counter vector registration
 
-	counter := prometheus.NewCounterVec(
+	mod.counter = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
 			Name: mod.counterVecName,
 			Help: "Collection of all counter variables being iterated by hives",
 		},
 		[]string{"name"},
 	)
-	err := prometheus.Register(counter)
+	err := prometheus.Register(mod.counter)
 	if err != nil {
 		mod.LogErrorf("Error registering counter vector: %v", err)
 		return
@@ -69,14 +69,14 @@ func (mod *PrometheusBee) Run(eventChan chan bees.Event) {
 
 	// Gauge vector registration
 
-	gauge := prometheus.NewGaugeVec(
+	mod.gauge = prometheus.NewGaugeVec(
 		prometheus.GaugeOpts{
 			Name: mod.gaugeVecName,
 			Help: "Collection of all gauge variables being iterated by hives",
 		},
 		[]string{"name"},
 	)
-	err = prometheus.Register(gauge)
+	err = prometheus.Register(mod.gauge)
 	if err != nil {
 		mod.LogErrorf("Error registering gauge vector: %v", err)
 		return
@@ -84,14 +84,14 @@ func (mod *PrometheusBee) Run(eventChan chan bees.Event) {
 
 	// Histogram vector registration
 
-	histogram := prometheus.NewHistogramVec(
+	mod.histogram = prometheus.NewHistogramVec(
 		prometheus.HistogramOpts{
 			Name: mod.histogramVecName,
 			Help: "Collection of all histogram variables being iterated by hives",
 		},
 		[]string{"name"},
 	)
-	err = prometheus.Register(histogram)
+	err = prometheus.Register(mod.histogram)
 	if err != nil {
 		mod.LogErrorf("Error registering histogram vector: %v", err)
 		return
@@ -99,14 +99,14 @@ func (mod *PrometheusBee) Run(eventChan chan bees.Event) {
 
 	// Summary vector registration
 
-	summary := prometheus.NewSummaryVec(
+	mod.summary = prometheus.NewSummaryVec(
 		prometheus.SummaryOpts{
 			Name: mod.summaryVecName,
 			Help: "Collection of all summary variables being iterated by hives",
 		},
 		[]string{"name"},
 	)
-	err = prometheus.Register(summary)
+	err = prometheus.Register(mod.summary)
 	if err != nil {
 		mod.LogErrorf("Error registering summary vector: %v", err)
 		return
@@ -135,8 +135,23 @@ func (mod *PrometheusBee) Action(action bees.Action) []bees.Placeholder {
 	case "counter_inc":
 		var label string
 		action.Options.Bind("label", &label)
-		mod.Logf("Incrementing %s", label)
-		mod.counter.WithLabelValues(label).Inc()
+		c, err := mod.counter.GetMetricWithLabelValues(label)
+		if err != nil {
+			mod.LogErrorf("Error incrementing counter: %v", err)
+		} else {
+			c.Inc()
+		}
+	case "gauge_set":
+		var label string
+		var value float64
+		action.Options.Bind("label", &label)
+		action.Options.Bind("value", &value)
+		g, err := mod.gauge.GetMetricWithLabelValues(label)
+		if err != nil {
+			mod.LogErrorf("Error setting gauge: %v", err)
+		} else {
+			g.Set(value)
+		}
 
 	default:
 		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
