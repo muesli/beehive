@@ -34,7 +34,6 @@ beehive.conf
 .*.sw*
 *.sublime-project
 *.sublime-workspace
-.vscode/
 
 # Jetbrains IDEs
 .idea
