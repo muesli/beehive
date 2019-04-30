@@ -21,8 +21,6 @@
 package main
 
 import (
-	_ "github.com/MarkJung/beehive/bees/youtubebee"
-
 	_ "github.com/muesli/beehive/bees/alertoverbee"
 	_ "github.com/muesli/beehive/bees/anelpowerctrlbee"
 	_ "github.com/muesli/beehive/bees/cleverbotbee"
@@ -63,4 +61,5 @@ import (
 	_ "github.com/muesli/beehive/bees/twiliobee"
 	_ "github.com/muesli/beehive/bees/twitterbee"
 	_ "github.com/muesli/beehive/bees/webbee"
+	_ "github.com/muesli/beehive/bees/youtubebee"
 )
