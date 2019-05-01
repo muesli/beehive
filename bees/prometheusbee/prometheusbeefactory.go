@@ -228,7 +228,7 @@ func (factory *PrometheusBeeFactory) Actions() []bees.ActionDescriptor {
 		{
 			Namespace:   factory.Name(),
 			Name:        "gauge_set_to_current_time",
-			Description: "Sets a gauge's vaue to the current time as a unix timestamp",
+			Description: "Sets a gauge's value to the current time as a unix timestamp",
 			Options: []bees.PlaceholderDescriptor{
 				{
 					Name:        "label",
