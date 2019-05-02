@@ -17,6 +17,8 @@ github.com/andybalholm/cascadia v1.0.0 h1:hOCXnnZ5A+3eVDX8pvgl4kofXv2ELss0bKcqRy
 github.com/andybalholm/cascadia v1.0.0/go.mod h1:GsXiBklL0woXo1j/WYWtSYYC4ouU9PqHO0sqidkEA4Y=
 github.com/araddon/dateparse v0.0.0-20190426192744-0d74ffceef83 h1:ukTLOeMC0aVxbJWVg6hOsVJ0VPIo8w++PbNsze/pqF8=
 github.com/araddon/dateparse v0.0.0-20190426192744-0d74ffceef83/go.mod h1:SLqhdZcd+dF3TEVL2RMoob5bBP5R1P1qkox+HtCBgGI=
+github.com/asaskevich/EventBus v0.0.0-20180315140547-d46933a94f05 h1:Shem5lRG4gJyrrg9YMIl7dOQazyWCq0Daz4LjompZ28=
+github.com/asaskevich/EventBus v0.0.0-20180315140547-d46933a94f05/go.mod h1:JS7hed4L1fj0hXcyEejnW57/7LCetXggd+vwrRnYeII=
 github.com/azr/backoff v0.0.0-20160115115103-53511d3c7330 h1:ekDALXAVvY/Ub1UtNta3inKQwZ/jMB/zpOtD8rAYh78=
 github.com/azr/backoff v0.0.0-20160115115103-53511d3c7330/go.mod h1:nH+k0SvAt3HeiYyOlJpLLv1HG1p7KWP7qU9QPp2/pCo=
 github.com/beorn7/perks v0.0.0-20180321164747-3a771d992973 h1:xJ4a3vCFaGF/jqvzLMYoU8P317H5OQ+Via4RmuPwCS0=
@@ -39,6 +41,8 @@ github.com/emicklei/go-restful v2.9.3+incompatible h1:2OwhVdhtzYUp5P5wuGsVDPagKS
 github.com/emicklei/go-restful v2.9.3+incompatible/go.mod h1:otzb+WCGbkyDHkqmQmT5YD2WR4BBwUdeQoFo8l/7tVs=
 github.com/fatih/set v0.2.1 h1:nn2CaJyknWE/6txyUDGwysr3G5QC6xWB/PtVjPBbeaA=
 github.com/fatih/set v0.2.1/go.mod h1:+RKtMCH+favT2+3YecHGxcc0b4KyVWA1QWWJUs4E0CI=
+github.com/flashmob/go-guerrilla v0.0.0-20190502151606-07043ae76e81 h1:45gIhMM+MtaoDrhBYFCSjYiQDNr9r6NNyGqzwPfKGco=
+github.com/flashmob/go-guerrilla v0.0.0-20190502151606-07043ae76e81/go.mod h1:ZT9TRggRsSY4ZVndoyx8TRUxi3tM/nOYtKWKDX94H0I=
 github.com/fluffle/goirc v1.0.1 h1:YHBfWIXSFgABz8dbijvOIKucFejnbHdk78+r2z/6B/Q=
 github.com/fluffle/goirc v1.0.1/go.mod h1:bm91JNJ5r070PbWm8uG9UDcy9GJxvB6fmVuHDttWwR4=
 github.com/fluffle/golog v1.0.2/go.mod h1:TKZoUh/MNb9worAhWP158Ol0TXc5EfhMJK/qB/7j+Ko=
