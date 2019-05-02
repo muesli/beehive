@@ -23,6 +23,7 @@ package bees
 
 import log "github.com/sirupsen/logrus"
 import "runtime/debug"
+import "fmt"
 
 // An Event describes an event including its parameters.
 type Event struct {
@@ -51,7 +52,8 @@ func handleEvents() {
 		log.Println()
 		log.Println("Event received:", event.Bee, "/", event.Name, "-", GetEventDescriptor(&event).Description)
 		for _, v := range event.Options {
-			log.Println("\tOptions:", v)
+			vv := truncateString(fmt.Sprintln(v), 1000)
+			log.Println("\tOptions:", vv)
 		}
 
 		go func() {
@@ -64,4 +66,15 @@ func handleEvents() {
 			execChains(&event)
 		}()
 	}
+}
+
+func truncateString(str string, num int) string {
+	bnoden := str
+	if len(str) > num {
+		if num > 3 {
+			num -= 3
+		}
+		bnoden = str[0:num] + "... (" + fmt.Sprint(len(str)-num) + " more characters)"
+	}
+	return bnoden
 }

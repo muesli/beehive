@@ -29,6 +29,7 @@ import (
 	_ "github.com/muesli/beehive/bees/devrantbee"
 	_ "github.com/muesli/beehive/bees/efabee"
 	_ "github.com/muesli/beehive/bees/emailbee"
+	_ "github.com/muesli/beehive/bees/emailserverbee"
 	_ "github.com/muesli/beehive/bees/execbee"
 	_ "github.com/muesli/beehive/bees/facebookbee"
 	_ "github.com/muesli/beehive/bees/fsnotifybee"

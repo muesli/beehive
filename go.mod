@@ -11,6 +11,7 @@ require (
 	github.com/PuerkitoBio/goquery v1.5.0
 	github.com/akashshinde/go_cricket v0.0.0-20170322162016-01a06b2c3f22
 	github.com/araddon/dateparse v0.0.0-20190426192744-0d74ffceef83 // indirect
+	github.com/asaskevich/EventBus v0.0.0-20180315140547-d46933a94f05 // indirect
 	github.com/azr/backoff v0.0.0-20160115115103-53511d3c7330 // indirect
 	github.com/briandowns/openweathermap v0.0.0-20180804155945-5f41b7c9d92d
 	github.com/carlosdp/twiliogo v0.0.0-20161027183705-b26045ebb9d1
@@ -19,6 +20,7 @@ require (
 	github.com/dustin/gojson v0.0.0-20160307161227-2e71ec9dd5ad // indirect
 	github.com/emicklei/go-restful v2.9.3+incompatible
 	github.com/fatih/set v0.2.1 // indirect
+	github.com/flashmob/go-guerrilla v0.0.0-20190502151606-07043ae76e81
 	github.com/fluffle/goirc v1.0.1
 	github.com/fsnotify/fsnotify v1.4.7
 	github.com/garyburd/go-oauth v0.0.0-20180319155456-bca2e7f09a17 // indirect
