@@ -125,6 +125,8 @@ func ConvertValue(v interface{}, dst interface{}) error {
 			vt = strings.ToLower(vt)
 			if vt == "true" || vt == "on" || vt == "yes" || vt == "1" || vt == "t" {
 				*d = true
+			} else {
+				*d = false
 			}
 		case int64:
 			*d = vt > 0
