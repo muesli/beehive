@@ -41,6 +41,23 @@ var (
 	logMutex sync.RWMutex
 )
 
+// MessageType defines the log level of the log entry we're dealing with
+type MessageType uint
+
+const (
+	// LogInfo is for info-level log entries
+	LogInfo MessageType = iota
+
+	// LogError is for error-level log entries
+	LogError MessageType = iota
+
+	// LogFatal is for fatal-level log entries
+	LogFatal MessageType = iota
+
+	// LogDebug is for debug-level log entries
+	LogDebug MessageType = iota
+)
+
 // LogSorter is used for sorting an array of LogMessages by their timestamp
 type LogSorter []LogMessage
 
@@ -49,18 +66,18 @@ func (a LogSorter) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a LogSorter) Less(i, j int) bool { return !a[i].Timestamp.Before(a[j].Timestamp) }
 
 // NewLogMessage returns a newly composed LogMessage
-func NewLogMessage(bee string, message string, messageType uint) LogMessage {
+func NewLogMessage(bee string, message string, messageType MessageType) LogMessage {
 	return LogMessage{
 		ID:          UUID(),
 		Bee:         bee,
 		Message:     message,
-		MessageType: messageType,
+		MessageType: uint(messageType),
 		Timestamp:   time.Now(),
 	}
 }
 
 // Log adds a new LogMessage to the log
-func Log(bee string, message string, messageType uint) {
+func Log(bee string, message string, messageType MessageType) {
 	logMutex.Lock()
 	defer logMutex.Unlock()
 
