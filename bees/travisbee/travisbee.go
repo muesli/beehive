@@ -205,6 +205,11 @@ func (mod *TravisBee) handleBuildFinish(bt *BuildTracker, build *travis.Build) {
 				Value: build.State,
 			},
 			{
+				Name:  "previous_state",
+				Type:  "string",
+				Value: build.PreviousState,
+			},
+			{
 				Name:  "repo_slug",
 				Type:  "string",
 				Value: build.Repository.Slug,

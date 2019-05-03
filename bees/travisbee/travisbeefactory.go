@@ -100,6 +100,11 @@ func (factory *TravisBeeFactory) Events() []bees.EventDescriptor {
 					Type:        "string",
 				},
 				{
+					Name:        "previous_state",
+					Description: "The final state of the previous build",
+					Type:        "string",
+				},
+				{
 					Name:        "repo_slug",
 					Description: "The slug of the repo being built",
 					Type:        "string",
