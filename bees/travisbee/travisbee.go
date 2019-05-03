@@ -181,17 +181,44 @@ func (mod *TravisBee) handleStateChange(bt *BuildTracker, build *travis.Build) {
 	}
 
 	mod.eventChan <- ev
+
+	if build.State == "canceled" || build.State == "passed" ||
+		build.State == "failed" || build.State == "errored" {
+		mod.handleBuildFinish(bt, build)
+	}
 }
 
-// Action triggers the action passed to it.
-func (mod *TravisBee) Action(action bees.Action) []bees.Placeholder {
-	outs := []bees.Placeholder{}
-	/*switch action.Name {
-	default:
-		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
-	}*/
-
-	return outs
+func (mod *TravisBee) handleBuildFinish(bt *BuildTracker, build *travis.Build) {
+	mod.Logf("Build %d has finished with state %s", build.Id, build.State)
+	ev := bees.Event{
+		Bee:  mod.Name(),
+		Name: "build_finished",
+		Options: []bees.Placeholder{
+			{
+				Name:  "id",
+				Type:  "uint",
+				Value: build.Id,
+			},
+			{
+				Name:  "state",
+				Type:  "string",
+				Value: build.State,
+			},
+			{
+				Name:  "repo_slug",
+				Type:  "string",
+				Value: build.Repository.Slug,
+			},
+			{
+				Name:  "duration",
+				Type:  "uint",
+				Value: build.Duration,
+			},
+		},
+	}
+	mod.eventChan <- ev
+	mod.Logf("Now untracking build %d", bt.id)
+	delete(mod.builds, bt.id)
 }
 
 // ReloadOptions parses the config options and initializes the Bee.

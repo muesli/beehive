@@ -143,6 +143,33 @@ func (factory *TravisBeeFactory) Events() []bees.EventDescriptor {
 				},
 			},
 		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "build_finished",
+			Description: "is triggered when a build enters any terminal state (canceled/errored/passed/failed)",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "id",
+					Description: "The id of the build",
+					Type:        "uint",
+				},
+				{
+					Name:        "state",
+					Description: "The final state of the build",
+					Type:        "string",
+				},
+				{
+					Name:        "repo_slug",
+					Description: "The slug of the repo being built",
+					Type:        "string",
+				},
+				{
+					Name:        "duration",
+					Description: "The duration of the build in seconds",
+					Type:        "uint",
+				},
+			},
+		},
 	}
 	return events
 }
