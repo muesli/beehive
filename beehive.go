@@ -107,6 +107,8 @@ func main() {
 
 	api.Run()
 
+	log.SetLevel(log.InfoLevel)
+
 	log.Println()
 	log.Println("Beehive is buzzing...")
 
