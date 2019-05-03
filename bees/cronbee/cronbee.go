@@ -54,7 +54,7 @@ func (mod *CronBee) Run(eventChan chan bees.Event) {
 					{
 						Name:  "timestamp",
 						Type:  "string",
-						Value: timer.GetNextEvent(),
+						Value: timer.GetNextEvent().Format(time.RFC3339),
 					},
 				},
 			}
