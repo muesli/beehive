@@ -89,7 +89,7 @@ func (mod *TravisBee) getBuilds(since time.Time) {
 			}
 			mod.builds[currentBuild.Id] = b
 		} else {
-			mod.Logf("[%d] %d - %s / %s", i, currentBuild.Id, currentBuild.StartedAt, currentBuild.State)
+			mod.LogDebugf("[%d] %d - %s / %s", i, currentBuild.Id, currentBuild.StartedAt, currentBuild.State)
 
 			// If a build was just barely created (i.e. hasn't moved into any other
 			// stage yet) then we can't even get a started_at time - instead, let's
@@ -112,7 +112,7 @@ func (mod *TravisBee) getBuilds(since time.Time) {
 
 func (mod *TravisBee) handleNewBuild(build *travis.Build, since time.Time) {
 	mod.builds[build.Id] = BuildTracker{id: build.Id, state: build.State, lastTime: time.Now()}
-	mod.Logf("Tracking build %d - state %s", build.Id, build.State)
+	mod.LogDebugf("Tracking build %d - state %s", build.Id, build.State)
 
 	ev := bees.Event{
 		Bee:  mod.Name(),
@@ -145,7 +145,7 @@ func (mod *TravisBee) handleNewBuild(build *travis.Build, since time.Time) {
 }
 
 func (mod *TravisBee) handleStateChange(bt *BuildTracker, build *travis.Build) {
-	mod.Logf("State changed! (was %s, is now %s)", bt.state, build.State)
+	mod.LogDebugf("State changed! (was %s, is now %s)", bt.state, build.State)
 
 	ev := bees.Event{
 		Bee:  mod.Name(),
@@ -188,7 +188,7 @@ func (mod *TravisBee) handleStateChange(bt *BuildTracker, build *travis.Build) {
 }
 
 func (mod *TravisBee) handleBuildFinish(bt *BuildTracker, build *travis.Build) {
-	mod.Logf("Build %d has finished with state %s", build.Id, build.State)
+	mod.LogDebugf("Build %d has finished with state %s", build.Id, build.State)
 	ev := bees.Event{
 		Bee:  mod.Name(),
 		Name: "build_finished",
@@ -221,7 +221,7 @@ func (mod *TravisBee) handleBuildFinish(bt *BuildTracker, build *travis.Build) {
 		},
 	}
 	mod.eventChan <- ev
-	mod.Logf("Now untracking build %d", bt.id)
+	mod.LogDebugf("Now untracking build %d", bt.id)
 	delete(mod.builds, bt.id)
 }
 
