@@ -77,8 +77,7 @@ func (mod *TravisBee) getBuilds(since time.Time) {
 	var opt = travis.BuildsOption{Limit: 10, Offset: 0, SortBy: "started_at:desc"}
 	builds, _, err := mod.client.Builds.List(context.Background(), &opt)
 	if err != nil {
-		mod.LogErrorf("Error getting builds from travis-ci: %v", err)
-		panic("Fatal error processing travis builds!")
+		mod.LogFatal("Error getting builds from travis-ci: ", err)
 	}
 
 	for i, currentBuild := range builds {
