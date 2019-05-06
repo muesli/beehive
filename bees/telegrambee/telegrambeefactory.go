@@ -101,8 +101,8 @@ func (factory *TelegramBeeFactory) Events() []bees.EventDescriptor {
 				},
 				{
 					Name:        "timestamp",
-					Description: "Timestamp (seconds since epoch)",
-					Type:        "string",
+					Description: "Timestamp",
+					Type:        "time.Time",
 				},
 			},
 		},

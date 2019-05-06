@@ -119,8 +119,8 @@ func (mod *TelegramBee) Run(eventChan chan bees.Event) {
 					},
 					{
 						Name:  "timestamp",
-						Type:  "string",
-						Value: strconv.FormatInt(time.Now().Unix(), 10),
+						Type:  "time.Time",
+						Value: time.Now(),
 					},
 				},
 			}
