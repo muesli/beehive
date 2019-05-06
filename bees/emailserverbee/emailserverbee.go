@@ -72,7 +72,8 @@ func (mod *EmailServerBee) mailProcessor() func() backends.Decorator {
 
 						// create events and send it to cin
 						ev := bees.Event{
-							Bee: mod.Name(),
+							Bee:  mod.Name(),
+							Name: "received",
 							Options: []bees.Placeholder{
 								{
 									Name:  "sender",
