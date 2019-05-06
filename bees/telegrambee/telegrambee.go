@@ -119,7 +119,7 @@ func (mod *TelegramBee) Run(eventChan chan bees.Event) {
 					},
 					{
 						Name:  "timestamp",
-						Type:  "time.Time",
+						Type:  "timestamp",
 						Value: time.Now(),
 					},
 				},

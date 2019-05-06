@@ -102,7 +102,7 @@ func (factory *TelegramBeeFactory) Events() []bees.EventDescriptor {
 				{
 					Name:        "timestamp",
 					Description: "Timestamp",
-					Type:        "time.Time",
+					Type:        "timestamp",
 				},
 			},
 		},
