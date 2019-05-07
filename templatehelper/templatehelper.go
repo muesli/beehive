@@ -32,7 +32,7 @@ import (
 // FuncMap contains all the common string helpers
 var (
 	FuncMap = template.FuncMap{
-		"Json": func(values ...interface{}) htmlTemplate.JS {
+		"JSON": func(values ...interface{}) htmlTemplate.JS {
 			json, _ := json.Marshal(values)
 			return htmlTemplate.JS(json)
 		},
