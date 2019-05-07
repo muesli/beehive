@@ -133,6 +133,10 @@ the `-bind` and `-canonicalurl` parameters. For example:
 
     beehive -bind "192.168.0.1:8181" -canonicalurl "http://192.168.0.1:8181"
 
+or
+
+    docker run --name beehive -d -e CANONICAL_URL="http://192.168.0.1:8181" -p 8181:8181 fribbledom/beehive
+
 ## Development
 
 Need help? Want to hack on your own Hives? Join us on IRC (irc://freenode.net/#beehive) or [Gitter](https://gitter.im/the_beehive/Lobby).
