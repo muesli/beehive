@@ -22,6 +22,8 @@
 package templatehelper
 
 import (
+	"encoding/json"
+	htmlTemplate "html/template"
 	"regexp"
 	"strings"
 	"text/template"
@@ -30,6 +32,10 @@ import (
 // FuncMap contains all the common string helpers
 var (
 	FuncMap = template.FuncMap{
+		"JSON": func(values ...interface{}) htmlTemplate.JS {
+			json, _ := json.Marshal(values)
+			return htmlTemplate.JS(json)
+		},
 		"Left": func(values ...interface{}) string {
 			return values[0].(string)[:values[1].(int)]
 		},
