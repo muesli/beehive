@@ -27,6 +27,7 @@ import (
 	_ "github.com/muesli/beehive/bees/cricketbee"
 	_ "github.com/muesli/beehive/bees/cronbee"
 	_ "github.com/muesli/beehive/bees/devrantbee"
+	_ "github.com/muesli/beehive/bees/discordbee"
 	_ "github.com/muesli/beehive/bees/efabee"
 	_ "github.com/muesli/beehive/bees/emailbee"
 	_ "github.com/muesli/beehive/bees/emailserverbee"
