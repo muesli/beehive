@@ -75,12 +75,6 @@ func (factory *DiscordBeeFactory) Options() []bees.BeeOptionDescriptor {
 			Type:        "string",
 			Mandatory:   true,
 		},
-		{
-			Name:        "trigger_phrase",
-			Description: "The phrase/word to start a command with in order for Beehive to recognize it",
-			Type:        "string",
-			Mandatory:   true,
-		},
 	}
 	return opts
 }
@@ -90,8 +84,8 @@ func (factory *DiscordBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{
 			Namespace:   factory.Name(),
-			Name:        "message_received",
-			Description: "is triggered when a message has been recieved with the trigger word",
+			Name:        "message",
+			Description: "is triggered when a message has been recieved",
 			Options: []bees.PlaceholderDescriptor{
 				{
 					Name:        "contents",
@@ -124,7 +118,7 @@ func (factory *DiscordBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		{
 			Namespace:   factory.Name(),
-			Name:        "send_message",
+			Name:        "send",
 			Description: "Sends a general message to the specified channel",
 			Options: []bees.PlaceholderDescriptor{
 				{
@@ -136,6 +130,19 @@ func (factory *DiscordBeeFactory) Actions() []bees.ActionDescriptor {
 				{
 					Name:        "channel_id",
 					Description: "ID of the channel to post in",
+					Type:        "string",
+					Mandatory:   true,
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "set_status",
+			Description: "Sets the status of the discord bot",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "status",
+					Description: "Playing {status}",
 					Type:        "string",
 					Mandatory:   true,
 				},

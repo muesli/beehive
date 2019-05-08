@@ -20,17 +20,17 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// Package discordbee is
+// Package discordbee is a bee for sending and recieving messages with Discord
+// servers.
 package discordbee
 
 import (
-	"strings"
-
 	"github.com/bwmarrin/discordgo"
 	"github.com/muesli/beehive/bees"
 )
 
-// DiscordBee is
+// DiscordBee is a bee for sending and recieving messages with Discord
+// servers.
 type DiscordBee struct {
 	bees.Bee
 
@@ -44,13 +44,13 @@ type DiscordBee struct {
 func (mod *DiscordBee) Run(eventChan chan bees.Event) {
 	mod.eventChan = eventChan
 
-	mod.Logf("Starting discord bee with apiToken %s", mod.apiToken)
+	mod.LogDebugf("Starting discord bee with apiToken %s", mod.apiToken)
 	d, err := discordgo.New("Bot " + mod.apiToken)
 	if err != nil {
 		mod.LogFatal("Unable to start discordbee! Error: ", err)
 	}
 	mod.discord = d
-	mod.Logf("Done!")
+	mod.LogDebugf("Done!")
 
 	mod.discord.AddHandler(mod.isReady)
 	mod.discord.AddHandler(mod.onSend)
@@ -70,7 +70,9 @@ func (mod *DiscordBee) Run(eventChan chan bees.Event) {
 }
 
 func (mod *DiscordBee) isReady(s *discordgo.Session, event *discordgo.Ready) {
-	mod.Logf("Is ready")
+	// Default status - once the persistance layer exists:
+	// TODO: Persist status, use it here.
+	mod.LogDebugf("isReady called")
 	s.UpdateStatus(0, "with bees")
 }
 
@@ -79,40 +81,38 @@ func (mod *DiscordBee) onSend(s *discordgo.Session, event *discordgo.MessageCrea
 		return
 	}
 
-	if strings.HasPrefix(event.Content, mod.triggerPhrase+" ") {
-		c, e := s.Channel(event.ChannelID)
-		if e != nil {
-			mod.LogErrorf("Unable to find channel with id %s", event.ChannelID)
-			return
-		}
-		ev := bees.Event{
-			Bee:  mod.Name(),
-			Name: "message_received",
-			Options: []bees.Placeholder{
-				{
-					Name:  "contents",
-					Type:  "string",
-					Value: strings.Replace(event.Content, mod.triggerPhrase+" ", "", 1),
-				},
-				{
-					Name:  "username",
-					Type:  "string",
-					Value: event.Author.String(),
-				},
-				{
-					Name:  "channel_id",
-					Type:  "string",
-					Value: event.ChannelID,
-				},
-				{
-					Name:  "channel_name",
-					Type:  "string",
-					Value: c.Name,
-				},
-			},
-		}
-		mod.eventChan <- ev
+	c, e := s.Channel(event.ChannelID)
+	if e != nil {
+		mod.LogErrorf("Unable to find channel with id %s", event.ChannelID)
+		return
 	}
+	ev := bees.Event{
+		Bee:  mod.Name(),
+		Name: "message",
+		Options: []bees.Placeholder{
+			{
+				Name:  "contents",
+				Type:  "string",
+				Value: event.Content,
+			},
+			{
+				Name:  "username",
+				Type:  "string",
+				Value: event.Author.String(),
+			},
+			{
+				Name:  "channel_id",
+				Type:  "string",
+				Value: event.ChannelID,
+			},
+			{
+				Name:  "channel_name",
+				Type:  "string",
+				Value: c.Name,
+			},
+		},
+	}
+	mod.eventChan <- ev
 
 }
 
@@ -120,7 +120,7 @@ func (mod *DiscordBee) onSend(s *discordgo.Session, event *discordgo.MessageCrea
 func (mod *DiscordBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 	switch action.Name {
-	case "send_message":
+	case "send":
 		var contents string
 		var channelID string
 		action.Options.Bind("contents", &contents)
@@ -130,6 +130,16 @@ func (mod *DiscordBee) Action(action bees.Action) []bees.Placeholder {
 		if err != nil {
 			mod.LogErrorf("Unable to send message: %v", err)
 		}
+	case "set_status":
+		var status string
+		action.Options.Bind("status", &status)
+
+		err := mod.discord.UpdateStatus(0, status)
+		if err != nil {
+			mod.LogErrorf("Unable to update status: %v", err)
+		}
+	default:
+		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
 	}
 	return outs
 }
