@@ -20,7 +20,7 @@
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
-// Package discordbee is a bee for sending and recieving messages with Discord
+// Package discordbee is a bee for sending and receiving messages with Discord
 // servers.
 package discordbee
 
@@ -29,7 +29,7 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
-// DiscordBee is a bee for sending and recieving messages with Discord
+// DiscordBee is a bee for sending and receiving messages with Discord
 // servers.
 type DiscordBee struct {
 	bees.Bee

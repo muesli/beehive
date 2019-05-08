@@ -85,7 +85,7 @@ func (factory *DiscordBeeFactory) Events() []bees.EventDescriptor {
 		{
 			Namespace:   factory.Name(),
 			Name:        "message",
-			Description: "is triggered when a message has been recieved",
+			Description: "is triggered when a message has been received",
 			Options: []bees.PlaceholderDescriptor{
 				{
 					Name:        "contents",
