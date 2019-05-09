@@ -23,5 +23,4 @@
 package main
 
 import (
-	_ "github.com/muesli/beehive/bees/notificationbee"
 )

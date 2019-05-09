@@ -1,4 +1,4 @@
-// +build darwin
+// +build linux
 
 /*
  *    Copyright (C) 2014-2017 Christian Muehlhaeuser
