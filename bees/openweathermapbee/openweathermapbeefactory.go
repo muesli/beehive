@@ -70,21 +70,21 @@ func (factory *OpenweathermapBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
 			Name:        "unit",
-			Description: "Your prefered unit",
+			Description: "Your preferred unit",
 			Type:        "string",
 			Default:     "c", // celcius -> The right one
 			Mandatory:   true,
 		},
 		{
 			Name:        "language",
-			Description: "Your prefered language",
+			Description: "Your preferred language",
 			Type:        "string",
 			Default:     "en", // english
 			Mandatory:   true,
 		},
 		{
 			Name:        "key",
-			Description: "Your openweathermap api key",
+			Description: "Your OpenWeatherMap api key",
 			Type:        "string",
 			Mandatory:   true,
 		},

@@ -61,7 +61,7 @@ func (factory *GitterBeeFactory) Image() string {
 	return factory.ID() + ".png"
 }
 
-// LogoColor returns ther preferred logo background color (used by the admin interface).
+// LogoColor returns the preferred logo background color (used by the admin interface).
 func (factory *GitterBeeFactory) LogoColor() string {
 	return "#994499"
 }
