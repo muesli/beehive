@@ -46,7 +46,7 @@ func (factory *YoutubeBeeFactory) ID() string {
 
 // Name returns the name of this Bee.
 func (factory *YoutubeBeeFactory) Name() string {
-	return "Youtube Bee"
+	return "Youtube"
 }
 
 // Description returns the description of this Bee.

@@ -21,13 +21,18 @@
  */
 
 // Package youtubebee is a Bee for tunneling Youtube push notifications.
-package youtube
+package youtubebee
 
 import (
 	"encoding/xml"
+	"fmt"
+	"io/ioutil"
+	"log"
 	"net"
 	"net/http"
 	"net/url"
+	"strconv"
+	"strings"
 
 	"github.com/muesli/beehive/bees"
 )
@@ -47,12 +52,13 @@ type YoutubeBee struct {
 func (mod *YoutubeBee) Run(eventChan chan bees.Event) {
 	mod.eventChan = eventChan
 	subscriptionLink := "https://pubsubhubbub.appspot.com/subscribe"
-	channelID := mod.url.split("/")
-	channelID = challenge[len(channelID)-1]
+	channelURLTokens := strings.Split(mod.url, "/")
+	channelID := channelURLTokens[len(channelURLTokens)-1]
 	topic := "https://www.youtube.com/xml/feeds/videos.xml?channel_id=" + channelID
+	hardcodedAddress := "0.0.0.0:5050" // should be mod.addr
 
-	srv := &http.Server{Addr: mod.addr, Handler: mod}
-	l, err := net.Listen("tcp", mod.addr)
+	srv := &http.Server{Addr: hardcodedAddress, Handler: mod}
+	l, err := net.Listen("tcp", hardcodedAddress)
 	if err != nil {
 		mod.LogErrorf("Can't listen on %s", mod.addr)
 		return
@@ -66,12 +72,22 @@ func (mod *YoutubeBee) Run(eventChan chan bees.Event) {
 		}
 		// Go 1.8+: srv.Close()
 		// send POST to Google's pubsubhubbub to subscribe
-		resp, err := http.PostForm(subscriptionLink,
-			url.Values{
-				"hub.mode":     {"subscribe"},
-				"hub.topic":    {topic},
-				"hub.callback": {mod.addr},
-			})
+		// need to be in form-data format
+		data := url.Values{}
+		data.Set("hub.mode", "subscribe")
+		data.Set("hub.topic", topic)
+		data.Set("hub.callback", mod.addr)
+		client := &http.Client{}
+		r, _ := http.NewRequest("POST", subscriptionLink, strings.NewReader(data.Encode())) // URL-encoded payload
+		r.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+		r.Header.Add("Content-Length", strconv.Itoa(len(data.Encode())))
+
+		resp, _ := client.Do(r)
+		for resp.Status != "202 Accepted" {
+			// redo until success
+			resp, _ = client.Do(r)
+		}
+
 	}()
 
 	select {
@@ -119,15 +135,21 @@ func (mod *YoutubeBee) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			} `xml:"entry"`
 		}
 		var feed Feed
-		xml.Unmarshal([]byte(realdata), &feed)
-		for _, link := range feed.Link {
-			if link.Rel == "self" {
-				ev.Options.SetValue("channelUrl", "string", link.Href)
-			}
+		body, err := ioutil.ReadAll(req.Body)
+		if err != nil {
+			log.Printf("Error reading body: %v", err)
+			http.Error(w, "can't read body", http.StatusBadRequest)
 		}
+		xml.Unmarshal([]byte(body), &feed)
+		ev.Options.SetValue("channelUrl", "string", feed.Entry.Author.URI)
 		ev.Options.SetValue("vidUrl", "string", feed.Entry.Link.Href)
 
 		mod.eventChan <- ev
+	} else if req.Method == "GET" {
+		challenge := req.URL.Query().Get("hub.challenge")
+		if challenge != "" {
+			fmt.Fprintf(w, challenge)
+		}
 	}
 }
 
