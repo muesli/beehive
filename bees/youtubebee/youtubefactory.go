@@ -88,7 +88,7 @@ func (factory *YoutubeBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{
 			Namespace:   factory.Name(),
-			Name:        "push",
+			Name:        "notification",
 			Description: "A push notification was sent by the Youtube channel",
 			Options: []bees.PlaceholderDescriptor{
 				{

@@ -18,6 +18,7 @@
  *	  Authors:
  *		Daniel 'grindhold' Brendle <grindhold@skarphed.org>
  *      Christian Muehlhaeuser <muesli@gmail.com>
+ * 		Mark Jung <gujung2022@u.northwestern.edu>
  */
 
 // Package youtubebee is a Bee for tunneling Youtube push notifications.
@@ -48,6 +49,39 @@ type YoutubeBee struct {
 	eventChan chan bees.Event
 }
 
+type Feed struct {
+	XMLName xml.Name `xml:"feed"`
+	Text    string   `xml:",chardata"`
+	Yt      string   `xml:"yt,attr"`
+	Xmlns   string   `xml:"xmlns,attr"`
+	Link    []struct {
+		Text string `xml:",chardata"`
+		Rel  string `xml:"rel,attr"`
+		Href string `xml:"href,attr"`
+	} `xml:"link"`
+	Title   string `xml:"title"`
+	Updated string `xml:"updated"`
+	Entry   struct {
+		Text      string `xml:",chardata"`
+		ID        string `xml:"id"`
+		VideoId   string `xml:"videoId"`
+		ChannelId string `xml:"channelId"`
+		Title     string `xml:"title"`
+		Link      struct {
+			Text string `xml:",chardata"`
+			Rel  string `xml:"rel,attr"`
+			Href string `xml:"href,attr"`
+		} `xml:"link"`
+		Author struct {
+			Text string `xml:",chardata"`
+			Name string `xml:"name"`
+			URI  string `xml:"uri"`
+		} `xml:"author"`
+		Published string `xml:"published"`
+		Updated   string `xml:"updated"`
+	} `xml:"entry"`
+}
+
 // Run executes the Bee's event loop.
 func (mod *YoutubeBee) Run(eventChan chan bees.Event) {
 	mod.eventChan = eventChan
@@ -55,10 +89,9 @@ func (mod *YoutubeBee) Run(eventChan chan bees.Event) {
 	channelURLTokens := strings.Split(mod.url, "/")
 	channelID := channelURLTokens[len(channelURLTokens)-1]
 	topic := "https://www.youtube.com/xml/feeds/videos.xml?channel_id=" + channelID
-	hardcodedAddress := "0.0.0.0:5050" // should be mod.addr
 
-	srv := &http.Server{Addr: hardcodedAddress, Handler: mod}
-	l, err := net.Listen("tcp", hardcodedAddress)
+	srv := &http.Server{Addr: mod.addr, Handler: mod}
+	l, err := net.Listen("tcp", mod.addr)
 	if err != nil {
 		mod.LogErrorf("Can't listen on %s", mod.addr)
 		return
@@ -82,10 +115,10 @@ func (mod *YoutubeBee) Run(eventChan chan bees.Event) {
 		r.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 		r.Header.Add("Content-Length", strconv.Itoa(len(data.Encode())))
 
-		resp, _ := client.Do(r)
-		for resp.Status != "202 Accepted" {
-			// redo until success
-			resp, _ = client.Do(r)
+		_, err = client.Do(r)
+		if err != nil {
+			mod.LogErrorf("Can't subscribe to youtube channel")
+			return
 		}
 
 	}()
@@ -101,39 +134,8 @@ func (mod *YoutubeBee) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		ev := bees.Event{
 			Bee: mod.Name(),
 		}
-		ev.Name = "push"
-		type Feed struct {
-			XMLName xml.Name `xml:"feed"`
-			Text    string   `xml:",chardata"`
-			Yt      string   `xml:"yt,attr"`
-			Xmlns   string   `xml:"xmlns,attr"`
-			Link    []struct {
-				Text string `xml:",chardata"`
-				Rel  string `xml:"rel,attr"`
-				Href string `xml:"href,attr"`
-			} `xml:"link"`
-			Title   string `xml:"title"`
-			Updated string `xml:"updated"`
-			Entry   struct {
-				Text      string `xml:",chardata"`
-				ID        string `xml:"id"`
-				VideoId   string `xml:"videoId"`
-				ChannelId string `xml:"channelId"`
-				Title     string `xml:"title"`
-				Link      struct {
-					Text string `xml:",chardata"`
-					Rel  string `xml:"rel,attr"`
-					Href string `xml:"href,attr"`
-				} `xml:"link"`
-				Author struct {
-					Text string `xml:",chardata"`
-					Name string `xml:"name"`
-					URI  string `xml:"uri"`
-				} `xml:"author"`
-				Published string `xml:"published"`
-				Updated   string `xml:"updated"`
-			} `xml:"entry"`
-		}
+		ev.Name = "notification"
+
 		var feed Feed
 		body, err := ioutil.ReadAll(req.Body)
 		if err != nil {
