@@ -105,6 +105,9 @@ func assetHandler(req *restful.Request, resp *restful.Response) {
 		re := regexp.MustCompile("integrity=\"([^\"]*)\"")
 		b = re.ReplaceAll(b, []byte{})
 	}
+	if strings.HasSuffix(canonicalURL, "/") {
+		canonicalURL = canonicalURL[:len(canonicalURL)-1]
+	}
 	if defaultURL != canonicalURL {
 		// We're serving files on a non-default canonical URL
 		// Make sure the HTML we serve references API & assets with the correct URL
