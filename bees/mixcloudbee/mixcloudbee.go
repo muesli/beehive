@@ -98,7 +98,6 @@ func (mod *MixcloudBee) pollFeed(feed string) {
 					},
 				},
 			}
-			mod.Logln("Event new_cloudcast", newCloudcastEvent)
 			mod.eventChan <- newCloudcastEvent
 		}
 		time.Sleep(25 * time.Second)
