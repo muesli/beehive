@@ -1,3 +1,8 @@
+env:
+  - GO111MODULE=on
+before:
+  hooks:
+  - go mod download
 builds:
   -
     binary: beehive
