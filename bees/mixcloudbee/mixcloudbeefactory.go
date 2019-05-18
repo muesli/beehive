@@ -106,6 +106,21 @@ func (factory *MixcloudBeeFactory) Events() []bees.EventDescriptor {
 	return events
 }
 
+// Actions describes the available actions provided by this Bee.
+func (factory *MixcloudBeeFactory) Actions() []bees.ActionDescriptor {
+	actions := []bees.ActionDescriptor{
+		{
+			Namespace:   factory.Name(),
+			Name:        "pollFeed",
+			Description: "Polls the Mixcloud Feed specified in the options",
+			Options: []bees.PlaceholderDescriptor{
+
+			},
+		},
+	}
+	return actions
+}
+
 func init() {
 	f := MixcloudBeeFactory{}
 	bees.RegisterFactory(&f)

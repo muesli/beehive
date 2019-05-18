@@ -45,63 +45,74 @@ type MixcloudBee struct {
 
 // Poll a Mixcloud Cloudcasts feed
 func (mod *MixcloudBee) pollFeed(feed string) {
+	mod.Logln("Parsing feed")
+	var allCloudcastsData []mixcloud.CloudcastData
+	var opt mixcloud.ListOptions
+	opt.Since = mod.lastUpdate
+	opt.Until = time.Now()
+	mod.lastUpdate = opt.Until
+	mod.Logln("Since", opt.Since, "Until", opt.Until)
+	cloudcasts, err := mod.client.GetCloudcasts(mod.feed, &opt)
+	if err != nil {
+		mod.LogErrorf("Error getting Cloudcasts: %s", err)
+		return
+	}
+	allCloudcastsData = append(allCloudcastsData, cloudcasts.Data...)
+	nextUrl := cloudcasts.Paging.NextURL
 	for {
-		mod.Logln("Parsing feed")
-		var allCloudcastsData []mixcloud.CloudcastData
-		var opt mixcloud.ListOptions
-		opt.Since = mod.lastUpdate
-		opt.Until = time.Now()
-		mod.lastUpdate = opt.Until
-		mod.Logln("Since", opt.Since, "Until", opt.Until)
-		cloudcasts, err := mod.client.GetCloudcasts(mod.feed, &opt)
-		if err != nil {
-			mod.LogErrorf("Error getting Cloudcasts: %s", err)
+		if nextUrl == "" {
 			break
 		}
+		// the following line is necessary to always create a new object, else just some values would be overwritten
+		// and missing values would stay the same as before
+		cloudcasts = mixcloud.Cloudcasts{}
+		err := mod.client.GetPage(nextUrl, &cloudcasts)
 		allCloudcastsData = append(allCloudcastsData, cloudcasts.Data...)
-		nextUrl := cloudcasts.Paging.NextURL
-		for {
-			if nextUrl == "" {
-				break
-			}
-			// the following line is necessary to always create a new object, else just some values would be overwritten
-			// and missing values would stay the same as before
-			cloudcasts = mixcloud.Cloudcasts{}
-			err := mod.client.GetPage(nextUrl, &cloudcasts)
-			allCloudcastsData = append(allCloudcastsData, cloudcasts.Data...)
-			if err != nil {
-				mod.LogErrorf("Error getting next Cloudcast page: %s", err)
-				break
-			}
-			nextUrl = cloudcasts.Paging.NextURL
+		if err != nil {
+			mod.LogErrorf("Error getting next Cloudcast page: %s", err)
+			break
 		}
-
-		for _, cloudcast := range allCloudcastsData {
-			newCloudcastEvent := bees.Event{
-				Bee:  mod.Name(),
-				Name: "new_cloudcast",
-				Options: []bees.Placeholder{
-					{
-						Name:  "name",
-						Type:  "string",
-						Value: cloudcast.Name,
-					},
-					{
-						Name:  "url",
-						Type:  "string",
-						Value: cloudcast.URL,
-					},
-					{
-						Name:  "slug",
-						Type:  "string",
-						Value: cloudcast.Slug,
-					},
-				},
-			}
-			mod.eventChan <- newCloudcastEvent
-		}
-		time.Sleep(25 * time.Second)
+		nextUrl = cloudcasts.Paging.NextURL
 	}
+
+	for _, cloudcast := range allCloudcastsData {
+		newCloudcastEvent := bees.Event{
+			Bee:  mod.Name(),
+			Name: "new_cloudcast",
+			Options: []bees.Placeholder{
+				{
+					Name:  "name",
+					Type:  "string",
+					Value: cloudcast.Name,
+				},
+				{
+					Name:  "url",
+					Type:  "string",
+					Value: cloudcast.URL,
+				},
+				{
+					Name:  "slug",
+					Type:  "string",
+					Value: cloudcast.Slug,
+				},
+			},
+		}
+		mod.eventChan <- newCloudcastEvent
+	}
+}
+
+// Action triggers the action passed to it.
+func (mod *MixcloudBee) Action(action bees.Action) []bees.Placeholder {
+	outs := []bees.Placeholder{}
+
+	switch action.Name {
+	case "pollFeed":
+		mod.pollFeed(mod.feed)
+	default:
+		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
+	}
+
+	return outs
 }
 
 // Run executes the Bee's event loop.
@@ -109,7 +120,6 @@ func (mod *MixcloudBee) Run(cin chan bees.Event) {
 	mod.eventChan = cin
 
 	time.Sleep(10 * time.Second)
-	mod.pollFeed(mod.feed)
 }
 
 // ReloadOptions parses the config options and initializes the Bee.
