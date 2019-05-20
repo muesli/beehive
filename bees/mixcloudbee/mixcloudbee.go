@@ -45,7 +45,7 @@ type MixcloudBee struct {
 
 // Poll a Mixcloud Cloudcasts feed
 func (mod *MixcloudBee) pollFeed(feed string) {
-	mod.Logln("Parsing feed")
+	mod.LogDebugf("Parsing feed %s", mod.feed)
 	var allCloudcastsData []mixcloud.CloudcastData
 	var opt mixcloud.ListOptions
 	opt.Since = mod.lastUpdate
