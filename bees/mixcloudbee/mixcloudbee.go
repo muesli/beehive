@@ -106,7 +106,7 @@ func (mod *MixcloudBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 
 	switch action.Name {
-	case "pollFeed":
+	case "poll_feed":
 		mod.pollFeed(mod.feed)
 	default:
 		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
@@ -118,8 +118,6 @@ func (mod *MixcloudBee) Action(action bees.Action) []bees.Placeholder {
 // Run executes the Bee's event loop.
 func (mod *MixcloudBee) Run(cin chan bees.Event) {
 	mod.eventChan = cin
-
-	time.Sleep(10 * time.Second)
 }
 
 // ReloadOptions parses the config options and initializes the Bee.

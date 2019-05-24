@@ -111,7 +111,7 @@ func (factory *MixcloudBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		{
 			Namespace:   factory.Name(),
-			Name:        "pollFeed",
+			Name:        "poll_feed",
 			Description: "Polls the Mixcloud Feed specified in the options",
 			Options: []bees.PlaceholderDescriptor{
 
