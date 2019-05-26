@@ -90,8 +90,10 @@ func (mod *YoutubeBee) Run(eventChan chan bees.Event) {
 	channelID := channelURLTokens[len(channelURLTokens)-1]
 	topic := "https://www.youtube.com/xml/feeds/videos.xml?channel_id=" + channelID
 
-	srv := &http.Server{Addr: mod.addr, Handler: mod}
-	l, err := net.Listen("tcp", mod.addr)
+	local := "http://localhost:5050/"
+
+	srv := &http.Server{Addr: local, Handler: mod} // SWAP BEFORE COMMIT
+	l, err := net.Listen("tcp", local) // SWAP BEFORE COMMIT
 	if err != nil {
 		mod.LogErrorf("Can't listen on %s", mod.addr)
 		return
@@ -134,8 +136,6 @@ func (mod *YoutubeBee) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		ev := bees.Event{
 			Bee: mod.Name(),
 		}
-		ev.Name = "notification"
-
 		var feed Feed
 		body, err := ioutil.ReadAll(req.Body)
 		if err != nil {
@@ -143,6 +143,11 @@ func (mod *YoutubeBee) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			http.Error(w, "can't read body", http.StatusBadRequest)
 		}
 		xml.Unmarshal([]byte(body), &feed)
+		if feed.Entry.Updated == feed.Entry.Published {
+			ev.Name = "new_video"
+		} else {
+			ev.Name = "change_video"
+		}
 		ev.Options.SetValue("channelUrl", "string", feed.Entry.Author.URI)
 		ev.Options.SetValue("vidUrl", "string", feed.Entry.Link.Href)
 

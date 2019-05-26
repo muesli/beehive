@@ -16,6 +16,7 @@
  *
  *    Authors:
  *      Christian Muehlhaeuser <muesli@gmail.com>
+ * 		Mark Jung <gujung2022@u.northwestern.edu>
  */
 
 package youtubebee
@@ -88,8 +89,25 @@ func (factory *YoutubeBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{
 			Namespace:   factory.Name(),
-			Name:        "notification",
-			Description: "A push notification was sent by the Youtube channel",
+			Name:        "new_video",
+			Description: "The channel posted a new video",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "channelUrl",
+					Description: "The url of the channel push notification was sent from",
+					Type:        "url",
+				},
+				{
+					Name:        "vidUrl",
+					Description: "The url of the video relevant to the push notification",
+					Type:        "url",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "change_video",
+			Description: "The channel updated a video",
 			Options: []bees.PlaceholderDescriptor{
 				{
 					Name:        "channelUrl",
