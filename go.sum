@@ -82,6 +82,8 @@ github.com/gorilla/websocket v1.4.0 h1:WDFjx/TMzVgy9VdMMQi2K2Emtwi2QcUQsztZ/zLaH
 github.com/gorilla/websocket v1.4.0/go.mod h1:E7qHFY5m1UJ88s3WnNqhKjPHQ0heANvMoAMk2YaljkQ=
 github.com/guelfey/go.dbus v0.0.0-20131113121618-f6a3a2366cc3 h1:fngCxKbvZdctIsWj2hYijhAt4iK0JXSSA78B36xP0yI=
 github.com/guelfey/go.dbus v0.0.0-20131113121618-f6a3a2366cc3/go.mod h1:0CNX5Cvi77WEH8llpfZ/ieuqyceb1cnO5//b5zzsnF8=
+github.com/horrendus/go-mixcloud v0.0.0-20190427074402-c2164c9e194c h1:nnb4dSY7AcPeDk91FQt+wpBGV2M2vYdz/3sjN21b/pU=
+github.com/horrendus/go-mixcloud v0.0.0-20190427074402-c2164c9e194c/go.mod h1:CyhbQCOE1KktIhrolqimsL9EAgBF9BsWYjnc3hRG5r0=
 github.com/huandu/facebook v2.3.1+incompatible h1:+F6kUqKx5TifzMg2fXYZFdA/3VVNphdNK8G4PF2ui74=
 github.com/huandu/facebook v2.3.1+incompatible/go.mod h1:wJogp9rhXUUjDuhx6ZaR5Eylx3dsJmy0zyFRaPYUq5g=
 github.com/jacobsa/go-serial v0.0.0-20180131005756-15cf729a72d4 h1:G2ztCwXov8mRvP0ZfjE6nAlaCX2XbykaeHdbT6KwDz0=
