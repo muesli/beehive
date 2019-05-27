@@ -13,9 +13,13 @@ func TestLoadConfig(t *testing.T) {
 		t.Error("Loading an invalid config file should return an error")
 	}
 
-	_, err = LoadConfig(filepath.Join("testdata", "beehive.conf"))
+	conf, err := LoadConfig(filepath.Join("testdata", "beehive.conf"))
 	if err != nil {
 		t.Error("Error loading config file fixture")
+	}
+
+	if conf.Bees[0].Name != "echo" {
+		t.Error("The first bee should be an exec bee named echo")
 	}
 }
 
