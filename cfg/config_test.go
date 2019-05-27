@@ -38,7 +38,7 @@ func TestSaveConfig(t *testing.T) {
 		t.Errorf("Failed to save the config to %s", configFile)
 	}
 
-	if _, err := os.Stat(configFile); os.IsNotExist(err) {
+	if !Exist(configFile) {
 		t.Error("Configuration file wasn't saved")
 	}
 }
