@@ -25,6 +25,7 @@
 package youtubebee
 
 import (
+	"time"
 	"encoding/xml"
 	"fmt"
 	"io/ioutil"
@@ -90,10 +91,8 @@ func (mod *YoutubeBee) Run(eventChan chan bees.Event) {
 	channelID := channelURLTokens[len(channelURLTokens)-1]
 	topic := "https://www.youtube.com/xml/feeds/videos.xml?channel_id=" + channelID
 
-	local := "http://localhost:5050/"
-
-	srv := &http.Server{Addr: local, Handler: mod} // SWAP BEFORE COMMIT
-	l, err := net.Listen("tcp", local) // SWAP BEFORE COMMIT
+	srv := &http.Server{Addr: mod.addr, Handler: mod} 
+	l, err := net.Listen("tcp", mod.addr) 
 	if err != nil {
 		mod.LogErrorf("Can't listen on %s", mod.addr)
 		return
@@ -111,7 +110,7 @@ func (mod *YoutubeBee) Run(eventChan chan bees.Event) {
 		data := url.Values{}
 		data.Set("hub.mode", "subscribe")
 		data.Set("hub.topic", topic)
-		data.Set("hub.callback", mod.addr)
+		data.Set("hub.callback", "mod.addr") 
 		client := &http.Client{}
 		r, _ := http.NewRequest("POST", subscriptionLink, strings.NewReader(data.Encode())) // URL-encoded payload
 		r.Header.Add("Content-Type", "application/x-www-form-urlencoded")
@@ -121,8 +120,7 @@ func (mod *YoutubeBee) Run(eventChan chan bees.Event) {
 		if err != nil {
 			mod.LogErrorf("Can't subscribe to youtube channel")
 			return
-		}
-
+		}  
 	}()
 
 	select {
@@ -143,7 +141,11 @@ func (mod *YoutubeBee) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 			http.Error(w, "can't read body", http.StatusBadRequest)
 		}
 		xml.Unmarshal([]byte(body), &feed)
-		if feed.Entry.Updated == feed.Entry.Published {
+		updatedTime, _ := time.Parse(time.RFC3339, feed.Entry.Updated)
+		publishedTime, _ := time.Parse(time.RFC3339, feed.Entry.Published)
+		diff := updatedTime.Sub(publishedTime)
+		// give the channel a minute window - for new videos, update and publish times aren't exact.
+		if diff.Minutes() <= 5 {
 			ev.Name = "new_video"
 		} else {
 			ev.Name = "change_video"
