@@ -81,13 +81,21 @@ func (mod *TravisBee) getBuilds(since time.Time) {
 	}
 
 	for i, currentBuild := range builds {
-		if b, ok := mod.builds[currentBuild.Id]; ok {
-			b.lastTime = time.Now()
-			if b.state != currentBuild.State {
-				mod.handleStateChange(&b, currentBuild)
-				b.state = currentBuild.State
+		if currentBuild.Id == nil {
+			mod.LogErrorf("[%d] Get builds - Build ID is empty", i)
+			continue
+		}
+		if b, ok := mod.builds[*currentBuild.Id]; ok {
+			if currentBuild.State == nil {
+				mod.LogErrorf("[%d] %d Get builds - State is empty", i, currentBuild.Id)
+				continue
 			}
-			mod.builds[currentBuild.Id] = b
+			b.lastTime = time.Now()
+			if b.state != *currentBuild.State {
+				mod.handleStateChange(&b, currentBuild)
+				b.state = *currentBuild.State
+			}
+			mod.builds[*currentBuild.Id] = b
 		} else {
 			mod.LogDebugf("[%d] %d - %s / %s", i, currentBuild.Id, currentBuild.StartedAt, currentBuild.State)
 
@@ -95,10 +103,14 @@ func (mod *TravisBee) getBuilds(since time.Time) {
 			// stage yet) then we can't even get a started_at time - instead, let's
 			// just make it a new build, figuring it's obviously something we havent
 			// seen before.
-			if currentBuild.State == "created" {
+			if *currentBuild.State == "created" {
 				mod.handleNewBuild(currentBuild, since)
 			} else {
-				t, err := time.Parse(time.RFC3339, currentBuild.StartedAt)
+				if currentBuild.StartedAt == nil {
+					mod.LogErrorf("[%d] %d Get builds - 'StartedAt' is empty", i, currentBuild.Id)
+					continue
+				}
+				t, err := time.Parse(time.RFC3339, *currentBuild.StartedAt)
 				if err != nil {
 					mod.LogErrorf("Error parsing time %s - %v", currentBuild.StartedAt, err)
 				}
@@ -111,7 +123,15 @@ func (mod *TravisBee) getBuilds(since time.Time) {
 }
 
 func (mod *TravisBee) handleNewBuild(build *travis.Build, since time.Time) {
-	mod.builds[build.Id] = BuildTracker{id: build.Id, state: build.State, lastTime: time.Now()}
+	if build.Id == nil {
+		mod.LogErrorf("Handle new build - Build ID is empty")
+		return
+	}
+	if build.StartedAt == nil {
+		mod.LogErrorf("[%d] Get builds - 'StartedAt' is empty", build.Id)
+		return
+	}
+	mod.builds[*build.Id] = BuildTracker{id: *build.Id, state: *build.State, lastTime: time.Now()}
 	mod.LogDebugf("Tracking build %d - state %s", build.Id, build.State)
 
 	ev := bees.Event{
@@ -181,8 +201,13 @@ func (mod *TravisBee) handleStateChange(bt *BuildTracker, build *travis.Build) {
 
 	mod.eventChan <- ev
 
-	if build.State == "canceled" || build.State == "passed" ||
-		build.State == "failed" || build.State == "errored" {
+	if build.State == nil {
+		mod.LogErrorf("[%d] Handle state change - State is empty", build.Id)
+		return
+	}
+
+	if *build.State == "canceled" || *build.State == "passed" ||
+		*build.State == "failed" || *build.State == "errored" {
 		mod.handleBuildFinish(bt, build)
 	}
 }
