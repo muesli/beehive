@@ -66,7 +66,7 @@ func escapeURL(u string) string {
 	return strings.Replace(url.QueryEscape(u), "%2F", "/", -1)
 }
 
-// Try to read a local/embedded asset. Gracefully fail and read index.html if
+// Try to read a local/embedded asset. Gracefully fail and read index.html
 // if not found.
 func readAssetOrIndex(path string) (string, []byte, error) {
 	b, err := Asset(path)
@@ -166,7 +166,7 @@ func oauth2Handler(req *restful.Request, resp *restful.Response) {
 // Run sets up the restful API container and an HTTP server go-routine
 func Run() {
 	// to see what happens in the package, uncomment the following
-	//restful.TraceLogger(log.New(os.Stdout, "[restful] ", log.LstdFlags|log.Lshortfile))
+	// restful.TraceLogger(log.New(os.Stdout, "[restful] ", log.LstdFlags|log.Lshortfile))
 
 	// Setup web-service
 	smolderConfig := smolder.APIConfig{
