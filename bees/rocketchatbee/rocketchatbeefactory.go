@@ -1,6 +1,7 @@
 /*
  *    Copyright (C) 2016 Sergio Rubio
  *                  2017 Christian Muehlhaeuser
+ *                  2019 David Schneider
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License as published
@@ -18,6 +19,7 @@
  *    Authors:
  *      Sergio Rubio <rubiojr@frameos.org>
  *      Christian Muehlhaeuser <muesli@gmail.com>
+ *      David Schneider <dsbrng25b@gmail.com>
  */
 
 package rocketchatbee
@@ -111,7 +113,7 @@ func (factory *RocketchatBeeFactory) Actions() []bees.ActionDescriptor {
 				},
 				{
 					Name:        "alias",
-					Description: "The name to show as sender. If empty the to which the user_id belongs to.",
+					Description: "The name to show as sender. If empty, the name to which the user_id belongs to.",
 					Type:        "string",
 					Mandatory:   false,
 				},
