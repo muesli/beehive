@@ -73,7 +73,10 @@ func (mod *EmailBee) Action(action bees.Action) []bees.Placeholder {
 			portstr = "587"
 		}
 		port, _ := strconv.Atoi(portstr)
-		s, _ := mail.NewDialer(host, port, mod.username, mod.password).Dial()
+		s, err := mail.NewDialer(host, port, mod.username, mod.password).Dial()
+		if err != nil {
+			panic(err)
+		}
 
 		// Send the email.
 		if err := mail.Send(s, m); err != nil {

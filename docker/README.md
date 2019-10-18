@@ -18,7 +18,7 @@ The simplest way to set up beehive with docker is to simply pull a prebuilt imag
 Make sure you're currently in the docker directory of the repository.
 You can simply clone the repository with git and cd into the directory.
 
-    git clone https://github.com/muesli/beehive.git
+    git clone --recursive https://github.com/muesli/beehive.git
     cd beehive
 
 Alternatively if you have the package installed with `go get` you can navigate
