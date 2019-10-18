@@ -41,6 +41,7 @@ require (
 	github.com/jacobsa/go-serial v0.0.0-20180131005756-15cf729a72d4
 	github.com/jayeshsolanki93/devgorant v0.0.0-20160810172004-69fb03e5c3b1
 	github.com/jaytaylor/html2text v0.0.0-20190408195923-01ec452cbe43 // indirect
+	github.com/jpillora/backoff v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.6 // indirect
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
 	github.com/kr/pretty v0.1.0
@@ -69,6 +70,7 @@ require (
 	github.com/olekukonko/tablewriter v0.0.1 // indirect
 	github.com/pkg/errors v0.8.1 // indirect
 	github.com/prometheus/client_golang v0.9.2
+	github.com/rdegges/go-ipify v0.0.0-20150526035502-2d94a6a86c40
 	github.com/rogpeppe/go-charset v0.0.0-20180617210344-2471d30d28b4 // indirect
 	github.com/shuheiktgw/go-travis v0.1.10-0.20190502100712-2d0b3e9898f0
 	github.com/simplepush/simplepush-go v0.0.0-20170307205831-8980e96b7b02
