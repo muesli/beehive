@@ -44,6 +44,7 @@ import (
 var (
 	configFile  string
 	versionFlag bool
+	debugFlag   bool
 )
 
 func main() {
@@ -60,6 +61,12 @@ func main() {
 			Value: false,
 			Desc:  "Beehive version",
 		},
+		{
+			V:     &debugFlag,
+			Name:  "debug",
+			Value: false,
+			Desc:  "Turn on debugging",
+		},
 	})
 
 	// Parse command-line args for all registered bees
@@ -72,7 +79,11 @@ func main() {
 
 	api.Run()
 
-	log.SetLevel(log.InfoLevel)
+	if debugFlag {
+		log.SetLevel(log.DebugLevel)
+	} else {
+		log.SetLevel(log.InfoLevel)
+	}
 
 	log.Println()
 	log.Println("Beehive is buzzing...")
