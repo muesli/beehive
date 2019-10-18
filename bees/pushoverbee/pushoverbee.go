@@ -78,7 +78,7 @@ func (mod *PushoverBee) Action(action bees.Action) []bees.Placeholder {
 		}
 		defer resp.Body.Close()
 		if resp.StatusCode == 200 {
-			mod.LogDebugf("Pushover send message success.", nil)
+			mod.LogDebugf("Pushover send message success.")
 		}
 
 	default:
