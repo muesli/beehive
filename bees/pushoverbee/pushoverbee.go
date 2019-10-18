@@ -71,14 +71,14 @@ func (mod *PushoverBee) Action(action bees.Action) []bees.Placeholder {
 			msg.Set("title", title)
 		}
 
-		mod.Logln(msg)
+		mod.LogDebugf("Message: %s", msg)
 		resp, err := http.PostForm("https://api.pushover.net/1/messages.json", msg)
 		if err != nil {
 			panic(err)
 		}
 		defer resp.Body.Close()
 		if resp.StatusCode == 200 {
-			mod.Logln("Pushover send message success.")
+			mod.LogDebugf("Pushover send message success.", nil)
 		}
 
 	default:
