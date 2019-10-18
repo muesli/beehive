@@ -97,12 +97,12 @@ func execChains(event *Event) {
 		ctx.FillMap(m)
 
 		failed := false
-		log.Println("Executing chain:", c.Name, "-", c.Description)
+		log.Debugln("Executing chain:", c.Name, "-", c.Description)
 		for _, el := range c.Filters {
 			if execFilter(el, m) {
-				log.Println("\t\tPassed filter!")
+				log.Debugln("\t\tPassed filter!")
 			} else {
-				log.Println("\t\tDid not pass filter!")
+				log.Debugln("\t\tDid not pass filter!")
 				failed = true
 				break
 			}

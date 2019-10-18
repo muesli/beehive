@@ -21,9 +21,12 @@
 // Package bees is Beehive's central module system.
 package bees
 
-import log "github.com/sirupsen/logrus"
-import "runtime/debug"
-import "fmt"
+import (
+	"fmt"
+	"runtime/debug"
+
+	log "github.com/sirupsen/logrus"
+)
 
 // An Event describes an event including its parameters.
 type Event struct {
@@ -49,11 +52,11 @@ func handleEvents() {
 		bee := GetBee(event.Bee)
 		(*bee).LogEvent()
 
-		log.Println()
-		log.Println("Event received:", event.Bee, "/", event.Name, "-", GetEventDescriptor(&event).Description)
+		log.Debugln()
+		log.Debugln("Event received:", event.Bee, "/", event.Name, "-", GetEventDescriptor(&event).Description)
 		for _, v := range event.Options {
 			vv := truncateString(fmt.Sprintln(v), 1000)
-			log.Println("\tOptions:", vv)
+			log.Debugln("\tOptions:", vv)
 		}
 
 		go func() {
