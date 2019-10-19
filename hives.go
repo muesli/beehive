@@ -23,7 +23,7 @@ package main
 import (
 	_ "github.com/muesli/beehive/bees/alertoverbee"
 	_ "github.com/muesli/beehive/bees/anelpowerctrlbee"
-	_ "github.com/muesli/beehive/bees/cfddns"
+	_ "github.com/muesli/beehive/bees/cfddnsbee"
 	_ "github.com/muesli/beehive/bees/cleverbotbee"
 	_ "github.com/muesli/beehive/bees/cricketbee"
 	_ "github.com/muesli/beehive/bees/cronbee"
@@ -41,6 +41,7 @@ import (
 	_ "github.com/muesli/beehive/bees/htmlextractbee"
 	_ "github.com/muesli/beehive/bees/httpbee"
 	_ "github.com/muesli/beehive/bees/huebee"
+	_ "github.com/muesli/beehive/bees/ipifybee"
 	_ "github.com/muesli/beehive/bees/ircbee"
 	_ "github.com/muesli/beehive/bees/jabberbee"
 	_ "github.com/muesli/beehive/bees/jenkinsbee"
@@ -67,5 +68,4 @@ import (
 	_ "github.com/muesli/beehive/bees/twiliobee"
 	_ "github.com/muesli/beehive/bees/twitterbee"
 	_ "github.com/muesli/beehive/bees/webbee"
-	_ "github.com/muesli/beehive/bees/ipify"
 )
