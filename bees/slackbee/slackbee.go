@@ -119,7 +119,7 @@ func (mod *SlackBee) findChannelID(name string, cache bool) string {
 	if cache {
 		mod.channels[name] = cid
 	}
-	mod.Logln("Channel map " + name + " " + cid)
+	mod.LogDebugf("Channel map %s %s", name, cid)
 
 	return cid
 }
