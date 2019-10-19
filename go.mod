@@ -32,6 +32,7 @@ require (
 	github.com/glaxx/go_pastebin v0.0.0-20170619211819-7e72d56770d0
 	github.com/go-ini/ini v1.42.0 // indirect
 	github.com/go-mail/mail v2.3.1+incompatible
+	github.com/go-redis/redis v6.15.6+incompatible
 	github.com/go-sql-driver/mysql v1.5.0 // indirect
 	github.com/go-telegram-bot-api/telegram-bot-api v4.6.4+incompatible
 	github.com/golang/mock v1.2.0 // indirect
