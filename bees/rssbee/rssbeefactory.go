@@ -78,6 +78,7 @@ func (factory *RSSBeeFactory) Options() []bees.BeeOptionDescriptor {
 			Description: "Whether to skip already existing entries",
 			Type:        "bool",
 			Mandatory:   false,
+			Default:     false,
 		},
 	}
 	return opts
