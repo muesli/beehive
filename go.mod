@@ -64,7 +64,7 @@ require (
 	github.com/muesli/go.hue v0.0.0-20140802040715-8aefcc693caf
 	github.com/muesli/goefa v0.0.0-20180507204150-08d8ee2555d2
 	github.com/muesli/smolder v0.0.0-20190505085143-9c21fc7135ee
-	github.com/nlopes/slack v0.5.0
+	github.com/nlopes/slack v0.6.0
 	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d
 	github.com/odwrtw/transmission v0.0.0-20170515140915-08885b3058e7
 	github.com/prometheus/client_golang v0.9.2
