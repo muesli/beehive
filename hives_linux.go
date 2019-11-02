@@ -25,4 +25,5 @@ package main
 import (
 	_ "github.com/muesli/beehive/bees/notificationbee"
 	_ "github.com/muesli/beehive/bees/serialbee"
+	_ "github.com/muesli/beehive/bees/watchdogbee"
 )
