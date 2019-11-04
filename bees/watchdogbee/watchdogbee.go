@@ -54,7 +54,7 @@ func (mod *WatchdogBee) Run(eventChan chan bees.Event) {
 			if err == nil {
 				resp.Body.Close()
 				mod.LogDebugf("Notify Systemd's watchdog")
-				daemon.SdNotify(false, "WATCHDOG=1")
+				daemon.SdNotify(false, daemon.SdNotifyWatchdog)
 			}
 		}
 	}
