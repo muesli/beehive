@@ -24,9 +24,7 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/signal"
 	"syscall"
@@ -36,6 +34,7 @@ import (
 
 	"github.com/muesli/beehive/api"
 	"github.com/muesli/beehive/app"
+	"github.com/muesli/beehive/cfg"
 	_ "github.com/muesli/beehive/filters"
 	_ "github.com/muesli/beehive/filters/template"
 
@@ -47,40 +46,6 @@ var (
 	versionFlag bool
 	debugFlag   bool
 )
-
-// Config contains an entire configuration set for Beehive
-type Config struct {
-	Bees    []bees.BeeConfig
-	Actions []bees.Action
-	Chains  []bees.Chain
-}
-
-// Loads chains from config
-func loadConfig() Config {
-	config := Config{}
-
-	j, err := ioutil.ReadFile(configFile)
-	if err == nil {
-		err = json.Unmarshal(j, &config)
-		if err != nil {
-			log.Fatal("Error parsing config file: ", err)
-		}
-	}
-
-	return config
-}
-
-// Saves chains to config
-func saveConfig(c Config) {
-	j, err := json.MarshalIndent(c, "", "  ")
-	if err == nil {
-		err = ioutil.WriteFile(configFile, j, 0644)
-	}
-
-	if err != nil {
-		log.Fatal(err)
-	}
-}
 
 func main() {
 	app.AddFlags([]app.CliFlag{
@@ -123,7 +88,15 @@ func main() {
 	log.Println()
 	log.Println("Beehive is buzzing...")
 
-	config := loadConfig()
+	config := cfg.Config{}
+	var err error
+	if cfg.Exist(configFile) {
+		config, err = cfg.LoadConfig(configFile)
+		if err != nil {
+			log.Panicf("Error loading config file %s!: %v", configFile, err)
+		}
+		log.Printf("Config file loaded from %s\n", configFile)
+	}
 
 	// Load actions from config
 	bees.SetActions(config.Actions)
@@ -142,7 +115,10 @@ func main() {
 		abort := false
 		switch s {
 		case syscall.SIGHUP:
-			config = loadConfig()
+			config, err := cfg.LoadConfig(configFile)
+			if err != nil {
+				log.Panicf("Error loading config from %s: %v", configFile, err)
+			}
 			bees.StopBees()
 			bees.SetActions(config.Actions)
 			bees.SetChains(config.Chains)
@@ -167,7 +143,10 @@ func main() {
 	config.Bees = bees.BeeConfigs()
 	config.Chains = bees.GetChains()
 	config.Actions = bees.GetActions()
-	saveConfig(config)
+	err = cfg.SaveConfig(configFile, config)
+	if err != nil {
+		log.Printf("Error saving config file to %s! %v", configFile, err)
+	}
 }
 
 func init() {
