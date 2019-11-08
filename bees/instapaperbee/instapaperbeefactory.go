@@ -72,10 +72,6 @@ func (factory *InstapaperBeeFactory) Options() []bees.BeeOptionDescriptor {
 	return opts
 }
 
-func (factory *InstapaperBeeFactory) Events() []bees.EventDescriptor {
-	return []bees.EventDescriptor{}
-}
-
 func (factory *InstapaperBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		{

@@ -34,13 +34,6 @@ type InstapaperBee struct {
 	password string
 }
 
-func (mod *InstapaperBee) Run(cin chan bees.Event) {
-	select {
-	case <-mod.SigChan:
-		return
-	}
-}
-
 func (mod *InstapaperBee) Action(action bees.Action) []bees.Placeholder {
 	switch action.Name {
 	case "save":
