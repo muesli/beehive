@@ -8,6 +8,9 @@ User=beehive
 Group=users
 RestartSec=5
 Restart=on-failure
+# Enable the software watchdog.
+# See https://github.com/muesli/beehive/tree/master/docs/watchdog.md
+WatchdogSec=30s
 
 [Install]
 WantedBy=multi-user.target

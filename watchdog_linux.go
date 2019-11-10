@@ -9,7 +9,7 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// Notifies Systemd's watchdog every WatchdogSec/3 when running
+// Notifies Systemd's watchdog every WatchdogSec/3 seconds when running
 // under Systemd and the watchdog feature has been enabled in
 // the service unit.
 //
@@ -19,19 +19,22 @@ import (
 // and https://www.freedesktop.org/software/systemd/man/systemd.service.html
 //
 func init() {
+	// returns the configured WatchdogSec in the service unit as time.Duration
 	interval, err := daemon.SdWatchdogEnabled(false)
-	// systemd's service unit interval in microseconds
 	if err != nil || interval == 0 {
 		log.Printf("Systemd watchdog not enabled")
 		return
 	}
-	interval = interval / 3 / 1000000000
-	log.Printf("Systemd watchdog interval: %d", interval)
+
+	// We want to notify the watchdog every WatchdogSec/3, that is, if WatchdogSec is
+	// set to 30 seconds, we'll send a notification to systemd every 10 seconds.
+	runEvery := interval / 3
+	log.Printf("Systemd watchdog notifications every %.2f seconds", runEvery.Seconds())
 
 	go func() {
 		for {
 			select {
-			case <-time.After(time.Duration(interval) * time.Second):
+			case <-time.After(runEvery):
 				resp, err := http.Get(api.CanonicalURL().String())
 				if err == nil {
 					resp.Body.Close()
