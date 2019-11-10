@@ -1,0 +1,37 @@
+name: beehive # you probably want to 'snapcraft register <name>'
+base: core18 # the base snap is the execution environment for this snap
+version: '0.4' # just for humans, typically '1.2+git' or '1.3.2'
+summary: A flexible event/agent & automation system with lots of bees 🐝
+description: |
+  Beehive is an event and agent system, which allows you to create your own
+  agents that perform automated tasks triggered by events and filters.
+  It is modular, flexible and really easy to extend for anyone. It has
+  modules (we call them Hives), so it can interface with, talk to, or retrieve
+  information from Twitter, Tumblr, Email, IRC, Jabber, RSS, Jenkins,
+  Hue - to name just a few.
+
+grade: stable # must be 'stable' to release into candidate/stable channels
+confinement: devmode # use 'strict' once you have the right plugs and slots
+apps:
+  beehive:
+    command: bin/beehive
+    extensions: [gnome-3-28]
+parts:
+  beehive:
+    plugin: dump
+    source: build/app
+    organize:
+      beehive-linux-x64/beehive.wrapper: bin/beehive
+    stage-packages:
+      - libx11-6
+      - libxcb-xtest0
+      - libx11-xcb1
+      - libnotify4
+      - libappindicator1
+      - libxtst6
+      - libnss3
+      - libxss1
+      - fontconfig-config
+      - gconf2
+      - libasound2
+      - pulseaudio
