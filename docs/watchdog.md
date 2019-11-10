@@ -29,4 +29,4 @@ WantedBy=multi-user.target
 * Enable the new service: `systemctl enable beehive`
 * Start the service: `systemctl start beehive`
 
-Beehive will automatically detect it's running under Systemd and notify Systemd's watchdog every WatchdogSec/3 seconds (10 seconds in this particular case).
+Beehive will automatically detect it's running under Systemd and notify Systemd's watchdog every WatchdogSec/3 seconds (10 seconds in this particular case). Note the notification interval is hardcoded to WatchdogSec/3.
