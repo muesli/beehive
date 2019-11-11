@@ -23,9 +23,6 @@ Connecting those modules with each other lets you create immensly useful agents.
 
 ## Installation
 
-Beehive requires Go 1.11 or higher. Make sure you have a working Go environment.
-See the [install instructions](http://golang.org/doc/install.html).
-
 ### Packages & Binaries
 
 - Arch Linux: beehive ([AUR](https://aur.archlinux.org/packages/beehive/))
@@ -41,6 +38,9 @@ You can find even more official releases [here](https://github.com/muesli/beehiv
 - [Ansible](https://github.com/morbidick/ansible-role-beehive)
 
 ### From source
+
+Beehive requires Go 1.11 or higher. Make sure you have a working Go environment.
+See the [install instructions](http://golang.org/doc/install.html).
 
 The recommended way is to fetch the sources and run make.
 
