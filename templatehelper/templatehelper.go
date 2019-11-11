@@ -1,5 +1,5 @@
 /*
- *    Copyright (C) 2017 Christian Muehlhaeuser
+ *    Copyright (C) 2017-2019 Christian Muehlhaeuser
  *
  *    This program is free software: you can redistribute it and/or modify
  *    it under the terms of the GNU Affero General Public License as published
@@ -37,20 +37,42 @@ var (
 			return htmlTemplate.JS(json)
 		},
 		"Left": func(values ...interface{}) string {
-			return values[0].(string)[:values[1].(int)]
+			s := values[0].(string)
+			n := values[1].(int)
+			if n > len(s) {
+				n = len(s)
+			}
+
+			return s[:n]
 		},
 		"Matches": func(values ...interface{}) bool {
 			ok, _ := regexp.MatchString(values[1].(string), values[0].(string))
 			return ok
 		},
 		"Mid": func(values ...interface{}) string {
-			if len(values) > 2 {
-				return values[0].(string)[values[1].(int):values[2].(int)]
+			s := values[0].(string)
+			l := values[1].(int)
+			if l > len(s) {
+				l = len(s)
 			}
-			return values[0].(string)[values[1].(int):]
+
+			if len(values) > 2 {
+				r := values[2].(int)
+				if r > len(s) {
+					r = len(s)
+				}
+				return s[l:r]
+			}
+			return s[l:]
 		},
 		"Right": func(values ...interface{}) string {
-			return values[0].(string)[len(values[0].(string))-values[1].(int):]
+			s := values[0].(string)
+			n := len(s) - values[1].(int)
+			if n < 0 {
+				n = 0
+			}
+
+			return s[n:]
 		},
 		"Last": func(values ...interface{}) string {
 			return values[0].([]string)[len(values[0].([]string))-1]
