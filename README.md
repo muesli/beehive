@@ -26,6 +26,20 @@ Connecting those modules with each other lets you create immensly useful agents.
 Beehive requires Go 1.11 or higher. Make sure you have a working Go environment.
 See the [install instructions](http://golang.org/doc/install.html).
 
+### Packages & Binaries
+
+- Arch Linux: beehive ([AUR](https://aur.archlinux.org/packages/beehive/))
+- [Linux Static 64bit](https://github.com/muesli/beehive/releases/download/v0.3.2/beehive_0.3.2_Linux_x86_64.tar.gz)
+- [Linux Static armv6](https://github.com/muesli/beehive/releases/download/v0.3.2/beehive_0.3.2_Linux_armv6.tar.gz)
+- [macOS 64bit](https://github.com/muesli/beehive/releases/download/v0.3.2/beehive_0.3.2_Darwin_x86_64.tar.gz)
+- [Windows 64bit](https://github.com/muesli/beehive/releases/download/v0.3.2/beehive_0.3.2_Windows_x86_64.tar.gz)
+
+You can find even more official releases [here](https://github.com/muesli/beehive/releases).
+
+### Deployment Tools
+- Docker: `docker run --name beehive -d -p 8181:8181 fribbledom/beehive`
+- [Ansible](https://github.com/morbidick/ansible-role-beehive)
+
 ### From source
 
 The recommended way is to fetch the sources and run make.
@@ -39,13 +53,6 @@ but you'll need to make sure Beehive can find the assets (images, javascript, cs
 See the Troubleshooting/Notes section for additional details.
 
 Run `beehive --help` to see a full list of options.
-
-### Packages
- - ArchLinux: beehive ([AUR](https://aur.archlinux.org/packages/beehive/))
-
-### Deployment Tools
- - Docker: `docker run --name beehive -d -p 8181:8181 fribbledom/beehive`
- - [Ansible](https://github.com/morbidick/ansible-role-beehive)
 
 ## Configuration
 
