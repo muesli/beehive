@@ -16,6 +16,9 @@ apps:
   beehive:
     command: bin/beehive
     extensions: [gnome-3-28]
+    plugs:
+      - network
+      - x11
 parts:
   beehive:
     plugin: dump
