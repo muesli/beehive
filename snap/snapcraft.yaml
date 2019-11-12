@@ -38,3 +38,13 @@ parts:
       - gconf2
       - libasound2
       - pulseaudio
+      - libatk-bridge2.0-0
+      - libatspi2.0-0
+      - libcairo-gobject2
+      - libepoxy0
+      - libgtk-3-0
+      - libwayland-client0
+      - libwayland-cursor0
+      - libwayland-egl1
+      - libxkbcommon0
+
