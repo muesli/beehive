@@ -11,14 +11,11 @@ description: |
   Hue - to name just a few.
 
 grade: stable # must be 'stable' to release into candidate/stable channels
-confinement: strict # use 'strict' once you have the right plugs and slots
+confinement: classic # use 'strict' once you have the right plugs and slots
 apps:
   beehive:
     command: bin/beehive
     extensions: [gnome-3-28]
-    plugs:
-      - network
-      - x11
 parts:
   beehive:
     plugin: dump
