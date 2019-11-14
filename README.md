@@ -1,5 +1,33 @@
-Beehive
-=======
+<h1 align="center">
+  <br>
+  <img src="https://raw.githubusercontent.com/muesli/beehive/master/assets/logo_256.png" alt="Beehive" width="192">
+  <br>
+  Beehive
+  <br>
+</h1>
+
+<h4 align="center">Beehive is an automation system that lets you create agents which perform automated tasks for you.</h4>
+
+<p align="center">
+    <a href="https://travis-ci.org/muesli/beehive">
+        <img src="https://travis-ci.org/muesli/beehive.svg?branch=master" alt="TravisCI">
+    </a>
+    <a href="https://gitter.im/the_beehive/Lobby">
+        <img src="https://badges.gitter.im/the_beehive/Lobby.svg" alt="Gitter">
+    </a>
+    <a href="http://goreportcard.com/report/muesli/beehive">
+        <img src="http://goreportcard.com/badge/muesli/beehive" alt="GoReportCard">
+    </a>
+    <a href="https://godoc.org/github.com/muesli/beehive">
+        <img src="https://godoc.org/github.com/golang/gddo?status.svg" alt="GoDoc">
+    </a>
+</p>
+
+<p align="center">
+  <a href="#download">Download</a> •
+  <a href="#installation">Installation</a> •
+  <a href="#configuration">Configuration</a>
+</p>
 
 Beehive is an event and agent system, which allows you to create your own
 agents that perform automated tasks triggered by events and filters. It is
@@ -18,8 +46,6 @@ Connecting those modules with each other lets you create immensly useful agents.
 * Run your own IRC bot that lets you trigger builds on a Jenkins CI
 * Control your Hue lighting system
 * Notify you when a stock's price drops below a certain value
-
-![beehive's Logo](/assets/logo_256.png?raw=true)
 
 ## Installation
 
@@ -148,7 +174,3 @@ or
 
 Need help? Want to hack on your own Hives? Join us on IRC (irc://freenode.net/#beehive) or [Gitter](https://gitter.im/the_beehive/Lobby).
 Follow the bees on [Twitter](https://twitter.com/beehive_app)!
-
-[![GoDoc](https://godoc.org/github.com/golang/gddo?status.svg)](https://godoc.org/github.com/muesli/beehive)
-[![Build Status](https://travis-ci.org/muesli/beehive.svg?branch=master)](https://travis-ci.org/muesli/beehive)
-[![Go ReportCard](http://goreportcard.com/badge/muesli/beehive)](http://goreportcard.com/report/muesli/beehive)
