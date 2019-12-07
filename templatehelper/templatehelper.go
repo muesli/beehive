@@ -29,7 +29,7 @@ import (
 	"text/template"
 )
 
-// FuncMap contains all the common string helpers
+// FuncMap contains a few convenient template helpers
 var (
 	FuncMap = template.FuncMap{
 		"JSON": func(values ...interface{}) htmlTemplate.JS {
