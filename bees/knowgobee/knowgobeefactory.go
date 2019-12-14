@@ -24,7 +24,7 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
-// HelloBeeFactory is a factory for HelloBees.
+// KnowGoBeeFactory is a factory for KnowGoBees.
 type KnowGoBeeFactory struct {
 	bees.BeeFactory
 }
