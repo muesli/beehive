@@ -25,6 +25,7 @@ import (
 	"encoding/json"
 	"github.com/knowgoio/knowgo-pubsub/api"
 	"github.com/muesli/beehive/bees"
+	log "github.com/sirupsen/logrus"
 	"net"
 	"net/url"
 	"strconv"
@@ -131,7 +132,7 @@ func (mod *KnowGoBee) Run(eventChan chan bees.Event) {
 		return
 	}
 
-	mod.Logf("Successfully subscribed")
+	log.Debugln("Successfully subscribed")
 
 	mod.client = client
 	mod.sub = sub
