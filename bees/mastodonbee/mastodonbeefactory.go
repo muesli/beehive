@@ -197,8 +197,57 @@ func (factory *mastodonBeeFactory) Events() []bees.EventDescriptor {
 		},
 		{
 			Namespace:   factory.Name(),
+			Name:        "followed",
+			Description: "is triggered when you followed someone on Mastodon",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "user_id",
+					Description: "Mastodon ID of the user to follow",
+					Type:        "string",
+				},
+				{
+					Name:        "following",
+					Description: "Indicates if your're following the user",
+					Type:        "bool",
+				},
+				{
+					Name:        "requested",
+					Description: "Indicates if you've requested following the user",
+					Type:        "bool",
+				},
+				{
+					Name:        "followed_by",
+					Description: "Indicates if you're followed by the user",
+					Type:        "bool",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "unfollowed",
+			Description: "is triggered when you unfollow someone on Mastodon",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "user_id",
+					Description: "Mastodon ID of the user to follow",
+					Type:        "string",
+				},
+				{
+					Name:        "following",
+					Description: "Indicates if your're following the user",
+					Type:        "bool",
+				},
+				{
+					Name:        "followed_by",
+					Description: "Indicates if you're followed by the user",
+					Type:        "bool",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
 			Name:        "favourite",
-			Description: "is triggered when someone favourites one of your toots.",
+			Description: "is triggered when someone favourites one of your toots",
 			Options: []bees.PlaceholderDescriptor{
 				{
 					Name:        "id",
@@ -213,6 +262,43 @@ func (factory *mastodonBeeFactory) Events() []bees.EventDescriptor {
 				{
 					Name:        "username",
 					Description: "The Mastodon handle of the user that favourited your toot",
+					Type:        "string",
+				},
+				{
+					Name:        "text",
+					Description: "text content of the favourited toot",
+					Type:        "string",
+				},
+				{
+					Name:        "url",
+					Description: "URL of the favourited toot",
+					Type:        "string",
+				},
+				{
+					Name:        "favourites",
+					Description: "The count of favourites for this toot",
+					Type:        "int64",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "favourited",
+			Description: "is triggered when you favourite someones toot",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "id",
+					Description: "The ID of toot",
+					Type:        "string",
+				},
+				{
+					Name:        "user_id",
+					Description: "Mastodon ID of the toots author",
+					Type:        "string",
+				},
+				{
+					Name:        "username",
+					Description: "The Mastodon handle of the toots author",
 					Type:        "string",
 				},
 				{
@@ -249,12 +335,44 @@ func (factory *mastodonBeeFactory) Events() []bees.EventDescriptor {
 				},
 				{
 					Name:        "text",
-					Description: "text content of the mention",
+					Description: "text content of the reblog",
 					Type:        "string",
 				},
 				{
 					Name:        "url",
-					Description: "URL of the mention",
+					Description: "URL of the reblog",
+					Type:        "string",
+				},
+				{
+					Name:        "reblogs",
+					Description: "Number of reblogs for the post",
+					Type:        "string",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "reblogged",
+			Description: "is triggered when you reblog a toot",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "user_id",
+					Description: "Mastodon ID of the reblogged toots author",
+					Type:        "string",
+				},
+				{
+					Name:        "username",
+					Description: "Mastodon handle of the reblogged toots author",
+					Type:        "string",
+				},
+				{
+					Name:        "text",
+					Description: "text content of the reblog",
+					Type:        "string",
+				},
+				{
+					Name:        "url",
+					Description: "URL of the reblog",
 					Type:        "string",
 				},
 				{
@@ -311,6 +429,77 @@ func (factory *mastodonBeeFactory) Actions() []bees.ActionDescriptor {
 				{
 					Name:        "text",
 					Description: "Text of the status to toot, may not be longer than 500 characters",
+					Type:        "string",
+					Mandatory:   true,
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "delete_toot",
+			Description: "Delete a toot from mastodon",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "id",
+					Description: "The ID of the to toot to delete",
+					Type:        "string",
+					Mandatory:   true,
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "get_toots",
+			Description: "Returns the current user's toots",
+			Options:     []bees.PlaceholderDescriptor{},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "follow",
+			Description: "Follow an user on Mastodon",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "id",
+					Description: "The ID of the to user to follow",
+					Type:        "string",
+					Mandatory:   true,
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "unfollow",
+			Description: "unfollow an user on Mastodon",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "id",
+					Description: "The ID of the to user to unfollow",
+					Type:        "string",
+					Mandatory:   true,
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "reblog",
+			Description: "reblog a toot on Mastodon",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "id",
+					Description: "The ID of the to toot to reblog",
+					Type:        "string",
+					Mandatory:   true,
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "favourite",
+			Description: "favourite a toot on Mastodon",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "id",
+					Description: "The ID of the to toot to favourite",
 					Type:        "string",
 					Mandatory:   true,
 				},
