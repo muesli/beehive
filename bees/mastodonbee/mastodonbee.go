@@ -16,7 +16,7 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  *    Authors:
- *      Nicolas Martin <penguwin@systemli.org>
+ *      Nicolas Martin <penguwin@penguwin.eu>
  *      Christian Muehlhaeuser <muesli@gmail.com>
  */
 
@@ -54,30 +54,61 @@ func (mod *mastodonBee) Action(action bees.Action) []bees.Placeholder {
 	case "toot":
 		var text string
 		action.Options.Bind("text", &text)
+		mod.Logf("Attempting to post \"%s\" to Mastodon", text)
 
 		// Post status toot on mastodon
-		status, err := mod.client.PostStatus(context.Background(), &mastodon.Toot{
+		_, err := mod.client.PostStatus(context.Background(), &mastodon.Toot{
 			Status: text,
 		})
 		if err != nil {
 			mod.LogErrorf("Error sending toot: %v", err)
 		}
 
-		// Handle back 'toot_sent' event
+	default:
+		mod.LogErrorf("Unkown action: %s", action.Name)
+	}
+	return outs
+}
+
+func (mod *mastodonBee) handleStreamEvent(item interface{}) {
+	switch e := item.(type) {
+	case *mastodon.UpdateEvent:
+		mod.handleStatus(e.Status)
+	case *mastodon.NotificationEvent:
+		mod.handleNotification(e.Notification)
+	case *mastodon.DeleteEvent:
 		ev := bees.Event{
 			Bee:  mod.Name(),
-			Name: "toot_sent",
+			Name: "deleted",
 			Options: []bees.Placeholder{
 				{
-					Name:  "text",
-					Value: status.Content,
+					Name:  "id",
+					Value: string(e.ID),
 					Type:  "string",
 				},
 			},
 		}
 		mod.evchan <- ev
+	default:
+		mod.LogErrorf("Unkown event: %+v", e)
 	}
-	return outs
+}
+
+func (mod *mastodonBee) handleStream() {
+	timeline, err := mod.client.StreamingUser(context.Background())
+	if err != nil {
+		mod.LogErrorf("Failed to get user stream: %+v", err)
+		return
+	}
+
+	for {
+		select {
+		case <-mod.SigChan:
+			return
+		case item := <-timeline:
+			mod.handleStreamEvent(item)
+		}
+	}
 }
 
 // Run executes the Bee's event loop.
@@ -104,13 +135,9 @@ func (mod *mastodonBee) Run(eventChan chan bees.Event) {
 	// set client
 	mod.client = c
 
-	// set eventchan
+	// set and start eventchan
 	mod.evchan = eventChan
-
-	select {
-	case <-mod.SigChan:
-		return
-	}
+	mod.handleStream()
 }
 
 // ReloadOptions parses the config options and initializes the Bee.
