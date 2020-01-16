@@ -31,9 +31,9 @@ require (
 	github.com/glaxx/go_pastebin v0.0.0-20170619211819-7e72d56770d0
 	github.com/go-ini/ini v1.42.0 // indirect
 	github.com/go-mail/mail v2.3.1+incompatible
+	github.com/go-sql-driver/mysql v1.4.1 // indirect
 	github.com/go-telegram-bot-api/telegram-bot-api v4.6.4+incompatible
 	github.com/golang/mock v1.2.0 // indirect
-	github.com/golang/protobuf v1.3.1 // indirect
 	github.com/google/go-github v17.0.0+incompatible
 	github.com/google/go-querystring v1.0.0 // indirect
 	github.com/gopherjs/gopherjs v0.0.0-20190430165422-3e4dfb77656c // indirect
@@ -44,20 +44,16 @@ require (
 	github.com/jayeshsolanki93/devgorant v0.0.0-20160810172004-69fb03e5c3b1
 	github.com/jaytaylor/html2text v0.0.0-20190408195923-01ec452cbe43 // indirect
 	github.com/jpillora/backoff v1.0.0 // indirect
-	github.com/json-iterator/go v1.1.6 // indirect
+	github.com/knowgoio/knowgo-pubsub v0.0.0-20191213102205-0c509a43fd2b
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
 	github.com/kr/pretty v0.1.0
 	github.com/kurrik/oauth1a v0.0.0-20151019171716-cb1b80e32dd4 // indirect
-	github.com/lusis/go-slackbot v0.0.0-20180109053408-401027ccfef5 // indirect
-	github.com/lusis/slack-test v0.0.0-20190426140909-c40012f20018 // indirect
 	github.com/mattn/go-colorable v0.1.1
 	github.com/mattn/go-isatty v0.0.7 // indirect
 	github.com/mattn/go-mastodon v0.0.3
 	github.com/mattn/go-xmpp v0.0.0-20190124093244-6093f50721ed
 	github.com/minio/minio-go v6.0.14+incompatible
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
-	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
-	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/mreiferson/go-httpclient v0.0.0-20160630210159-31f0106b4474 // indirect
 	github.com/mrexodia/wray v0.0.0-20160318003008-78a2c1f284ff // indirect
 	github.com/muesli/go-pkg-rss v0.0.0-20180307042412-3bef0f3126ec
@@ -68,13 +64,13 @@ require (
 	github.com/nlopes/slack v0.6.0
 	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d
 	github.com/odwrtw/transmission v0.0.0-20170515140915-08885b3058e7
-	github.com/prometheus/client_golang v0.9.2
+	github.com/prometheus/client_golang v1.2.1
 	github.com/rdegges/go-ipify v0.0.0-20150526035502-2d94a6a86c40
 	github.com/rogpeppe/go-charset v0.0.0-20180617210344-2471d30d28b4 // indirect
 	github.com/shuheiktgw/go-travis v0.1.10-0.20190502100712-2d0b3e9898f0
 	github.com/simplepush/simplepush-go v0.0.0-20170307205831-8980e96b7b02
 	github.com/simplereach/timeutils v1.2.0 // indirect
-	github.com/sirupsen/logrus v1.4.1
+	github.com/sirupsen/logrus v1.4.2
 	github.com/smartystreets/assertions v0.0.0-20190401211740-f487f9de1cd3 // indirect
 	github.com/smartystreets/goconvey v0.0.0-20190330032615-68dc04aab96a // indirect
 	github.com/sromku/go-gitter v0.0.0-20170828210750-70f7030a94a6
@@ -84,7 +80,6 @@ require (
 	github.com/tomnomnom/linkheader v0.0.0-20180905144013-02ca5825eb80 // indirect
 	golang.org/x/crypto v0.0.0-20190426145343-a29dc8fdc734 // indirect
 	golang.org/x/oauth2 v0.0.0-20190402181905-9f3314589c9a
-	golang.org/x/sys v0.0.0-20190429190828-d89cdac9e872 // indirect
 	golang.org/x/text v0.3.2 // indirect
 	google.golang.org/appengine v1.5.0 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
