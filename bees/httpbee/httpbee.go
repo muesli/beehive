@@ -16,6 +16,7 @@
  *
  *    Authors:
  *      Christian Muehlhaeuser <muesli@gmail.com>
+ *		CalmBit <calmbit@posteto.net>
  */
 
 // Package httpbee is a Bee that lets you trigger HTTP requests.
@@ -56,11 +57,26 @@ func (mod *HTTPBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 
 	u := ""
+	h := []string{}
 	action.Options.Bind("url", &u)
+	action.Options.Bind("headers", &h)
 
 	switch action.Name {
 	case "get":
-		resp, err := http.Get(u)
+		req, err := http.NewRequest("GET", u, nil)
+		if err != nil {
+			mod.LogErrorf("Error: %s", err)
+			return outs
+		}
+		for _, header := range h {
+			comp := strings.SplitN(header, ":", 2)
+			if len(comp) != 2 {
+				mod.LogErrorf("Warning: header '%s' was not formatted correctly - ignoring", header)
+				continue
+			}
+			req.Header.Set(comp[0], strings.TrimSpace(comp[1]))
+		}
+		resp, err := http.DefaultClient.Do(req)
 		if err != nil {
 			mod.LogErrorf("Error: %s", err)
 			return outs
@@ -73,10 +89,27 @@ func (mod *HTTPBee) Action(action bees.Action) []bees.Placeholder {
 			return outs
 		}
 
+		// reforming the request headers slice here for absolute
+		// conformity with what was taken in by the request
+
+		reqHeaders := make([]string, len(req.Header))
+
+		for name, header := range req.Header {
+			reqHeaders = append(reqHeaders, name+": "+strings.Join(header, ", "))
+		}
+
+		respHeaders := make([]string, len(resp.Header))
+
+		for name, header := range resp.Header {
+			respHeaders = append(respHeaders, name+": "+strings.Join(header, ", "))
+		}
+
 		ev, err := mod.prepareResponseEvent(b)
 		if err == nil {
 			ev.Name = "get"
 			ev.Options.SetValue("url", "url", u)
+			ev.Options.SetValue("reqHeaders", "[]string", reqHeaders)
+			ev.Options.SetValue("respHeaders", "[]string", respHeaders)
 			mod.eventChan <- ev
 		}
 
@@ -86,16 +119,39 @@ func (mod *HTTPBee) Action(action bees.Action) []bees.Placeholder {
 		var j string
 		var form url.Values
 		var resp *http.Response
+		var h []string
+		var ctype string
 
 		action.Options.Bind("json", &j)
 		action.Options.Bind("form", &form)
+		action.Options.Bind("headers", &h)
+
+		var buf *strings.Reader
 
 		if j != "" {
-			buf := strings.NewReader(j)
-			resp, err = http.Post(u, "application/json", buf)
+			buf = strings.NewReader(j)
+			ctype = "application/json"
 		} else {
-			resp, err = http.PostForm(u, form)
+			buf = strings.NewReader(form.Encode())
+			ctype = "application/x-www-form-urlencoded"
 		}
+
+		req, err := http.NewRequest("POST", u, buf)
+		req.Header.Set("Content-Type", ctype)
+
+		if err != nil {
+			mod.LogErrorf("Error: %s", err)
+			return outs
+		}
+		for _, header := range h {
+			comp := strings.SplitN(header, ":", 2)
+			if len(comp) != 2 {
+				mod.LogErrorf("Warning: header '%s' was not formatted correctly - ignoring", header)
+				continue
+			}
+			req.Header.Set(comp[0], strings.TrimSpace(comp[1]))
+		}
+		resp, err = http.DefaultClient.Do(req)
 		if err != nil {
 			mod.LogErrorf("Error: %s", err)
 			return outs
@@ -109,9 +165,27 @@ func (mod *HTTPBee) Action(action bees.Action) []bees.Placeholder {
 		}
 
 		ev, err := mod.prepareResponseEvent(b)
+
+		// reforming the request headers slice here for absolute
+		// conformity with what was taken in by the request
+
+		reqHeaders := make([]string, len(req.Header))
+
+		for name, header := range req.Header {
+			reqHeaders = append(reqHeaders, name+": "+strings.Join(header, ", "))
+		}
+
+		respHeaders := make([]string, len(resp.Header))
+
+		for name, header := range resp.Header {
+			respHeaders = append(respHeaders, name+": "+strings.Join(header, ", "))
+		}
+
 		if err == nil {
 			ev.Name = "post"
 			ev.Options.SetValue("url", "url", u)
+			ev.Options.SetValue("reqHeaders", "[]string", reqHeaders)
+			ev.Options.SetValue("respHeaders", "[]string", respHeaders)
 			mod.eventChan <- ev
 		}
 
@@ -147,7 +221,7 @@ func (mod *HTTPBee) prepareResponseEvent(resp []byte) (bees.Event, error) {
 
 		if err == nil {
 			for k, v := range j {
-				mod.Logf("JSON param: %s = %+v\n", k, v)
+				mod.LogDebugf("JSON param: %s = %+v\n", k, v)
 				if k == "json" || k == "data" {
 					continue
 				}
