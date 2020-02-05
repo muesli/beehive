@@ -50,10 +50,12 @@ func (mod *HueBee) Action(action bees.Action) []bees.Placeholder {
 	case "setcolor":
 		var lightID int
 		var color string
+		var alert int
 		brightness := 254
 		action.Options.Bind("light", &lightID)
 		action.Options.Bind("color", &color)
 		action.Options.Bind("brightness", &brightness)
+		action.Options.Bind("alert", &alert)
 
 		light, err := mod.client.FindLightById(strconv.Itoa(lightID))
 		if err != nil {
@@ -61,9 +63,15 @@ func (mod *HueBee) Action(action bees.Action) []bees.Placeholder {
 		}
 
 		state := hue.SetLightState{
-			On:  "true",
-			Bri: strconv.FormatInt(int64(brightness), 10),
-			Sat: "254",
+			On:     "true",
+			Bri:    strconv.FormatInt(int64(brightness), 10),
+			Effect: "",
+		}
+		switch alert {
+		case 1:
+			state.Alert = "select"
+		case 2:
+			state.Alert = "lselect"
 		}
 
 		switch strings.ToLower(color) {
