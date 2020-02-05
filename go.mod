@@ -31,6 +31,7 @@ require (
 	github.com/glaxx/go_pastebin v0.0.0-20170619211819-7e72d56770d0
 	github.com/go-ini/ini v1.42.0 // indirect
 	github.com/go-mail/mail v2.3.1+incompatible
+	github.com/go-sql-driver/mysql v1.5.0 // indirect
 	github.com/go-telegram-bot-api/telegram-bot-api v4.6.4+incompatible
 	github.com/golang/mock v1.2.0 // indirect
 	github.com/golang/protobuf v1.3.1 // indirect
@@ -48,8 +49,7 @@ require (
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
 	github.com/kr/pretty v0.1.0
 	github.com/kurrik/oauth1a v0.0.0-20151019171716-cb1b80e32dd4 // indirect
-	github.com/lusis/go-slackbot v0.0.0-20180109053408-401027ccfef5 // indirect
-	github.com/lusis/slack-test v0.0.0-20190426140909-c40012f20018 // indirect
+	github.com/lucasb-eyer/go-colorful v1.0.3
 	github.com/mattn/go-colorable v0.1.1
 	github.com/mattn/go-isatty v0.0.7 // indirect
 	github.com/mattn/go-mastodon v0.0.3
@@ -60,10 +60,13 @@ require (
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/mreiferson/go-httpclient v0.0.0-20160630210159-31f0106b4474 // indirect
 	github.com/mrexodia/wray v0.0.0-20160318003008-78a2c1f284ff // indirect
+	github.com/muesli/clusters v0.0.0-20190807044042-ba9c57dd9228 // indirect
+	github.com/muesli/gamut v0.0.0-20190807050624-0d3f7d26a44e
 	github.com/muesli/go-pkg-rss v0.0.0-20180307042412-3bef0f3126ec
 	github.com/muesli/go-pkg-xmlx v0.0.0-20151201012946-76f54ee73233 // indirect
 	github.com/muesli/go.hue v0.0.0-20140802040715-8aefcc693caf
 	github.com/muesli/goefa v0.0.0-20180507204150-08d8ee2555d2
+	github.com/muesli/kmeans v0.0.0-20190917235210-80dfc71e6c5a // indirect
 	github.com/muesli/smolder v0.0.0-20190505085143-9c21fc7135ee
 	github.com/nlopes/slack v0.6.0
 	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d
@@ -82,6 +85,7 @@ require (
 	github.com/stretchr/objx v0.2.0 // indirect
 	github.com/technoweenie/multipartstreamer v1.0.1 // indirect
 	github.com/tomnomnom/linkheader v0.0.0-20180905144013-02ca5825eb80 // indirect
+	github.com/xrash/smetrics v0.0.0-20170218160415-a3153f7040e9 // indirect
 	golang.org/x/crypto v0.0.0-20190426145343-a29dc8fdc734 // indirect
 	golang.org/x/oauth2 v0.0.0-20190402181905-9f3314589c9a
 	golang.org/x/sys v0.0.0-20190429190828-d89cdac9e872 // indirect

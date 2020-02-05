@@ -25,7 +25,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/muesli/go.hue"
+	"github.com/lucasb-eyer/go-colorful"
+	"github.com/muesli/gamut/palette"
+	hue "github.com/muesli/go.hue"
 
 	"github.com/muesli/beehive/bees"
 )
@@ -73,18 +75,49 @@ func (mod *HueBee) Action(action bees.Action) []bees.Placeholder {
 			state.Sat = ""
 		case "green":
 			state.Hue = strconv.FormatInt(182*140, 10)
+			state.Sat = "254"
 		case "red":
 			state.Hue = strconv.FormatInt(0, 10)
+			state.Sat = "254"
 		case "blue":
 			state.Hue = strconv.FormatInt(182*250, 10)
+			state.Sat = "254"
 		case "orange":
 			state.Hue = strconv.FormatInt(182*25, 10)
+			state.Sat = "254"
 		case "yellow":
 			state.Hue = strconv.FormatInt(182*85, 10)
+			state.Sat = "254"
 		case "pink":
 			state.Hue = strconv.FormatInt(182*300, 10)
+			state.Sat = "254"
 		case "purple":
 			state.Hue = strconv.FormatInt(182*270, 10)
+			state.Sat = "254"
+		case "":
+			// ignore
+		default:
+			var hex colorful.Color
+			if strings.HasPrefix(color, "#") {
+				// RGB color
+				hex, err = colorful.Hex(color)
+				if err != nil {
+					return outs
+				}
+			} else {
+				cols := palette.Wikipedia.Filter(color)
+
+				var ok bool
+				hex, ok = colorful.MakeColor(cols[0].Color)
+				if !ok {
+					return outs
+				}
+			}
+			cx, cy, cz := hex.Xyz()
+			cx = cx / (cx + cy + cz)
+			cy = cy / (cx + cy + cz)
+			state.Xy = append(state.Xy, float32(cx))
+			state.Xy = append(state.Xy, float32(cy))
 		}
 		light.SetState(state)
 
