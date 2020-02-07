@@ -68,14 +68,9 @@ func (mod *HTTPBee) Action(action bees.Action) []bees.Placeholder {
 			mod.LogErrorf("Error: %s", err)
 			return outs
 		}
-		for _, header := range h {
-			comp := strings.SplitN(header, ":", 2)
-			if len(comp) != 2 {
-				mod.LogErrorf("Warning: header '%s' was not formatted correctly - ignoring", header)
-				continue
-			}
-			req.Header.Set(comp[0], strings.TrimSpace(comp[1]))
-		}
+
+		mod.parseHeaders(h, req)
+
 		resp, err := http.DefaultClient.Do(req)
 		if err != nil {
 			mod.LogErrorf("Error: %s", err)
@@ -92,17 +87,7 @@ func (mod *HTTPBee) Action(action bees.Action) []bees.Placeholder {
 		// reforming the request headers slice here for absolute
 		// conformity with what was taken in by the request
 
-		reqHeaders := make([]string, len(req.Header))
-
-		for name, header := range req.Header {
-			reqHeaders = append(reqHeaders, name+": "+strings.Join(header, ", "))
-		}
-
-		respHeaders := make([]string, len(resp.Header))
-
-		for name, header := range resp.Header {
-			respHeaders = append(respHeaders, name+": "+strings.Join(header, ", "))
-		}
+		reqHeaders, respHeaders := mod.serializeHeaders(req, resp)
 
 		ev, err := mod.prepareResponseEvent(b)
 		if err == nil {
@@ -143,14 +128,9 @@ func (mod *HTTPBee) Action(action bees.Action) []bees.Placeholder {
 			mod.LogErrorf("Error: %s", err)
 			return outs
 		}
-		for _, header := range h {
-			comp := strings.SplitN(header, ":", 2)
-			if len(comp) != 2 {
-				mod.LogErrorf("Warning: header '%s' was not formatted correctly - ignoring", header)
-				continue
-			}
-			req.Header.Set(comp[0], strings.TrimSpace(comp[1]))
-		}
+
+		mod.parseHeaders(h, req)
+
 		resp, err = http.DefaultClient.Do(req)
 		if err != nil {
 			mod.LogErrorf("Error: %s", err)
@@ -169,17 +149,7 @@ func (mod *HTTPBee) Action(action bees.Action) []bees.Placeholder {
 		// reforming the request headers slice here for absolute
 		// conformity with what was taken in by the request
 
-		reqHeaders := make([]string, len(req.Header))
-
-		for name, header := range req.Header {
-			reqHeaders = append(reqHeaders, name+": "+strings.Join(header, ", "))
-		}
-
-		respHeaders := make([]string, len(resp.Header))
-
-		for name, header := range resp.Header {
-			respHeaders = append(respHeaders, name+": "+strings.Join(header, ", "))
-		}
+		reqHeaders, respHeaders := mod.serializeHeaders(req, resp)
 
 		if err == nil {
 			ev.Name = "post"
@@ -233,6 +203,34 @@ func (mod *HTTPBee) prepareResponseEvent(resp []byte) (bees.Event, error) {
 	}
 
 	return ev, nil
+}
+
+func (mod *HTTPBee) parseHeaders(headers []string, req *http.Request) {
+	for _, header := range headers {
+		comp := strings.SplitN(header, ":", 2)
+		if len(comp) != 2 {
+			mod.LogErrorf("Warning: header '%s' was not formatted correctly - ignoring", header)
+			continue
+		}
+		req.Header.Set(comp[0], strings.TrimSpace(comp[1]))
+	}
+}
+
+func (mod *HTTPBee) serializeHeaders(req *http.Request, resp *http.Response) ([]string, []string) {
+	reqHeaders := make([]string, len(req.Header))
+
+	for name, header := range req.Header {
+		reqHeaders = append(reqHeaders, name+": "+strings.Join(header, ", "))
+	}
+
+	respHeaders := make([]string, len(resp.Header))
+
+	for name, header := range resp.Header {
+		respHeaders = append(respHeaders, name+": "+strings.Join(header, ", "))
+	}
+
+	return reqHeaders, respHeaders
+
 }
 
 // ReloadOptions parses the config options and initializes the Bee.
