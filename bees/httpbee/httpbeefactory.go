@@ -78,9 +78,19 @@ func (factory *HTTPBeeFactory) Events() []bees.EventDescriptor {
 					Type:        "url",
 				},
 				{
+					Name:        "reqHeaders",
+					Description: "Headers of the request",
+					Type:        "[]string",
+				},
+				{
 					Name:        "data",
 					Description: "Raw response",
 					Type:        "string",
+				},
+				{
+					Name:        "respHeaders",
+					Description: "Headers on the response",
+					Type:        "[]string",
 				},
 				{
 					Name:        "json",
@@ -100,9 +110,19 @@ func (factory *HTTPBeeFactory) Events() []bees.EventDescriptor {
 					Type:        "url",
 				},
 				{
+					Name:        "reqHeaders",
+					Description: "HTTP headers of the request",
+					Type:        "[]string",
+				},
+				{
 					Name:        "data",
 					Description: "Raw response",
 					Type:        "string",
+				},
+				{
+					Name:        "respHeaders",
+					Description: "HTTP headers on the response",
+					Type:        "[]string",
 				},
 				{
 					Name:        "json",
@@ -129,6 +149,11 @@ func (factory *HTTPBeeFactory) Actions() []bees.ActionDescriptor {
 					Type:        "url",
 					Mandatory:   true,
 				},
+				{
+					Name:        "headers",
+					Description: "HTTP headers to send (e.g. 'User-Agent: BeeHive/1.0')",
+					Type:        "[]string",
+				},
 			},
 		},
 		{
@@ -151,6 +176,11 @@ func (factory *HTTPBeeFactory) Actions() []bees.ActionDescriptor {
 					Description: "Where to connect to",
 					Type:        "url",
 					Mandatory:   true,
+				},
+				{
+					Name:        "headers",
+					Description: "HTTP headers to send (e.g. 'User-Agent: BeeHive/1.0')",
+					Type:        "[]string",
 				},
 			},
 		},
