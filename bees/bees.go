@@ -16,6 +16,7 @@
  *
  *    Authors:
  *      Christian Muehlhaeuser <muesli@gmail.com>
+ *      Nicolas Martin <penguwin@penguwin.eu>
  */
 
 // Package bees is Beehive's central module system.
@@ -323,6 +324,42 @@ func (bee *Bee) LastAction() time.Time {
 // LogEvent logs the last triggered event.
 func (bee *Bee) LogEvent() {
 	bee.lastEvent = time.Now()
+}
+
+// CreateEvent creates an Event for the given name and fills it's Placeholders
+// from the given map. This map should be structured like this:
+//
+//   properties := map[string]interface{}{
+//           "event0": val0,
+//           "event1": val1,
+//           "event2": val2,
+//           // ...
+//   }
+//
+// whereas the map keys correspond to the placeholders name as string and the map
+// values correspond to the desired values for the specific placeholder.
+func (bee *Bee) CreateEvent(name string, prop map[string]interface{}) Event {
+	event := Event{
+		Bee:     bee.Name(),
+		Name:    name,
+		Options: []Placeholder{},
+	}
+
+	// iterate over the Events provided in the Namespace of the bee and match on
+	// the provided name
+	for _, ev := range (*factories[bee.Namespace()]).Events() {
+		if ev.Name == name {
+			// and create the corresponding Placholder for the Event
+			for _, pl := range ev.Options {
+				event.Options = append(event.Options, Placeholder{
+					Name:  pl.Name,
+					Value: prop[pl.Name],
+					Type:  pl.Type,
+				})
+			}
+		}
+	}
+	return event
 }
 
 // LogAction logs the last triggered action.
