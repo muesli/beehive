@@ -16,6 +16,7 @@
  *
  *    Authors:
  *      Christian Muehlhaeuser <muesli@gmail.com>
+ *      Nicolas Martin <penguwin@penguwin.eu>
  */
 
 // Package ircbee is a Bee that can connect to an IRC server.
@@ -153,23 +154,12 @@ func (mod *IrcBee) statusChange(eventChan chan bees.Event, conn *irc.Conn, line 
 
 	channel := line.Args[0]
 	user := line.Src[:strings.Index(line.Src, "!")]
-	ev := bees.Event{
-		Bee:  mod.Name(),
-		Name: strings.ToLower(line.Cmd),
-		Options: []bees.Placeholder{
-			{
-				Name:  "channel",
-				Type:  "string",
-				Value: channel,
-			},
-			{
-				Name:  "user",
-				Type:  "string",
-				Value: user,
-			},
-		},
+
+	properties := map[string]interface{}{
+		"channel": channel,
+		"user":    user,
 	}
-	eventChan <- ev
+	eventChan <- mod.CreateEvent(strings.ToLower(line.Cmd), properties)
 }
 
 // Run executes the Bee's event loop.
@@ -226,33 +216,12 @@ func (mod *IrcBee) Run(eventChan chan bees.Event) {
 		user := line.Src[:strings.Index(line.Src, "!")]
 		hostmask := line.Src[strings.Index(line.Src, "!")+2:]
 
-		ev := bees.Event{
-			Bee:  mod.Name(),
-			Name: "message",
-			Options: []bees.Placeholder{
-				{
-					Name:  "channel",
-					Type:  "string",
-					Value: channel,
-				},
-				{
-					Name:  "user",
-					Type:  "string",
-					Value: user,
-				},
-				{
-					Name:  "hostmask",
-					Type:  "string",
-					Value: hostmask,
-				},
-				{
-					Name:  "text",
-					Type:  "string",
-					Value: msg,
-				},
-			},
-		}
-		eventChan <- ev
+		eventChan <- mod.CreateEvent("message", map[string]interface{}{
+			"channel":  channel,
+			"user":     user,
+			"hostmask": hostmask,
+			"text":     msg,
+		})
 	})
 
 	waitForDisconnect := false
