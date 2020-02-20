@@ -18,13 +18,14 @@
  *      Sergio Rubio <sergio@rubio.im>
  */
 
-package cfddns
+package redisbee
 
 import (
 	"fmt"
 
 	"github.com/go-redis/redis"
 	"github.com/muesli/beehive/bees"
+	log "github.com/sirupsen/logrus"
 )
 
 // RedisBee  updates a Cloudflare domain name
@@ -36,6 +37,51 @@ type RedisBee struct {
 
 // Run executes the Bee's event loop.
 func (mod *RedisBee) Run(eventChan chan bees.Event) {
+
+	rchann := mod.Config().Options.Value("channel").(string)
+	if rchann == "" {
+		log.Debugf("Redis channel not configured, disabling pubsub")
+		return
+	}
+
+	log.Debugf("Redis: subscribed to channel '%s'", rchann)
+
+	pubsub := mod.client.Subscribe(rchann)
+	_, err := pubsub.Receive()
+	if err != nil {
+		mod.LogErrorf("Redis: error subscribing to channel '%s', disabling pubsub", rchann)
+	}
+	ch := pubsub.Channel()
+
+	for {
+		select {
+		case <-mod.SigChan:
+			return
+
+		case msg := <-ch:
+			sendEvent(mod.Name(), msg.Channel, msg.Payload, eventChan)
+		}
+	}
+}
+
+func sendEvent(bee string, channel string, msg string, eventChan chan bees.Event) {
+	event := bees.Event{
+		Bee:  bee,
+		Name: "message",
+		Options: []bees.Placeholder{
+			{
+				Name:  "channel",
+				Type:  "string",
+				Value: channel,
+			},
+			{
+				Name:  "message",
+				Type:  "string",
+				Value: msg,
+			},
+		},
+	}
+	eventChan <- event
 }
 
 // Action triggers the action passed to it.

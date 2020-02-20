@@ -18,7 +18,7 @@
  *      Sergio Rubio <sergio@rubio.im>
  */
 
-package cfddns
+package redisbee
 
 import (
 	"github.com/muesli/beehive/bees"
@@ -51,7 +51,7 @@ func (factory *RedisBeeFactory) Name() string {
 
 // Description returns the description of this Bee.
 func (factory *RedisBeeFactory) Description() string {
-	return "Stores arbitrary key/value strings in a Redis server"
+	return "PubSub and key/value storage using a Redis server"
 }
 
 // Image returns the asset name of this Bee (in the assets/bees folder)
@@ -61,7 +61,26 @@ func (factory *RedisBeeFactory) Image() string {
 
 // Events describes the available events provided by this Bee.
 func (factory *RedisBeeFactory) Events() []bees.EventDescriptor {
-	return []bees.EventDescriptor{}
+	events := []bees.EventDescriptor{
+		{
+			Namespace:   factory.Name(),
+			Name:        "message",
+			Description: "A message was received over the pubsub channel",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "message",
+					Description: "The message that was received",
+					Type:        "string",
+				},
+				{
+					Name:        "channel",
+					Description: "The channel the message was received in",
+					Type:        "string",
+				},
+			},
+		},
+	}
+	return events
 }
 
 // Actions describes the available actions provided by this Bee.
@@ -119,6 +138,13 @@ func (factory *RedisBeeFactory) Options() []bees.BeeOptionDescriptor {
 			Description: "Redis database",
 			Type:        "int",
 			Default:     0,
+			Mandatory:   false,
+		},
+		{
+			Name:        "channel",
+			Description: "Redis PubSub Channel",
+			Type:        "string",
+			Default:     "",
 			Mandatory:   false,
 		},
 	}
