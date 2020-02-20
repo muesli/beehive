@@ -16,166 +16,49 @@
  *
  *    Authors:
  *      Christian Muehlhaeuser <muesli@gmail.com>
- *      Nicolas Martin <penguwingit@gmail.com>
+ *      Nicolas Martin <penguwin@penguwin.eu>
  */
 
 package openweathermapbee
 
 import (
-	"github.com/muesli/beehive/bees"
-
 	owm "github.com/briandowns/openweathermap"
 )
 
 // TriggerCurrentWeatherEvent triggers all current weather events
 func (mod *OpenweathermapBee) TriggerCurrentWeatherEvent() {
-	ev := bees.Event{
-		Bee:  mod.Name(),
-		Name: "current_weather",
-		Options: []bees.Placeholder{
-			{
-				Name:  "geo_pos_longitude",
-				Type:  "float64",
-				Value: mod.current.GeoPos.Longitude,
-			},
-			{
-				Name:  "geo_pos_latitude",
-				Type:  "float64",
-				Value: mod.current.GeoPos.Latitude,
-			},
-			{
-				Name:  "sys_type",
-				Type:  "int",
-				Value: mod.current.Sys.Type,
-			},
-			{
-				Name:  "sys_id",
-				Type:  "int",
-				Value: mod.current.Sys.ID,
-			},
-			{
-				Name:  "sys_message",
-				Type:  "float64",
-				Value: mod.current.Sys.Message,
-			},
-			{
-				Name:  "sys_country",
-				Type:  "string",
-				Value: mod.current.Sys.Country,
-			},
-			{
-				Name:  "sys_sunrise",
-				Type:  "int",
-				Value: mod.current.Sys.Sunrise,
-			},
-			{
-				Name:  "sys_sunset",
-				Type:  "int",
-				Value: mod.current.Sys.Sunset,
-			},
-			{
-				Name:  "base",
-				Type:  "string",
-				Value: mod.current.Base,
-			},
-			{
-				Name:  "main_temp",
-				Type:  "float64",
-				Value: mod.current.Main.Temp,
-			},
-			{
-				Name:  "main_temp_min",
-				Type:  "float64",
-				Value: mod.current.Main.TempMin,
-			},
-			{
-				Name:  "main_temp_max",
-				Type:  "float64",
-				Value: mod.current.Main.TempMax,
-			},
-			{
-				Name:  "main_pressure",
-				Type:  "float64",
-				Value: mod.current.Main.Pressure,
-			},
-			{
-				Name:  "main_sealevel",
-				Type:  "float64",
-				Value: mod.current.Main.SeaLevel,
-			},
-			{
-				Name:  "main_grndlevel",
-				Type:  "float64",
-				Value: mod.current.Main.GrndLevel,
-			},
-			{
-				Name:  "main_humidity",
-				Type:  "float64",
-				Value: mod.current.Main.Humidity,
-			},
-			{
-				Name:  "wind_speed",
-				Type:  "float64",
-				Value: mod.current.Wind.Speed,
-			},
-			{
-				Name:  "wind_deg",
-				Type:  "float64",
-				Value: mod.current.Wind.Deg,
-			},
-			{
-				Name:  "clouds_all",
-				Type:  "int",
-				Value: mod.current.Clouds.All,
-			},
-			{
-				Name:  "rain",
-				Type:  "map[string]float64",
-				Value: mod.current.Rain,
-			},
-			{
-				Name:  "snow",
-				Type:  "map[string]float64",
-				Value: mod.current.Snow,
-			},
-			{
-				Name:  "dt",
-				Type:  "int",
-				Value: mod.current.Dt,
-			},
-			{
-				Name:  "id",
-				Type:  "int",
-				Value: mod.current.ID,
-			},
-			{
-				Name:  "name",
-				Type:  "string",
-				Value: mod.current.Name,
-			},
-			{
-				Name:  "cod",
-				Type:  "int",
-				Value: mod.current.Cod,
-			},
-			{
-				Name:  "unit",
-				Type:  "string",
-				Value: mod.current.Unit,
-			},
-			{
-				Name:  "lang",
-				Type:  "string",
-				Value: mod.current.Lang,
-			},
-			{
-				Name:  "key",
-				Type:  "string",
-				Value: mod.current.Key,
-			},
-		},
+	properties := map[string]interface{}{
+		"geo_pos_longitude": mod.current.GeoPos.Longitude,
+		"geo_pos_latitude":  mod.current.GeoPos.Latitude,
+		"sys_type":          mod.current.Sys.Type,
+		"sys_id":            mod.current.Sys.ID,
+		"sys_message":       mod.current.Sys.Message,
+		"sys_country":       mod.current.Sys.Country,
+		"sys_sunrise":       mod.current.Sys.Sunrise,
+		"sys_sunset":        mod.current.Sys.Sunset,
+		"base":              mod.current.Base,
+		"main_temp":         mod.current.Main.Temp,
+		"main_temp_min":     mod.current.Main.TempMin,
+		"main_temp_max":     mod.current.Main.TempMax,
+		"main_pressure":     mod.current.Main.Pressure,
+		"main_sealevel":     mod.current.Main.SeaLevel,
+		"main_grndlevel":    mod.current.Main.GrndLevel,
+		"main_humidity":     mod.current.Main.Humidity,
+		"wind_speed":        mod.current.Wind.Speed,
+		"wind_deg":          mod.current.Wind.Deg,
+		"clouds_all":        mod.current.Clouds.All,
+		"rain":              mod.current.Rain,
+		"snow":              mod.current.Snow,
+		"dt":                mod.current.Dt,
+		"id":                mod.current.ID,
+		"name":              mod.current.Name,
+		"cod":               mod.current.Cod,
+		"unit":              mod.current.Unit,
+		"lang":              mod.current.Lang,
+		"key":               mod.current.Key,
 	}
-	mod.evchan <- ev
+
+	mod.evchan <- mod.CreateEvent("current_weather", properties)
 
 	for _, v := range mod.current.Weather {
 		mod.TriggerWeatherInformationEvent(&v)
@@ -184,31 +67,11 @@ func (mod *OpenweathermapBee) TriggerCurrentWeatherEvent() {
 
 // WeatherInformationEvent triggers a weather event
 func (mod *OpenweathermapBee) TriggerWeatherInformationEvent(v *owm.Weather) {
-	weather := bees.Event{
-		Bee:  mod.Name(),
-		Name: "main_weather",
-		Options: []bees.Placeholder{
-			{
-				Name:  "id",
-				Type:  "int",
-				Value: v.ID,
-			},
-			{
-				Name:  "main",
-				Type:  "string",
-				Value: v.Main,
-			},
-			{
-				Name:  "description",
-				Type:  "string",
-				Value: v.Description,
-			},
-			{
-				Name:  "icon",
-				Type:  "string",
-				Value: v.Icon,
-			},
-		},
+	properties := map[string]interface{}{
+		"id":          v.ID,
+		"main":        v.Main,
+		"description": v.Description,
+		"icon":        v.Icon,
 	}
-	mod.evchan <- weather
+	mod.evchan <- mod.CreateEvent("main_weather", properties)
 }
