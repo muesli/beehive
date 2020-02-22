@@ -61,7 +61,7 @@ func (factory *TwitchBeeFactory) Image() string {
 
 // LogoColor returns the preferred logo background color (used by the admin interface).
 func (factory *TwitchBeeFactory) LogoColor() string {
-	return "#ef3e56"
+	return "#6441a5"
 }
 
 // Options returns the options available to configure this Bee.
