@@ -27,6 +27,7 @@ require (
 	github.com/fluffle/goirc v1.0.1
 	github.com/fsnotify/fsnotify v1.4.7
 	github.com/garyburd/go-oauth v0.0.0-20180319155456-bca2e7f09a17 // indirect
+	github.com/gempir/go-twitch-irc/v2 v2.2.2
 	github.com/gigawattio/window v0.0.0-20180317192513-0f5467e35573 // indirect
 	github.com/glaxx/go_pastebin v0.0.0-20170619211819-7e72d56770d0
 	github.com/go-ini/ini v1.42.0 // indirect

@@ -67,6 +67,7 @@ import (
 	_ "github.com/muesli/beehive/bees/travisbee"
 	_ "github.com/muesli/beehive/bees/tumblrbee"
 	_ "github.com/muesli/beehive/bees/twiliobee"
+	_ "github.com/muesli/beehive/bees/twitchbee"
 	_ "github.com/muesli/beehive/bees/twitterbee"
 	_ "github.com/muesli/beehive/bees/webbee"
 )
