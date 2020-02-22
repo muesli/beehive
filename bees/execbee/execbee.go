@@ -26,6 +26,7 @@ package execbee
 
 import (
 	"bufio"
+	"encoding/csv"
 	"io"
 	"os/exec"
 	"strings"
@@ -54,7 +55,14 @@ func (mod *ExecBee) Action(action bees.Action) []bees.Placeholder {
 		mod.Logln("Executing locally: ", command)
 
 		go func() {
-			c := strings.Split(command, " ")
+			r := csv.NewReader(strings.NewReader(command))
+			r.Comma = ' ' // space
+			c, err := r.Read()
+			if err != nil {
+				mod.LogErrorf("Error parsing command: %v", err)
+				return
+			}
+
 			cmd := exec.Command(c[0], c[1:]...)
 
 			if stdin != "" {
