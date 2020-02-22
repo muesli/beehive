@@ -61,7 +61,7 @@ func (mod *ExecBee) Action(action bees.Action) []bees.Placeholder {
 				stdinPipe, err := cmd.StdinPipe()
 
 				if err != nil {
-					mod.LogFatal("Error creating stdinPipe for Cmd", err)
+					mod.LogErrorf("Error creating stdinPipe for Cmd: %v", err)
 					return
 				}
 
@@ -74,7 +74,7 @@ func (mod *ExecBee) Action(action bees.Action) []bees.Placeholder {
 			// read and print stdout
 			outReader, err := cmd.StdoutPipe()
 			if err != nil {
-				mod.LogFatal("Error creating StdoutPipe for Cmd", err)
+				mod.LogErrorf("Error creating StdoutPipe for Cmd: %v", err)
 				return
 			}
 			outBuffer := []string{}
@@ -90,7 +90,7 @@ func (mod *ExecBee) Action(action bees.Action) []bees.Placeholder {
 			// read and print stderr
 			errReader, err := cmd.StderrPipe()
 			if err != nil {
-				mod.LogFatal("Error creating StderrPipe for Cmd", err)
+				mod.LogErrorf("Error creating StderrPipe for Cmd: %v", err)
 				return
 			}
 			errBuffer := []string{}
@@ -105,12 +105,12 @@ func (mod *ExecBee) Action(action bees.Action) []bees.Placeholder {
 
 			err = cmd.Start()
 			if err != nil {
-				mod.LogFatal("Error starting Cmd", err)
+				mod.LogErrorf("Error starting Cmd: %v", err)
 			}
 
 			err = cmd.Wait()
 			if err != nil {
-				mod.LogFatal("Error waiting for Cmd", err)
+				mod.LogErrorf("Error waiting for Cmd: %v", err)
 			}
 
 			ev := bees.Event{
