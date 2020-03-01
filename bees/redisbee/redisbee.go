@@ -28,28 +28,27 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// RedisBee  updates a Cloudflare domain name
+// RedisBee is able to pubsub to Redis and store key/values
 type RedisBee struct {
 	bees.Bee
-	client *redis.Client
-	domain string
+	client  *redis.Client
+	channel string
 }
 
 // Run executes the Bee's event loop.
 func (mod *RedisBee) Run(eventChan chan bees.Event) {
 
-	rchann := mod.Config().Options.Value("channel").(string)
-	if rchann == "" {
+	if mod.channel == "" {
 		log.Debugf("Redis channel not configured, disabling pubsub")
 		return
 	}
 
-	log.Debugf("Redis: subscribed to channel '%s'", rchann)
+	log.Debugf("Redis: subscribed to channel '%s'", mod.channel)
 
-	pubsub := mod.client.Subscribe(rchann)
+	pubsub := mod.client.Subscribe(mod.channel)
 	_, err := pubsub.Receive()
 	if err != nil {
-		mod.LogErrorf("Redis: error subscribing to channel '%s', disabling pubsub", rchann)
+		mod.LogErrorf("Redis: error subscribing to channel '%s', disabling pubsub", mod.channel)
 	}
 	ch := pubsub.Channel()
 
@@ -91,6 +90,11 @@ func (mod *RedisBee) Action(action bees.Action) []bees.Placeholder {
 	switch action.Name {
 	case "set":
 		mod.client.Set(action.Options.Value("key").(string), action.Options.Value("value").(string), 0).Err()
+	case "publish":
+		_, err := mod.client.Publish(mod.channel, action.Options.Value("message").(string)).Result()
+		if err != nil {
+			mod.LogErrorf("Redis: error publishing message to channel")
+		}
 	default:
 		mod.LogDebugf("Unknown action triggered in %s: %s", mod.Name(), action.Name)
 	}
@@ -120,4 +124,8 @@ func (mod *RedisBee) ReloadOptions(options bees.BeeOptions) {
 		DB:       db,       // use default DB
 	})
 	mod.client = client
+
+	var channel string
+	options.Bind("channel", &channel)
+	mod.channel = channel
 }

@@ -105,6 +105,19 @@ func (factory *RedisBeeFactory) Actions() []bees.ActionDescriptor {
 				},
 			},
 		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "publish",
+			Description: "Publish to a Redis channel",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "message",
+					Description: "Redis message",
+					Type:        "string",
+					Mandatory:   true,
+				},
+			},
+		},
 	}
 	return actions
 }
