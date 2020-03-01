@@ -16,6 +16,7 @@ require (
 	github.com/briandowns/openweathermap v0.0.0-20180804155945-5f41b7c9d92d
 	github.com/bwmarrin/discordgo v0.19.0
 	github.com/carlosdp/twiliogo v0.0.0-20161027183705-b26045ebb9d1
+	github.com/cenkalti/backoff v2.2.1+incompatible
 	github.com/cloudflare/cloudflare-go v0.10.6
 	github.com/coreos/go-systemd v0.0.0-20190719114852-fd7a80b32e1f
 	github.com/deckarep/gosx-notifier v0.0.0-20180201035817-e127226297fb
@@ -73,6 +74,8 @@ require (
 	github.com/nlopes/slack v0.6.0
 	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d
 	github.com/odwrtw/transmission v0.0.0-20170515140915-08885b3058e7
+	github.com/onsi/ginkgo v1.12.0 // indirect
+	github.com/onsi/gomega v1.9.0 // indirect
 	github.com/prometheus/client_golang v0.9.2
 	github.com/rdegges/go-ipify v0.0.0-20150526035502-2d94a6a86c40
 	github.com/rogpeppe/go-charset v0.0.0-20180617210344-2471d30d28b4 // indirect
@@ -90,7 +93,6 @@ require (
 	github.com/xrash/smetrics v0.0.0-20170218160415-a3153f7040e9 // indirect
 	golang.org/x/crypto v0.0.0-20190426145343-a29dc8fdc734 // indirect
 	golang.org/x/oauth2 v0.0.0-20190402181905-9f3314589c9a
-	golang.org/x/sys v0.0.0-20190429190828-d89cdac9e872 // indirect
 	golang.org/x/text v0.3.2 // indirect
 	google.golang.org/appengine v1.5.0 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect

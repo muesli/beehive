@@ -22,7 +22,9 @@ package redisbee
 
 import (
 	"fmt"
+	"time"
 
+	"github.com/cenkalti/backoff"
 	"github.com/go-redis/redis"
 	"github.com/muesli/beehive/bees"
 	log "github.com/sirupsen/logrus"
@@ -33,6 +35,7 @@ type RedisBee struct {
 	bees.Bee
 	client  *redis.Client
 	channel string
+	bkoff   *backoff.ExponentialBackOff
 }
 
 // Run executes the Bee's event loop.
@@ -45,22 +48,44 @@ func (mod *RedisBee) Run(eventChan chan bees.Event) {
 
 	log.Debugf("Redis: subscribed to channel '%s'", mod.channel)
 
-	pubsub := mod.client.Subscribe(mod.channel)
-	_, err := pubsub.Receive()
-	if err != nil {
-		mod.LogErrorf("Redis: error subscribing to channel '%s', disabling pubsub", mod.channel)
-	}
-	ch := pubsub.Channel()
-
-	for {
-		select {
-		case <-mod.SigChan:
-			return
-
-		case msg := <-ch:
-			sendEvent(mod.Name(), msg.Channel, msg.Payload, eventChan)
+	operation := func() error {
+		pubsub := mod.client.Subscribe(mod.channel)
+		_, err := pubsub.Receive()
+		if err != nil {
+			mod.LogErrorf("Redis: error subscribing to channel '%s', disabling pubsub. Redis error: %v", mod.channel, err)
+			return err
+		}
+		ch := pubsub.Channel()
+		for {
+			select {
+			case <-mod.SigChan:
+				return nil
+			case msg := <-ch:
+				sendEvent(mod.Name(), msg.Channel, msg.Payload, eventChan)
+			}
 		}
 	}
+
+	err := backoff.Retry(operation, backoff.WithMaxRetries(mod.bkoff, 10))
+	if err != nil {
+		mod.LogErrorf("Redis connection failed. Exhausted reconnection attempts.")
+		return
+	}
+}
+
+func (mod *RedisBee) publishWithBackoff(message string) error {
+	operation := func() error {
+		_, err := mod.client.Publish(mod.channel, message).Result()
+		return err
+	}
+
+	err := backoff.Retry(operation, backoff.WithMaxRetries(mod.bkoff, 10))
+	if err != nil {
+		mod.LogErrorf("Redis connection failed. Exhausted reconnection attempts.")
+		return err
+	}
+
+	return nil
 }
 
 func sendEvent(bee string, channel string, msg string, eventChan chan bees.Event) {
@@ -91,9 +116,10 @@ func (mod *RedisBee) Action(action bees.Action) []bees.Placeholder {
 	case "set":
 		mod.client.Set(action.Options.Value("key").(string), action.Options.Value("value").(string), 0).Err()
 	case "publish":
-		_, err := mod.client.Publish(mod.channel, action.Options.Value("message").(string)).Result()
+		//_, err := mod.client.Publish(mod.channel, action.Options.Value("message").(string)).Result()
+		err := mod.publishWithBackoff(action.Options.Value("message").(string))
 		if err != nil {
-			mod.LogErrorf("Redis: error publishing message to channel")
+			mod.LogErrorf("Redis: error publishing message to channel. Redis error: %v", err)
 		}
 	default:
 		mod.LogDebugf("Unknown action triggered in %s: %s", mod.Name(), action.Name)
@@ -128,4 +154,8 @@ func (mod *RedisBee) ReloadOptions(options bees.BeeOptions) {
 	var channel string
 	options.Bind("channel", &channel)
 	mod.channel = channel
+
+	mod.bkoff = backoff.NewExponentialBackOff()
+	mod.bkoff.InitialInterval = 1 * time.Second
+	mod.bkoff.Multiplier = 2
 }
