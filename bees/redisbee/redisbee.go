@@ -88,9 +88,12 @@ func (mod *RedisBee) Action(action bees.Action) []bees.Placeholder {
 
 	switch action.Name {
 	case "set":
-		mod.client.Set(action.Options.Value("key").(string), action.Options.Value("value").(string), 0).Err()
+		err := mod.client.Set(action.Options.Value("key").(string), action.Options.Value("value").(string), 0).Err()
+		if err != nil {
+			mod.LogErrorf("Redis: error setting key/value. Redis error: %v", err)
+		}
 	case "publish":
-		err := mod.client.Publish(mod.channel, action.Options.Value("message").(string))
+		err := mod.client.Publish(mod.channel, action.Options.Value("message").(string)).Err()
 		if err != nil {
 			mod.LogErrorf("Redis: error publishing message to channel. Redis error: %v", err)
 		}
