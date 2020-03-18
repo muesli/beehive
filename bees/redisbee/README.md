@@ -15,6 +15,8 @@ Store arbitrary key/value strings in a Redis server.
 * Store URLs sent via POST to the HTTP server hive
 * Store all messages received in a Slack channel using the Slack hive
 
+See [beehive-youtube-dl](https://github.com/rubiojr/beehive-youtube-dl), a sample project that combines multiple hives, including this one.
+
 ## Credits
 
 [Redis Icon](https://iconscout.com/icon/redis-4) by Icon Mafia on [Iconscout]](https://iconscout.com)
