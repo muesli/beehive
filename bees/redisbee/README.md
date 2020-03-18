@@ -8,6 +8,7 @@ Store arbitrary key/value strings in a Redis server.
 * port: Redis port (defaults to 6379)
 * password: Redis server password (defaults to passwordless auth)
 * db: Redis database to use (defaults to 0)
+* channel: Redis channel to subscribe to (pubsub disabled if not specified)
 
 ## Ideas
 
