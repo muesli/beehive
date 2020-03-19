@@ -45,6 +45,11 @@ func TestSaveConfig(t *testing.T) {
 	if !Exist(configFile) {
 		t.Error("Configuration file wasn't saved")
 	}
+
+	err = SaveConfig(filepath.Join(os.TempDir(), "fooconf/beehive.conf"), testConf)
+	if err != nil {
+		t.Errorf("Failed to create intermediate directories when saving config")
+	}
 }
 
 func TestSaveCurrentConfig(t *testing.T) {
@@ -68,4 +73,35 @@ func TestSaveCurrentConfig(t *testing.T) {
 			t.Error("Configuration file should have been saved")
 		}
 	})
+}
+
+func TestFindUserConfigPath(t *testing.T) {
+	tmpfile, err := ioutil.TempFile("", "example")
+	if err != nil {
+		t.Error("Could not create temp file")
+	}
+	defer os.Remove(tmpfile.Name()) // clean up
+
+	searchPaths = func() []string {
+		return []string{"foobar", "testdata/beehive.conf"}
+	}
+
+	if FindUserConfigPath() != "testdata/beehive.conf" {
+		t.Error("Invalid config file from search path returned")
+	}
+
+	searchPaths = func() []string {
+		return []string{tmpfile.Name(), "testdata/beehive.conf"}
+	}
+
+	if FindUserConfigPath() != tmpfile.Name() {
+		t.Error("Invalid config file from search path returned")
+	}
+}
+
+func TestDefaultPath(t *testing.T) {
+	dir, _ := os.UserConfigDir()
+	if DefaultPath() != filepath.Join(dir, "beehive", "beehive.conf") {
+		t.Error("Error returning default config file path")
+	}
 }

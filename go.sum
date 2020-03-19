@@ -158,6 +158,8 @@ github.com/muesli/clusters v0.0.0-20190807044042-ba9c57dd9228 h1:JNZ3Ev2fzCgkhtR
 github.com/muesli/clusters v0.0.0-20190807044042-ba9c57dd9228/go.mod h1:mw5KDqUj0eLj/6DUNINLVJNoPTFkEuGMHtJsXLviLkY=
 github.com/muesli/gamut v0.0.0-20190807050624-0d3f7d26a44e h1:039bFbhxSzy9DDVLPT36bz5hG3PG74Y8qrGMXea0iS8=
 github.com/muesli/gamut v0.0.0-20190807050624-0d3f7d26a44e/go.mod h1:qOhbxUcDlplFAT1ULq47hrHOCw1CJoqvbsMeEu6/4mU=
+github.com/muesli/go-app-paths v0.2.1 h1:Qi+2igkDX2aPqyRddp7P0sMQIBwBqhkfQfNcjdGjL6Y=
+github.com/muesli/go-app-paths v0.2.1/go.mod h1:SxS3Umca63pcFcLtbjVb+J0oD7cl4ixQWoBKhGEtEho=
 github.com/muesli/go-pkg-rss v0.0.0-20180307042412-3bef0f3126ec h1:HyAZt1/sm0/stsv+GxzMr1QDYqwXIQS0aFCViIsx6E0=
 github.com/muesli/go-pkg-rss v0.0.0-20180307042412-3bef0f3126ec/go.mod h1:asRQ3kBaWU1Dtidbg30iByH0cWAE9ZzVBHbozpVBtCM=
 github.com/muesli/go-pkg-xmlx v0.0.0-20151201012946-76f54ee73233 h1:BpRRQx7DiGCvj3G9ioAnzesXNaF+TXZO1Y7Za1GzC9A=
