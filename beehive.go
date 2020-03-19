@@ -50,10 +50,9 @@ var (
 func main() {
 	app.AddFlags([]app.CliFlag{
 		{
-			V:     &configFile,
-			Name:  "config",
-			Value: "./beehive.conf",
-			Desc:  "Config-file to use",
+			V:    &configFile,
+			Name: "config",
+			Desc: "Config-file to use",
 		},
 		{
 			V:     &versionFlag,
@@ -90,12 +89,23 @@ func main() {
 
 	config := cfg.Config{}
 	var err error
-	if cfg.Exist(configFile) {
-		config, err = cfg.LoadConfig(configFile)
-		if err != nil {
-			log.Panicf("Error loading config file %s!: %v", configFile, err)
+	if configFile == "" {
+		configFile = cfg.FindUserConfigPath()
+		if configFile != "" {
+			config, err = cfg.LoadConfig(configFile)
 		}
+	} else {
+		config, err = cfg.LoadConfig(configFile)
+	}
+
+	if err != nil {
+		log.Panicf("Error loading config file %s!: %v", configFile, err)
+	}
+	if configFile != "" {
 		log.Printf("Config file loaded from %s\n", configFile)
+	} else {
+		configFile = cfg.DefaultPath()
+		log.Println("No config file found, loading defaults")
 	}
 
 	// Load actions from config
@@ -139,7 +149,7 @@ func main() {
 	}
 
 	// Save actions & chains to config
-	log.Println("Storing config...")
+	log.Printf("Storing config to %s", configFile)
 	config.Bees = bees.BeeConfigs()
 	config.Chains = bees.GetChains()
 	config.Actions = bees.GetActions()

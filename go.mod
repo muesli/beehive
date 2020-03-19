@@ -56,13 +56,13 @@ require (
 	github.com/mattn/go-mastodon v0.0.3
 	github.com/mattn/go-xmpp v0.0.0-20190124093244-6093f50721ed
 	github.com/minio/minio-go v6.0.14+incompatible
-	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/mreiferson/go-httpclient v0.0.0-20160630210159-31f0106b4474 // indirect
 	github.com/mrexodia/wray v0.0.0-20160318003008-78a2c1f284ff // indirect
 	github.com/muesli/clusters v0.0.0-20190807044042-ba9c57dd9228 // indirect
 	github.com/muesli/gamut v0.0.0-20190807050624-0d3f7d26a44e
+	github.com/muesli/go-app-paths v0.2.1
 	github.com/muesli/go-pkg-rss v0.0.0-20180307042412-3bef0f3126ec
 	github.com/muesli/go-pkg-xmlx v0.0.0-20151201012946-76f54ee73233 // indirect
 	github.com/muesli/go.hue v0.0.0-20140802040715-8aefcc693caf
