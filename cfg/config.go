@@ -8,14 +8,13 @@ import (
 
 	"github.com/muesli/beehive/bees"
 	gap "github.com/muesli/go-app-paths"
+	log "github.com/sirupsen/logrus"
 )
 
 const appName = "beehive"
-const cfgFileName = "beehive.conf"
 
-// This can be easily replaced in tests so we can test without using
-// the real search paths
-var searchPaths = defaultSearchPaths
+var cfgFileName = "beehive.conf"
+var lookupFunc = Lookup
 
 // Config contains an entire configuration set for Beehive
 type Config struct {
@@ -39,19 +38,29 @@ func DefaultPath() string {
 	return path
 }
 
-func defaultSearchPaths() []string {
-	userScope := gap.NewScope(gap.User, appName)
+// Lookup an existing user config file
+//
+// Returns an empty array when no configs are found.
+func Lookup() []string {
 	paths := []string{}
-	userCfg, err := userScope.ConfigPath(cfgFileName)
-	if err == nil {
-		paths = append(paths, userCfg)
+	defaultPath := DefaultPath()
+	if Exist(defaultPath) {
+		paths = append(paths, defaultPath)
 	}
 
+	// Prepend ./beehive.conf to the search path if exists, takes priority
+	// over the rest
 	cwd, err := os.Getwd()
 	if err != nil {
+		log.Errorf("Error getting current working directory. err: %v", err)
 		cwd = "."
 	}
-	return append(paths, filepath.Join(cwd, cfgFileName))
+	cwdCfg := filepath.Join(cwd, cfgFileName)
+	if Exist(cwdCfg) {
+		paths = append([]string{cwdCfg}, paths...)
+	}
+
+	return paths
 }
 
 // FindUserConfigPath tries to find the config file.
@@ -65,16 +74,30 @@ func defaultSearchPaths() []string {
 //   - ~/Library/Preferences/app/filename.conf
 // Windows:
 //   - %LOCALAPPDATA%/app/Config/filename.conf
+//
+// If no valid config file is found, an empty string is returned.
 func FindUserConfigPath() string {
-	path := ""
-	for _, sPath := range searchPaths() {
-		if Exist(sPath) {
-			path = sPath
-			break
-		}
+	paths := lookupFunc()
+	if len(paths) == 0 {
+		return ""
 	}
+	return paths[0]
+}
 
-	return path
+// Load tries to load the default config file, returning an empty config object
+// if not found
+//
+// Returns the path of the config found and the Config object, returning an error
+// also if loading the config from the filesystem fails.
+func Load() (string, Config, error) {
+	path := FindUserConfigPath()
+	if path == "" {
+		log.Info("No config file found, loading defaults")
+		return DefaultPath(), Config{}, nil
+	}
+	log.Infof("Loading config file from %s", path)
+	cfg, err := LoadConfig(path)
+	return path, cfg, err
 }
 
 // Loads chains from config

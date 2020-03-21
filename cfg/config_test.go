@@ -23,6 +23,32 @@ func TestLoadConfig(t *testing.T) {
 	}
 }
 
+func TestLoad(t *testing.T) {
+	// override package Lookup func so it always returns an empty array
+	oldLookupFunc := lookupFunc
+	lookupFunc = func() []string {
+		return []string{}
+	}
+	_, _, err := Load()
+	if err != nil {
+		t.Error("Should not return an error when there are no configs")
+	}
+	lookupFunc = oldLookupFunc
+
+	oldCfgFileName := cfgFileName
+	cfgFileName = "testdata/beehive.conf"
+
+	path, cfg, err := Load()
+	cwd, _ := os.Getwd()
+	if path != filepath.Join(cwd, cfgFileName) {
+		t.Error("")
+	}
+	if err != nil || cfg.Bees[0].Name != "echo" {
+		t.Error("Should not return an error when there are no configs")
+	}
+	cfgFileName = oldCfgFileName
+}
+
 func TestSaveConfig(t *testing.T) {
 	tmpfile, err := ioutil.TempFile("", "example")
 	if err != nil {
@@ -76,32 +102,23 @@ func TestSaveCurrentConfig(t *testing.T) {
 }
 
 func TestFindUserConfigPath(t *testing.T) {
-	tmpfile, err := ioutil.TempFile("", "example")
-	if err != nil {
-		t.Error("Could not create temp file")
+	// override package Lookup func so it always returns an empty array
+	oldLookupFunc := lookupFunc
+	lookupFunc = func() []string {
+		return []string{}
 	}
-	defer os.Remove(tmpfile.Name()) // clean up
+	path := FindUserConfigPath()
+	if path != "" {
+		t.Error("Should return an empty string when Lookup fails")
+	}
+	lookupFunc = oldLookupFunc
 
-	searchPaths = func() []string {
-		return []string{"foobar", "testdata/beehive.conf"}
+	// override package internal variable so we can test this without writing
+	// to the filesystem
+	cfgFileName = "testdata/beehive.conf"
+	cwd, _ := os.Getwd()
+	if FindUserConfigPath() != filepath.Join(cwd, cfgFileName) {
+		t.Error("Should return $CWD/beehive.conf when available")
 	}
-
-	if FindUserConfigPath() != "testdata/beehive.conf" {
-		t.Error("Invalid config file from search path returned")
-	}
-
-	searchPaths = func() []string {
-		return []string{tmpfile.Name(), "testdata/beehive.conf"}
-	}
-
-	if FindUserConfigPath() != tmpfile.Name() {
-		t.Error("Invalid config file from search path returned")
-	}
-}
-
-func TestDefaultPath(t *testing.T) {
-	dir, _ := os.UserConfigDir()
-	if DefaultPath() != filepath.Join(dir, "beehive", "beehive.conf") {
-		t.Error("Error returning default config file path")
-	}
+	cfgFileName = "beehive.conf"
 }
