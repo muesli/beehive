@@ -50,9 +50,10 @@ var (
 func main() {
 	app.AddFlags([]app.CliFlag{
 		{
-			V:    &configFile,
-			Name: "config",
-			Desc: "Config-file to use",
+			V:     &configFile,
+			Name:  "config",
+			Value: cfg.DefaultPath(),
+			Desc:  "Config-file to use",
 		},
 		{
 			V:     &versionFlag,
@@ -87,25 +88,18 @@ func main() {
 	log.Println()
 	log.Println("Beehive is buzzing...")
 
-	config := cfg.Config{}
+	var config cfg.Config
 	var err error
-	if configFile == "" {
-		configFile = cfg.FindUserConfigPath()
-		if configFile != "" {
-			config, err = cfg.LoadConfig(configFile)
+	if configFile != cfg.DefaultPath() {
+		_, err = cfg.LoadConfig(configFile)
+		if err != nil {
+			log.Fatalf("Error loading specified config file %s. err: %v", configFile, err)
 		}
 	} else {
-		config, err = cfg.LoadConfig(configFile)
-	}
-
-	if err != nil {
-		log.Panicf("Error loading config file %s!: %v", configFile, err)
-	}
-	if configFile != "" {
-		log.Printf("Config file loaded from %s\n", configFile)
-	} else {
-		configFile = cfg.DefaultPath()
-		log.Println("No config file found, loading defaults")
+		configFile, config, err = cfg.Load()
+		if err != nil {
+			log.Fatalf("Error loading user config file %s. err: %v", configFile, err)
+		}
 	}
 
 	// Load actions from config
