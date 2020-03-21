@@ -91,7 +91,7 @@ func main() {
 	var config cfg.Config
 	var err error
 	if configFile != cfg.DefaultPath() {
-		_, err = cfg.LoadConfig(configFile)
+		config, err = cfg.LoadConfig(configFile)
 		if err != nil {
 			log.Fatalf("Error loading specified config file %s. err: %v", configFile, err)
 		}
