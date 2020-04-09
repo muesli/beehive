@@ -90,15 +90,23 @@ func main() {
 
 	var config cfg.Config
 	var err error
-	if configFile != cfg.DefaultPath() {
-		config, err = cfg.LoadConfig(configFile)
+	if configFile != cfg.DefaultPath() { // the user specified a custom config path
+		config, err = cfg.Load(configFile)
 		if err != nil {
 			log.Fatalf("Error loading specified config file %s. err: %v", configFile, err)
 		}
-	} else {
-		configFile, config, err = cfg.Load()
-		if err != nil {
-			log.Fatalf("Error loading user config file %s. err: %v", configFile, err)
+	} else { // try to load config from user paths
+		path := cfg.Lookup()
+		if path == "" {
+			log.Info("No config file found, loading defaults")
+			config = cfg.Config{}
+		} else {
+			configFile = path
+			log.Infof("Loading config file from %s", path)
+			config, err = cfg.Load(path)
+			if err != nil {
+				log.Fatalf("Error loading user config file %s. err: %v", configFile, err)
+			}
 		}
 	}
 
@@ -119,7 +127,7 @@ func main() {
 		abort := false
 		switch s {
 		case syscall.SIGHUP:
-			config, err := cfg.LoadConfig(configFile)
+			config, err := cfg.Load(configFile)
 			if err != nil {
 				log.Panicf("Error loading config from %s: %v", configFile, err)
 			}
@@ -147,7 +155,7 @@ func main() {
 	config.Bees = bees.BeeConfigs()
 	config.Chains = bees.GetChains()
 	config.Actions = bees.GetActions()
-	err = cfg.SaveConfig(configFile, config)
+	err = cfg.Save(configFile, config)
 	if err != nil {
 		log.Printf("Error saving config file to %s! %v", configFile, err)
 	}
