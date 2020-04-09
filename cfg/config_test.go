@@ -23,7 +23,7 @@ func TestLoad(t *testing.T) {
 	}
 }
 
-func TestSaveConfig(t *testing.T) {
+func TestSave(t *testing.T) {
 	tmpfile, err := ioutil.TempFile("", "example")
 	if err != nil {
 		t.Error("Could not create temp file")
@@ -42,7 +42,7 @@ func TestSaveConfig(t *testing.T) {
 		t.Errorf("Failed to save the config to %s", configFile)
 	}
 
-	if !Exist(configFile) {
+	if !exist(configFile) {
 		t.Error("Configuration file wasn't saved")
 	}
 
@@ -52,7 +52,7 @@ func TestSaveConfig(t *testing.T) {
 	}
 }
 
-func TestSaveCurrentConfig(t *testing.T) {
+func TestSaveCurrent(t *testing.T) {
 	tmpfile, err := ioutil.TempFile("", "example")
 	if err != nil {
 		t.Error("Could not create temp file")
@@ -60,7 +60,7 @@ func TestSaveCurrentConfig(t *testing.T) {
 	defer os.Remove(tmpfile.Name()) // clean up
 
 	t.Run("configFile empty", func(t *testing.T) {
-		err = SaveCurrentConfig("")
+		err = SaveCurrent("")
 		if err == nil {
 			t.Error("Configuration file should not be saved")
 		}
@@ -68,7 +68,7 @@ func TestSaveCurrentConfig(t *testing.T) {
 
 	t.Run("configFile tmpfile", func(t *testing.T) {
 		configFile := tmpfile.Name()
-		err = SaveCurrentConfig(configFile)
+		err = SaveCurrent(configFile)
 		if err != nil {
 			t.Error("Configuration file should have been saved")
 		}

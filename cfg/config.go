@@ -53,7 +53,7 @@ func DefaultPath() string {
 func Lookup() string {
 	paths := []string{}
 	defaultPath := DefaultPath()
-	if Exist(defaultPath) {
+	if exist(defaultPath) {
 		paths = append(paths, defaultPath)
 	}
 
@@ -65,7 +65,7 @@ func Lookup() string {
 		cwd = "."
 	}
 	cwdCfg := filepath.Join(cwd, cfgFileName)
-	if Exist(cwdCfg) {
+	if exist(cwdCfg) {
 		paths = append([]string{cwdCfg}, paths...)
 	}
 	if len(paths) == 0 {
@@ -74,7 +74,7 @@ func Lookup() string {
 	return paths[0]
 }
 
-// Loads chains from config
+// Load loads chains from config
 func Load(file string) (Config, error) {
 	config := Config{}
 
@@ -91,10 +91,10 @@ func Load(file string) (Config, error) {
 	return config, nil
 }
 
-// Saves chains to config
+// Save saves chains to config
 func Save(file string, c Config) error {
 	cfgDir := filepath.Dir(file)
-	if !Exist(cfgDir) {
+	if !exist(cfgDir) {
 		os.MkdirAll(cfgDir, 0755)
 	}
 
@@ -106,7 +106,8 @@ func Save(file string, c Config) error {
 	return err
 }
 
-func SaveCurrentConfig(file string) error {
+// SaveCurrent saves current in-memory configuration to the config file
+func SaveCurrent(file string) error {
 	config := Config{}
 	config.Bees = bees.BeeConfigs()
 	config.Chains = bees.GetChains()
@@ -114,7 +115,7 @@ func SaveCurrentConfig(file string) error {
 	return Save(file, config)
 }
 
-func Exist(file string) bool {
+func exist(file string) bool {
 	_, err := os.Stat(file)
 	if err == nil {
 		return true
