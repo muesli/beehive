@@ -7,13 +7,13 @@ import (
 	"testing"
 )
 
-func TestLoadConfig(t *testing.T) {
-	_, err := LoadConfig("foobar")
+func TestLoad(t *testing.T) {
+	_, err := Load("foobar")
 	if err == nil {
 		t.Error("Loading an invalid config file should return an error")
 	}
 
-	conf, err := LoadConfig(filepath.Join("testdata", "beehive.conf"))
+	conf, err := Load(filepath.Join("testdata", "beehive.conf"))
 	if err != nil {
 		t.Error("Error loading config file fixture")
 	}
@@ -21,32 +21,6 @@ func TestLoadConfig(t *testing.T) {
 	if conf.Bees[0].Name != "echo" {
 		t.Error("The first bee should be an exec bee named echo")
 	}
-}
-
-func TestLoad(t *testing.T) {
-	// override package Lookup func so it always returns an empty array
-	oldLookupFunc := lookupFunc
-	lookupFunc = func() []string {
-		return []string{}
-	}
-	_, _, err := Load()
-	if err != nil {
-		t.Error("Should not return an error when there are no configs")
-	}
-	lookupFunc = oldLookupFunc
-
-	oldCfgFileName := cfgFileName
-	cfgFileName = "testdata/beehive.conf"
-
-	path, cfg, err := Load()
-	cwd, _ := os.Getwd()
-	if path != filepath.Join(cwd, cfgFileName) {
-		t.Error("")
-	}
-	if err != nil || cfg.Bees[0].Name != "echo" {
-		t.Error("Should not return an error when there are no configs")
-	}
-	cfgFileName = oldCfgFileName
 }
 
 func TestSaveConfig(t *testing.T) {
@@ -57,13 +31,13 @@ func TestSaveConfig(t *testing.T) {
 	defer os.Remove(tmpfile.Name()) // clean up
 
 	testConfPath := filepath.Join("testdata", "beehive.conf")
-	testConf, err := LoadConfig(testConfPath)
+	testConf, err := Load(testConfPath)
 	if err != nil {
 		t.Errorf("Failed to load config fixture %s: %v", testConfPath, err)
 	}
 
 	configFile := tmpfile.Name()
-	err = SaveConfig(configFile, testConf)
+	err = Save(configFile, testConf)
 	if err != nil {
 		t.Errorf("Failed to save the config to %s", configFile)
 	}
@@ -72,7 +46,7 @@ func TestSaveConfig(t *testing.T) {
 		t.Error("Configuration file wasn't saved")
 	}
 
-	err = SaveConfig(filepath.Join(os.TempDir(), "fooconf/beehive.conf"), testConf)
+	err = Save(filepath.Join(os.TempDir(), "fooconf/beehive.conf"), testConf)
 	if err != nil {
 		t.Errorf("Failed to create intermediate directories when saving config")
 	}
@@ -99,26 +73,4 @@ func TestSaveCurrentConfig(t *testing.T) {
 			t.Error("Configuration file should have been saved")
 		}
 	})
-}
-
-func TestFindUserConfigPath(t *testing.T) {
-	// override package Lookup func so it always returns an empty array
-	oldLookupFunc := lookupFunc
-	lookupFunc = func() []string {
-		return []string{}
-	}
-	path := FindUserConfigPath()
-	if path != "" {
-		t.Error("Should return an empty string when Lookup fails")
-	}
-	lookupFunc = oldLookupFunc
-
-	// override package internal variable so we can test this without writing
-	// to the filesystem
-	cfgFileName = "testdata/beehive.conf"
-	cwd, _ := os.Getwd()
-	if FindUserConfigPath() != filepath.Join(cwd, cfgFileName) {
-		t.Error("Should return $CWD/beehive.conf when available")
-	}
-	cfgFileName = "beehive.conf"
 }

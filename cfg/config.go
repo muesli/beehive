@@ -14,7 +14,6 @@ import (
 const appName = "beehive"
 
 var cfgFileName = "beehive.conf"
-var lookupFunc = Lookup
 
 // Config contains an entire configuration set for Beehive
 type Config struct {
@@ -38,10 +37,20 @@ func DefaultPath() string {
 	return path
 }
 
-// Lookup an existing user config file
+// Lookup tries to find the config file.
 //
-// Returns an empty array when no configs are found.
-func Lookup() []string {
+// If a config file is found in the current working directory, that's returned.
+// Otherwise we try to locate it following an OS dependant:
+//
+// Unix:
+//   - ~/.config/app/filename.conf
+// macOS:
+//   - ~/Library/Preferences/app/filename.conf
+// Windows:
+//   - %LOCALAPPDATA%/app/Config/filename.conf
+//
+// If no valid config file is found, an empty string is returned.
+func Lookup() string {
 	paths := []string{}
 	defaultPath := DefaultPath()
 	if Exist(defaultPath) {
@@ -59,49 +68,14 @@ func Lookup() []string {
 	if Exist(cwdCfg) {
 		paths = append([]string{cwdCfg}, paths...)
 	}
-
-	return paths
-}
-
-// FindUserConfigPath tries to find the config file.
-//
-// If a config file is found in the current working directory, that's returned.
-// Otherwise we try to locate it following an OS dependant:
-//
-// Unix:
-//   - ~/.config/app/filename.conf
-// macOS:
-//   - ~/Library/Preferences/app/filename.conf
-// Windows:
-//   - %LOCALAPPDATA%/app/Config/filename.conf
-//
-// If no valid config file is found, an empty string is returned.
-func FindUserConfigPath() string {
-	paths := lookupFunc()
 	if len(paths) == 0 {
 		return ""
 	}
 	return paths[0]
 }
 
-// Load tries to load the default config file, returning an empty config object
-// if not found
-//
-// Returns the path of the config found and the Config object, returning an error
-// also if loading the config from the filesystem fails.
-func Load() (string, Config, error) {
-	path := FindUserConfigPath()
-	if path == "" {
-		log.Info("No config file found, loading defaults")
-		return DefaultPath(), Config{}, nil
-	}
-	log.Infof("Loading config file from %s", path)
-	cfg, err := LoadConfig(path)
-	return path, cfg, err
-}
-
 // Loads chains from config
-func LoadConfig(file string) (Config, error) {
+func Load(file string) (Config, error) {
 	config := Config{}
 
 	j, err := ioutil.ReadFile(file)
@@ -118,7 +92,7 @@ func LoadConfig(file string) (Config, error) {
 }
 
 // Saves chains to config
-func SaveConfig(file string, c Config) error {
+func Save(file string, c Config) error {
 	cfgDir := filepath.Dir(file)
 	if !Exist(cfgDir) {
 		os.MkdirAll(cfgDir, 0755)
@@ -137,7 +111,7 @@ func SaveCurrentConfig(file string) error {
 	config.Bees = bees.BeeConfigs()
 	config.Chains = bees.GetChains()
 	config.Actions = bees.GetActions()
-	return SaveConfig(file, config)
+	return Save(file, config)
 }
 
 func Exist(file string) bool {
