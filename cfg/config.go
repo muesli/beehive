@@ -20,7 +20,6 @@ type Config struct {
 	Bees    []bees.BeeConfig
 	Actions []bees.Action
 	Chains  []bees.Chain
-	uri     string `json:"-"`
 }
 
 // IConfig is the interface implemented by the configuration backends
