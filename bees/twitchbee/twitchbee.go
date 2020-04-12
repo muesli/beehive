@@ -26,6 +26,7 @@ import (
 	"time"
 
 	twitch "github.com/gempir/go-twitch-irc/v2"
+	"github.com/nicklaw5/helix"
 
 	"github.com/muesli/beehive/bees"
 )
@@ -38,11 +39,14 @@ type TwitchBee struct {
 	connectedState chan bool
 
 	// setup Twitch client:
-	client   *twitch.Client
+	chat     *twitch.Client
+	client   *helix.Client
 	channels []string
 
 	username string
 	password string
+
+	clientId string
 }
 
 // Action triggers the action passed to it.
@@ -65,7 +69,7 @@ func (mod *TwitchBee) Action(action bees.Action) []bees.Placeholder {
 			if recv == "*" {
 				// special: send to all joined channels
 				for _, to := range mod.channels {
-					mod.client.Say(to, text)
+					mod.chat.Say(to, text)
 				}
 			} else {
 				// needs stripping hostname when sending to user!host
@@ -73,7 +77,7 @@ func (mod *TwitchBee) Action(action bees.Action) []bees.Placeholder {
 					recv = recv[0:strings.Index(recv, "!")]
 				}
 
-				mod.client.Say(recv, text)
+				mod.chat.Say(recv, text)
 			}
 		}
 
@@ -99,20 +103,20 @@ func (mod *TwitchBee) Action(action bees.Action) []bees.Placeholder {
 
 func (mod *TwitchBee) rejoin() {
 	for _, channel := range mod.channels {
-		mod.client.Join(channel)
+		mod.chat.Join(channel)
 	}
 }
 
 func (mod *TwitchBee) join(channel string) {
 	channel = strings.TrimSpace(channel)
-	mod.client.Join(channel)
+	mod.chat.Join(channel)
 
 	mod.channels = append(mod.channels, channel)
 }
 
 func (mod *TwitchBee) part(channel string) {
 	channel = strings.TrimSpace(channel)
-	mod.client.Depart(channel)
+	mod.chat.Depart(channel)
 
 	for k, v := range mod.channels {
 		if v == channel {
@@ -122,19 +126,80 @@ func (mod *TwitchBee) part(channel string) {
 	}
 }
 
+func (mod *TwitchBee) monitorFollows(eventChan chan bees.Event) {
+	var twitchId string
+	{
+		resp, err := mod.client.GetUsers(&helix.UsersParams{
+			Logins: []string{mod.username},
+		})
+		if err != nil || len(resp.Data.Users) != 1 {
+			mod.LogErrorf("Failed retrieving user info from Twitch API: %v", err)
+		}
+		twitchId = resp.Data.Users[0].ID
+	}
+
+	follows := make(map[string]helix.UserFollow)
+	var seeded bool
+	for {
+		var pagination string
+		for {
+			resp, err := mod.client.GetUsersFollows(&helix.UsersFollowsParams{
+				After: pagination,
+				First: 40,
+				ToID:  twitchId,
+			})
+			if err != nil {
+				mod.LogErrorf("Failed retrieving follows from Twitch API: %v", err)
+				break
+			}
+			pagination = resp.Data.Pagination.Cursor
+
+			for _, f := range resp.Data.Follows {
+				if _, ok := follows[f.FromID]; !ok {
+					follows[f.FromID] = f
+
+					if seeded {
+						ev := bees.Event{
+							Bee:  mod.Name(),
+							Name: "follow",
+							Options: []bees.Placeholder{
+								{
+									Name:  "user",
+									Type:  "string",
+									Value: f.FromName,
+								},
+							},
+						}
+						eventChan <- ev
+					}
+				}
+			}
+
+			if len(resp.Data.Follows) == 0 || pagination == "" {
+				// end of paginated list
+				seeded = true
+				break
+			}
+		}
+
+		// poll once a minute
+		time.Sleep(30 * time.Second)
+	}
+}
+
 // Run executes the Bee's event loop.
 func (mod *TwitchBee) Run(eventChan chan bees.Event) {
 	// channel signaling Twitch connection status
 	mod.connectedState = make(chan bool)
 
-	// setup Twitch client:
-	mod.client = twitch.NewClient(mod.username, mod.password)
+	// setup Twitch c:
+	mod.chat = twitch.NewClient(mod.username, mod.password)
 
-	mod.client.OnConnect(func() {
+	mod.chat.OnConnect(func() {
 		mod.connectedState <- true
 	})
 
-	mod.client.OnUserJoinMessage(func(msg twitch.UserJoinMessage) {
+	mod.chat.OnUserJoinMessage(func(msg twitch.UserJoinMessage) {
 		ev := bees.Event{
 			Bee:  mod.Name(),
 			Name: "join",
@@ -153,7 +218,7 @@ func (mod *TwitchBee) Run(eventChan chan bees.Event) {
 		}
 		eventChan <- ev
 	})
-	mod.client.OnUserPartMessage(func(msg twitch.UserPartMessage) {
+	mod.chat.OnUserPartMessage(func(msg twitch.UserPartMessage) {
 		ev := bees.Event{
 			Bee:  mod.Name(),
 			Name: "part",
@@ -173,7 +238,7 @@ func (mod *TwitchBee) Run(eventChan chan bees.Event) {
 		eventChan <- ev
 	})
 
-	mod.client.OnPrivateMessage(func(msg twitch.PrivateMessage) {
+	mod.chat.OnPrivateMessage(func(msg twitch.PrivateMessage) {
 		ev := bees.Event{
 			Bee:  mod.Name(),
 			Name: "message",
@@ -201,10 +266,20 @@ func (mod *TwitchBee) Run(eventChan chan bees.Event) {
 	connected := false
 	mod.ContextSet("connected", &connected)
 
-	mod.rejoin()
+	var err error
+	mod.client, err = helix.NewClient(&helix.Options{
+		ClientID: mod.clientId,
+	})
+	if err != nil {
+		mod.LogErrorf("Failed connecting to Twitch API: %v", err)
+		return
+	}
+	go mod.monitorFollows(eventChan)
+
 	go func() {
 		mod.Logln("Connecting to Twitch")
-		err := mod.client.Connect()
+		mod.rejoin()
+		err := mod.chat.Connect()
 		if err != nil {
 			mod.LogErrorf("Failed to connect to Twitch: %v", err)
 		}
@@ -222,7 +297,7 @@ func (mod *TwitchBee) Run(eventChan chan bees.Event) {
 			}
 
 		case <-mod.SigChan:
-			mod.client.Disconnect()
+			mod.chat.Disconnect()
 			return
 
 		default:
@@ -235,6 +310,7 @@ func (mod *TwitchBee) Run(eventChan chan bees.Event) {
 func (mod *TwitchBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
+	options.Bind("client_id", &mod.clientId)
 	options.Bind("username", &mod.username)
 	options.Bind("password", &mod.password)
 	options.Bind("channels", &mod.channels)

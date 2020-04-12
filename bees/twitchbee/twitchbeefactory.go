@@ -68,6 +68,12 @@ func (factory *TwitchBeeFactory) LogoColor() string {
 func (factory *TwitchBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
+			Name:        "client_id",
+			Description: "Your Twitch Client ID",
+			Type:        "string",
+			Mandatory:   true,
+		},
+		{
 			Name:        "username",
 			Description: "Your Twitch username",
 			Type:        "string",
@@ -126,6 +132,18 @@ func (factory *TwitchBeeFactory) Events() []bees.EventDescriptor {
 				{
 					Name:        "user",
 					Description: "The user that sent the message",
+					Type:        "string",
+				},
+			},
+		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "follow",
+			Description: "A user followed you",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "user",
+					Description: "The user that followed you",
 					Type:        "string",
 				},
 			},

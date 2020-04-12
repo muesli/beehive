@@ -61,7 +61,6 @@ github.com/fsnotify/fsnotify v1.4.7 h1:IXs+QLmnXW2CcXuY+8Mzv/fWEsPGWxqefPtCP5CnV
 github.com/fsnotify/fsnotify v1.4.7/go.mod h1:jwhsz4b93w/PPRr/qN1Yymfu8t87LnFCMoQvtojpjFo=
 github.com/garyburd/go-oauth v0.0.0-20180319155456-bca2e7f09a17 h1:GOfMz6cRgTJ9jWV0qAezv642OhPnKEG7gtUjJSdStHE=
 github.com/garyburd/go-oauth v0.0.0-20180319155456-bca2e7f09a17/go.mod h1:HfkOCN6fkKKaPSAeNq/er3xObxTW4VLeY6UUK895gLQ=
-github.com/gempir/go-twitch-irc v1.1.0 h1:Q9gQGI/3yJzYwlYDlFsGJzWfpaqubMExfmBXNpOC6W0=
 github.com/gempir/go-twitch-irc/v2 v2.2.2 h1:uzinel2qApXL1UVfr3QcZ3dJsf+YU+PaUp0qJk03qNo=
 github.com/gempir/go-twitch-irc/v2 v2.2.2/go.mod h1:0HXoEr9l7gNjwajosptV0w0xGpHeU6gsD7JDlfvjTYI=
 github.com/gigawattio/window v0.0.0-20180317192513-0f5467e35573 h1:u8AQ9bPa9oC+8/A/jlWouakhIvkFfuxgIIRjiy8av7I=
@@ -170,6 +169,8 @@ github.com/muesli/kmeans v0.0.0-20190917235210-80dfc71e6c5a h1:TfqSfRTR/uTo2h3Af
 github.com/muesli/kmeans v0.0.0-20190917235210-80dfc71e6c5a/go.mod h1:DchXqcxIXcInFMlUlAAcmjNYiDEPoIQQdDxlWlELyxM=
 github.com/muesli/smolder v0.0.0-20190505085143-9c21fc7135ee h1:owp+45s+e2xN1fFUHIld1X+2ZtHSUjXKkgEr7iwq7u8=
 github.com/muesli/smolder v0.0.0-20190505085143-9c21fc7135ee/go.mod h1:vBtOJlVGxLheofBQdKVQGaG40aJQUwr6Lh4PVliqebY=
+github.com/nicklaw5/helix v0.5.7 h1:DvNyoKkuLYrqZv5/yugL18Ud99UeQoXzzAsg4OwU8uY=
+github.com/nicklaw5/helix v0.5.7/go.mod h1:nRcok4VLg8ONQYW/iXBZ24wcfiJjTlDbhgk0ZatOrUY=
 github.com/nlopes/slack v0.6.0 h1:jt0jxVQGhssx1Ib7naAOZEZcGdtIhTzkP0nopK0AsRA=
 github.com/nlopes/slack v0.6.0/go.mod h1:JzQ9m3PMAqcpeCam7UaHSuBuupz7CmpjehYMayT6YOk=
 github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d h1:VhgPp6v9qf9Agr/56bj7Y/xa04UccTW04VP0Qed4vnQ=
