@@ -1,4 +1,4 @@
-BEEHIVE_VERSION=0.3.99
+BEEHIVE_VERSION=0.4.0
 COMMIT_SHA=$(shell git rev-parse --short HEAD)
 
 all: submodule embed
