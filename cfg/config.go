@@ -1,8 +1,8 @@
 package cfg
 
 import (
-	"encoding/json"
-	"io/ioutil"
+	"fmt"
+	"net/url"
 	"os"
 	"path/filepath"
 
@@ -20,6 +20,39 @@ type Config struct {
 	Bees    []bees.BeeConfig
 	Actions []bees.Action
 	Chains  []bees.Chain
+	uri     string `json:"-"`
+}
+
+// IConfig is the interface implemented by the configuration backends
+type IConfigBackend interface {
+	Load() (Config, error)
+	Save(Config) error
+	URI() string
+	SetURI(uri string) error
+}
+
+// New returns the config file backend that can handle backendURI
+func NewBackend(uri string) (IConfigBackend, error) {
+	var backend IConfigBackend
+	url, err := url.Parse(uri)
+	if err != nil {
+		return nil, err
+	}
+
+	switch url.Scheme {
+	case "":
+		backend = &FileBackend{}
+	case "mem":
+		backend = &MemBackend{}
+	case "file":
+		backend = &FileBackend{}
+	default:
+		return nil, fmt.Errorf("Configuration backend '%s' not supported", url.Scheme)
+	}
+
+	backend.SetURI(uri)
+
+	return backend, nil
 }
 
 // DefaultPath returns Beehive's default config path
@@ -74,51 +107,11 @@ func Lookup() string {
 	return paths[0]
 }
 
-// Load loads chains from config
-func Load(file string) (Config, error) {
-	config := Config{}
-
-	j, err := ioutil.ReadFile(file)
-	if err != nil {
-		return config, err
-	}
-
-	err = json.Unmarshal(j, &config)
-	if err != nil {
-		return config, err
-	}
-
-	return config, nil
-}
-
-// Save saves chains to config
-func Save(file string, c Config) error {
-	cfgDir := filepath.Dir(file)
-	if !exist(cfgDir) {
-		os.MkdirAll(cfgDir, 0755)
-	}
-
-	j, err := json.MarshalIndent(c, "", "  ")
-	if err == nil {
-		err = ioutil.WriteFile(file, j, 0644)
-	}
-
-	return err
-}
-
-// SaveCurrent saves current in-memory configuration to the config file
-func SaveCurrent(file string) error {
-	config := Config{}
-	config.Bees = bees.BeeConfigs()
-	config.Chains = bees.GetChains()
-	config.Actions = bees.GetActions()
-	return Save(file, config)
-}
-
 func exist(file string) bool {
 	_, err := os.Stat(file)
 	if err == nil {
 		return true
 	}
+
 	return false
 }
