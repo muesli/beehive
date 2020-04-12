@@ -1,0 +1,16 @@
+---
+version: '3'
+
+services:
+  beehive:
+    image: fribbledom/beehive
+    ports:
+      - 8181:8181
+    volumes:
+      - beehive-conf:/conf
+    environment:
+      # be sure not to pass quotes, just the bare url
+      - CANONICAL_URL=https://beehive.example.com
+
+volumes:
+  beehive-conf:
