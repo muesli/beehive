@@ -2,7 +2,7 @@ package cfg
 
 import "net/url"
 
-// FileBackend implements a dummy memory backend for the configuration
+// MemBackend implements a dummy memory backend for the configuration
 type MemBackend struct{ uri *url.URL }
 
 func (mb *MemBackend) URI() string {
