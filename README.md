@@ -26,10 +26,10 @@ Connecting those modules with each other lets you create immensly useful agents.
 ### Packages & Binaries
 
 - Arch Linux: beehive ([AUR](https://aur.archlinux.org/packages/beehive/))
-- [Linux Static 64bit](https://github.com/muesli/beehive/releases/download/v0.3.2/beehive_0.3.2_Linux_x86_64.tar.gz)
-- [Linux Static armv6](https://github.com/muesli/beehive/releases/download/v0.3.2/beehive_0.3.2_Linux_armv6.tar.gz)
-- [macOS 64bit](https://github.com/muesli/beehive/releases/download/v0.3.2/beehive_0.3.2_Darwin_x86_64.tar.gz)
-- [Windows 64bit](https://github.com/muesli/beehive/releases/download/v0.3.2/beehive_0.3.2_Windows_x86_64.tar.gz)
+- [Linux Static 64bit](https://github.com/muesli/beehive/releases/download/v0.4.0/beehive_0.4.0_Linux_x86_64.tar.gz)
+- [Linux Static armv6](https://github.com/muesli/beehive/releases/download/v0.4.0/beehive_0.4.0_Linux_armv6.tar.gz)
+- [macOS 64bit](https://github.com/muesli/beehive/releases/download/v0.4.0/beehive_0.4.0_Darwin_x86_64.tar.gz)
+- [Windows 64bit](https://github.com/muesli/beehive/releases/download/v0.4.0/beehive_0.4.0_Windows_x86_64.tar.gz)
 
 You can find even more official releases [here](https://github.com/muesli/beehive/releases).
 
