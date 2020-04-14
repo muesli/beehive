@@ -29,3 +29,28 @@ func TestNew(t *testing.T) {
 		t.Error("Backend for 'mem:' should be a MemoryBackend")
 	}
 }
+
+func TestSetURL(t *testing.T) {
+	conf, err := New("/foobar")
+	if err != nil {
+		panic(err)
+	}
+	conf.SetURL("mem:")
+	if conf.URL().Scheme != "mem" {
+		t.Error("Config URL didn't change")
+	}
+}
+
+func TestLoad(t *testing.T) {
+	conf, err := New("mem://")
+	if err != nil {
+		panic(err)
+	}
+	err = conf.Load()
+	if err != nil {
+		t.Error("Failed loading the configuration")
+	}
+	if conf.URL().Scheme != "mem" {
+		t.Error("Config URL didn't change")
+	}
+}
