@@ -4,28 +4,28 @@ import (
 	"testing"
 )
 
-func TestNewBackend(t *testing.T) {
-	backend, err := NewBackend("/foobar")
+func TestNew(t *testing.T) {
+	conf, err := New("/foobar")
 	if err != nil {
 		panic(err)
 	}
-	if _, ok := backend.(*FileBackend); !ok {
+	if _, ok := conf.Backend().(*FileBackend); !ok {
 		t.Error("Backend for '/foobar' should be a FileBackend")
 	}
 
-	backend, err = NewBackend("file:///foobar")
+	conf, err = New("file:///foobar")
 	if err != nil {
 		panic(err)
 	}
-	if _, ok := backend.(*FileBackend); !ok {
+	if _, ok := conf.Backend().(*FileBackend); !ok {
 		t.Error("Backend for 'file:///foobar' should be a FileBackend")
 	}
 
-	backend, err = NewBackend("mem:")
+	conf, err = New("mem:")
 	if err != nil {
 		panic(err)
 	}
-	if _, ok := backend.(*MemBackend); !ok {
+	if _, ok := conf.Backend().(*MemBackend); !ok {
 		t.Error("Backend for 'mem:' should be a MemoryBackend")
 	}
 }

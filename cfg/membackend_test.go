@@ -1,33 +1,31 @@
 package cfg
 
 import (
+	"net/url"
 	"path/filepath"
 	"testing"
 )
 
 func TestMemLoad(t *testing.T) {
-	backend, err := NewBackend("mem://mem")
-	if err != nil {
-		t.Error("Error loading the mem backend")
-	}
-
-	_, err = backend.Load()
+	u, _ := url.Parse("mem://")
+	backend := NewMemBackend()
+	_, err := backend.Load(u)
 	if err != nil {
 		t.Error("Loading an invalid config file should return an error")
 	}
 }
 
 func TestMemSave(t *testing.T) {
-	testConfPath := filepath.Join("testdata", "foobar")
-	backend, _ := NewBackend("mem://" + testConfPath)
-
-	conf := Config{}
+	path := filepath.Join("testdata", "foobar")
+	u, _ := url.Parse(filepath.Join("testdata", "foobar"))
+	backend := NewMemBackend()
+	conf := &Config{url: u}
 	err := backend.Save(conf)
 	if err != nil {
 		t.Errorf("Failed to save the config to memory")
 	}
 
-	if exist(testConfPath) {
+	if exist(path) {
 		t.Error("Configuration file should not exist")
 	}
 }

@@ -20,38 +20,72 @@ type Config struct {
 	Bees    []bees.BeeConfig
 	Actions []bees.Action
 	Chains  []bees.Chain
+	backend IConfigBackend
+	url     *url.URL
 }
 
 // IConfig is the interface implemented by the configuration backends
 type IConfigBackend interface {
-	Load() (Config, error)
-	Save(Config) error
-	URI() string
-	SetURI(uri string) error
+	Load(*url.URL) (*Config, error)
+	Save(*Config) error
 }
 
-// New returns the config file backend that can handle backendURI
-func NewBackend(uri string) (IConfigBackend, error) {
+func (c *Config) Save() error {
+	return c.backend.Save(c)
+}
+
+func (c *Config) Load() error {
+	config, err := c.backend.Load(c.url)
+	if err != nil {
+		return err
+	}
+	c.Bees = config.Bees
+	c.Actions = config.Actions
+	c.Chains = config.Chains
+	return nil
+}
+
+func (c *Config) Backend() IConfigBackend {
+	return c.backend
+}
+
+func (c *Config) SetURL(u string) error {
+	url, err := url.Parse(u)
+	if err != nil {
+		return err
+	}
+
+	c.url = url
+
+	return nil
+}
+
+func (c *Config) URL() *url.URL {
+	return c.url
+}
+
+// New returns a new Config struct
+func New(url string) (*Config, error) {
+	config := &Config{}
 	var backend IConfigBackend
-	url, err := url.Parse(uri)
+
+	err := config.SetURL(url)
 	if err != nil {
 		return nil, err
 	}
 
-	switch url.Scheme {
-	case "":
-		backend = &FileBackend{}
+	switch config.url.Scheme {
+	case "", "file":
+		backend = NewFileBackend()
 	case "mem":
-		backend = &MemBackend{}
-	case "file":
-		backend = &FileBackend{}
+		backend = NewMemBackend()
 	default:
-		return nil, fmt.Errorf("Configuration backend '%s' not supported", url.Scheme)
+		return nil, fmt.Errorf("Configuration backend '%s' not supported", config.url.Scheme)
 	}
 
-	backend.SetURI(uri)
+	config.backend = backend
 
-	return backend, nil
+	return config, nil
 }
 
 // DefaultPath returns Beehive's default config path

@@ -42,7 +42,7 @@ import (
 )
 
 var (
-	configURI   string
+	configURL   string
 	versionFlag bool
 	debugFlag   bool
 )
@@ -50,7 +50,7 @@ var (
 func main() {
 	app.AddFlags([]app.CliFlag{
 		{
-			V:     &configURI,
+			V:     &configURL,
 			Name:  "config",
 			Value: cfg.DefaultPath(),
 			Desc:  "Default configuration path",
@@ -88,27 +88,25 @@ func main() {
 	log.Println()
 	log.Println("Beehive is buzzing...")
 
-	config := cfg.Config{}
-	var err error
-	cfgBackend, err := cfg.NewBackend(configURI)
+	config, err := cfg.New(configURL)
 	if err != nil {
-		log.Fatalf("Error loading the configuration backend %s", err)
+		log.Fatalf("Error creating the configuration %s", err)
 	}
 
-	if cfgBackend.URI() != cfg.DefaultPath() { // the user specified a custom config path or URI
-		config, err = cfgBackend.Load()
+	if config.URL().String() != cfg.DefaultPath() { // the user specified a custom config path or URI
+		err = config.Load()
 		if err != nil {
-			log.Fatalf("Error loading configuration file from %s. err: %v", cfgBackend.URI(), err)
+			log.Fatalf("Error loading configuration file from %s. err: %v", config.URL(), err)
 		}
-		log.Infof("Loading configuration from %s", cfgBackend.URI())
+		log.Infof("Loading configuration from %s", config.URL())
 	} else { // try to load default config from user paths
 		path := cfg.Lookup()
 		if path == "" {
 			log.Info("No config file found, loading defaults")
 		} else {
-			cfgBackend.SetURI("file://" + path)
+			config.SetURL("file://" + path)
 			log.Infof("Loading config file from %s", path)
-			config, err = cfgBackend.Load()
+			err = config.Load()
 			if err != nil {
 				log.Fatalf("Error loading user config file %s. err: %v", path, err)
 			}
@@ -132,9 +130,9 @@ func main() {
 		abort := false
 		switch s {
 		case syscall.SIGHUP:
-			config, err := cfgBackend.Load()
+			err := config.Load()
 			if err != nil {
-				log.Panicf("Error loading config from %s: %v", cfgBackend.URI(), err)
+				log.Panicf("Error loading config from %s: %v", config.URL(), err)
 			}
 			bees.StopBees()
 			bees.SetActions(config.Actions)
@@ -156,13 +154,13 @@ func main() {
 	}
 
 	// Save actions & chains to config
-	log.Printf("Saving config to %s", cfgBackend.URI())
+	log.Printf("Saving config to %s", config.URL())
 	config.Bees = bees.BeeConfigs()
 	config.Chains = bees.GetChains()
 	config.Actions = bees.GetActions()
-	err = cfgBackend.Save(config)
+	err = config.Save()
 	if err != nil {
-		log.Printf("Error saving config file to %s! %v", cfgBackend.URI(), err)
+		log.Printf("Error saving config file to %s! %v", config.URL(), err)
 	}
 }
 
