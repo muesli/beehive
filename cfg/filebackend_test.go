@@ -18,12 +18,11 @@ func TestFileLoad(t *testing.T) {
 	}
 
 	// try to load the config from a relative path
-	cfgURL, err := url.Parse(filepath.Join("testdata", "beehive.conf"))
-
+	u, err = url.Parse(filepath.Join("testdata", "beehive.conf"))
 	backend = NewFileBackend()
-	conf, err := backend.Load(cfgURL)
+	conf, err := backend.Load(u)
 	if err != nil {
-		t.Errorf("Error loading config file fixture from relative path %s. %v", cfgURL, err)
+		t.Errorf("Error loading config file fixture from relative path %s. %v", u, err)
 	}
 	if conf.Bees[0].Name != "echo" {
 		t.Error("The first bee should be an exec bee named echo")
@@ -31,11 +30,11 @@ func TestFileLoad(t *testing.T) {
 
 	// try to load the config from an absolute path using a URI
 	cwd, _ := os.Getwd()
-	cfgURL, err = url.Parse(filepath.Join("file://", cwd, "testdata", "beehive.conf"))
+	u, err = url.Parse(filepath.Join("file://", cwd, "testdata", "beehive.conf"))
 	backend = NewFileBackend()
-	conf, err = backend.Load(cfgURL)
+	conf, err = backend.Load(u)
 	if err != nil {
-		t.Errorf("Error loading config file fixture from absolute path %s. %v", cfgURL, err)
+		t.Errorf("Error loading config file fixture from absolute path %s. %v", u, err)
 	}
 	if conf.Bees[0].Name != "echo" {
 		t.Error("The first bee should be an exec bee named echo")
