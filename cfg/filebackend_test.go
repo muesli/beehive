@@ -13,8 +13,8 @@ func TestFileLoad(t *testing.T) {
 	backend := NewFileBackend()
 
 	_, err := backend.Load(u)
-	if err == nil {
-		t.Error("Loading an invalid config file should return an error")
+	if err != nil {
+		t.Error("Loading an non-existing config file should not return an error")
 	}
 
 	// try to load the config from a relative path

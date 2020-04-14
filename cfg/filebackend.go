@@ -18,6 +18,11 @@ func NewFileBackend() *FileBackend {
 // Load loads chains from config
 func (fs *FileBackend) Load(u *url.URL) (*Config, error) {
 	var config Config
+
+	if !exist(u.Path) {
+		return &Config{url: u}, nil
+	}
+
 	j, err := ioutil.ReadFile(u.Path)
 	if err != nil {
 		return &config, err
