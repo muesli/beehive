@@ -24,7 +24,7 @@ type Config struct {
 	url     *url.URL
 }
 
-// IConfig is the interface implemented by the configuration backends
+// ConfigBackend the interface implemented by the configuration backends
 type ConfigBackend interface {
 	Load(*url.URL) (*Config, error)
 	Save(*Config) error
