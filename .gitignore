@@ -40,4 +40,4 @@ beehive
 
 # Embedded assets
 api/bindata.go
-
+/bin
