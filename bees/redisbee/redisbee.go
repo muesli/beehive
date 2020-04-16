@@ -29,6 +29,14 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+// Redis client tunning.
+// This enables Redis client retries, causing it to retry
+// failed commands with an exponential backoff, making the
+// the bee more resilient against server or network failures
+const redisMinRetryBackoff = 80 * time.Millisecond
+const redisMaxRetryBackoff = 1 * time.Second
+const redisMaxRetries = 50
+
 // RedisBee is able to pubsub to Redis and store key/values
 type RedisBee struct {
 	bees.Bee
@@ -124,9 +132,9 @@ func (mod *RedisBee) ReloadOptions(options bees.BeeOptions) {
 		Addr:            fmt.Sprintf("%s:%s", host, port),
 		Password:        password, // no password set
 		DB:              db,       // use default DB
-		MinRetryBackoff: 80 * time.Millisecond,
-		MaxRetryBackoff: 1 * time.Second,
-		MaxRetries:      50,
+		MinRetryBackoff: redisMinRetryBackoff,
+		MaxRetryBackoff: redisMaxRetryBackoff,
+		MaxRetries:      redisMaxRetries,
 	})
 	mod.client = client
 
