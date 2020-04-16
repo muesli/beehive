@@ -54,6 +54,7 @@ import (
 	_ "github.com/muesli/beehive/bees/pastebinbee"
 	_ "github.com/muesli/beehive/bees/prometheusbee"
 	_ "github.com/muesli/beehive/bees/pushoverbee"
+	_ "github.com/muesli/beehive/bees/redisbee"
 	_ "github.com/muesli/beehive/bees/rocketchatbee"
 	_ "github.com/muesli/beehive/bees/rssbee"
 	_ "github.com/muesli/beehive/bees/s3bee"
