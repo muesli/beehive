@@ -20,12 +20,12 @@ type Config struct {
 	Bees    []bees.BeeConfig
 	Actions []bees.Action
 	Chains  []bees.Chain
-	backend IConfigBackend
+	backend ConfigBackend
 	url     *url.URL
 }
 
 // IConfig is the interface implemented by the configuration backends
-type IConfigBackend interface {
+type ConfigBackend interface {
 	Load(*url.URL) (*Config, error)
 	Save(*Config) error
 }
@@ -45,7 +45,7 @@ func (c *Config) Load() error {
 	return nil
 }
 
-func (c *Config) Backend() IConfigBackend {
+func (c *Config) Backend() ConfigBackend {
 	return c.backend
 }
 
@@ -67,7 +67,7 @@ func (c *Config) URL() *url.URL {
 // New returns a new Config struct
 func New(url string) (*Config, error) {
 	config := &Config{}
-	var backend IConfigBackend
+	var backend ConfigBackend
 
 	err := config.SetURL(url)
 	if err != nil {
