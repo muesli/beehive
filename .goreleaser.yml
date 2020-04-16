@@ -3,6 +3,8 @@ env:
 before:
   hooks:
   - go mod download
+  - go build -o bin/beehive-web ./cmd/web
+  - go build -o bin/beehive-tray ./cmd/tray
 builds:
   -
     binary: beehive
@@ -49,3 +51,24 @@ changelog:
     exclude:
     - '^docs:'
     - '^test:'
+nfpms:
+  -
+    id: default
+    package_name: beehive-tray
+    file_name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    vendor: com.github.muesli.beehive
+    homepage: https://github.com/muesli/beehive
+    maintainer: Beehive Developers
+    description: Beehive's notification area application
+    license: GNU AFFERO GENERAL PUBLIC LICENSE (AGPL-3)
+    formats:
+      - deb
+    dependencies:
+      - libwebkit2gtk-4.0-37
+    bindir: /usr/bin
+    epoch: 1
+    files:
+      "bin/beehive-web": "/usr/bin/beehive-web"
+      "bin/beehive-tray": "/usr/bin/beehive-tray"
+      "assets/logo.png": "/usr/share/pixmaps/beehive-tray.png"
+      "assets/beehive-tray.desktop": "/usr/share/applications/beehive-tray.desktop"

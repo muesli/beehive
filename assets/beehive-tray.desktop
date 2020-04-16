@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Beehive Tray
+Comment=Beehive Tray Application
+Exec=beehive-tray
+Icon=beehive-tray
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Utility;
+Keywords=Automation;
