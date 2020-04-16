@@ -30,17 +30,6 @@ func TestNew(t *testing.T) {
 	}
 }
 
-func TestSetURL(t *testing.T) {
-	conf, err := New("/foobar")
-	if err != nil {
-		panic(err)
-	}
-	conf.SetURL("mem:")
-	if conf.URL().Scheme != "mem" {
-		t.Error("Config URL didn't change")
-	}
-}
-
 func TestLoad(t *testing.T) {
 	conf, err := New("mem://")
 	if err != nil {
