@@ -65,6 +65,7 @@ nfpms:
       - deb
     dependencies:
       - libwebkit2gtk-4.0-37
+      - libgtk-3-0
     bindir: /usr/bin
     epoch: 1
     files:
