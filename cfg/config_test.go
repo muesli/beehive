@@ -28,6 +28,16 @@ func TestNew(t *testing.T) {
 	if _, ok := conf.Backend().(*MemBackend); !ok {
 		t.Error("Backend for 'mem:' should be a MemoryBackend")
 	}
+
+	conf, err = New("c:\\foobar")
+	if err == nil {
+		t.Error("Not a valid URL, should return an error")
+	}
+
+	conf, err = New("")
+	if err == nil {
+		t.Error("Not a valid URL, should return an error")
+	}
 }
 
 func TestLoad(t *testing.T) {

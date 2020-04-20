@@ -7,16 +7,22 @@ type MemBackend struct {
 	conf *Config
 }
 
-// Load loads chains from config
+// NewMemBackend returns a backend that handles loading and saving
+// the configuration from memory
 func NewMemBackend() *MemBackend {
 	return &MemBackend{conf: &Config{}}
 }
 
+// Load the config from memory
+//
+// No need to do anything here, already loaded
 func (m *MemBackend) Load(u *url.URL) (*Config, error) {
 	return m.conf, nil
 }
 
-// Save saves chains to config
+// Save the config to memory
+//
+// No need to do anything special here, already in memory
 func (m *MemBackend) Save(config *Config) error {
 	return nil
 }

@@ -24,16 +24,27 @@ type Config struct {
 	url     *url.URL
 }
 
-// ConfigBackend the interface implemented by the configuration backends
+// ConfigBackend is the interface implemented by the configuration backends.
+//
+// Backends are responsible for loading and saving the Config struct to
+// memory, the local filesystem, the network, etc.
 type ConfigBackend interface {
 	Load(*url.URL) (*Config, error)
 	Save(*Config) error
 }
 
+// Save the current configuration.
+//
+// The backend loaded will be responsible for saving it
+// to the given URL
 func (c *Config) Save() error {
 	return c.backend.Save(c)
 }
 
+// Load the configuration.
+//
+// The backend loaded will be responsible for loading it
+// from the given URL.
 func (c *Config) Load() error {
 	config, err := c.backend.Load(c.url)
 	if err != nil {
@@ -45,10 +56,15 @@ func (c *Config) Load() error {
 	return nil
 }
 
+// Backend currently being used.
 func (c *Config) Backend() ConfigBackend {
 	return c.backend
 }
 
+// SetURL updates the configuration URL.
+//
+// Next time the config is loaded or saved
+// the new URL will be used.
 func (c *Config) SetURL(u string) error {
 	url, err := url.Parse(u)
 	if err != nil {
@@ -60,14 +76,26 @@ func (c *Config) SetURL(u string) error {
 	return nil
 }
 
+// URL currently being used.
 func (c *Config) URL() *url.URL {
 	return c.url
 }
 
-// New returns a new Config struct
+// New returns a new Config struct.
+//
+// The URL will be matched against all the supported
+// backends and the first backend that can handle the
+// URL scheme will be loaded.
+//
+// A UNIX style path is also accepted, and will be handled
+// by the default FileBackend.
 func New(url string) (*Config, error) {
 	config := &Config{}
 	var backend ConfigBackend
+
+	if url == "" {
+		return nil, fmt.Errorf("Empty URL provided but not supported")
+	}
 
 	err := config.SetURL(url)
 	if err != nil {
@@ -88,7 +116,7 @@ func New(url string) (*Config, error) {
 	return config, nil
 }
 
-// DefaultPath returns Beehive's default config path
+// DefaultPath returns Beehive's default config path.
 //
 // The path returned is OS dependant. If there's an error
 // while trying to figure out the OS dependant path, "beehive.conf"
@@ -124,7 +152,7 @@ func Lookup() string {
 	}
 
 	// Prepend ./beehive.conf to the search path if exists, takes priority
-	// over the rest
+	// over the rest.
 	cwd, err := os.Getwd()
 	if err != nil {
 		log.Errorf("Error getting current working directory. err: %v", err)

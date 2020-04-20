@@ -11,6 +11,8 @@ import (
 // FileBackend implements a filesystem backend for the configuration
 type FileBackend struct{}
 
+// NewFileBackend returns a FileBackend that handles loading and
+// saving files from the local filesytem.
 func NewFileBackend() *FileBackend {
 	return &FileBackend{}
 }
