@@ -1,71 +1,55 @@
 package cfg
 
 import (
-	"io/ioutil"
-	"os"
-	"path/filepath"
 	"testing"
 )
 
-func TestLoadConfig(t *testing.T) {
-	_, err := LoadConfig("foobar")
+func TestNew(t *testing.T) {
+	conf, err := New("/foobar")
+	if err != nil {
+		panic(err)
+	}
+	if _, ok := conf.Backend().(*FileBackend); !ok {
+		t.Error("Backend for '/foobar' should be a FileBackend")
+	}
+
+	conf, err = New("file:///foobar")
+	if err != nil {
+		panic(err)
+	}
+	if _, ok := conf.Backend().(*FileBackend); !ok {
+		t.Error("Backend for 'file:///foobar' should be a FileBackend")
+	}
+
+	conf, err = New("mem:")
+	if err != nil {
+		panic(err)
+	}
+	if _, ok := conf.Backend().(*MemBackend); !ok {
+		t.Error("Backend for 'mem:' should be a MemoryBackend")
+	}
+
+	conf, err = New("c:\\foobar")
 	if err == nil {
-		t.Error("Loading an invalid config file should return an error")
+		t.Error("Not a valid URL, should return an error")
 	}
 
-	conf, err := LoadConfig(filepath.Join("testdata", "beehive.conf"))
-	if err != nil {
-		t.Error("Error loading config file fixture")
-	}
-
-	if conf.Bees[0].Name != "echo" {
-		t.Error("The first bee should be an exec bee named echo")
+	conf, err = New("")
+	if err == nil {
+		t.Error("Not a valid URL, should return an error")
 	}
 }
 
-func TestSaveConfig(t *testing.T) {
-	tmpfile, err := ioutil.TempFile("", "example")
+func TestLoad(t *testing.T) {
+	conf, err := New("mem://")
 	if err != nil {
-		t.Error("Could not create temp file")
+		panic(err)
 	}
-	defer os.Remove(tmpfile.Name()) // clean up
-
-	testConfPath := filepath.Join("testdata", "beehive.conf")
-	testConf, err := LoadConfig(testConfPath)
+	err = conf.Load()
 	if err != nil {
-		t.Errorf("Failed to load config fixture %s: %v", testConfPath, err)
+		t.Error("Failed loading the configuration")
 	}
-
-	configFile := tmpfile.Name()
-	err = SaveConfig(configFile, testConf)
-	if err != nil {
-		t.Errorf("Failed to save the config to %s", configFile)
+	if conf.URL().Scheme != "mem" {
+		t.Error("Config URL didn't change")
 	}
-
-	if !Exist(configFile) {
-		t.Error("Configuration file wasn't saved")
-	}
-}
-
-func TestSaveCurrentConfig(t *testing.T) {
-	tmpfile, err := ioutil.TempFile("", "example")
-	if err != nil {
-		t.Error("Could not create temp file")
-	}
-	defer os.Remove(tmpfile.Name()) // clean up
-
-	t.Run("configFile empty", func(t *testing.T) {
-		err = SaveCurrentConfig("")
-		if err == nil {
-			t.Error("Configuration file should not be saved")
-		}
-	})
-
-	t.Run("configFile tmpfile", func(t *testing.T) {
-		configFile := tmpfile.Name()
-		err = SaveCurrentConfig(configFile)
-		if err != nil {
-			t.Error("Configuration file should have been saved")
-		}
-	})
 }

@@ -42,7 +42,7 @@ import (
 )
 
 var (
-	configFile  string
+	configURL   string
 	versionFlag bool
 	debugFlag   bool
 )
@@ -50,10 +50,10 @@ var (
 func main() {
 	app.AddFlags([]app.CliFlag{
 		{
-			V:     &configFile,
+			V:     &configURL,
 			Name:  "config",
-			Value: "./beehive.conf",
-			Desc:  "Config-file to use",
+			Value: cfg.DefaultPath(),
+			Desc:  "Default configuration path",
 		},
 		{
 			V:     &versionFlag,
@@ -88,14 +88,29 @@ func main() {
 	log.Println()
 	log.Println("Beehive is buzzing...")
 
-	config := cfg.Config{}
-	var err error
-	if cfg.Exist(configFile) {
-		config, err = cfg.LoadConfig(configFile)
+	config, err := cfg.New(configURL)
+	if err != nil {
+		log.Fatalf("Error creating the configuration %s", err)
+	}
+
+	if config.URL().String() != cfg.DefaultPath() { // the user specified a custom config path or URI
+		err = config.Load()
 		if err != nil {
-			log.Panicf("Error loading config file %s!: %v", configFile, err)
+			log.Fatalf("Error loading configuration file from %s. err: %v", config.URL(), err)
 		}
-		log.Printf("Config file loaded from %s\n", configFile)
+		log.Infof("Loading configuration from %s", config.URL())
+	} else { // try to load default config from user paths
+		path := cfg.Lookup()
+		if path == "" {
+			log.Info("No config file found, loading defaults")
+		} else {
+			config.SetURL("file://" + path)
+			log.Infof("Loading config file from %s", path)
+			err = config.Load()
+			if err != nil {
+				log.Fatalf("Error loading user config file %s. err: %v", path, err)
+			}
+		}
 	}
 
 	// Load actions from config
@@ -115,9 +130,9 @@ func main() {
 		abort := false
 		switch s {
 		case syscall.SIGHUP:
-			config, err := cfg.LoadConfig(configFile)
+			err := config.Load()
 			if err != nil {
-				log.Panicf("Error loading config from %s: %v", configFile, err)
+				log.Panicf("Error loading config from %s: %v", config.URL(), err)
 			}
 			bees.StopBees()
 			bees.SetActions(config.Actions)
@@ -139,13 +154,13 @@ func main() {
 	}
 
 	// Save actions & chains to config
-	log.Println("Storing config...")
+	log.Printf("Saving config to %s", config.URL())
 	config.Bees = bees.BeeConfigs()
 	config.Chains = bees.GetChains()
 	config.Actions = bees.GetActions()
-	err = cfg.SaveConfig(configFile, config)
+	err = config.Save()
 	if err != nil {
-		log.Printf("Error saving config file to %s! %v", configFile, err)
+		log.Printf("Error saving config file to %s! %v", config.URL(), err)
 	}
 }
 
