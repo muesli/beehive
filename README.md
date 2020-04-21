@@ -44,7 +44,7 @@ See the [install instructions](http://golang.org/doc/install.html).
 
 The recommended way is to fetch the sources and run make.
 
-    git clone https://github.com/muesli/beehive.git
+    git clone --recursive https://github.com/muesli/beehive.git
     cd beehive
     make
 
