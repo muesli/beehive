@@ -14,18 +14,22 @@ import (
 	"golang.org/x/crypto/scrypt"
 )
 
+// AESBackend symmetrically encrypts the configuration file using AES-GCM
 type AESBackend struct{}
 
+// NewAESBackend create the backend
 func NewAESBackend() *AESBackend {
 	return &AESBackend{}
 }
 
+// Load configuration file from the given URL and decrypt it
 func (b *AESBackend) Load(u *url.URL) (*Config, error) {
+	config := &Config{url: u}
+
 	if !exist(u.Path) {
-		return &Config{url: u}, nil
+		return config, nil
 	}
 
-	var config Config
 	ciphertext, err := ioutil.ReadFile(u.Path)
 	if err != nil {
 		return nil, err
@@ -41,7 +45,7 @@ func (b *AESBackend) Load(u *url.URL) (*Config, error) {
 		return nil, err
 	}
 
-	err = json.Unmarshal(plaintext, &config)
+	err = json.Unmarshal(plaintext, config)
 	if err != nil {
 		return nil, err
 	}
@@ -49,10 +53,11 @@ func (b *AESBackend) Load(u *url.URL) (*Config, error) {
 	config.backend = b
 	config.url = u
 
-	return &config, nil
+	return config, nil
 
 }
 
+// Save encrypts then saves the configuration
 func (b *AESBackend) Save(config *Config) error {
 	u := config.URL()
 	cfgDir := filepath.Dir(u.Path)
