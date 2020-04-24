@@ -107,6 +107,8 @@ func New(url string) (*Config, error) {
 		backend = NewFileBackend()
 	case "mem":
 		backend = NewMemBackend()
+	case "crypto":
+		backend = NewAESBackend()
 	default:
 		return nil, fmt.Errorf("Configuration backend '%s' not supported", config.url.Scheme)
 	}
