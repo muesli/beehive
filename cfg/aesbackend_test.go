@@ -92,8 +92,8 @@ func TestAESBackendSave(t *testing.T) {
 		t.Errorf("configuration file wasn't saved to %s", p)
 	}
 
-	b, _ := ioutil.ReadFile(p)
-	if string(b[0:12]) != EncryptedHeaderPrefix {
-		t.Errorf("encrypted config header not added")
+	ok, err := IsEncrypted(u)
+	if !ok {
+		t.Errorf("encrypted config header not added. %v", err)
 	}
 }

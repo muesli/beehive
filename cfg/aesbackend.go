@@ -30,6 +30,26 @@ func NewAESBackend() *AESBackend {
 	return &AESBackend{}
 }
 
+func IsEncrypted(u *url.URL) (bool, error) {
+	f, err := os.Open(u.Path)
+	if err != nil {
+		return false, err
+	}
+	defer f.Close()
+
+	b := make([]byte, 12)
+	_, err = f.Read(b)
+	if err != nil {
+		return false, err
+	}
+
+	if string(b) != EncryptedHeaderPrefix {
+		return false, nil
+	}
+
+	return true, nil
+}
+
 // Load configuration file from the given URL and decrypt it
 func (b *AESBackend) Load(u *url.URL) (*Config, error) {
 	config := &Config{url: u}

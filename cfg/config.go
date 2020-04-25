@@ -104,7 +104,12 @@ func New(url string) (*Config, error) {
 
 	switch config.url.Scheme {
 	case "", "file":
-		backend = NewFileBackend()
+		if ok, _ := IsEncrypted(config.url); ok {
+			log.Debugf("Loading encrypted configuration file")
+			backend = NewAESBackend()
+		} else {
+			backend = NewFileBackend()
+		}
 	case "mem":
 		backend = NewMemBackend()
 	case "crypto":
