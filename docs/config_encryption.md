@@ -27,6 +27,12 @@ BEEHIVE_CONFIG_PASSWORD=mysecret beehive --config /path/to/config
 
 Will happily detect and load an encrypted configuration file.
 
+## Using user keyrings to store the password
+
+A sample wrapper script (Linux only) is provided in [tools/encrypted-config-wrapper] that will read the configuration password from the sessions's keyring.
+
+Something similar could be written to do it in macOS using Keychain and its `security(1)` CLI.
+
 ## Troubleshooting
 
 ```
