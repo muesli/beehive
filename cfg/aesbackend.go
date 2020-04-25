@@ -5,7 +5,7 @@ import (
 	"crypto/cipher"
 	"crypto/rand"
 	"encoding/json"
-	"fmt"
+	"errors"
 	"io/ioutil"
 	"net/url"
 	"os"
@@ -13,6 +13,10 @@ import (
 
 	"golang.org/x/crypto/scrypt"
 )
+
+// PasswordEnvVar defines the environment variable name that should
+// contain the configuration password.
+const PasswordEnvVar = "BEEHIVE_CONFIG_PASSWORD"
 
 // AESBackend symmetrically encrypts the configuration file using AES-GCM
 type AESBackend struct{}
@@ -35,9 +39,9 @@ func (b *AESBackend) Load(u *url.URL) (*Config, error) {
 		return nil, err
 	}
 
-	p, ok := u.User.Password()
-	if !ok {
-		return nil, fmt.Errorf("No password specified!")
+	p, err := getPassword(u)
+	if err != nil {
+		return nil, err
 	}
 
 	plaintext, err := decrypt(ciphertext, []byte(p))
@@ -70,9 +74,9 @@ func (b *AESBackend) Save(config *Config) error {
 		return err
 	}
 
-	p, ok := u.User.Password()
-	if !ok {
-		return fmt.Errorf("No password specified!")
+	p, err := getPassword(config.URL())
+	if err != nil {
+		return err
 	}
 
 	ciphertext, err := encrypt(j, []byte(p))
@@ -152,4 +156,18 @@ func deriveKey(password, salt []byte) ([]byte, []byte, error) {
 	}
 
 	return key, salt, nil
+}
+
+func getPassword(u *url.URL) (string, error) {
+	p := os.Getenv(PasswordEnvVar)
+	if p != "" {
+		return p, nil
+	}
+
+	p, ok := u.User.Password()
+	if ok {
+		return p, nil
+	}
+
+	return "", errors.New("password to decrypt the config file not available")
 }

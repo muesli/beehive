@@ -8,6 +8,8 @@ import (
 	"testing"
 )
 
+const testPassword = "foo"
+
 func TestAESBackendLoad(t *testing.T) {
 	u, _ := url.Parse("crypt://foobar")
 	backend := NewAESBackend()
@@ -19,7 +21,7 @@ func TestAESBackendLoad(t *testing.T) {
 
 	// try to load the config from an absolute path using a URI
 	cwd, _ := os.Getwd()
-	u, err = url.Parse("crypto://x:foo@" + filepath.Join(cwd, "testdata", "beehive-crypto.conf"))
+	u, err = url.Parse("crypto://x:" + testPassword + "@" + filepath.Join(cwd, "testdata", "beehive-crypto.conf"))
 	backend = NewAESBackend()
 	conf, err := backend.Load(u)
 	if err != nil {
@@ -29,12 +31,31 @@ func TestAESBackendLoad(t *testing.T) {
 		t.Error("The first bee should be an exec bee named echo")
 	}
 
+	// try to load the config using the password from the environment
+	os.Setenv(PasswordEnvVar, testPassword)
+	u, err = url.Parse("crypto://" + filepath.Join(cwd, "testdata", "beehive-crypto.conf"))
+	backend = NewAESBackend()
+	conf, err = backend.Load(u)
+	if err != nil {
+		t.Errorf("loading the config file using the environment password should work. %v", err)
+	}
+
 	// try to load the config with an invalid password
+	os.Setenv(PasswordEnvVar, "")
 	u, err = url.Parse("crypto://x:bar@" + filepath.Join(cwd, "testdata", "beehive-crypto.conf"))
 	backend = NewAESBackend()
 	conf, err = backend.Load(u)
-	if err.Error() != "cipher: message authentication failed" {
-		t.Errorf("Loading the config file with an invalid password should fail. %v", err)
+	if err == nil || err.Error() != "cipher: message authentication failed" {
+		t.Errorf("loading the config file with an invalid password should fail. %v", err)
+	}
+
+	// environment password takes prececence
+	os.Setenv(PasswordEnvVar, testPassword)
+	u, err = url.Parse("crypto://x:bar@" + filepath.Join(cwd, "testdata", "beehive-crypto.conf"))
+	backend = NewAESBackend()
+	conf, err = backend.Load(u)
+	if err != nil {
+		t.Errorf("the password defined in %s should take precedence. %v", PasswordEnvVar, err)
 	}
 }
 
@@ -45,7 +66,7 @@ func TestAESBackendSave(t *testing.T) {
 	}
 
 	cwd, _ := os.Getwd()
-	u, err := url.Parse(filepath.Join("crypto://x:foo", cwd, "testdata", "beehive-crypto.conf"))
+	u, err := url.Parse(filepath.Join("crypto://x:"+testPassword+"@", cwd, "testdata", "beehive-crypto.conf"))
 	backend := NewAESBackend()
 	c, err := backend.Load(u)
 	if err != nil {
@@ -54,14 +75,14 @@ func TestAESBackendSave(t *testing.T) {
 
 	// Save the config file to a new absolute path using a URL
 	p := filepath.Join(tmpdir, "beehive-crypto.conf")
-	u, err = url.Parse("crypto://x:foo@" + p)
+	u, err = url.Parse("crypto://x:" + testPassword + "@" + p)
 	c.SetURL(u.String())
 	backend = NewAESBackend()
 	err = backend.Save(c)
 	if err != nil {
-		t.Errorf("Failed to save the config to %s", u)
+		t.Errorf("cailed to save the config to %s", u)
 	}
 	if !exist(p) {
-		t.Errorf("Configuration file wasn't saved to %s", p)
+		t.Errorf("configuration file wasn't saved to %s", p)
 	}
 }
