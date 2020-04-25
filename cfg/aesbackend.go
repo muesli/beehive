@@ -18,6 +18,10 @@ import (
 // contain the configuration password.
 const PasswordEnvVar = "BEEHIVE_CONFIG_PASSWORD"
 
+// EncryptedHeaderPrefix is added to the encrypted configuration
+// to make it possible to detect it's an encrypted configuration file
+const EncryptedHeaderPrefix = "beehiveconf+"
+
 // AESBackend symmetrically encrypts the configuration file using AES-GCM
 type AESBackend struct{}
 
@@ -38,13 +42,17 @@ func (b *AESBackend) Load(u *url.URL) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
+	ftype := ciphertext[0:12]
+	if string(ftype) != EncryptedHeaderPrefix {
+		return nil, errors.New("encrypted configuration header not valid")
+	}
 
 	p, err := getPassword(u)
 	if err != nil {
 		return nil, err
 	}
 
-	plaintext, err := decrypt(ciphertext, []byte(p))
+	plaintext, err := decrypt(ciphertext[12:], []byte(p))
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +92,8 @@ func (b *AESBackend) Save(config *Config) error {
 		return err
 	}
 
-	err = ioutil.WriteFile(u.Path, ciphertext, 0644)
+	marked := []byte(EncryptedHeaderPrefix)
+	err = ioutil.WriteFile(u.Path, append(marked, ciphertext...), 0644)
 
 	return err
 }

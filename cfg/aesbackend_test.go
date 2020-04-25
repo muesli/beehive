@@ -51,10 +51,16 @@ func TestAESBackendLoad(t *testing.T) {
 
 	// environment password takes prececence
 	os.Setenv(PasswordEnvVar, testPassword)
-	u, err = url.Parse("crypto://x:bar@" + filepath.Join(cwd, "testdata", "beehive-crypto.conf"))
+	u, _ = url.Parse("crypto://x:bar@" + filepath.Join(cwd, "testdata", "beehive-crypto.conf"))
 	backend = NewAESBackend()
 	conf, err = backend.Load(u)
 	if err != nil {
+		t.Errorf("the password defined in %s should take precedence. %v", PasswordEnvVar, err)
+	}
+
+	u, _ = url.Parse("crypto://x:" + testPassword + "@" + filepath.Join(cwd, "testdata", "beehive.conf"))
+	conf, err = backend.Load(u)
+	if err == nil || err.Error() != "encrypted configuration header not valid" {
 		t.Errorf("the password defined in %s should take precedence. %v", PasswordEnvVar, err)
 	}
 }
@@ -84,5 +90,10 @@ func TestAESBackendSave(t *testing.T) {
 	}
 	if !exist(p) {
 		t.Errorf("configuration file wasn't saved to %s", p)
+	}
+
+	b, _ := ioutil.ReadFile(p)
+	if string(b[0:12]) != EncryptedHeaderPrefix {
+		t.Errorf("encrypted config header not added")
 	}
 }
