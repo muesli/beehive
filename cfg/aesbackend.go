@@ -25,11 +25,23 @@ const EncryptedHeaderPrefix = "beehiveconf+"
 // AESBackend symmetrically encrypts the configuration file using AES-GCM
 type AESBackend struct{}
 
-// NewAESBackend create the backend
-func NewAESBackend() *AESBackend {
-	return &AESBackend{}
+// NewAESBackend creates the backend.
+//
+// Given the password is required to encrypt/decrypt the configuration, if the
+// URL passed doesn't have a password or PasswordEnvVar is not defined,
+// it'll return an error.
+func NewAESBackend(u *url.URL) (*AESBackend, error) {
+	if _, err := getPassword(u); err != nil {
+		return nil, err
+	}
+
+	return &AESBackend{}, nil
 }
 
+// IsEncrypted returns true and no error if the configuration is encrypted
+//
+// If the error returned is not nil, an error was returned while opening or
+// reading the file.
 func IsEncrypted(u *url.URL) (bool, error) {
 	f, err := os.Open(u.Path)
 	if err != nil {
@@ -198,5 +210,5 @@ func getPassword(u *url.URL) (string, error) {
 		return p, nil
 	}
 
-	return "", errors.New("password to decrypt the config file not available")
+	return "", errors.New("password to encrypt or decrypt the config file not available")
 }
