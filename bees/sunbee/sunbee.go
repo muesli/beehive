@@ -23,6 +23,7 @@
 package sunbee
 
 import (
+	"math"
 	"strconv"
 	"time"
 
@@ -140,11 +141,11 @@ func (mod *SunBee) check(query string, eventChan chan bees.Event) {
 	} else {
 		evt = "sunset"
 	}
-	timeTo := float64(tdiff) / 3600.0
+	timeTo := math.Abs(float64(tdiff) / 3600.0)
 	mod.LogDebugf("Time remaining to %s event in %s (%f, %f): %.2f hours\n", evt, mod.city, lat, lon, timeTo)
 
 	// if sunrise/sunset less than 5 mins away, callback
-	if tdiff <= 300 && tdiff >= -300 {
+	if math.Abs(float64(tdiff)) <= 300 {
 		f(tdiff, eventChan)
 	}
 }
