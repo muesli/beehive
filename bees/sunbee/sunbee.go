@@ -38,9 +38,6 @@ type SunBee struct {
 	city string
 }
 
-var sunsetAlerted = false
-var sunriseAlerted = false
-
 // Run executes the Bee's event loop.
 func (mod *SunBee) Run(eventChan chan bees.Event) {
 	gominatim.SetServer("https://nominatim.openstreetmap.org/")
@@ -64,11 +61,13 @@ func (mod *SunBee) Action(action bees.Action) []bees.Placeholder {
 func (mod *SunBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
+	mod.ContextSet("sunset", false)
+	mod.ContextSet("sunrise", false)
 	options.Bind("city", &mod.city)
 }
 
 func (mod *SunBee) sunset(secondsTo int64, eventChan chan bees.Event) {
-	if sunsetAlerted {
+	if mod.ContextValue("sunset").(bool) {
 		return
 	}
 
@@ -79,12 +78,12 @@ func (mod *SunBee) sunset(secondsTo int64, eventChan chan bees.Event) {
 	}
 
 	eventChan <- ev
-	sunsetAlerted = true
-	sunriseAlerted = false
+	mod.ContextSet("sunset", true)
+	mod.ContextSet("sunrise", false)
 }
 
 func (mod *SunBee) sunrise(secondsTo int64, eventChan chan bees.Event) {
-	if sunriseAlerted {
+	if mod.ContextValue("sunrise").(bool) {
 		return
 	}
 
@@ -95,8 +94,8 @@ func (mod *SunBee) sunrise(secondsTo int64, eventChan chan bees.Event) {
 	}
 
 	eventChan <- ev
-	sunriseAlerted = true
-	sunsetAlerted = false
+	mod.ContextSet("sunset", false)
+	mod.ContextSet("sunrise", true)
 }
 
 func (mod *SunBee) check(query string, eventChan chan bees.Event) {
