@@ -15,8 +15,7 @@
  *    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  *    Authors:
- *      Michael Wendland <michiwend@michiwend.com>
- *      Christian Muehlhaeuser <muesli@gmail.com>
+ *      Sergio Rubio <sergio@rubio.im>
  */
 
 // Package sunbee is a bee that sends sunrise/sunset event based on the
