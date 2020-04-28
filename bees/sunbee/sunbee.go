@@ -44,14 +44,14 @@ var sunriseAlerted = false
 
 // Run executes the Bee's event loop.
 func (mod *SunBee) Run(eventChan chan bees.Event) {
-	gominatim.SetServer("http://nominatim.openstreetmap.org/")
+	gominatim.SetServer("https://nominatim.openstreetmap.org/")
 
 	for {
 		select {
 		case <-mod.SigChan:
 			return
 		case <-time.After(time.Duration(1 * time.Minute)):
-			mod.check(mod.city, eventChan, sunset, sunset)
+			mod.check(mod.city, eventChan)
 		}
 	}
 }
@@ -68,13 +68,13 @@ func (mod *SunBee) ReloadOptions(options bees.BeeOptions) {
 	options.Bind("city", &mod.city)
 }
 
-func sunset(secondsTo int64, eventChan chan bees.Event) {
+func (mod *SunBee) sunset(secondsTo int64, eventChan chan bees.Event) {
 	if sunsetAlerted {
 		return
 	}
 
 	ev := bees.Event{
-		Bee:     "sun",
+		Bee:     mod.Name(),
 		Name:    "sunset",
 		Options: []bees.Placeholder{},
 	}
@@ -84,13 +84,13 @@ func sunset(secondsTo int64, eventChan chan bees.Event) {
 	sunriseAlerted = false
 }
 
-func sunrise(secondsTo int64, eventChan chan bees.Event) {
+func (mod *SunBee) sunrise(secondsTo int64, eventChan chan bees.Event) {
 	if sunriseAlerted {
 		return
 	}
 
 	ev := bees.Event{
-		Bee:     "sun",
+		Bee:     mod.Name(),
 		Name:    "sunrise",
 		Options: []bees.Placeholder{},
 	}
@@ -100,7 +100,7 @@ func sunrise(secondsTo int64, eventChan chan bees.Event) {
 	sunsetAlerted = false
 }
 
-func (mod *SunBee) check(query string, eventChan chan bees.Event, isSunrise, isSunset func(int64, chan bees.Event)) {
+func (mod *SunBee) check(query string, eventChan chan bees.Event) {
 	qry := gominatim.SearchQuery{
 		Q: query,
 	}
@@ -132,12 +132,12 @@ func (mod *SunBee) check(query string, eventChan chan bees.Event, isSunrise, isS
 	tsunrise := time.Date(now.Year(), now.Month(), now.Day(), sunrise.Hour(), sunrise.Minute(), 0, 0, time.UTC)
 
 	tdiff := tsunset.Unix() - time.Now().UTC().Unix()
-	f := isSunset
+	f := mod.sunset
 	// if time diff is negative, sunset is next
 	var evt string
 	if tdiff < 0 {
 		tdiff = tsunrise.Unix() - time.Now().Unix()
-		f = isSunrise
+		f = mod.sunrise
 		evt = "sunrise"
 	} else {
 		evt = "sunset"
