@@ -24,7 +24,6 @@
 package sunbee
 
 import (
-	"fmt"
 	"strconv"
 	"time"
 
@@ -74,7 +73,6 @@ func sunset(secondsTo int64, eventChan chan bees.Event) {
 		return
 	}
 
-	fmt.Printf("Sunset! %s\n", time.Now())
 	ev := bees.Event{
 		Bee:     "sun",
 		Name:    "sunset",
@@ -91,7 +89,6 @@ func sunrise(secondsTo int64, eventChan chan bees.Event) {
 		return
 	}
 
-	fmt.Printf("Sunrise! %s\n", time.Now())
 	ev := bees.Event{
 		Bee:     "sun",
 		Name:    "sunrise",
