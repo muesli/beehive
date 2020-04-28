@@ -130,12 +130,12 @@ func (mod *SunBee) check(query string, eventChan chan bees.Event) {
 	tsunset := time.Date(now.Year(), now.Month(), now.Day(), sunset.Hour(), sunset.Minute(), 0, 0, time.UTC)
 	tsunrise := time.Date(now.Year(), now.Month(), now.Day(), sunrise.Hour(), sunrise.Minute(), 0, 0, time.UTC)
 
-	tdiff := tsunset.Unix() - time.Now().UTC().Unix()
+	tdiff := tsunset.Unix() - now.UTC().Unix()
 	f := mod.sunset
-	// if time diff is negative, sunset is next
 	var evt string
+	// if time diff is negative, sunset is next
 	if tdiff < 0 {
-		tdiff = tsunrise.Unix() - time.Now().Unix()
+		tdiff = tsunrise.Unix() - now.Unix()
 		f = mod.sunrise
 		evt = "sunrise"
 	} else {
