@@ -63,9 +63,16 @@ func (factory *SunBeeFactory) Image() string {
 func (factory *SunBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
-			Name:        "city",
+			Name:        "query",
 			Description: "The name of the city where the sunrise/sunset will happen",
 			Type:        "string",
+			Mandatory:   true,
+		},
+		{
+			Name:        "offset",
+			Description: "Fire the event this number of seconds before sunset/sunrise (default: 2 min)",
+			Type:        "int",
+			Default:     120,
 			Mandatory:   true,
 		},
 	}

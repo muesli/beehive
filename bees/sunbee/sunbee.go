@@ -36,19 +36,37 @@ import (
 // with writing your own Bees.
 type SunBee struct {
 	bees.Bee
-	city string
+	query    string
+	offset   int64
+	lat, lon float64
 }
 
 // Run executes the Bee's event loop.
 func (mod *SunBee) Run(eventChan chan bees.Event) {
 	gominatim.SetServer("https://nominatim.openstreetmap.org/")
+	qry := gominatim.SearchQuery{
+		Q: mod.query,
+	}
+	resp, err := qry.Get()
+	if err != nil {
+		mod.LogFatal("Error geocoding %s. err: %v", mod.query, err)
+	}
+
+	mod.lat, err = strconv.ParseFloat(resp[0].Lat, 64)
+	if err != nil {
+		mod.LogFatal("failed parsing latitude from response. err: %v", err)
+	}
+	mod.lon, err = strconv.ParseFloat(resp[0].Lon, 64)
+	if err != nil {
+		mod.LogFatal("failed parsing longitude from response. err: %v", err)
+	}
 
 	for {
 		select {
 		case <-mod.SigChan:
 			return
-		case <-time.After(time.Duration(1 * time.Minute)):
-			mod.check(mod.city, eventChan)
+		case <-time.After(time.Duration(10 * time.Second)):
+			mod.check(eventChan)
 		}
 	}
 }
@@ -64,7 +82,8 @@ func (mod *SunBee) ReloadOptions(options bees.BeeOptions) {
 
 	mod.ContextSet("sunset", false)
 	mod.ContextSet("sunrise", false)
-	options.Bind("city", &mod.city)
+	options.Bind("query", &mod.query)
+	options.Bind("offset", mod.offset)
 }
 
 func (mod *SunBee) sunset(secondsTo int64, eventChan chan bees.Event) {
@@ -99,53 +118,51 @@ func (mod *SunBee) sunrise(secondsTo int64, eventChan chan bees.Event) {
 	mod.ContextSet("sunrise", true)
 }
 
-func (mod *SunBee) check(query string, eventChan chan bees.Event) {
-	qry := gominatim.SearchQuery{
-		Q: query,
-	}
-	resp, err := qry.Get()
-	if err != nil {
-		mod.LogFatal("Error geocoding %s. err: %v", query, err)
-	}
-
-	lat, err := strconv.ParseFloat(resp[0].Lat, 64)
-	if err != nil {
-		mod.LogFatal("failed parsing latitude from response. err: %v", err)
-	}
-	lon, err := strconv.ParseFloat(resp[0].Lon, 64)
-	if err != nil {
-		mod.LogFatal("failed parsing longitude from response. err: %v", err)
-	}
-
+func (mod *SunBee) check(eventChan chan bees.Event) {
+	now := time.Now().UTC()
 	p := sunrisesunset.Parameters{
-		Latitude:  lat,
-		Longitude: lon,
-		Date:      time.Date(2017, 3, 23, 0, 0, 0, 0, time.UTC),
+		Latitude:  mod.lat,
+		Longitude: mod.lon,
+		UtcOffset: 0,
+		Date:      now,
 	}
 
 	// Calculate the sunrise and sunset times
 	sunrise, sunset, err := p.GetSunriseSunset()
+	if err != nil {
+		mod.LogFatal("error retrieving sunrise/sunset time. err: %v", err)
+	}
 
-	now := time.Now()
 	tsunset := time.Date(now.Year(), now.Month(), now.Day(), sunset.Hour(), sunset.Minute(), 0, 0, time.UTC)
 	tsunrise := time.Date(now.Year(), now.Month(), now.Day(), sunrise.Hour(), sunrise.Minute(), 0, 0, time.UTC)
 
-	tdiff := tsunset.Unix() - now.UTC().Unix()
-	f := mod.sunset
-	var evt string
-	// if time diff is negative, sunset is next
-	if tdiff < 0 {
-		tdiff = tsunrise.Unix() - now.Unix()
-		f = mod.sunrise
-		evt = "sunrise"
-	} else {
-		evt = "sunset"
+	timeToSunset := tsunset.UTC().Unix() - now.UTC().Unix()
+	// sunset already passed
+	if timeToSunset < 0 {
+		timeToSunset = timeToSunset + 24*60*60
 	}
-	timeTo := math.Abs(float64(tdiff) / 3600.0)
-	mod.LogDebugf("Time remaining to %s event in %s (%f, %f): %.2f hours\n", evt, mod.city, lat, lon, timeTo)
+	timeToSunrise := tsunrise.UTC().Unix() - now.UTC().Unix()
+	// sunrise already passed
+	if timeToSunrise < 0 {
+		timeToSunrise = timeToSunrise + 24*60*60
+	}
+
+	f := mod.sunrise
+	var evt string
+	var tdiff int64
+	if timeToSunset < timeToSunrise {
+		tdiff = timeToSunset
+		f = mod.sunset
+		evt = "sunset"
+	} else {
+		tdiff = timeToSunrise
+		evt = "sunrise"
+	}
+	timeTo := float64(tdiff) / 3600.0
+	mod.LogDebugf("Time remaining to %s event in %s (%f, %f): %.2f hours\n", evt, mod.query, mod.lat, mod.lon, timeTo)
 
 	// if sunrise/sunset less than 5 mins away, callback
-	if math.Abs(float64(tdiff)) <= 300 {
+	if math.Abs(float64(tdiff)) <= float64(mod.offset) {
 		f(tdiff, eventChan)
 	}
 }
