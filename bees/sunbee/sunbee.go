@@ -136,12 +136,12 @@ func (mod *SunBee) check(eventChan chan bees.Event) {
 	tsunset := time.Date(now.Year(), now.Month(), now.Day(), sunset.Hour(), sunset.Minute(), 0, 0, time.UTC)
 	tsunrise := time.Date(now.Year(), now.Month(), now.Day(), sunrise.Hour(), sunrise.Minute(), 0, 0, time.UTC)
 
-	timeToSunset := tsunset.UTC().Unix() - now.UTC().Unix()
+	timeToSunset := tsunset.Unix() - now.Unix()
 	// sunset already passed
 	if timeToSunset < 0 {
 		timeToSunset = timeToSunset + 24*60*60
 	}
-	timeToSunrise := tsunrise.UTC().Unix() - now.UTC().Unix()
+	timeToSunrise := tsunrise.Unix() - now.Unix()
 	// sunrise already passed
 	if timeToSunrise < 0 {
 		timeToSunrise = timeToSunrise + 24*60*60
