@@ -65,7 +65,7 @@ func (mod *SunBee) Run(eventChan chan bees.Event) {
 		select {
 		case <-mod.SigChan:
 			return
-		case <-time.After(time.Duration(10 * time.Second)):
+		case <-time.After(time.Duration(1 * time.Minute)):
 			mod.check(eventChan)
 		}
 	}
