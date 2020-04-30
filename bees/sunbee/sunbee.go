@@ -32,8 +32,10 @@ import (
 	"github.com/muesli/gominatim"
 )
 
-// SunBee is an example for a Bee skeleton, designed to help you get started
-// with writing your own Bees.
+// Check if sunset/sunrise ever checkInterval number of seconds
+const checkInterval = 60
+
+// SunBee is a Bee that alerts you when the sun goes up/down.
 type SunBee struct {
 	bees.Bee
 	query    string
@@ -65,7 +67,7 @@ func (mod *SunBee) Run(eventChan chan bees.Event) {
 		select {
 		case <-mod.SigChan:
 			return
-		case <-time.After(time.Duration(1 * time.Minute)):
+		case <-time.After(time.Duration(checkInterval * time.Second)):
 			mod.check(eventChan)
 		}
 	}
@@ -161,8 +163,8 @@ func (mod *SunBee) check(eventChan chan bees.Event) {
 	timeTo := float64(tdiff) / 3600.0
 	mod.LogDebugf("Time remaining to %s event in %s (%f, %f): %.2f hours\n", evt, mod.query, mod.lat, mod.lon, timeTo)
 
-	// if sunrise/sunset less than mod.offset seconds away, callback
-	if math.Abs(float64(tdiff)) <= float64(mod.offset) {
+	// if sunrise/sunset less than checInterval + mod.offset seconds away, callback
+	if math.Abs(float64(tdiff)) <= float64(checkInterval+mod.offset) {
 		f(tdiff, eventChan)
 	}
 }
