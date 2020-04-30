@@ -101,7 +101,7 @@ func (c *crontime) calculateEvent(baseTime time.Time) time.Time {
 	c.nextValidHour(baseTime)
 	c.nextValidMinute(baseTime)
 	c.nextValidSecond(baseTime)
-	log.Println("Cronbee has found a time stamp: ", c.calculatedTime)
+	log.Debug("Cronbee has found a time stamp: ", c.calculatedTime)
 	return c.calculatedTime
 }
 
