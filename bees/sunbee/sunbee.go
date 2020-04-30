@@ -40,7 +40,7 @@ const checkInterval = 60
 type SunBee struct {
 	bees.Bee
 	query    string
-	offset   int64
+	offset   int
 	lat, lon float64
 }
 
@@ -86,7 +86,7 @@ func (mod *SunBee) ReloadOptions(options bees.BeeOptions) {
 	mod.ContextSet("sunset", false)
 	mod.ContextSet("sunrise", false)
 	options.Bind("query", &mod.query)
-	options.Bind("offset", mod.offset)
+	options.Bind("offset", &mod.offset)
 }
 
 func (mod *SunBee) sunset(secondsTo int64, eventChan chan bees.Event) {
