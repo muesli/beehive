@@ -1,6 +1,8 @@
 package cfg
 
 import (
+	"os"
+	"path/filepath"
 	"testing"
 )
 
@@ -19,6 +21,13 @@ func TestNew(t *testing.T) {
 	}
 	if _, ok := conf.Backend().(*FileBackend); !ok {
 		t.Error("Backend for 'file:///foobar' should be a FileBackend")
+	}
+
+	cwd, _ := os.Getwd()
+	p := filepath.Join(cwd, "testdata/beehive-crypto.conf")
+	conf, err = New(p)
+	if _, ok := conf.Backend().(*AESBackend); !ok {
+		t.Errorf("Backend for '%s' should be an AESBackend", p)
 	}
 
 	conf, err = New("mem:")
