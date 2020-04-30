@@ -70,7 +70,7 @@ func (factory *SunBeeFactory) Options() []bees.BeeOptionDescriptor {
 		},
 		{
 			Name:        "offset",
-			Description: "Fire the event this number of seconds before sunset/sunrise (default: 2 min)",
+			Description: "Fire the event this number of seconds before sunset/sunrise",
 			Type:        "int",
 			Default:     0,
 			Mandatory:   false,
