@@ -23,6 +23,7 @@
 package sunbee
 
 import (
+	"fmt"
 	"math"
 	"strconv"
 	"time"
@@ -51,16 +52,16 @@ func (mod *SunBee) Run(eventChan chan bees.Event) {
 	}
 	resp, err := qry.Get()
 	if err != nil {
-		mod.LogFatal("Error geocoding %s. err: %v", mod.query, err)
+		mod.LogFatal(fmt.Sprintf("Error geocoding %s. err: ", mod.query), err)
 	}
 
 	mod.lat, err = strconv.ParseFloat(resp[0].Lat, 64)
 	if err != nil {
-		mod.LogFatal("failed parsing latitude from response. err: %v", err)
+		mod.LogFatal("failed parsing latitude from response. err: ", err)
 	}
 	mod.lon, err = strconv.ParseFloat(resp[0].Lon, 64)
 	if err != nil {
-		mod.LogFatal("failed parsing longitude from response. err: %v", err)
+		mod.LogFatal("failed parsing longitude from response. err: ", err)
 	}
 
 	for {
@@ -132,7 +133,7 @@ func (mod *SunBee) check(eventChan chan bees.Event) {
 	// Calculate the sunrise and sunset times
 	sunrise, sunset, err := p.GetSunriseSunset()
 	if err != nil {
-		mod.LogFatal("error retrieving sunrise/sunset time. err: %v", err)
+		mod.LogFatal("error retrieving sunrise/sunset time. err: ", err)
 	}
 
 	tsunset := time.Date(now.Year(), now.Month(), now.Day(), sunset.Hour(), sunset.Minute(), 0, 0, time.UTC)
