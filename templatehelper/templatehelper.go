@@ -27,6 +27,7 @@ import (
 	"regexp"
 	"strings"
 	"text/template"
+	"time"
 )
 
 // FuncMap contains a few convenient template helpers
@@ -96,6 +97,7 @@ var (
 		"SplitAfter":   strings.SplitAfter,
 		"SplitAfterN":  strings.SplitAfterN,
 		"SplitN":       strings.SplitN,
+		"TimeNow":      time.Now,
 		"Title":        strings.Title,
 		"ToLower":      strings.ToLower,
 		"ToTitle":      strings.ToTitle,
