@@ -35,7 +35,7 @@ require (
 	github.com/go-mail/mail v2.3.1+incompatible
 	github.com/go-redis/redis v6.15.6+incompatible
 	github.com/go-sql-driver/mysql v1.5.0 // indirect
-	github.com/go-telegram-bot-api/telegram-bot-api v4.6.4+incompatible
+	github.com/go-telegram-bot-api/telegram-bot-api v1.0.1-0.20200319042609-5e339ed016b0
 	github.com/golang/mock v1.2.0 // indirect
 	github.com/golang/protobuf v1.3.1 // indirect
 	github.com/google/go-github v17.0.0+incompatible
