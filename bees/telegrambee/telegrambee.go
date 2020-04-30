@@ -86,7 +86,7 @@ func (mod *TelegramBee) Run(eventChan chan bees.Event) {
 
 	updates, err := mod.bot.GetUpdatesChan(u)
 	if err != nil {
-		panic(err)
+		mod.LogFatal("Failed retrieving the updates channel. err: ", err)
 	}
 
 	for {
@@ -97,6 +97,8 @@ func (mod *TelegramBee) Run(eventChan chan bees.Event) {
 			if update.Message == nil || update.Message.Text == "" {
 				continue
 			}
+
+			mod.LogDebugf("Message received: %+v", update.Message)
 
 			ev := bees.Event{
 				Bee:  mod.Name(),
