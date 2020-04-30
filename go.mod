@@ -16,7 +16,6 @@ require (
 	github.com/briandowns/openweathermap v0.0.0-20180804155945-5f41b7c9d92d
 	github.com/bwmarrin/discordgo v0.19.0
 	github.com/carlosdp/twiliogo v0.0.0-20161027183705-b26045ebb9d1
-	github.com/cenkalti/backoff v2.2.1+incompatible
 	github.com/cloudflare/cloudflare-go v0.10.6
 	github.com/coreos/go-systemd v0.0.0-20190719114852-fd7a80b32e1f
 	github.com/deckarep/gosx-notifier v0.0.0-20180201035817-e127226297fb
@@ -49,6 +48,7 @@ require (
 	github.com/jaytaylor/html2text v0.0.0-20190408195923-01ec452cbe43 // indirect
 	github.com/jpillora/backoff v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.6 // indirect
+	github.com/kelvins/sunrisesunset v0.0.0-20170601204625-14f1915ad4b4
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
 	github.com/kr/pretty v0.1.0
 	github.com/kurrik/oauth1a v0.0.0-20151019171716-cb1b80e32dd4 // indirect
@@ -69,6 +69,7 @@ require (
 	github.com/muesli/go-pkg-xmlx v0.0.0-20151201012946-76f54ee73233 // indirect
 	github.com/muesli/go.hue v0.0.0-20140802040715-8aefcc693caf
 	github.com/muesli/goefa v0.0.0-20180507204150-08d8ee2555d2
+	github.com/muesli/gominatim v0.1.0
 	github.com/muesli/kmeans v0.0.0-20190917235210-80dfc71e6c5a // indirect
 	github.com/muesli/smolder v0.0.0-20190505085143-9c21fc7135ee
 	github.com/nicklaw5/helix v0.5.7
@@ -95,7 +96,7 @@ require (
 	golang.org/x/crypto v0.0.0-20190426145343-a29dc8fdc734 // indirect
 	golang.org/x/oauth2 v0.0.0-20190402181905-9f3314589c9a
 	golang.org/x/text v0.3.2 // indirect
-	google.golang.org/appengine v1.5.0
+	google.golang.org/appengine v1.5.0 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 	gopkg.in/ini.v1 v1.42.0 // indirect
