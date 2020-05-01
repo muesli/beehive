@@ -225,8 +225,8 @@ func getPassword(u *url.URL) (string, error) {
 		return p, nil
 	}
 
-	p, ok := u.User.Password()
-	if ok {
+	p = u.User.Username()
+	if p != "" {
 		return p, nil
 	}
 

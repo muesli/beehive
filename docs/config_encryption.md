@@ -7,7 +7,7 @@ Beehive's supports encrypting the configuration file using AES+GCM.
 To encrypt the configuration for the first time, simply start Beehive using a `crypto` URL for the configuration:
 
 ```
-./beehive --config crypto://x:mysecret@$HOME/.config/beehive/beehive.conf`
+./beehive --config crypto://mysecret@$HOME/.config/beehive/beehive.conf`
 ```
 
 You could also use the `BEEHIVE_CONFIG_PASSWORD` environment variable to define the password:
