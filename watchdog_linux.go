@@ -29,7 +29,7 @@ func init() {
 	// We want to notify the watchdog every WatchdogSec/3, that is, if WatchdogSec is
 	// set to 30 seconds, we'll send a notification to systemd every 10 seconds.
 	runEvery := interval / 3
-	log.Debug("Systemd watchdog notifications every %.2f seconds", runEvery.Seconds())
+	log.Debugf("Systemd watchdog notifications every %.2f seconds", runEvery.Seconds())
 
 	go func() {
 		for {
