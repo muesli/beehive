@@ -1,0 +1,17 @@
+#!/bin/bash
+# Beehive shell wrapper that reads configuration password from the keyring.
+# Store the configuration password using secret-tool:
+#
+#   secret-tool store --label "Beehive configuration password" /beehive/secrets/config password
+# 
+# Linux only.
+#
+set -e
+
+export BEEHIVE_CONFIG_PASSWORD=$(secret-tool lookup /beehive/secrets/config password)
+if [ -z "$BEEHIVE_CONFIG_PASSWORD" ]; then
+  echo "Beehive's config password not found in keyring." >&2
+  echo "Add it using 'secret-tool store --label "Beehive configuration password" /beehive/secrets/config password'" >&2
+  exit 1
+fi
+beehive --config crypto://$HOME/.config/beehive/beehive.conf

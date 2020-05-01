@@ -104,9 +104,22 @@ func New(url string) (*Config, error) {
 
 	switch config.url.Scheme {
 	case "", "file":
-		backend = NewFileBackend()
+		if ok, _ := IsEncrypted(config.url); ok {
+			log.Debugf("Loading encrypted configuration file")
+			backend, err = NewAESBackend(config.url)
+			if err != nil {
+				log.Fatalf("error loading the AES configuration backend. err: %v", err)
+			}
+		} else {
+			backend = NewFileBackend()
+		}
 	case "mem":
 		backend = NewMemBackend()
+	case "crypto":
+		backend, err = NewAESBackend(config.url)
+		if err != nil {
+			log.Fatalf("error loading the AES configuration backend. err: %v", err)
+		}
 	default:
 		return nil, fmt.Errorf("Configuration backend '%s' not supported", config.url.Scheme)
 	}
