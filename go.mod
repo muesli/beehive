@@ -69,7 +69,7 @@ require (
 	github.com/muesli/go-pkg-xmlx v0.0.0-20151201012946-76f54ee73233 // indirect
 	github.com/muesli/go.hue v0.0.0-20140802040715-8aefcc693caf
 	github.com/muesli/goefa v0.0.0-20180507204150-08d8ee2555d2
-	github.com/muesli/gominatim v0.1.0
+	github.com/muesli/gominatim v0.1.1-0.20200501135808-f6af22631c72
 	github.com/muesli/kmeans v0.0.0-20190917235210-80dfc71e6c5a // indirect
 	github.com/muesli/smolder v0.0.0-20190505085143-9c21fc7135ee
 	github.com/nicklaw5/helix v0.5.7
