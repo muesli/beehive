@@ -33,6 +33,26 @@ A sample wrapper script (Linux only) is provided in [tools/encrypted-config-wrap
 
 Something similar could be written to do it on macOS using Keychain and its `security(1)` CLI.
 
+## Decrypting the configuration
+
+Use `--decrypt` with a valid password:
+
+```
+beehive --decrypt --config crypto://mysecret@/path/to/config/file
+```
+
+or using an environment variable:
+
+```
+BEEHIVE_CONFIG_PASSWORD=mysecret beehive --decrypt --config crypto:///path/to/config/file
+```
+
+You can also use omit `--config` when using the default configuration path:
+
+```
+BEEHIVE_CONFIG_PASSWORD=mysecret beehive --decrypt
+```
+
 ## Troubleshooting
 
 ```

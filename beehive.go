@@ -24,7 +24,9 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
+	"net/url"
 	"os"
 	"os/signal"
 	"syscall"
@@ -45,6 +47,7 @@ var (
 	configURL   string
 	versionFlag bool
 	debugFlag   bool
+	decryptFlag bool
 )
 
 func main() {
@@ -67,6 +70,12 @@ func main() {
 			Value: false,
 			Desc:  "Turn on debugging",
 		},
+		{
+			V:     &decryptFlag,
+			Name:  "decrypt",
+			Value: false,
+			Desc:  "Decrypt and print the configuration file",
+		},
 	})
 
 	// Parse command-line args for all registered bees
@@ -75,6 +84,10 @@ func main() {
 	if versionFlag {
 		fmt.Printf("Beehive %s (%s)\n", Version, CommitSHA)
 		os.Exit(0)
+	}
+
+	if decryptFlag {
+		decryptConfig(configURL)
 	}
 
 	api.Run()
@@ -162,6 +175,32 @@ func main() {
 	if err != nil {
 		log.Printf("Error saving config file to %s! %v", config.URL(), err)
 	}
+}
+
+func decryptConfig(u string) {
+	b := cfg.AESBackend{}
+
+	pu, err := url.Parse(u)
+	if err != nil {
+		log.Fatal("Invalid configuration URL. err: ", err)
+	}
+
+	_, err = os.Stat(pu.Path)
+	if err != nil {
+		log.Fatalf("Invalid configuration file %s", pu.Path)
+	}
+
+	config, err := b.Load(pu)
+	if err != nil {
+		log.Fatal("Error decrypting the configuration file. err: ", err)
+	}
+
+	j, err := json.MarshalIndent(config, "", "  ")
+	if err != nil {
+		log.Fatal("Error encoding the configuraiton file. err: ", err)
+	}
+	fmt.Println(string(j))
+	os.Exit(0)
 }
 
 func init() {
