@@ -164,7 +164,7 @@ func (mod *SunBee) check(eventChan chan bees.Event) {
 	timeTo := float64(tdiff) / 3600.0
 	mod.LogDebugf("Time remaining to %s event in %s (%f, %f): %.2f hours\n", evt, mod.query, mod.lat, mod.lon, timeTo)
 
-	// if sunrise/sunset less than checInterval + mod.offset seconds away, callback
+	// if sunrise/sunset less than checkInterval + mod.offset seconds away, callback
 	if math.Abs(float64(tdiff)) <= float64(checkInterval+mod.offset) {
 		f(tdiff, eventChan)
 	}
