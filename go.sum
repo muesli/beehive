@@ -177,6 +177,8 @@ github.com/muesli/goefa v0.0.0-20180507204150-08d8ee2555d2 h1:A0yDQZg4PVcBvzH9IY
 github.com/muesli/goefa v0.0.0-20180507204150-08d8ee2555d2/go.mod h1:cbhVWIL28EF8sTH71/qsU+TeEEmYC33MES0J7Ul0TFI=
 github.com/muesli/gominatim v0.1.0 h1:WFfXBLa/tXAhCbG2WrVfUN+l3WSP7rDRpYxe0tekvz0=
 github.com/muesli/gominatim v0.1.0/go.mod h1:4/L0h2Z155HXvPTnRdks5EQr16e2yH1EM2lGReeQCwg=
+github.com/muesli/gominatim v0.1.1-0.20200501135808-f6af22631c72 h1:8Fq6qkEpVNhDM8wKRE5vYfKeasp6dZKfpNWcD+c+5Pw=
+github.com/muesli/gominatim v0.1.1-0.20200501135808-f6af22631c72/go.mod h1:4/L0h2Z155HXvPTnRdks5EQr16e2yH1EM2lGReeQCwg=
 github.com/muesli/kmeans v0.0.0-20190917235210-80dfc71e6c5a h1:TfqSfRTR/uTo2h3AfuXaeWm+a6DH7mYSlfQkNhxnxUk=
 github.com/muesli/kmeans v0.0.0-20190917235210-80dfc71e6c5a/go.mod h1:DchXqcxIXcInFMlUlAAcmjNYiDEPoIQQdDxlWlELyxM=
 github.com/muesli/smolder v0.0.0-20190505085143-9c21fc7135ee h1:owp+45s+e2xN1fFUHIld1X+2ZtHSUjXKkgEr7iwq7u8=
