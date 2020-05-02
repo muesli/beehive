@@ -225,9 +225,11 @@ func getPassword(u *url.URL) (string, error) {
 		return p, nil
 	}
 
-	p = u.User.Username()
-	if p != "" {
-		return p, nil
+	if u.User != nil {
+		p = u.User.Username()
+		if p != "" {
+			return p, nil
+		}
 	}
 
 	return "", errors.New("password to encrypt or decrypt the config file not available")
