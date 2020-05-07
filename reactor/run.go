@@ -1,10 +1,11 @@
 package reactor
 
 import (
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/muesli/beehive/bees"
 	"github.com/muesli/beehive/cfg"
@@ -23,6 +24,7 @@ func Run(config *cfg.Config) {
 	ch := make(chan os.Signal, 1)
 	signal.Notify(ch, os.Interrupt, syscall.SIGHUP, syscall.SIGTERM, syscall.SIGKILL)
 
+	log.Debug("Starting Beehive's reactor")
 	for s := range ch {
 		log.Println("Got signal:", s)
 
