@@ -11,6 +11,13 @@ import (
 	"github.com/muesli/beehive/cfg"
 )
 
+// SetLogLevel sets the reactor log level.
+//
+// From 0 (quiet) to 6 (trace).
+func SetLogLevel(level int) {
+	log.SetLevel(log.Level(level))
+}
+
 // Reactor loops and handles signals.
 func Run(config *cfg.Config) {
 	// Load actions from config
