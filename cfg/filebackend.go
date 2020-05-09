@@ -32,6 +32,7 @@ func NewFileBackend() *FileBackend {
 // Load loads chains from config
 func (fs *FileBackend) Load(u *url.URL) (*Config, error) {
 	var config Config
+	fixWinURL(u)
 
 	// detect file format by extension
 	if strings.HasSuffix(u.Path, ".yaml") {
@@ -67,6 +68,7 @@ func (fs *FileBackend) Load(u *url.URL) (*Config, error) {
 
 // Save saves chains to config
 func (fs *FileBackend) Save(config *Config) error {
+	fixWinURL(config.URL())
 	cfgDir := filepath.Dir(config.URL().Path)
 	if !exist(cfgDir) {
 		err := os.MkdirAll(cfgDir, 0755)

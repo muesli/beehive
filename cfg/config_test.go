@@ -9,7 +9,7 @@ import (
 func TestNew(t *testing.T) {
 	conf, err := New("/foobar")
 	if err != nil {
-		t.Fatal("cannot create config from path")
+		t.Fatalf("Error in New. %v", err)
 	}
 	if _, ok := conf.Backend().(*FileBackend); !ok {
 		t.Error("Backend for '/foobar' should be a FileBackend")
@@ -24,10 +24,10 @@ func TestNew(t *testing.T) {
 	}
 
 	cwd, _ := os.Getwd()
-	p := filepath.Join(cwd, "testdata/beehive-crypto.conf")
+	p := fixWindowsPath(filepath.Join(cwd, "testdata", "beehive-crypto.conf"))
 	conf, err = New(p)
 	if err != nil {
-		t.Fatal(err)
+		t.Fatalf("Error in New: %v", err)
 	}
 	if _, ok := conf.Backend().(*AESBackend); !ok {
 		t.Errorf("Backend for '%s' should be an AESBackend", p)
@@ -39,11 +39,6 @@ func TestNew(t *testing.T) {
 	}
 	if _, ok := conf.Backend().(*MemBackend); !ok {
 		t.Error("Backend for 'mem:' should be a MemoryBackend")
-	}
-
-	_, err = New("c:\\foobar")
-	if err == nil {
-		t.Error("Not a valid URL, should return an error")
 	}
 
 	_, err = New("")

@@ -5,6 +5,8 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"regexp"
+	"runtime"
 
 	"github.com/muesli/beehive/bees"
 	gap "github.com/muesli/go-app-paths"
@@ -97,22 +99,20 @@ func New(url string) (*Config, error) {
 		return nil, fmt.Errorf("Empty URL provided but not supported")
 	}
 
-	err := config.SetURL(url)
+	winURL := regexp.MustCompile(`^[a-zA-Z]:`)
+	var err error
+	if runtime.GOOS == "windows" && winURL.MatchString(url) {
+		err = config.SetURL("file://" + url)
+	} else {
+		err = config.SetURL(url)
+	}
 	if err != nil {
 		return nil, err
 	}
 
 	switch config.url.Scheme {
 	case "", "file":
-		if ok, _ := IsEncrypted(config.url); ok {
-			log.Debugf("Loading encrypted configuration file")
-			backend, err = NewAESBackend(config.url)
-			if err != nil {
-				log.Fatalf("error loading the AES configuration backend. err: %v", err)
-			}
-		} else {
-			backend = NewFileBackend()
-		}
+		backend = loadLocalFileBackend(config)
 	case "mem":
 		backend = NewMemBackend()
 	case "crypto":
@@ -127,6 +127,23 @@ func New(url string) (*Config, error) {
 	config.backend = backend
 
 	return config, nil
+}
+
+func loadLocalFileBackend(config *Config) ConfigBackend {
+	var backend ConfigBackend
+	var err error
+
+	if ok, _ := IsEncrypted(config.url); ok {
+		log.Debugf("Loading encrypted configuration file")
+		backend, err = NewAESBackend(config.url)
+		if err != nil {
+			log.Fatalf("error loading the AES configuration backend. err: %v", err)
+		}
+	} else {
+		backend = NewFileBackend()
+	}
+
+	return backend
 }
 
 // DefaultPath returns Beehive's default config path.
@@ -184,4 +201,15 @@ func Lookup() string {
 func exist(file string) bool {
 	_, err := os.Stat(file)
 	return err == nil
+}
+
+// Workaround Go URL parsing in Windows, where URL.Host contains the drive
+// info for a URL like file://c:/path/to/beehive.config
+//
+// no-op in non-Windows OSes
+func fixWinURL(u *url.URL) {
+	if runtime.GOOS == "windows" {
+		u.Path = filepath.Join(u.Host, u.Path)
+		u.Host = ""
+	}
 }
