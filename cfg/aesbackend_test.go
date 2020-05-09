@@ -21,7 +21,6 @@
 package cfg
 
 import (
-	"fmt"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -44,7 +43,6 @@ func TestAESBackendLoad(t *testing.T) {
 
 	// try to load the config from an absolute path using a URI
 	u, err = url.Parse("crypto://" + testPassword + "@" + encryptedConfPath())
-	fmt.Println(u.Path)
 	if err != nil {
 		t.Fatalf("Can't parse crypto URL: %v", err)
 	}
