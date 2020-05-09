@@ -110,7 +110,7 @@ func TestAESBackendLoad(t *testing.T) {
 	}
 	conf, err = backend.Load(u)
 	if err == nil || err.Error() != "encrypted configuration header not valid" {
-		t.Errorf("the password defined in %s should take precedence. %v", PasswordEnvVar, err)
+		t.Errorf("Loading a non-encrypted config should error")
 	}
 }
 
