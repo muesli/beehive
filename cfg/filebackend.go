@@ -20,6 +20,7 @@ func NewFileBackend() *FileBackend {
 // Load loads chains from config
 func (fs *FileBackend) Load(u *url.URL) (*Config, error) {
 	var config Config
+	fixWinURL(u)
 
 	if !exist(u.Path) {
 		return &Config{url: u}, nil
@@ -42,6 +43,7 @@ func (fs *FileBackend) Load(u *url.URL) (*Config, error) {
 
 // Save saves chains to config
 func (fs *FileBackend) Save(config *Config) error {
+	fixWinURL(config.URL())
 	cfgDir := filepath.Dir(config.URL().Path)
 	if !exist(cfgDir) {
 		os.MkdirAll(cfgDir, 0755)
