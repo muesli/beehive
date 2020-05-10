@@ -54,6 +54,19 @@ func (factory *HelloBeeFactory) Description() string {
 	return "A 'Hello World' module for beehive"
 }
 
+// Actions describes the available actions provided by this Bee.
+func (factory *HelloBeeFactory) Actions() []bees.ActionDescriptor {
+	actions := []bees.ActionDescriptor{
+		{
+			Namespace:   factory.Name(),
+			Name:        "say_hello",
+			Description: "Say Hello!",
+			Options:     []bees.PlaceholderDescriptor{},
+		},
+	}
+	return actions
+}
+
 func init() {
 	f := HelloBeeFactory{}
 	bees.RegisterFactory(&f)
