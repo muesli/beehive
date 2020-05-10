@@ -26,7 +26,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"net/url"
 	"os"
 	"os/signal"
 	"syscall"
@@ -106,12 +105,12 @@ func main() {
 		log.Fatalf("Error creating the configuration %s", err)
 	}
 
-	if config.URL().String() != cfg.DefaultPath() { // the user specified a custom config path or URI
+	if config.URL().Raw != cfg.DefaultPath() { // the user specified a custom config path or URI
 		err = config.Load()
 		if err != nil {
 			log.Fatalf("Error loading configuration file from %s. err: %v", config.URL(), err)
 		}
-		log.Infof("Loading configuration from %s", config.URL())
+		log.Infof("Loading configuration from %s", config.URL().Raw)
 	} else { // try to load default config from user paths
 		path := cfg.Lookup()
 		if path == "" {
@@ -180,7 +179,7 @@ func main() {
 func decryptConfig(u string) {
 	b := cfg.AESBackend{}
 
-	pu, err := url.Parse(u)
+	pu, err := cfg.ParseURL(u)
 	if err != nil {
 		log.Fatal("Invalid configuration URL. err: ", err)
 	}
