@@ -29,7 +29,7 @@ func TestFileLoad(t *testing.T) {
 	backend = NewFileBackend()
 	conf, err := backend.Load(u)
 	if err != nil {
-		t.Errorf("Error loading config file fixture from relative path %s. %v", u, err)
+		t.Errorf("Error loading config file fixture from relative path %s. %v", u.Raw, err)
 	}
 	if conf.Bees[0].Name != "echo" {
 		t.Error("The first bee should be an exec bee named echo")
@@ -45,7 +45,7 @@ func TestFileLoad(t *testing.T) {
 	backend = NewFileBackend()
 	conf, err = backend.Load(u)
 	if err != nil {
-		t.Errorf("Error loading config file fixture from absolute path %s. %v", u, err)
+		t.Errorf("Error loading config file fixture from absolute path %s. %v", u.Raw, err)
 	}
 	if conf.Bees[0].Name != "echo" {
 		t.Error("The first bee should be an exec bee named echo")
@@ -65,7 +65,7 @@ func TestFileSave(t *testing.T) {
 	backend := NewFileBackend()
 	c, err := backend.Load(u)
 	if err != nil {
-		t.Errorf("Failed to load config fixture from relative path %s: %v", u, err)
+		t.Errorf("Failed to load config fixture from relative path %s: %v", u.Raw, err)
 	}
 
 	// Save the config file to a new absolute path using a URL
@@ -81,14 +81,14 @@ func TestFileSave(t *testing.T) {
 	backend = NewFileBackend()
 	err = backend.Save(c)
 	if err != nil {
-		t.Errorf("Failed to save the config to %s", u)
+		t.Errorf("Failed to save the config to %s", u.Raw)
 	}
 	if !exist(p) {
 		t.Errorf("Configuration file wasn't saved to %s", p)
 	}
 	c, err = backend.Load(u)
 	if err != nil {
-		t.Errorf("Failed to load config fixture from absolute path %s: %v", u, err)
+		t.Errorf("Failed to load config fixture from absolute path %s: %v", u.Raw, err)
 	}
 
 	// Save the config file to a new absolute path using a regular path

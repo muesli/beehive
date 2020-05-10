@@ -8,6 +8,6 @@ func TestWindowsStylePaths(t *testing.T) {
 		t.Fatalf("Error in New. %v", err)
 	}
 	if _, ok := conf.Backend().(*FileBackend); !ok {
-		t.Errorf("Backend for %s should be a FileBackend", conf.URL().String())
+		t.Errorf("Backend for %s should be a FileBackend", conf.URL().Raw)
 	}
 }
