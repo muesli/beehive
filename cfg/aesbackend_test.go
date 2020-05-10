@@ -42,7 +42,7 @@ func TestAESBackendLoad(t *testing.T) {
 	// try to load the config from an absolute path using a URI
 	u, err = ParseURL("crypto://" + testPassword + "@" + encryptedConfPath())
 	if err != nil {
-		t.Fatalf("Can't parse crypto URL: %v", err)
+		t.Errorf("Can't parse crypto URL: %v", err)
 	}
 	backend, err = NewAESBackend(u)
 	if err != nil {
@@ -50,7 +50,7 @@ func TestAESBackendLoad(t *testing.T) {
 	}
 	conf, err := backend.Load(u)
 	if err != nil {
-		t.Errorf("Error loading config file fixture from absolute path %s. %v", u, err)
+		t.Errorf("Error loading config file fixture from absolute path. %v", err)
 	}
 	if conf.Bees[0].Name != "echo" {
 		t.Error("The first bee should be an exec bee named echo")
@@ -115,7 +115,7 @@ func TestAESBackendSave(t *testing.T) {
 	}
 	c, err := backend.Load(u)
 	if err != nil {
-		t.Errorf("Failed to load config fixture from relative path %s: %v", u, err)
+		t.Errorf("Failed to load config fixture from relative path %s. %v", p, err)
 	}
 
 	// Save the config file to a new absolute path using a URL
@@ -131,7 +131,7 @@ func TestAESBackendSave(t *testing.T) {
 	backend, _ = NewAESBackend(u)
 	err = backend.Save(c)
 	if err != nil {
-		t.Errorf("failed to save the config to %s. %v", u, err)
+		t.Errorf("failed to save the config to %s. %v", newURL, err)
 	}
 	if !exist(p) {
 		t.Errorf("configuration file wasn't saved to %s", p)

@@ -14,8 +14,10 @@ type URL struct {
 	Host   string
 	Scheme string
 	User   *url.Userinfo
+	Raw    string
 }
 
+// ParseURL mimicks net/url URL.Parse
 func ParseURL(rawurl string) (*URL, error) {
 	u, err := url.Parse(rawurl)
 	if err != nil {
@@ -28,12 +30,9 @@ func ParseURL(rawurl string) (*URL, error) {
 	curl.Path = u.Path
 	curl.Host = u.Host
 	curl.Scheme = u.Scheme
+	curl.Raw = rawurl
 
 	return &curl, nil
-}
-
-func (u *URL) String() string {
-	return u.nurl.String()
 }
 
 func (u *URL) NetURL() *url.URL {
