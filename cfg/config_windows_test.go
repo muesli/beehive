@@ -11,3 +11,10 @@ func TestWindowsStylePaths(t *testing.T) {
 		t.Errorf("Backend for %s should be a FileBackend", conf.URL().Raw)
 	}
 }
+
+func TestUnsupportedWindowsPath(t *testing.T) {
+	_, err := New(`file://c:\foo\bar\beehive.conf`)
+	if err == nil {
+		t.Errorf("Invalid Windows file URL Should raise an error")
+	}
+}
