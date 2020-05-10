@@ -35,6 +35,10 @@ func ParseURL(rawurl string) (*URL, error) {
 	return &curl, nil
 }
 
+func (u *URL) String() string {
+	return u.nurl.String()
+}
+
 func (u *URL) NetURL() *url.URL {
 	return u.nurl
 }
