@@ -58,7 +58,7 @@ func TestFileSave(t *testing.T) {
 	}
 
 	// Save the config file to a new absolute path using a URL
-	p := fixWindowsPath(tmpConfPath())
+	p := tmpConfPath()
 	newURL := "file://" + p
 	c.SetURL(newURL)
 	backend = NewFileBackend()
@@ -76,8 +76,11 @@ func TestFileSave(t *testing.T) {
 
 	// Save the config file to a new absolute path using a regular path
 	p = tmpConfPath()
-	c.SetURL(p)
-	u, err = ParseURL(p)
+	c, err = New(p)
+	if err != nil {
+		t.Errorf("Error creating config file")
+
+	}
 	err = backend.Save(c)
 	if err != nil {
 		t.Errorf("Failed to save the config to %s", p)
