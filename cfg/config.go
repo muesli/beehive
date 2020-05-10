@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"runtime"
+	"strings"
 
 	"github.com/muesli/beehive/bees"
 	gap "github.com/muesli/go-app-paths"
@@ -157,7 +158,7 @@ func DefaultPath() string {
 		return cfgFileName
 	}
 
-	return path
+	return fixWindowsPath(path)
 }
 
 // Lookup tries to find the config file.
@@ -204,4 +205,14 @@ func exist(file string) bool {
 	}
 
 	return false
+}
+
+// Replace backward slashes in Windows paths with /, to make them suitable
+// for Go URL parsing.
+func fixWindowsPath(path string) string {
+	if runtime.GOOS == "windows" {
+		return strings.Replace(path, `\`, "/", -1)
+	}
+
+	return path
 }
