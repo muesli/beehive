@@ -21,7 +21,6 @@
 package cfg
 
 import (
-	"net/url"
 	"os"
 	"path/filepath"
 	"testing"
@@ -30,7 +29,7 @@ import (
 const testPassword = "foo"
 
 func TestAESBackendLoad(t *testing.T) {
-	u, _ := url.Parse("crypt://foo@foobar")
+	u, _ := ParseURL("crypt://foo@foobar")
 	backend, err := NewAESBackend(u)
 	if err != nil {
 		t.Error("The backend should return an error if no password specified")
@@ -42,7 +41,7 @@ func TestAESBackendLoad(t *testing.T) {
 	}
 
 	// try to load the config from an absolute path using a URI
-	u, err = url.Parse("crypto://" + testPassword + "@" + encryptedConfPath())
+	u, err = ParseURL("crypto://" + testPassword + "@" + encryptedConfPath())
 	if err != nil {
 		t.Fatalf("Can't parse crypto URL: %v", err)
 	}
@@ -60,7 +59,7 @@ func TestAESBackendLoad(t *testing.T) {
 
 	// try to load the config using the password from the environment
 	os.Setenv(PasswordEnvVar, testPassword)
-	u, err = url.Parse("crypto://" + encryptedConfPath())
+	u, err = ParseURL("crypto://" + encryptedConfPath())
 	if err != nil {
 		t.Fatalf("Can't parse crypto URL: %v", err)
 	}
@@ -72,7 +71,7 @@ func TestAESBackendLoad(t *testing.T) {
 
 	// try to load the config with an invalid password
 	os.Setenv(PasswordEnvVar, "")
-	u, err = url.Parse("crypto://bar@" + encryptedConfPath())
+	u, err = ParseURL("crypto://bar@" + encryptedConfPath())
 	if err != nil {
 		t.Fatalf("Can't parse crypto URL: %v", err)
 	}
@@ -84,7 +83,7 @@ func TestAESBackendLoad(t *testing.T) {
 
 	// environment password takes prececence
 	os.Setenv(PasswordEnvVar, testPassword)
-	u, err = url.Parse("crypto://bar@" + encryptedConfPath())
+	u, err = ParseURL("crypto://bar@" + encryptedConfPath())
 	if err != nil {
 		t.Fatalf("Can't parse crypto URL: %v", err)
 	}
@@ -98,7 +97,7 @@ func TestAESBackendLoad(t *testing.T) {
 		t.Errorf("the password defined in %s should take precedence. %v", PasswordEnvVar, err)
 	}
 
-	u, err = url.Parse("crypto://" + testPassword + "@" + confPath())
+	u, err = ParseURL("crypto://" + testPassword + "@" + confPath())
 	if err != nil {
 		t.Fatalf("Can't parse crypto URL: %v", err)
 	}
@@ -110,7 +109,7 @@ func TestAESBackendLoad(t *testing.T) {
 
 func TestAESBackendSave(t *testing.T) {
 	cwd, _ := os.Getwd()
-	u, err := url.Parse(filepath.Join("crypto://"+testPassword+"@", cwd, "testdata", "beehive-crypto.conf"))
+	u, err := ParseURL(filepath.Join("crypto://"+testPassword+"@", cwd, "testdata", "beehive-crypto.conf"))
 	backend, _ := NewAESBackend(u)
 	c, err := backend.Load(u)
 	if err != nil {
@@ -119,7 +118,7 @@ func TestAESBackendSave(t *testing.T) {
 
 	// Save the config file to a new absolute path using a URL
 	p := encryptedTempConf()
-	u, err = url.Parse("crypto://" + testPassword + "@" + p)
+	u, err = ParseURL("crypto://" + testPassword + "@" + p)
 	c.SetURL(u.String())
 	backend, _ = NewAESBackend(u)
 	err = backend.Save(c)

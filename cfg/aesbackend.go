@@ -27,7 +27,6 @@ import (
 	"encoding/json"
 	"errors"
 	"io/ioutil"
-	"net/url"
 	"os"
 	"path/filepath"
 
@@ -50,7 +49,7 @@ type AESBackend struct{}
 // Given the password is required to encrypt/decrypt the configuration, if the
 // URL passed doesn't have a password or PasswordEnvVar is not defined,
 // it'll return an error.
-func NewAESBackend(u *url.URL) (*AESBackend, error) {
+func NewAESBackend(u *URL) (*AESBackend, error) {
 	if _, err := getPassword(u); err != nil {
 		return nil, err
 	}
@@ -62,8 +61,7 @@ func NewAESBackend(u *url.URL) (*AESBackend, error) {
 //
 // If the error returned is not nil, an error was returned while opening or
 // reading the file.
-func IsEncrypted(u *url.URL) (bool, error) {
-	fixWinURL(u)
+func IsEncrypted(u *URL) (bool, error) {
 	f, err := os.Open(u.Path)
 	if err != nil {
 		return false, err
@@ -84,8 +82,7 @@ func IsEncrypted(u *url.URL) (bool, error) {
 }
 
 // Load configuration file from the given URL and decrypt it
-func (b *AESBackend) Load(u *url.URL) (*Config, error) {
-	fixWinURL(u)
+func (b *AESBackend) Load(u *URL) (*Config, error) {
 	config := &Config{url: u}
 
 	if !exist(u.Path) {
@@ -126,7 +123,6 @@ func (b *AESBackend) Load(u *url.URL) (*Config, error) {
 // Save encrypts then saves the configuration
 func (b *AESBackend) Save(config *Config) error {
 	u := config.URL()
-	fixWinURL(u)
 	cfgDir := filepath.Dir(u.Path)
 	if !exist(cfgDir) {
 		os.MkdirAll(cfgDir, 0755)
@@ -222,7 +218,7 @@ func deriveKey(password, salt []byte) ([]byte, []byte, error) {
 	return key, salt, nil
 }
 
-func getPassword(u *url.URL) (string, error) {
+func getPassword(u *URL) (string, error) {
 	p := os.Getenv(PasswordEnvVar)
 	if p != "" {
 		return p, nil
