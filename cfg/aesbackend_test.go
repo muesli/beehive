@@ -22,7 +22,6 @@ package cfg
 
 import (
 	"os"
-	"path/filepath"
 	"testing"
 )
 
@@ -108,22 +107,31 @@ func TestAESBackendLoad(t *testing.T) {
 }
 
 func TestAESBackendSave(t *testing.T) {
-	cwd, _ := os.Getwd()
-	u, err := ParseURL(filepath.Join("crypto://"+testPassword+"@", cwd, "testdata", "beehive-crypto.conf"))
+	p := encryptedConfPath()
+	u, err := ParseURL("crypto://" + testPassword + "@" + p)
 	backend, _ := NewAESBackend(u)
+	if err != nil {
+		t.Fatalf("Can't parse crypto URL: %v", err)
+	}
 	c, err := backend.Load(u)
 	if err != nil {
 		t.Errorf("Failed to load config fixture from relative path %s: %v", u, err)
 	}
 
 	// Save the config file to a new absolute path using a URL
-	p := encryptedTempConf()
-	u, err = ParseURL("crypto://" + testPassword + "@" + p)
-	c.SetURL(u.String())
+	p = encryptedTempConf()
+	newURL := "crypto://" + testPassword + "@" + p
+	if err != nil {
+		t.Fatalf("Can't parse crypto URL: %v", err)
+	}
+	err = c.SetURL(newURL)
+	if err != nil {
+		t.Fatalf("Error updating the configuration URL. %v", err)
+	}
 	backend, _ = NewAESBackend(u)
 	err = backend.Save(c)
 	if err != nil {
-		t.Errorf("failed to save the config to %s", u)
+		t.Errorf("failed to save the config to %s. %v", u, err)
 	}
 	if !exist(p) {
 		t.Errorf("configuration file wasn't saved to %s", p)
