@@ -1,7 +1,6 @@
 package cfg
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"testing"
@@ -48,11 +47,6 @@ func TestFileLoad(t *testing.T) {
 }
 
 func TestFileSave(t *testing.T) {
-	tmpdir, err := ioutil.TempDir("", "beehivetest")
-	if err != nil {
-		t.Error("Could not create temp directory")
-	}
-
 	u, err := ParseURL(filepath.Join("testdata", "beehive.conf"))
 	if err != nil {
 		t.Fatalf("Can't parse URL. %v", err)
@@ -64,7 +58,7 @@ func TestFileSave(t *testing.T) {
 	}
 
 	// Save the config file to a new absolute path using a URL
-	p := fixWindowsPath(filepath.Join(tmpdir, "beehive.conf"))
+	p := fixWindowsPath(tmpConfPath())
 	newURL := "file://" + p
 	c.SetURL(newURL)
 	backend = NewFileBackend()
@@ -81,7 +75,8 @@ func TestFileSave(t *testing.T) {
 	}
 
 	// Save the config file to a new absolute path using a regular path
-	p = filepath.Join(tmpdir, "beehive.conf")
+	p = tmpConfPath()
+	c.SetURL(p)
 	u, err = ParseURL(p)
 	err = backend.Save(c)
 	if err != nil {

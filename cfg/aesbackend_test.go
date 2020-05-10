@@ -50,7 +50,7 @@ func TestAESBackendLoad(t *testing.T) {
 	}
 	conf, err := backend.Load(u)
 	if err != nil {
-		t.Errorf("Error loading config file fixture from absolute path. %v", err)
+		t.Errorf("Error loading config file fixture from absolute path %s. %v", u.Raw, err)
 	}
 	if conf.Bees[0].Name != "echo" {
 		t.Error("The first bee should be an exec bee named echo")
