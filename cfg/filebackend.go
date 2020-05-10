@@ -3,7 +3,6 @@ package cfg
 import (
 	"encoding/json"
 	"io/ioutil"
-	"net/url"
 	"os"
 	"path/filepath"
 )
@@ -18,9 +17,8 @@ func NewFileBackend() *FileBackend {
 }
 
 // Load loads chains from config
-func (fs *FileBackend) Load(u *url.URL) (*Config, error) {
+func (fs *FileBackend) Load(u *URL) (*Config, error) {
 	var config Config
-
 	if !exist(u.Path) {
 		return &Config{url: u}, nil
 	}
