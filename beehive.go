@@ -110,7 +110,7 @@ func main() {
 		if err != nil {
 			log.Fatalf("Error loading configuration file from %s. err: %v", config.URL(), err)
 		}
-		log.Infof("Loading configuration from %s", config.URL())
+		log.Infof("Loading configuration from %s", config.URL().Raw)
 	} else { // try to load default config from user paths
 		path := cfg.Lookup()
 		if path == "" {
