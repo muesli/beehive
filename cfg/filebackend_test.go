@@ -91,10 +91,17 @@ func TestFileSave(t *testing.T) {
 
 	// Save the config file to a new absolute path using a regular path
 	p = tmpConfPath()
+<<<<<<< HEAD
 	c.SetURL(p)
 	u, err = ParseURL(p)
 	if err != nil {
 		t.Error("cannot parse url")
+=======
+	c, err = New(p)
+	if err != nil {
+		t.Errorf("Error creating config file")
+
+>>>>>>> moar test fixes
 	}
 	err = backend.Save(c)
 	if err != nil {
