@@ -2,7 +2,6 @@ package cfg
 
 import (
 	"fmt"
-	"net/url"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -23,7 +22,7 @@ type Config struct {
 	Actions []bees.Action
 	Chains  []bees.Chain
 	backend ConfigBackend
-	url     *url.URL
+	url     *URL
 }
 
 // ConfigBackend is the interface implemented by the configuration backends.
@@ -31,7 +30,7 @@ type Config struct {
 // Backends are responsible for loading and saving the Config struct to
 // memory, the local filesystem, the network, etc.
 type ConfigBackend interface {
-	Load(*url.URL) (*Config, error)
+	Load(*URL) (*Config, error)
 	Save(*Config) error
 }
 
@@ -68,7 +67,7 @@ func (c *Config) Backend() ConfigBackend {
 // Next time the config is loaded or saved
 // the new URL will be used.
 func (c *Config) SetURL(u string) error {
-	url, err := url.Parse(u)
+	url, err := ParseURL(u)
 	if err != nil {
 		return err
 	}
@@ -79,7 +78,7 @@ func (c *Config) SetURL(u string) error {
 }
 
 // URL currently being used.
-func (c *Config) URL() *url.URL {
+func (c *Config) URL() *URL {
 	return c.url
 }
 
@@ -201,15 +200,4 @@ func Lookup() string {
 func exist(file string) bool {
 	_, err := os.Stat(file)
 	return err == nil
-}
-
-// Workaround Go URL parsing in Windows, where URL.Host contains the drive
-// info for a URL like file://c:/path/to/beehive.config
-//
-// no-op in non-Windows OSes
-func fixWinURL(u *url.URL) {
-	if runtime.GOOS == "windows" {
-		u.Path = filepath.Join(u.Host, u.Path)
-		u.Host = ""
-	}
 }
