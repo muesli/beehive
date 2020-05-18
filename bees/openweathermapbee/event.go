@@ -29,6 +29,9 @@ import (
 
 // TriggerCurrentWeatherEvent triggers all current weather events
 func (mod *OpenweathermapBee) TriggerCurrentWeatherEvent() {
+
+	mod.ContextSet("current", mod.current)
+
 	ev := bees.Event{
 		Bee:  mod.Name(),
 		Name: "current_weather",
