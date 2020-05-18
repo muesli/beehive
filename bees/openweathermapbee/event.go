@@ -27,10 +27,19 @@ import (
 	owm "github.com/briandowns/openweathermap"
 )
 
+type weatherContext = map[int]*owm.CurrentWeatherData
+
 // TriggerCurrentWeatherEvent triggers all current weather events
 func (mod *OpenweathermapBee) TriggerCurrentWeatherEvent() {
 
-	mod.ContextSet("current", mod.current)
+	cc := mod.ContextValue("current")
+	if cc != nil {
+		(cc.(weatherContext))[mod.current.ID] = mod.current
+	} else {
+		cc = weatherContext{}
+		(cc.(weatherContext))[mod.current.ID] = mod.current
+		mod.ContextSet("current", cc)
+	}
 
 	ev := bees.Event{
 		Bee:  mod.Name(),
