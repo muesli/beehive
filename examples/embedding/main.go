@@ -40,6 +40,7 @@ func main() {
 	chain.Description = "this is a test chain that will say hello every second"
 	chain.Actions = []string{"123"} // Action ID we create above
 	chain.Event = &event
+	chain.Filters = []string{}
 	config.Chains = []bees.Chain{chain}
 
 	// Debugging level, prints debug messages from bees
