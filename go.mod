@@ -23,7 +23,7 @@ require (
 	github.com/dustin/gojson v0.0.0-20160307161227-2e71ec9dd5ad // indirect
 	github.com/emicklei/go-restful v2.9.3+incompatible
 	github.com/fatih/set v0.2.1 // indirect
-	github.com/flashmob/go-guerrilla v0.0.0-20190502151606-07043ae76e81
+	github.com/flashmob/go-guerrilla v1.6.1
 	github.com/fluffle/goirc v1.0.1
 	github.com/fsnotify/fsnotify v1.4.7
 	github.com/garyburd/go-oauth v0.0.0-20180319155456-bca2e7f09a17 // indirect
