@@ -16,15 +16,16 @@ func main() {
 		panic(err)
 	}
 
+	helloBee := newHelloBee()
 	config.Bees = []bees.BeeConfig{
 		newTimeBee(),
-		newHelloBee(),
+		helloBee,
 	}
 
 	// Create the Action and add it to the config
 	action := bees.Action{}
 	action.ID = "123"
-	action.Bee = "hello" // this is the name we gave to the bee in newHelloBee, not the bee ID
+	action.Bee = helloBee.Name
 	action.Name = "say_hello"
 	action.Options = bees.Placeholders{}
 	config.Actions = []bees.Action{action}
@@ -38,8 +39,9 @@ func main() {
 	chain := bees.Chain{}
 	chain.Name = "foochain"
 	chain.Description = "this is a test chain that will say hello every second"
-	chain.Actions = []string{"123"} // Action ID we create above
+	chain.Actions = []string{action.ID} // Action ID we create above
 	chain.Event = &event
+	chain.Filters = []string{}
 	config.Chains = []bees.Chain{chain}
 
 	// Debugging level, prints debug messages from bees
