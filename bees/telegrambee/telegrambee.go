@@ -30,7 +30,7 @@ import (
 	"strings"
 	"time"
 
-	telegram "github.com/tucnak/telebot"
+	telegram "gopkg.in/tucnak/telebot.v2"
 
 	"github.com/muesli/beehive/bees"
 )
@@ -103,7 +103,7 @@ func (mod *TelegramBee) Run(eventChan chan bees.Event) {
 				{
 					Name:  "user_id",
 					Type:  "string",
-					Value: strconv.Itoa(m.OriginalSender.ID),
+					Value: strconv.Itoa(m.Sender.ID),
 				},
 				{
 					Name:  "timestamp",
@@ -112,6 +112,7 @@ func (mod *TelegramBee) Run(eventChan chan bees.Event) {
 				},
 			},
 		}
+		mod.LogDebugf("Sending event: %+v", ev)
 		eventChan <- ev
 	})
 
