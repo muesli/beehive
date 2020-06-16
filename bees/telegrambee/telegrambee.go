@@ -83,7 +83,7 @@ func (mod *TelegramBee) Run(eventChan chan bees.Event) {
 	var err error
 	mod.bot, err = telegram.NewBot(telegram.Settings{
 		Token:  mod.apiKey,
-		Poller: &telegram.LongPoller{Timeout: 10 * time.Second},
+		Poller: &telegram.LongPoller{Timeout: 1 * time.Second},
 	})
 	if err != nil {
 		mod.LogErrorf("Authorization failed, make sure the Telegram API key is correct: %s", err)
@@ -123,7 +123,20 @@ func (mod *TelegramBee) Run(eventChan chan bees.Event) {
 		eventChan <- ev
 	})
 
-	mod.bot.Start()
+	go func() {
+		// Wait some time for the old poller to gracefully shutdown
+		// when reloading bee
+		time.Sleep(2 * time.Second)
+		mod.bot.Start()
+	}()
+
+	for {
+		select {
+		case <-mod.SigChan:
+			mod.bot.Stop()
+			return
+		}
+	}
 }
 
 // ReloadOptions parses the config options and initializes the Bee.
