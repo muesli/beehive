@@ -56,6 +56,7 @@ func (mod *TelegramBee) Action(action bees.Action) []bees.Placeholder {
 		action.Options.Bind("chat_id", &chatID)
 		action.Options.Bind("text", &text)
 
+		mod.LogDebugf("Sending text message: text: '%s' chatid: '%+v'", text, chatID)
 		cid, err := strconv.ParseInt(chatID, 10, 64)
 		if err != nil {
 			panic("Invalid telegram chat ID")
