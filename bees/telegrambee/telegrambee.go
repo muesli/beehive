@@ -30,7 +30,7 @@ import (
 	"strings"
 	"time"
 
-	telegram "github.com/go-telegram-bot-api/telegram-bot-api"
+	telegram "github.com/tucnak/telebot"
 
 	"github.com/muesli/beehive/bees"
 )
@@ -42,7 +42,7 @@ type TelegramBee struct {
 	// Telegram bot API Key
 	apiKey string
 	// Bot API client
-	bot *telegram.BotAPI
+	bot *telegram.Bot
 }
 
 // Action triggers the action passed to it.
@@ -61,8 +61,7 @@ func (mod *TelegramBee) Action(action bees.Action) []bees.Placeholder {
 			panic("Invalid telegram chat ID")
 		}
 
-		msg := telegram.NewMessage(cid, text)
-		_, err = mod.bot.Send(msg)
+		_, err = mod.bot.Send(&telegram.Chat{ID: cid}, text)
 		if err != nil {
 			mod.Logf("Error sending message %v", err)
 		}
@@ -74,61 +73,48 @@ func (mod *TelegramBee) Action(action bees.Action) []bees.Placeholder {
 // Run executes the Bee's event loop.
 func (mod *TelegramBee) Run(eventChan chan bees.Event) {
 	var err error
-	mod.bot, err = telegram.NewBotAPI(mod.apiKey)
+	mod.bot, err = telegram.NewBot(telegram.Settings{
+		Token:  mod.apiKey,
+		Poller: &telegram.LongPoller{Timeout: 10 * time.Second},
+	})
 	if err != nil {
 		mod.LogErrorf("Authorization failed, make sure the Telegram API key is correct: %s", err)
 		return
 	}
-	mod.Logf("Authorized on account %s", mod.bot.Self.UserName)
+	mod.Logf("Authorized on account %s", mod.bot.Me.Username)
 
-	u := telegram.NewUpdate(0)
-	u.Timeout = 60
-
-	updates, err := mod.bot.GetUpdatesChan(u)
-	if err != nil {
-		mod.LogFatal("Failed retrieving the updates channel. err: ", err)
-	}
-
-	for {
-		select {
-		case <-mod.SigChan:
-			return
-		case update := <-updates:
-			if update.Message == nil || update.Message.Text == "" {
-				continue
-			}
-
-			mod.LogDebugf("Message received: %+v", update.Message)
-
-			ev := bees.Event{
-				Bee:  mod.Name(),
-				Name: "message",
-				Options: []bees.Placeholder{
-					{
-						Name:  "text",
-						Type:  "string",
-						Value: update.Message.Text,
-					},
-					{
-						Name:  "chat_id",
-						Type:  "string",
-						Value: strconv.FormatInt(update.Message.Chat.ID, 10),
-					},
-					{
-						Name:  "user_id",
-						Type:  "string",
-						Value: strconv.Itoa(update.Message.From.ID),
-					},
-					{
-						Name:  "timestamp",
-						Type:  "timestamp",
-						Value: time.Now(),
-					},
+	mod.bot.Handle(telegram.OnText, func(m *telegram.Message) {
+		mod.LogDebugf("Message received: text: '%s' chatid: '%+v'", m.Text, m.Chat.ID)
+		ev := bees.Event{
+			Bee:  mod.Name(),
+			Name: "message",
+			Options: []bees.Placeholder{
+				{
+					Name:  "text",
+					Type:  "string",
+					Value: m.Text,
 				},
-			}
-			eventChan <- ev
+				{
+					Name:  "chat_id",
+					Type:  "string",
+					Value: strconv.FormatInt(m.Chat.ID, 10),
+				},
+				{
+					Name:  "user_id",
+					Type:  "string",
+					Value: strconv.Itoa(m.OriginalSender.ID),
+				},
+				{
+					Name:  "timestamp",
+					Type:  "timestamp",
+					Value: time.Now(),
+				},
+			},
 		}
-	}
+		eventChan <- ev
+	})
+
+	mod.bot.Start()
 }
 
 // ReloadOptions parses the config options and initializes the Bee.
