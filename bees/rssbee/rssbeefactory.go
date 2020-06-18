@@ -80,6 +80,13 @@ func (factory *RSSBeeFactory) Options() []bees.BeeOptionDescriptor {
 			Mandatory:   false,
 			Default:     false,
 		},
+		{
+			Name:        "poll_interval",
+			Description: "Custom feed poll interval in seconds",
+			Type:        "int",
+			Mandatory:   false,
+			Default:     0,
+		},
 	}
 	return opts
 }

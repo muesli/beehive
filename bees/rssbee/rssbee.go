@@ -40,6 +40,8 @@ type RSSBee struct {
 	skipNextFetch bool
 
 	eventChan chan bees.Event
+
+	pollInterval int
 }
 
 func (mod *RSSBee) chanHandler(feed *rss.Feed, newchannels []*rss.Channel) {
@@ -137,19 +139,23 @@ func (mod *RSSBee) itemHandler(feed *rss.Feed, ch *rss.Channel, newitems []*rss.
 func (mod *RSSBee) pollFeed(uri string, timeout int) {
 	feed := rss.New(timeout, true, mod.chanHandler, mod.itemHandler)
 
-	wait := time.Duration(0)
+	wait := time.Second * time.Duration(mod.pollInterval)
+
 	for {
 		select {
 		case <-mod.SigChan:
 			return
 
 		case <-time.After(wait):
+			mod.LogDebugf("Updating %s feed after %v seconds", feed.Url, wait)
 			if err := feed.Fetch(uri, nil); err != nil {
 				mod.LogErrorf("%s: %s", uri, err)
 			}
 		}
 
-		wait = time.Duration(feed.SecondsTillUpdate() * 1e9)
+		if mod.pollInterval == 0 {
+			wait = time.Duration(feed.SecondsTillUpdate() * 1e9)
+		}
 	}
 }
 
@@ -167,4 +173,5 @@ func (mod *RSSBee) ReloadOptions(options bees.BeeOptions) {
 
 	options.Bind("skip_first", &mod.skipNextFetch)
 	options.Bind("url", &mod.url)
+	options.Bind("poll_interval", &mod.pollInterval)
 }
