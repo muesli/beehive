@@ -1,4 +1,4 @@
-###Options
+### Options
 
 Accepted favourite team value
   1. Ind (India)
@@ -9,7 +9,7 @@ Accepted favourite team value
   6. Sri (Srilanka)
   7. Ban (Bangladesh)
   
-###Events 
+### Events 
   1. Run change
   2. Over change
   3. Wicket fall
