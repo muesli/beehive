@@ -39,6 +39,7 @@ type CronBee struct {
 }
 
 func (mod *CronBee) runTask() {
+	mod.LogDebugf("Running cron task " + strings.Join(mod.input[:], " "))
 	event := bees.Event{
 		Bee:  mod.Name(),
 		Name: "time",
@@ -56,8 +57,12 @@ func (mod *CronBee) runTask() {
 // Run executes the Bee's event loop.
 func (mod *CronBee) Run(eventChan chan bees.Event) {
 	mod.eventChan = eventChan
-	c := cron.New()
-	c.AddFunc(strings.Join(mod.input[:], " "), mod.runTask)
+	c := cron.New(cron.WithSeconds())
+	mod.LogDebugf("Scheduling " + strings.Join(mod.input[:], " "))
+	_, err := c.AddFunc(strings.Join(mod.input[:], " "), mod.runTask)
+	if err != nil {
+		mod.LogFatal(err)
+	}
 	c.Start()
 
 	for {
