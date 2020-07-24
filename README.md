@@ -1,6 +1,8 @@
 Beehive
 =======
 
+**Note: This is an experimental fork of muesli/beehive, also available in import "github.com/buger/jsonparser"**
+
 [![Build Status](https://travis-ci.org/muesli/beehive.svg?branch=master)](https://travis-ci.org/muesli/beehive)
 [![Go ReportCard](http://goreportcard.com/badge/muesli/beehive)](http://goreportcard.com/report/muesli/beehive)
 [![GoDoc](https://godoc.org/github.com/golang/gddo?status.svg)](https://godoc.org/github.com/muesli/beehive)
