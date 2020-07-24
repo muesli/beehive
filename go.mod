@@ -1,6 +1,6 @@
 module github.com/muesli/beehive
 
-go 1.12
+go 1.13
 
 require (
 	github.com/ChimeraCoder/anaconda v2.0.0+incompatible
