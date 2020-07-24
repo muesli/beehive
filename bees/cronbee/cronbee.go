@@ -28,7 +28,7 @@ import (
 	"time"
 
 	"github.com/muesli/beehive/bees"
-	"github.com/robfig/cron"
+	"github.com/robfig/cron/v3"
 )
 
 // CronBee is a Bee that acts like a time-based job scheduler (cron).
