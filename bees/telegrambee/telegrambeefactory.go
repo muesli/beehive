@@ -73,6 +73,13 @@ func (factory *TelegramBeeFactory) Options() []bees.BeeOptionDescriptor {
 			Type:        "string",
 			Mandatory:   true,
 		},
+		{
+			Name:        "formatting_enabled",
+			Description: "Enable HTML text formatting",
+			Type:        "bool",
+			Default:     false,
+			Mandatory:   false,
+		},
 	}
 	return opts
 }

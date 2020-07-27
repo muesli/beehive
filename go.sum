@@ -52,8 +52,6 @@ github.com/emicklei/go-restful v2.9.3+incompatible h1:2OwhVdhtzYUp5P5wuGsVDPagKS
 github.com/emicklei/go-restful v2.9.3+incompatible/go.mod h1:otzb+WCGbkyDHkqmQmT5YD2WR4BBwUdeQoFo8l/7tVs=
 github.com/fatih/set v0.2.1 h1:nn2CaJyknWE/6txyUDGwysr3G5QC6xWB/PtVjPBbeaA=
 github.com/fatih/set v0.2.1/go.mod h1:+RKtMCH+favT2+3YecHGxcc0b4KyVWA1QWWJUs4E0CI=
-github.com/flashmob/go-guerrilla v0.0.0-20190502151606-07043ae76e81 h1:45gIhMM+MtaoDrhBYFCSjYiQDNr9r6NNyGqzwPfKGco=
-github.com/flashmob/go-guerrilla v0.0.0-20190502151606-07043ae76e81/go.mod h1:ZT9TRggRsSY4ZVndoyx8TRUxi3tM/nOYtKWKDX94H0I=
 github.com/flashmob/go-guerrilla v1.6.1 h1:MLkqzRFUJveVAWuQ3s2MNPTAWbvXLt8EFsBoraS6qHA=
 github.com/flashmob/go-guerrilla v1.6.1/go.mod h1:ZT9TRggRsSY4ZVndoyx8TRUxi3tM/nOYtKWKDX94H0I=
 github.com/fluffle/goirc v1.0.1 h1:YHBfWIXSFgABz8dbijvOIKucFejnbHdk78+r2z/6B/Q=
@@ -77,10 +75,6 @@ github.com/go-redis/redis v6.15.6+incompatible h1:H9evprGPLI8+ci7fxQx6WNZHJSb7be
 github.com/go-redis/redis v6.15.6+incompatible/go.mod h1:NAIEuMOZ/fxfXJIrKDQDz8wamY7mA7PouImQ2Jvg6kA=
 github.com/go-sql-driver/mysql v1.5.0 h1:ozyZYNQW3x3HtqT1jira07DN2PArx2v7/mN66gGcHOs=
 github.com/go-sql-driver/mysql v1.5.0/go.mod h1:DCzpHaOWr8IXmIStZouvnhqoel9Qv2LBy8hT2VhHyBg=
-github.com/go-telegram-bot-api/telegram-bot-api v1.0.1-0.20200319042609-5e339ed016b0 h1:MMufjch8yWKRo67mc+HdMseaUlF1UAwngldBRB/lgAs=
-github.com/go-telegram-bot-api/telegram-bot-api v1.0.1-0.20200319042609-5e339ed016b0/go.mod h1:lDm2E64X4OjFdBUA4hlN4mEvbSitvhJdKw7rsA8KHgI=
-github.com/go-telegram-bot-api/telegram-bot-api v4.6.4+incompatible h1:2cauKuaELYAEARXRkq2LrJ0yDDv1rW7+wrTEdVL3uaU=
-github.com/go-telegram-bot-api/telegram-bot-api v4.6.4+incompatible/go.mod h1:qf9acutJ8cwBUhm1bqgz6Bei9/C/c93FPDljKWwsOgM=
 github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 h1:DACJavvAHhabrF08vX0COfcOBJRhZ8lUbR+ZWIs0Y5g=
 github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0/go.mod h1:E/TSTwGwJL78qG/PmXZO1EjYhfJinVAhrmmHX6Z8B9k=
 github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b/go.mod h1:SBH7ygxi8pfUlaOkMMuAQtPIUF8ecWP5IEl/CR7VP2Q=
@@ -177,8 +171,6 @@ github.com/muesli/go.hue v0.0.0-20140802040715-8aefcc693caf h1:LxZj9OgYtTw5bQWoH
 github.com/muesli/go.hue v0.0.0-20140802040715-8aefcc693caf/go.mod h1:kbCdPkiPQGNQW+m9a1XHIrOCT4/FtfpqBF2bVkwZjMg=
 github.com/muesli/goefa v0.0.0-20180507204150-08d8ee2555d2 h1:A0yDQZg4PVcBvzH9IYGydylu0ytfiTK8LaHOH5eJrLY=
 github.com/muesli/goefa v0.0.0-20180507204150-08d8ee2555d2/go.mod h1:cbhVWIL28EF8sTH71/qsU+TeEEmYC33MES0J7Ul0TFI=
-github.com/muesli/gominatim v0.1.0 h1:WFfXBLa/tXAhCbG2WrVfUN+l3WSP7rDRpYxe0tekvz0=
-github.com/muesli/gominatim v0.1.0/go.mod h1:4/L0h2Z155HXvPTnRdks5EQr16e2yH1EM2lGReeQCwg=
 github.com/muesli/gominatim v0.1.1-0.20200501135808-f6af22631c72 h1:8Fq6qkEpVNhDM8wKRE5vYfKeasp6dZKfpNWcD+c+5Pw=
 github.com/muesli/gominatim v0.1.1-0.20200501135808-f6af22631c72/go.mod h1:4/L0h2Z155HXvPTnRdks5EQr16e2yH1EM2lGReeQCwg=
 github.com/muesli/kmeans v0.0.0-20190917235210-80dfc71e6c5a h1:TfqSfRTR/uTo2h3AfuXaeWm+a6DH7mYSlfQkNhxnxUk=
@@ -248,8 +240,8 @@ github.com/stretchr/testify v1.3.0 h1:TivCn/peBQ7UY8ooIcPgZFpTNSz0Q2U6UrFlUfqbe0
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
 github.com/stretchr/testify v1.4.0 h1:2E4SXV/wtOkTonXsotYi4li6zVWxYlZuYNCXe9XRJyk=
 github.com/stretchr/testify v1.4.0/go.mod h1:j7eGeouHqKxXV5pUuKE4zz7dFj8WfuZ+81PSLYec5m4=
-github.com/technoweenie/multipartstreamer v1.0.1 h1:XRztA5MXiR1TIRHxH2uNxXxaIkKQDeX7m2XsSOlQEnM=
-github.com/technoweenie/multipartstreamer v1.0.1/go.mod h1:jNVxdtShOxzAsukZwTSw6MDx5eUJoiEBsSvzDU9uzog=
+github.com/stretchr/testify v1.5.1 h1:nOGnQDM7FYENwehXlg/kFVnos3rEvtKTjRvOWSzb6H4=
+github.com/stretchr/testify v1.5.1/go.mod h1:5W2xD1RspED5o8YsWQXVCued0rvSQ+mT+I5cxcmMvtA=
 github.com/tomnomnom/linkheader v0.0.0-20180905144013-02ca5825eb80 h1:nrZ3ySNYwJbSpD6ce9duiP+QkD3JuLCcWkdaehUS/3Y=
 github.com/tomnomnom/linkheader v0.0.0-20180905144013-02ca5825eb80/go.mod h1:iFyPdL66DjUD96XmzVL3ZntbzcflLnznH0fr99w5VqE=
 github.com/urfave/cli v1.22.1/go.mod h1:Gos4lmkARVdJ6EkW0WaNv/tZAAMe9V7XWyB60NtXRu0=
@@ -316,6 +308,8 @@ gopkg.in/mgo.v2 v2.0.0-20180705113604-9856a29383ce h1:xcEWjVhvbDy+nHP67nPDDpbYrY
 gopkg.in/mgo.v2 v2.0.0-20180705113604-9856a29383ce/go.mod h1:yeKp02qBN3iKW1OzL3MGk2IdtZzaj7SFntXj72NppTA=
 gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 h1:uRGJdciOHaEIrze2W8Q3AKkepLTh2hOroT7a+7czfdQ=
 gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7/go.mod h1:dt/ZhP58zS4L8KSrWDmTeBkI65Dw0HsyUHuEVlX15mw=
+gopkg.in/tucnak/telebot.v2 v2.3.1 h1:ux26aeidIT1RcqOiTjZtNEdAgXoohc/CKM6imBSkzbw=
+gopkg.in/tucnak/telebot.v2 v2.3.1/go.mod h1:t+KVAiqFsG9ZDF0hz1ZPFTyENtlrDrDS3qmRRqhICBg=
 gopkg.in/yaml.v2 v2.2.2 h1:ZCJp+EgiOT7lHqUV2J862kp8Qj64Jo6az82+3Td9dZw=
 gopkg.in/yaml.v2 v2.2.2/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
 gopkg.in/yaml.v2 v2.2.4 h1:/eiJrUcujPVeJ3xlSWaiNi3uSVmDGBK1pDHUHAnao1I=
