@@ -23,6 +23,7 @@ package templatehelper
 
 import (
 	"encoding/json"
+	"errors"
 	htmlTemplate "html/template"
 	"regexp"
 	"strings"
@@ -37,46 +38,41 @@ var (
 			json, _ := json.Marshal(values)
 			return htmlTemplate.JS(json)
 		},
-		"Left": func(values ...interface{}) string {
-			s := values[0].(string)
-			n := values[1].(int)
+		"Left": func(s string, n int) string {
 			if n > len(s) {
 				n = len(s)
 			}
-
 			return s[:n]
 		},
-		"Matches": func(values ...interface{}) bool {
-			ok, _ := regexp.MatchString(values[1].(string), values[0].(string))
-			return ok
+		"Matches": func(s string, pattern string) (bool, error) {
+			return regexp.MatchString(pattern, s)
 		},
-		"Mid": func(values ...interface{}) string {
-			s := values[0].(string)
-			l := values[1].(int)
-			if l > len(s) {
-				l = len(s)
+		"Mid": func(s string, left int, values ...int) string {
+			if left > len(s) {
+				left = len(s)
 			}
 
-			if len(values) > 2 {
-				r := values[2].(int)
-				if r > len(s) {
-					r = len(s)
+			if len(values) != 0 {
+				right := values[0]
+				if right > len(s) {
+					right = len(s)
 				}
-				return s[l:r]
+				return s[left:right]
 			}
-			return s[l:]
+			return s[left:]
 		},
-		"Right": func(values ...interface{}) string {
-			s := values[0].(string)
-			n := len(s) - values[1].(int)
-			if n < 0 {
-				n = 0
+		"Right": func(s string, right int) string {
+			left := len(s) - right
+			if left < 0 {
+				left = 0
 			}
-
-			return s[n:]
+			return s[left:]
 		},
-		"Last": func(values ...interface{}) string {
-			return values[0].([]string)[len(values[0].([]string))-1]
+		"Last": func(items []string) (string, error) {
+			if len(items) == 0 {
+				return "", errors.New("cannot get last element from empty slice")
+			}
+			return items[len(items)-1], nil
 		},
 		// strings functions
 		"Compare":      strings.Compare, // 1.5+ only
