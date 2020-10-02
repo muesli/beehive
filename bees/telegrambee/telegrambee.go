@@ -35,6 +35,12 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+const (
+	ModeHTML     = telegram.ModeHTML
+	ModeMarkdown = "MarkdownV2"
+	ModePlain    = ""
+)
+
 // TelegramBee is a Bee that can connect to Telegram.
 type TelegramBee struct {
 	bees.Bee
@@ -53,15 +59,26 @@ func (mod *TelegramBee) Action(action bees.Action) []bees.Placeholder {
 	case "send":
 		chatID := ""
 		text := ""
+		parseMode := ""
 		action.Options.Bind("chat_id", &chatID)
 		action.Options.Bind("text", &text)
+		action.Options.Bind("parse_mode", &parseMode)
 
 		cid, err := strconv.ParseInt(chatID, 10, 64)
 		if err != nil {
 			panic("Invalid telegram chat ID")
 		}
 
+		// use newer version of markdown parser
+		if parseMode == telegram.ModeMarkdown {
+			parseMode = ModeMarkdown
+		}
+		if parseMode != ModePlain && parseMode != ModeHTML && parseMode != ModeMarkdown {
+			panic("Invalid parse mode")
+		}
+
 		msg := telegram.NewMessage(cid, text)
+		msg.ParseMode = parseMode
 		_, err = mod.bot.Send(msg)
 		if err != nil {
 			mod.Logf("Error sending message %v", err)
