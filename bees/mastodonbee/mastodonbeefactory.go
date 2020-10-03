@@ -24,14 +24,14 @@ package mastodonbee
 
 import "github.com/muesli/beehive/bees"
 
-// mastodonBeeFactory is a factory for mastodonBees.
-type mastodonBeeFactory struct {
+// MastodonBeeFactory is a factory for mastodonBees.
+type MastodonBeeFactory struct {
 	bees.BeeFactory
 }
 
 // New returns a new Bee instance configured with the supplied options.
-func (factory *mastodonBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
-	bee := mastodonBee{
+func (factory *MastodonBeeFactory) New(name, description string, options bees.BeeOptions) bees.BeeInterface {
+	bee := MastodonBee{
 		Bee: bees.NewBee(name, factory.ID(), description, options),
 	}
 	bee.ReloadOptions(options)
@@ -40,32 +40,32 @@ func (factory *mastodonBeeFactory) New(name, description string, options bees.Be
 }
 
 // ID returns the ID of this Bee.
-func (factory *mastodonBeeFactory) ID() string {
+func (factory *MastodonBeeFactory) ID() string {
 	return "mastodonbee"
 }
 
 // Name returns the name of this Bee.
-func (factory *mastodonBeeFactory) Name() string {
+func (factory *MastodonBeeFactory) Name() string {
 	return "mastodon"
 }
 
 // Description returns the description of this Bee.
-func (factory *mastodonBeeFactory) Description() string {
+func (factory *MastodonBeeFactory) Description() string {
 	return "Interact with mastodon"
 }
 
 // Image returns the filename of an image for this Bee.
-func (factory *mastodonBeeFactory) Image() string {
+func (factory *MastodonBeeFactory) Image() string {
 	return factory.ID() + ".png"
 }
 
 // LogoColor returns the preferred logo background color (used by the admin interface).
-func (factory *mastodonBeeFactory) LogoColor() string {
+func (factory *MastodonBeeFactory) LogoColor() string {
 	return "#003b66"
 }
 
 // Options returns the options available to configure this Bee.
-func (factory *mastodonBeeFactory) Options() []bees.BeeOptionDescriptor {
+func (factory *MastodonBeeFactory) Options() []bees.BeeOptionDescriptor {
 	opts := []bees.BeeOptionDescriptor{
 		{
 			Name:        "server",
@@ -102,7 +102,7 @@ func (factory *mastodonBeeFactory) Options() []bees.BeeOptionDescriptor {
 }
 
 // Events describes the available events provided by this Bee.
-func (factory *mastodonBeeFactory) Events() []bees.EventDescriptor {
+func (factory *MastodonBeeFactory) Events() []bees.EventDescriptor {
 	events := []bees.EventDescriptor{
 		{
 			Namespace:   factory.Name(),
@@ -419,7 +419,7 @@ func (factory *mastodonBeeFactory) Events() []bees.EventDescriptor {
 }
 
 // Actions describes the available actions provided by this Bee.
-func (factory *mastodonBeeFactory) Actions() []bees.ActionDescriptor {
+func (factory *MastodonBeeFactory) Actions() []bees.ActionDescriptor {
 	actions := []bees.ActionDescriptor{
 		{
 			Namespace:   factory.Name(),
@@ -510,6 +510,6 @@ func (factory *mastodonBeeFactory) Actions() []bees.ActionDescriptor {
 }
 
 func init() {
-	f := mastodonBeeFactory{}
+	f := MastodonBeeFactory{}
 	bees.RegisterFactory(&f)
 }

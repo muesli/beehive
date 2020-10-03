@@ -31,8 +31,8 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
-// mastodonBee is a Bee that can connect to mastodon.
-type mastodonBee struct {
+// MastodonBee is a Bee that can connect to mastodon.
+type MastodonBee struct {
 	bees.Bee
 
 	server       string
@@ -47,7 +47,7 @@ type mastodonBee struct {
 }
 
 // Action triggers the action passed to it.
-func (mod *mastodonBee) Action(action bees.Action) []bees.Placeholder {
+func (mod *MastodonBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
 
 	switch action.Name {
@@ -268,7 +268,7 @@ func (mod *mastodonBee) Action(action bees.Action) []bees.Placeholder {
 	return outs
 }
 
-func (mod *mastodonBee) handleStreamEvent(item interface{}) {
+func (mod *MastodonBee) handleStreamEvent(item interface{}) {
 	switch e := item.(type) {
 	case *mastodon.UpdateEvent:
 		mod.handleStatus(e.Status)
@@ -292,7 +292,7 @@ func (mod *mastodonBee) handleStreamEvent(item interface{}) {
 	}
 }
 
-func (mod *mastodonBee) handleStream() {
+func (mod *MastodonBee) handleStream() {
 	timeline, err := mod.client.StreamingUser(context.Background())
 	if err != nil {
 		mod.LogErrorf("Failed to get user stream: %+v", err)
@@ -310,7 +310,7 @@ func (mod *mastodonBee) handleStream() {
 }
 
 // Run executes the Bee's event loop.
-func (mod *mastodonBee) Run(eventChan chan bees.Event) {
+func (mod *MastodonBee) Run(eventChan chan bees.Event) {
 	// Create the new api client
 	c := mastodon.NewClient(&mastodon.Config{
 		Server:       mod.server,
@@ -339,7 +339,7 @@ func (mod *mastodonBee) Run(eventChan chan bees.Event) {
 }
 
 // ReloadOptions parses the config options and initializes the Bee.
-func (mod *mastodonBee) ReloadOptions(options bees.BeeOptions) {
+func (mod *MastodonBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
 	options.Bind("server", &mod.server)
