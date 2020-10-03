@@ -156,6 +156,11 @@ func (factory *MastodonBeeFactory) Events() []bees.EventDescriptor {
 					Description: "The url for the toot",
 					Type:        "string",
 				},
+				{
+					Name:        "created",
+					Description: "The timestamp of the toots creation",
+					Type:        "time.Time",
+				},
 			},
 		},
 		{
