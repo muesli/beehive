@@ -70,6 +70,11 @@ func (mod *MastodonBee) handleStatus(status *mastodon.Status) {
 				Value: status.URL,
 				Type:  "string",
 			},
+			{
+				Name:  "created",
+				Value: status.CreatedAt,
+				Type:  "time.Time",
+			},
 		},
 	}
 	mod.evchan <- ev
