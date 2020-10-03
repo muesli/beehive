@@ -30,7 +30,7 @@ import (
 
 // handleUpdateEvent handles incoming Toot updates from mastodon from yourself
 // and from people you follow.
-func (mod *mastodonBee) handleStatus(status *mastodon.Status) {
+func (mod *MastodonBee) handleStatus(status *mastodon.Status) {
 	ev := bees.Event{
 		Bee:  mod.Name(),
 		Name: "toot_fetched",
@@ -75,7 +75,7 @@ func (mod *mastodonBee) handleStatus(status *mastodon.Status) {
 	mod.evchan <- ev
 }
 
-func (mod *mastodonBee) handleNotification(notif *mastodon.Notification) {
+func (mod *MastodonBee) handleNotification(notif *mastodon.Notification) {
 	switch notif.Type {
 
 	case "follow":
