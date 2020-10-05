@@ -102,5 +102,6 @@ require (
 	gopkg.in/ini.v1 v1.42.0 // indirect
 	gopkg.in/mail.v2 v2.3.1 // indirect
 	gopkg.in/mgo.v2 v2.0.0-20180705113604-9856a29383ce // indirect
+	gopkg.in/yaml.v2 v2.3.0
 	layeh.com/gumble v0.0.0-20180508205105-1ea1159c4956
 )
