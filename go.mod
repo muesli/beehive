@@ -49,6 +49,7 @@ require (
 	github.com/jpillora/backoff v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.6 // indirect
 	github.com/kelvins/sunrisesunset v0.0.0-20170601204625-14f1915ad4b4
+	github.com/kevinburke/go-bindata v3.21.0+incompatible // indirect
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
 	github.com/kr/pretty v0.1.0
 	github.com/kurrik/oauth1a v0.0.0-20151019171716-cb1b80e32dd4 // indirect
