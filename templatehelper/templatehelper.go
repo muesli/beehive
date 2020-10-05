@@ -74,10 +74,20 @@ var (
 			}
 			return items[len(items)-1], nil
 		},
+		"ContainsAny": func(target, subs string, other ...string) bool {
+			if len(other) == 0 {
+				return strings.ContainsAny(target, subs)
+			}
+			for _, another := range other {
+				if strings.Contains(target, another) {
+					return true
+				}
+			}
+			return strings.Contains(target, subs)
+		},
 		// strings functions
 		"Compare":      strings.Compare, // 1.5+ only
 		"Contains":     strings.Contains,
-		"ContainsAny":  strings.ContainsAny,
 		"Count":        strings.Count,
 		"EqualFold":    strings.EqualFold,
 		"HasPrefix":    strings.HasPrefix,

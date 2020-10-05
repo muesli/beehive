@@ -34,8 +34,13 @@ func Test_FuncMap_Positive(t *testing.T) {
 		{`{{if Contains "123" "2"}}ok{{end}}`, "ok"},
 		{`{{if Contains "123" "4"}}ok{{end}}`, ""},
 
+		// contains any of symbols
 		{`{{if ContainsAny "123" "24"}}ok{{end}}`, "ok"},
 		{`{{if ContainsAny "123" "45"}}ok{{end}}`, ""},
+		// contains any of strings
+		{`{{if ContainsAny "123456" "23" "78"}}ok{{end}}`, "ok"},
+		{`{{if ContainsAny "123456" "78" "23"}}ok{{end}}`, "ok"},
+		{`{{if ContainsAny "123456" "46" "24"}}ok{{end}}`, ""},
 
 		{`{{if EqualFold "HellO" "hello"}}ok{{end}}`, "ok"},
 		{`{{if EqualFold "ПривеТ" "привет"}}ok{{end}}`, "ok"},
