@@ -43,7 +43,7 @@ You can find even more official releases [here](https://github.com/muesli/beehiv
 
 ### From source
 
-Beehive requires Go 1.11 or higher. Make sure you have a working Go environment.
+Beehive requires Go 1.13 or higher. Make sure you have a working Go environment.
 See the [install instructions](http://golang.org/doc/install.html).
 
 The recommended way is to fetch the sources and run make.
