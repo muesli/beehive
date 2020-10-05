@@ -33,15 +33,6 @@ func NewFileBackend() *FileBackend {
 func (fs *FileBackend) Load(u *url.URL) (*Config, error) {
 	var config Config
 
-	if !exist(u.Path) {
-		return &Config{url: u}, nil
-	}
-
-	content, err := ioutil.ReadFile(u.Path)
-	if err != nil {
-		return &config, err
-	}
-
 	// detect file format by extension
 	if strings.HasSuffix(u.Path, ".yaml") {
 		fs.format = FormatYAML
@@ -49,6 +40,15 @@ func (fs *FileBackend) Load(u *url.URL) (*Config, error) {
 		fs.format = FormatYAML
 	} else {
 		fs.format = FormatJSON
+	}
+
+	if !exist(u.Path) {
+		return &Config{url: u}, nil
+	}
+
+	content, err := ioutil.ReadFile(u.Path)
+	if err != nil {
+		return &config, err
 	}
 
 	if fs.format == FormatYAML {
