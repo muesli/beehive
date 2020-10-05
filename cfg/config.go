@@ -15,6 +15,13 @@ const appName = "beehive"
 
 var cfgFileName = "beehive.conf"
 
+type Format int
+
+const (
+	FormatJSON Format = 0
+	FormatYAML Format = iota
+)
+
 // Config contains an entire configuration set for Beehive
 type Config struct {
 	Bees    []bees.BeeConfig
