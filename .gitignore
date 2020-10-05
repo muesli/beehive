@@ -29,6 +29,7 @@ _testmain.go
 *~
 beehive
 /beehive.conf
+/beehive.yaml
 
 # Texteditor-specific stuff
 .*.sw*
