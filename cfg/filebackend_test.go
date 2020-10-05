@@ -88,9 +88,13 @@ func TestFileSave(t *testing.T) {
 
 	// Save the config file to a new absolute path using a regular path
 	p = filepath.Join(tmpdir, "beehive.conf")
-	_, err = url.Parse(p)
+	u, err = url.Parse(p)
 	if err != nil {
 		t.Error("cannot parse config path")
+	}
+	err = c.SetURL(u.String())
+	if err != nil {
+		t.Error("cannot set url")
 	}
 	err = backend.Save(c)
 	if err != nil {
