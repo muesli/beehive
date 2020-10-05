@@ -26,6 +26,9 @@ func TestNew(t *testing.T) {
 	cwd, _ := os.Getwd()
 	p := filepath.Join(cwd, "testdata/beehive-crypto.conf")
 	conf, err = New(p)
+	if err != nil {
+		panic(err)
+	}
 	if _, ok := conf.Backend().(*AESBackend); !ok {
 		t.Errorf("Backend for '%s' should be an AESBackend", p)
 	}
@@ -38,12 +41,12 @@ func TestNew(t *testing.T) {
 		t.Error("Backend for 'mem:' should be a MemoryBackend")
 	}
 
-	conf, err = New("c:\\foobar")
+	_, err = New("c:\\foobar")
 	if err == nil {
 		t.Error("Not a valid URL, should return an error")
 	}
 
-	conf, err = New("")
+	_, err = New("")
 	if err == nil {
 		t.Error("Not a valid URL, should return an error")
 	}
