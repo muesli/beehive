@@ -34,6 +34,9 @@ import (
 // FuncMap contains a few convenient template helpers
 var (
 	FuncMap = template.FuncMap{
+		"Array": func(values ...interface{}) []interface{} {
+			return values
+		},
 		"JSON": func(values ...interface{}) htmlTemplate.JS {
 			json, _ := json.Marshal(values)
 			return htmlTemplate.JS(json)

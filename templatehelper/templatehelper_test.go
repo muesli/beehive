@@ -104,6 +104,11 @@ func Test_FuncMap_Positive(t *testing.T) {
 		{`{{TrimPrefix "123hello123" "231"}}`, "123hello123"},
 		{`{{TrimSuffix "123hello123" "123"}}`, "123hello"},
 		{`{{TrimSuffix "123hello123" "231"}}`, "123hello123"},
+
+		// OTHER FILTERS //
+		{`{{Array "oh" "hi" "mark"}}`, "[oh hi mark]"},
+		{`{{Count "why do you cry willy why do you cry why willy why" "why"}}`, "4"},
+		// ...
 	}
 
 	for _, tcase := range cases {
