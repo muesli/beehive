@@ -75,15 +75,28 @@ var (
 			return items[len(items)-1], nil
 		},
 		"ContainsAny": func(target, subs string, other ...string) bool {
+			// contains any symbol from the given string
 			if len(other) == 0 {
 				return strings.ContainsAny(target, subs)
 			}
+			// contains any of the given strings
 			for _, another := range other {
 				if strings.Contains(target, another) {
 					return true
 				}
 			}
 			return strings.Contains(target, subs)
+		},
+		"ContainsAll": func(target string, other ...string) (bool, error) {
+			if len(other) == 0 {
+				return false, errors.New("to find substring in a string, use Contains")
+			}
+			for _, another := range other {
+				if !strings.Contains(target, another) {
+					return false, nil
+				}
+			}
+			return true, nil
 		},
 		// strings functions
 		"Compare":      strings.Compare, // 1.5+ only

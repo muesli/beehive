@@ -21,12 +21,12 @@ func Test_FuncMap_Positive(t *testing.T) {
 		text     string
 		expected string
 	}{
-		// sanity checks
+		// SANITY CHECKS //
 
 		{`{{if true}}ok{{end}}`, "ok"},
 		{`{{if false}}ok{{end}}`, ""},
 
-		// boolean filters
+		// BOOLEAN FILTERS //
 
 		{`{{if Matches "123" "\\d+"}}ok{{end}}`, "ok"},
 		{`{{if Matches "hello" "\\d+"}}ok{{end}}`, ""},
@@ -42,6 +42,10 @@ func Test_FuncMap_Positive(t *testing.T) {
 		{`{{if ContainsAny "123456" "78" "23"}}ok{{end}}`, "ok"},
 		{`{{if ContainsAny "123456" "46" "24"}}ok{{end}}`, ""},
 
+		{`{{if ContainsAll "123456" "23" "56"}}ok{{end}}`, "ok"},
+		{`{{if ContainsAll "123456" "23" "78"}}ok{{end}}`, ""},
+		{`{{if ContainsAll "123456" "24" "35"}}ok{{end}}`, ""},
+
 		{`{{if EqualFold "HellO" "hello"}}ok{{end}}`, "ok"},
 		{`{{if EqualFold "ПривеТ" "привет"}}ok{{end}}`, "ok"},
 		{`{{if EqualFold "good" "goed"}}ok{{end}}`, ""},
@@ -52,7 +56,7 @@ func Test_FuncMap_Positive(t *testing.T) {
 		{`{{if HasSuffix "hello" "lo"}}ok{{end}}`, "ok"},
 		{`{{if HasSuffix "hello" "he"}}ok{{end}}`, ""},
 
-		// filters returning a string
+		// FILTERS RETURNING A STRING //
 
 		{`{{JSON 123}}`, "[123]"},
 
@@ -78,7 +82,28 @@ func Test_FuncMap_Positive(t *testing.T) {
 
 		{`{{Replace "1234" "23" "56" -1}}`, "1564"},
 		{`{{Replace "12223" "2" "5" 1}}`, "15223"},
-		// ...
+
+		{`{{Title "aragorn son of arathorn"}}`, "Aragorn Son Of Arathorn"},
+		{`{{Title "ǳ"}}`, "ǲ"},
+
+		{`{{ToTitle "aragorn son of arathorn"}}`, "ARAGORN SON OF ARATHORN"},
+		{`{{ToTitle "ǳ"}}`, "ǲ"},
+
+		{`{{ToLower "Aragorn Son Of Arathorn"}}`, "aragorn son of arathorn"},
+		{`{{ToLower "ǳ"}}`, "ǳ"},
+
+		{`{{ToUpper "Aragorn Son Of Arathorn"}}`, "ARAGORN SON OF ARATHORN"},
+		{`{{ToUpper "ǳ"}}`, "Ǳ"},
+
+		{`{{Trim "-_=oh=hi-mark---=" "=_-"}}`, "oh=hi-mark"},
+		{`{{TrimLeft "-_=oh=hi-mark---=" "=_-"}}`, "oh=hi-mark---="},
+		{`{{TrimRight "-_=oh=hi-mark---=" "=_-"}}`, "-_=oh=hi-mark"},
+		{`{{TrimSpace "  oh hi  mark \\n\\t  "}}`, "oh hi  mark \\n\\t"},
+
+		{`{{TrimPrefix "123hello123" "123"}}`, "hello123"},
+		{`{{TrimPrefix "123hello123" "231"}}`, "123hello123"},
+		{`{{TrimSuffix "123hello123" "123"}}`, "123hello"},
+		{`{{TrimSuffix "123hello123" "231"}}`, "123hello123"},
 	}
 
 	for _, tcase := range cases {
