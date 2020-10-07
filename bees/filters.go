@@ -22,6 +22,8 @@
 package bees
 
 import (
+	"strings"
+
 	log "github.com/sirupsen/logrus"
 
 	"github.com/muesli/beehive/filters"
@@ -35,9 +37,14 @@ type Filter struct {
 }
 
 // execFilter executes a filter. Returns whether the filter passed or not.
-func execFilter(filter string, opts map[string]interface{}) bool {
-	f := *filters.GetFilter("template")
-	log.Println("\tExecuting filter:", filter)
+func execFilter(source string, opts map[string]interface{}) bool {
+	name := "template"
+	if strings.Contains(source, "def main(") {
+		name := "starlark"
+	}
+
+	f := *filters.GetFilter(name)
+	log.Println("\tExecuting filter:", source)
 
 	defer func() {
 		if e := recover(); e != nil {
@@ -45,5 +52,5 @@ func execFilter(filter string, opts map[string]interface{}) bool {
 		}
 	}()
 
-	return f.Passes(opts, filter)
+	return f.Passes(opts, source)
 }

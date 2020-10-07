@@ -22,4 +22,9 @@ func TestStarlarkFilter(t *testing.T) {
 	if f.Passes(o, template) {
 		t.Error("must be false but it is not")
 	}
+
+	o["text"] = 1
+	if f.Passes(o, template) {
+		t.Error("must be false but it is not")
+	}
 }
