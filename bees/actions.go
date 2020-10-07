@@ -98,6 +98,9 @@ func execAction(action Action, opts map[string]interface{}) bool {
 	}
 
 	bee := GetBee(a.Bee)
+	if bee == nil {
+		log.Fatal("cannot find bee ", a.Bee)
+	}
 	if (*bee).IsRunning() {
 		(*bee).LogAction()
 
