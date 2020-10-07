@@ -18,8 +18,13 @@ RUN make embed
 FROM alpine
 
 RUN apk update && \
-    apk add --no-cache ca-certificates tzdata bash python2 && \
+    apk add --no-cache ca-certificates tzdata bash && \
     update-ca-certificates
+    
+# Uncomment to add additional scripting languages for CMD bee usage
+# Added as a new layer intentionally
+#RUN apk update && \
+#    apk add --no-cache python2 python3 perl ruby lua php # whatever else you want
 
 COPY --from=builder /go/beehive/beehive /go/bin/beehive
 
