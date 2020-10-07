@@ -43,14 +43,18 @@ func execFilter(source string, opts map[string]interface{}) bool {
 		name = "starlark"
 	}
 
-	f := *filters.GetFilter(name)
+	filter := filters.GetFilter(name)
+	if filter == nil {
+		log.Error("cannot find filter", name)
+		return false
+	}
 	log.Println("\tExecuting filter:", source)
 
 	defer func() {
 		if e := recover(); e != nil {
-			log.Println("Fatal filter event:", e)
+			log.Error("Fatal filter event:", e)
 		}
 	}()
 
-	return f.Passes(opts, source)
+	return (*filter).Passes(opts, source)
 }
