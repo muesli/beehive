@@ -3,6 +3,8 @@
 package starlarkfilter
 
 import (
+	"reflect"
+
 	"github.com/muesli/beehive/filters"
 	"go.starlark.net/starlark"
 )
@@ -22,17 +24,19 @@ func (filter *StarlarkFilter) Description() string {
 	return "This filter passes when `main` function returns True"
 }
 
-func (filter *StarlarkFilter) convert(v interface{}) starlark.Value {
-	switch val := v.(type) {
-	case string:
-		return starlark.String(val)
-	case bool:
-		return starlark.Bool(val)
-	case int:
-		return starlark.MakeInt(val)
-	case []interface{}:
-		vals := make([]starlark.Value, len(val))
-		for i, el := range val {
+func (filter *StarlarkFilter) convert(reflected reflect.Value) starlark.Value {
+	switch reflected.Kind() {
+	case reflect.Bool:
+		return starlark.Bool(reflected.Bool())
+	case reflect.String:
+		return starlark.String(reflected.String())
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return starlark.MakeInt64(reflected.Int())
+	case reflect.Slice:
+		count := reflected.Len()
+		vals := make([]starlark.Value, count)
+		for i := 0; i < count; i++ {
+			el := reflected.Index(i)
 			vals[i] = filter.convert(el)
 		}
 		return starlark.NewList(vals)
@@ -53,7 +57,7 @@ func (filter *StarlarkFilter) Passes(opts map[string]interface{}, template strin
 	for key, value := range opts {
 		arg := starlark.Tuple([]starlark.Value{
 			starlark.String(key),
-			filter.convert(value),
+			filter.convert(reflect.ValueOf(value)),
 		})
 		kwargs = append(kwargs, arg)
 	}
