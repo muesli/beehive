@@ -1,8 +1,9 @@
-// Package templatefilter provides a starlark-based filter.
+// Package starlarkfilter provides a starlark-based filter.
 // https://github.com/google/starlark-go
 package starlarkfilter
 
 import (
+	"fmt"
 	"reflect"
 
 	"github.com/muesli/beehive/filters"
@@ -40,8 +41,9 @@ func (filter *StarlarkFilter) convert(reflected reflect.Value) starlark.Value {
 			vals[i] = filter.convert(el)
 		}
 		return starlark.NewList(vals)
+	default:
+		panic(fmt.Sprintf("unknown type: %s", reflected.Kind()))
 	}
-	panic("unknown type")
 }
 
 // Passes returns true when the Filter matched the opts.
@@ -72,6 +74,5 @@ func (filter *StarlarkFilter) Passes(opts map[string]interface{}, template strin
 
 func init() {
 	f := StarlarkFilter{}
-
 	filters.RegisterFilter(&f)
 }

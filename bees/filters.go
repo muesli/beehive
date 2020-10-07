@@ -52,7 +52,7 @@ func execFilter(source string, opts map[string]interface{}) bool {
 
 	defer func() {
 		if e := recover(); e != nil {
-			log.Error("Fatal filter event:", e)
+			log.Error("Fatal filter event: ", e)
 		}
 	}()
 
