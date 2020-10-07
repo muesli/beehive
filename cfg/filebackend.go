@@ -44,7 +44,10 @@ func (fs *FileBackend) Load(u *url.URL) (*Config, error) {
 func (fs *FileBackend) Save(config *Config) error {
 	cfgDir := filepath.Dir(config.URL().Path)
 	if !exist(cfgDir) {
-		os.MkdirAll(cfgDir, 0755)
+		err := os.MkdirAll(cfgDir, 0755)
+		if err != nil {
+			return err
+		}
 	}
 
 	j, err := json.MarshalIndent(config, "", "  ")

@@ -183,9 +183,5 @@ func Lookup() string {
 
 func exist(file string) bool {
 	_, err := os.Stat(file)
-	if err == nil {
-		return true
-	}
-
-	return false
+	return err == nil
 }

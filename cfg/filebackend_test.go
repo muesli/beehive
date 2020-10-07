@@ -19,6 +19,9 @@ func TestFileLoad(t *testing.T) {
 
 	// try to load the config from a relative path
 	u, err = url.Parse(filepath.Join("testdata", "beehive.conf"))
+	if err != nil {
+		t.Error("cannot parse config path")
+	}
 	backend = NewFileBackend()
 	conf, err := backend.Load(u)
 	if err != nil {
@@ -31,6 +34,9 @@ func TestFileLoad(t *testing.T) {
 	// try to load the config from an absolute path using a URI
 	cwd, _ := os.Getwd()
 	u, err = url.Parse(filepath.Join("file://", cwd, "testdata", "beehive.conf"))
+	if err != nil {
+		t.Error("cannot parse config path")
+	}
 	backend = NewFileBackend()
 	conf, err = backend.Load(u)
 	if err != nil {
@@ -48,6 +54,9 @@ func TestFileSave(t *testing.T) {
 	}
 
 	u, err := url.Parse(filepath.Join("testdata", "beehive.conf"))
+	if err != nil {
+		t.Error("cannot parse config path")
+	}
 	backend := NewFileBackend()
 	c, err := backend.Load(u)
 	if err != nil {
@@ -57,7 +66,13 @@ func TestFileSave(t *testing.T) {
 	// Save the config file to a new absolute path using a URL
 	p := filepath.Join(tmpdir, "beehive.conf")
 	u, err = url.Parse("file://" + p)
-	c.SetURL(u.String())
+	if err != nil {
+		t.Error("cannot parse config path")
+	}
+	err = c.SetURL(u.String())
+	if err != nil {
+		t.Error("cannot set url")
+	}
 	backend = NewFileBackend()
 	err = backend.Save(c)
 	if err != nil {
@@ -74,6 +89,13 @@ func TestFileSave(t *testing.T) {
 	// Save the config file to a new absolute path using a regular path
 	p = filepath.Join(tmpdir, "beehive.conf")
 	u, err = url.Parse(p)
+	if err != nil {
+		t.Error("cannot parse config path")
+	}
+	err = c.SetURL(u.String())
+	if err != nil {
+		t.Error("cannot set url")
+	}
 	err = backend.Save(c)
 	if err != nil {
 		t.Errorf("Failed to save the config to %s", p)

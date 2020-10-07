@@ -72,7 +72,7 @@ func TestAESBackendLoad(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Can't create AES backend: %v", err)
 	}
-	conf, err = backend.Load(u)
+	_, err = backend.Load(u)
 	if err != nil {
 		t.Errorf("loading the config file using the environment password should work. %v", err)
 	}
@@ -88,7 +88,7 @@ func TestAESBackendLoad(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Can't create AES backend: %v", err)
 	}
-	conf, err = backend.Load(u)
+	_, err = backend.Load(u)
 	if err == nil || err.Error() != "cipher: message authentication failed" {
 		t.Errorf("loading the config file with an invalid password should fail. %v", err)
 	}
@@ -104,7 +104,7 @@ func TestAESBackendLoad(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Can't create AES backend: %v", err)
 	}
-	conf, err = backend.Load(u)
+	_, err = backend.Load(u)
 	if err != nil {
 		t.Errorf("the password defined in %s should take precedence. %v", PasswordEnvVar, err)
 	}
@@ -113,7 +113,7 @@ func TestAESBackendLoad(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Can't parse crypto URL: %v", err)
 	}
-	conf, err = backend.Load(u)
+	_, err = backend.Load(u)
 	if err == nil || err.Error() != "encrypted configuration header not valid" {
 		t.Errorf("the password defined in %s should take precedence. %v", PasswordEnvVar, err)
 	}
@@ -127,6 +127,9 @@ func TestAESBackendSave(t *testing.T) {
 
 	cwd, _ := os.Getwd()
 	u, err := url.Parse(filepath.Join("crypto://"+testPassword+"@", cwd, "testdata", "beehive-crypto.conf"))
+	if err != nil {
+		t.Error("cannot parse config url")
+	}
 	backend, _ := NewAESBackend(u)
 	c, err := backend.Load(u)
 	if err != nil {
@@ -136,7 +139,13 @@ func TestAESBackendSave(t *testing.T) {
 	// Save the config file to a new absolute path using a URL
 	p := filepath.Join(tmpdir, "beehive-crypto.conf")
 	u, err = url.Parse("crypto://" + testPassword + "@" + p)
-	c.SetURL(u.String())
+	if err != nil {
+		t.Error("cannot parse config url")
+	}
+	err = c.SetURL(u.String())
+	if err != nil {
+		t.Error("cannot set url")
+	}
 	backend, _ = NewAESBackend(u)
 	err = backend.Save(c)
 	if err != nil {

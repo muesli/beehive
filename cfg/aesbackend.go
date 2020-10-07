@@ -126,7 +126,10 @@ func (b *AESBackend) Save(config *Config) error {
 	u := config.URL()
 	cfgDir := filepath.Dir(u.Path)
 	if !exist(cfgDir) {
-		os.MkdirAll(cfgDir, 0755)
+		err := os.MkdirAll(cfgDir, 0755)
+		if err != nil {
+			return err
+		}
 	}
 
 	j, err := json.MarshalIndent(config, "", "  ")
