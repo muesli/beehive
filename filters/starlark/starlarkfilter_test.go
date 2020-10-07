@@ -56,6 +56,13 @@ func TestStarlarkFilter(t *testing.T) {
 		t.Error("[text in map] must be false but it is not")
 	}
 
+	// test pointer convertion
+	items := map[string]bool{"oh": true, "hi": true, "mark": true}
+	o["items"] = &items
+	if !f.Passes(o, template) {
+		t.Error("[text in map] must be true but it is not")
+	}
+
 	// test bool convertion
 	template = `
 	def main(res, **kwargs):

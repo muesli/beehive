@@ -63,6 +63,8 @@ func (filter *StarlarkFilter) convert(reflected reflect.Value) (starlark.Value, 
 			}
 		}
 		return result, nil
+	case reflect.Ptr:
+		return filter.convert(reflected.Elem())
 	}
 	if err != nil {
 		return nil, err
