@@ -29,7 +29,7 @@ type FilterInterface interface {
 	Description() string
 
 	// Execute the filter
-	Passes(data interface{}, value interface{}) bool
+	Passes(data map[string]interface{}, value string) bool
 }
 
 var (
