@@ -40,7 +40,7 @@ type Filter struct {
 func execFilter(source string, opts map[string]interface{}) bool {
 	name := "template"
 	if strings.Contains(source, "def main(") {
-		name := "starlark"
+		name = "starlark"
 	}
 
 	f := *filters.GetFilter(name)
