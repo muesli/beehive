@@ -38,6 +38,7 @@ import (
 	"github.com/muesli/beehive/app"
 	"github.com/muesli/beehive/cfg"
 	_ "github.com/muesli/beehive/filters"
+	_ "github.com/muesli/beehive/filters/starlark"
 	_ "github.com/muesli/beehive/filters/template"
 
 	"github.com/muesli/beehive/bees"
