@@ -5,6 +5,7 @@ import (
 )
 
 func TestStarlarkFilter(t *testing.T) {
+	t.Parallel()
 	f := StarlarkFilter{}
 
 	o := map[string]interface{}{}
@@ -13,21 +14,23 @@ func TestStarlarkFilter(t *testing.T) {
 		return text == 'good'
 	`
 
+	// test string convertion
 	o["text"] = "good"
 	if !f.Passes(o, template) {
 		t.Error("must be true but it is not")
 	}
-
 	o["text"] = "not-good"
 	if f.Passes(o, template) {
 		t.Error("must be false but it is not")
 	}
 
+	// test int convertion
 	o["text"] = 1
 	if f.Passes(o, template) {
 		t.Error("must be false but it is not")
 	}
 
+	// test slice convertion
 	template = `
 	def main(text, items):
 		return text in items
@@ -42,6 +45,18 @@ func TestStarlarkFilter(t *testing.T) {
 		t.Error("[text in items] must be false but it is not")
 	}
 
+	// test map convertion
+	o["text"] = "hi"
+	o["items"] = map[string]bool{"oh": true, "hi": true, "mark": true}
+	if !f.Passes(o, template) {
+		t.Error("[text in map] must be true but it is not")
+	}
+	o["items"] = map[string]bool{"oh": true, "hello": true, "mark": true}
+	if f.Passes(o, template) {
+		t.Error("[text in map] must be false but it is not")
+	}
+
+	// test bool convertion
 	template = `
 	def main(res, **kwargs):
 		return res
