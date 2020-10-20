@@ -6,31 +6,56 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"strings"
+
+	"gopkg.in/yaml.v2"
+)
+
+type Format int
+
+const (
+	FormatJSON Format = iota
+	FormatYAML        = iota
 )
 
 // FileBackend implements a filesystem backend for the configuration
-type FileBackend struct{}
+type FileBackend struct {
+	format Format
+}
 
 // NewFileBackend returns a FileBackend that handles loading and
 // saving files from the local filesytem.
 func NewFileBackend() *FileBackend {
-	return &FileBackend{}
+	return &FileBackend{format: FormatJSON}
 }
 
 // Load loads chains from config
 func (fs *FileBackend) Load(u *url.URL) (*Config, error) {
 	var config Config
 
+	// detect file format by extension
+	if strings.HasSuffix(u.Path, ".yaml") {
+		fs.format = FormatYAML
+	} else if strings.HasSuffix(u.Path, ".yml") {
+		fs.format = FormatYAML
+	} else {
+		fs.format = FormatJSON
+	}
+
 	if !exist(u.Path) {
 		return &Config{url: u}, nil
 	}
 
-	j, err := ioutil.ReadFile(u.Path)
+	content, err := ioutil.ReadFile(u.Path)
 	if err != nil {
 		return &config, err
 	}
 
-	err = json.Unmarshal(j, &config)
+	if fs.format == FormatYAML {
+		err = yaml.Unmarshal(content, &config)
+	} else {
+		err = json.Unmarshal(content, &config)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -50,10 +75,15 @@ func (fs *FileBackend) Save(config *Config) error {
 		}
 	}
 
-	j, err := json.MarshalIndent(config, "", "  ")
-	if err == nil {
-		err = ioutil.WriteFile(config.URL().Path, j, 0644)
+	var content []byte
+	var err error
+	if fs.format == FormatYAML {
+		content, err = yaml.Marshal(config)
+	} else {
+		content, err = json.MarshalIndent(config, "", "  ")
 	}
-
-	return err
+	if err != nil {
+		return err
+	}
+	return ioutil.WriteFile(config.URL().Path, content, 0644)
 }

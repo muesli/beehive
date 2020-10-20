@@ -1,0 +1,4 @@
+bees:
+  - name: echo
+    class: execbee
+    description: echo
