@@ -292,6 +292,7 @@ func (mod *TwitterBee) handleStream() {
 			return
 		case item := <-s.C:
 			mod.handleStreamEvent(item)
+			time.Sleep(time.Second)
 		}
 	}
 }
