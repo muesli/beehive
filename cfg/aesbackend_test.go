@@ -106,7 +106,7 @@ func TestAESBackendLoad(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Can't parse crypto URL: %v", err)
 	}
-	conf, err = backend.Load(u)
+	_, err = backend.Load(u)
 	if err == nil || err.Error() != "encrypted configuration header not valid" {
 		t.Errorf("Loading a non-encrypted config should error")
 	}
@@ -125,7 +125,7 @@ func TestAESBackendSave(t *testing.T) {
 	}
 
 	// Save the config file to a new absolute path using a URL
-	p := encryptedTempConf()
+	p = encryptedTempConf()
 	u, err = ParseURL("crypto://" + testPassword + "@" + p)
 	if err != nil {
 		t.Error("cannot parse config url")
@@ -137,7 +137,7 @@ func TestAESBackendSave(t *testing.T) {
 	backend, _ = NewAESBackend(u)
 	err = backend.Save(c)
 	if err != nil {
-		t.Errorf("failed to save the config to %s. %v", newURL, err)
+		t.Errorf("failed to save the config to %s. %v", u, err)
 	}
 	if !exist(p) {
 		t.Errorf("configuration file wasn't saved to %s", p)

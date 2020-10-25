@@ -1,11 +1,7 @@
 package cfg
 
 import (
-<<<<<<< HEAD
 	"io/ioutil"
-	"net/url"
-=======
->>>>>>> :lipstick:
 	"os"
 	"path/filepath"
 	"testing"
@@ -23,11 +19,7 @@ func TestFileLoad(t *testing.T) {
 	// try to load the config from a relative path
 	u, err = ParseURL(filepath.Join("testdata", "beehive.conf"))
 	if err != nil {
-<<<<<<< HEAD
-		t.Error("cannot parse config path")
-=======
 		t.Fatalf("Can't parse URL. %v", err)
->>>>>>> Test fixes
 	}
 	backend = NewFileBackend()
 	conf, err := backend.Load(u)
@@ -56,6 +48,7 @@ func TestFileLoad(t *testing.T) {
 }
 
 func TestFileSave(t *testing.T) {
+	tmpdir, err := ioutil.TempDir("", "beehivetest")
 	u, err := ParseURL(filepath.Join("testdata", "beehive.conf"))
 	if err != nil {
 		t.Fatalf("Can't parse URL. %v", err)
@@ -91,17 +84,10 @@ func TestFileSave(t *testing.T) {
 
 	// Save the config file to a new absolute path using a regular path
 	p = tmpConfPath()
-<<<<<<< HEAD
 	c.SetURL(p)
 	u, err = ParseURL(p)
 	if err != nil {
 		t.Error("cannot parse url")
-=======
-	c, err = New(p)
-	if err != nil {
-		t.Errorf("Error creating config file")
-
->>>>>>> moar test fixes
 	}
 	err = backend.Save(c)
 	if err != nil {
@@ -114,7 +100,7 @@ func TestFileSave(t *testing.T) {
 
 func Test_FileLoad_FileSave_YAML(t *testing.T) {
 	// load
-	u, err := url.Parse(filepath.Join("testdata", "beehive.yaml"))
+	u, err := ParseURL(filepath.Join("testdata", "beehive.yaml"))
 	if err != nil {
 		t.Error("cannot parse config path")
 	}
@@ -132,7 +118,7 @@ func Test_FileLoad_FileSave_YAML(t *testing.T) {
 		t.Error("Could not create temp directory")
 	}
 	p := filepath.Join(tmpdir, "beehive.yaml")
-	u, err = url.Parse("file://" + p)
+	u, err = ParseURL("file://" + p)
 	if err != nil {
 		t.Error("cannot parse config path")
 	}

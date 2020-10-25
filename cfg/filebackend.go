@@ -31,7 +31,6 @@ func NewFileBackend() *FileBackend {
 // Load loads chains from config
 func (fs *FileBackend) Load(u *URL) (*Config, error) {
 	var config Config
-	fixWinURL(u)
 
 	// detect file format by extension
 	if strings.HasSuffix(u.Path, ".yaml") {
