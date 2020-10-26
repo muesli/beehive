@@ -132,7 +132,7 @@ func (mod *FacebookBee) handleStream(since string) (string, error) {
 		ClientID:     mod.clientID,
 		ClientSecret: mod.clientSecret,
 		RedirectURL:  api.CanonicalURL().String() + "/" + path.Join("oauth2", mod.Namespace(), mod.clientID, mod.clientSecret),
-		Scopes:       []string{"public_profile", "publish_actions"},
+		Scopes:       []string{"public_profile", "pages_manage_posts", "publish_to_groups", "pages_read_engagement"},
 		Endpoint:     oauth2fb.Endpoint,
 	}
 
