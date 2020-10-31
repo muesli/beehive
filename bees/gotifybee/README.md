@@ -1,4 +1,4 @@
-# AlertOverbee
+# GotifyBee
 
 This bee can push notification to the specified gotify application as an action to some event.
 
