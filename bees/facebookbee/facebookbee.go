@@ -22,6 +22,9 @@
 package facebookbee
 
 import (
+	"io"
+	"io/ioutil"
+	"net/http"
 	"net/url"
 	"path"
 	"strconv"
@@ -83,23 +86,29 @@ func (mod *FacebookBee) Action(action bees.Action) []bees.Placeholder {
 		mod.Logf("Attempting to post \"%s\" to Facebook Page \"%s\"", text, mod.pageId)
 
 		// See https://developers.facebook.com/docs/pages/publishing#before-you-start
-		params := facebook.Params{}
-		params["message"] = text
-		params["access_token"] = mod.pageAccessToken
+		baseURL := "https://graph.facebook.com/" + mod.pageId + "/feed"
+		v := url.Values{}
+		v.Set("message", text)
+		v.Set("access_token", mod.pageAccessToken)
+		graphUrl := baseURL + "?" + v.Encode()
 
-		res, err := mod.session.Post(mod.pageId + "/feed", params)
-		if err != nil {
-			// err can be an facebook API error.
-			// if so, the Error struct contains error details.
-			if e, ok := err.(*facebook.Error); ok {
-				mod.LogErrorf("Error: [message:%v] [type:%v] [code:%v] [subcode:%v]",
-					e.Message, e.Type, e.Code, e.ErrorSubcode)
-				return outs
-			}
-			mod.LogErrorf(err.Error())
-		} else if res != nil {
-			mod.Logf("Facebook Page post id: \"%s\"", res.Get("id"))
+		var buf io.ReadWriter
+		res, err := http.Post(graphUrl, "", buf)
+
+		if err != nil || res == nil {
+			mod.LogErrorf("Posting to Facebook Page failed: %v", err)
+			return outs
 		}
+
+		defer res.Body.Close()
+		body, err := ioutil.ReadAll(res.Body)
+
+		if err != nil {
+			mod.LogErrorf("Reading content from post request to Facebook Page failed: %v", err)
+			return outs
+		}
+
+		mod.Logf("Facebook Page post: \"%s\"", body)
 
 	default:
 		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
