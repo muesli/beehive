@@ -130,6 +130,16 @@ func (factory *FacebookBeeFactory) Options() []bees.BeeOptionDescriptor {
 			Description: "Access token for the Facebook API",
 			Type:        "oauth2:" + u.String(),
 		},
+		{
+			Name:        "page_id",
+			Description: "Page ID of your Facebook page (see wiki)",
+			Type:        "string",
+		},
+		{
+			Name:        "page_access_token",
+			Description: "Page access token for the Facebook API (see wiki)",
+			Type:        "oauth2:" + u.String(),
+		},
 	}
 	return opts
 }

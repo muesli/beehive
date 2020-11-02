@@ -39,9 +39,11 @@ import (
 type FacebookBee struct {
 	bees.Bee
 
-	clientID     string
-	clientSecret string
-	accessToken  string
+	clientID        string
+	clientSecret    string
+	accessToken     string
+	pageId          string
+	pageAccessToken string
 
 	session *facebook.Session
 
@@ -78,12 +80,14 @@ func (mod *FacebookBee) Action(action bees.Action) []bees.Placeholder {
 	case "post":
 		var text string
 		action.Options.Bind("text", &text)
-		mod.Logf("Attempting to post \"%s\" to Facebook", text)
+		mod.Logf("Attempting to post \"%s\" to Facebook Page \"%s\"", text, mod.pageId)
 
+		// See https://developers.facebook.com/docs/pages/publishing#before-you-start
 		params := facebook.Params{}
 		params["message"] = text
+		params["access_token"] = mod.pageAccessToken
 
-		_, err := mod.session.Post("/me/feed", params)
+		res, err := mod.session.Post(mod.pageId + "/feed", params)
 		if err != nil {
 			// err can be an facebook API error.
 			// if so, the Error struct contains error details.
@@ -93,6 +97,8 @@ func (mod *FacebookBee) Action(action bees.Action) []bees.Placeholder {
 				return outs
 			}
 			mod.LogErrorf(err.Error())
+		} else if res != nil {
+			mod.Logf("Facebook Page post id: \"%s\"", res.Get("id"))
 		}
 
 	default:
@@ -190,4 +196,6 @@ func (mod *FacebookBee) ReloadOptions(options bees.BeeOptions) {
 	options.Bind("client_id", &mod.clientID)
 	options.Bind("client_secret", &mod.clientSecret)
 	options.Bind("access_token", &mod.accessToken)
+	options.Bind("page_id", &mod.pageId)
+	options.Bind("page_access_token", &mod.pageAccessToken)
 }
