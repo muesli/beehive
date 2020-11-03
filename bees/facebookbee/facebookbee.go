@@ -102,9 +102,13 @@ func (mod *FacebookBee) handlePermanentPageToken() {
 	}
 
 	pageToken := mod.fetchPermanentPageAccessToken(accountID, longToken)
+	mod.Logf("Permanent pageToken: \"%s\"", pageToken)
+
 	setRes := mod.SetOption("page_access_token", pageToken)
 
-	mod.Logf("Permanent pageToken: \"%s\" (stored: %s)", pageToken, setRes)
+	if !setRes {
+		mod.LogErrorf("Permanent pageToken could not be stored!")
+	}
 }
 
 func (mod *FacebookBee) fetchLongLivedUserAccessToken() string {
