@@ -25,6 +25,7 @@ import (
 	"encoding/json"
 	"io"
 	"io/ioutil"
+	"jaytaylor.com/html2text"
 	"net/http"
 	"net/url"
 	"path"
@@ -238,6 +239,13 @@ func (mod *FacebookBee) Action(action bees.Action) []bees.Placeholder {
 		var text string
 		action.Options.Bind("text", &text)
 		mod.Logf("Attempting to post \"%s\" to Facebook Page \"%s\"", text, mod.pageID)
+
+		// transform possible html in the text
+		textNoHtml, err := html2text.FromString(text, html2text.Options{PrettyTables: true})
+
+		if err == nil {
+			text = textNoHtml
+		}
 
 		// See https://developers.facebook.com/docs/pages/publishing#before-you-start
 		baseURL := "https://graph.facebook.com/" + mod.pageID + "/feed"

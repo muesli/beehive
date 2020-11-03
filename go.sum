@@ -120,8 +120,6 @@ github.com/jtolds/gls v4.20.0+incompatible h1:xdiiI2gbIgH/gLH7ADydsJ1uDOEzR8yvV7
 github.com/jtolds/gls v4.20.0+incompatible/go.mod h1:QJZ7F/aHp+rZTRtaJ1ow/lLfFfVYBRgL+9YlvaHOwJU=
 github.com/kelvins/sunrisesunset v0.0.0-20170601204625-14f1915ad4b4 h1:8GEzGYjqXcb1PW2RFrkbsv7Gzq4v9ykbjy6lUc9nbnM=
 github.com/kelvins/sunrisesunset v0.0.0-20170601204625-14f1915ad4b4/go.mod h1:3oZ7G+fb8Z8KF+KPHxeDO3GWpEjgvk/f+d/yaxmDRT4=
-github.com/kevinburke/go-bindata v3.21.0+incompatible h1:baK7hwFJDlAHrOqmE9U3u8tow1Uc5ihN9E/b7djcK2g=
-github.com/kevinburke/go-bindata v3.21.0+incompatible/go.mod h1:/pEEZ72flUW2p0yi30bslSp9YqD9pysLxunQDdb2CPM=
 github.com/konsorten/go-windows-terminal-sequences v1.0.1/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
 github.com/konsorten/go-windows-terminal-sequences v1.0.2 h1:DB17ag19krx9CFsz4o3enTrPXyIXCl+2iCXH/aMAp9s=
 github.com/konsorten/go-windows-terminal-sequences v1.0.2/go.mod h1:T0+1ngSBFLxvqU3pZ+m/2kptfBszLMUkC4ZK/EgS/cQ=
@@ -320,5 +318,7 @@ gopkg.in/yaml.v2 v2.2.4 h1:/eiJrUcujPVeJ3xlSWaiNi3uSVmDGBK1pDHUHAnao1I=
 gopkg.in/yaml.v2 v2.2.4/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
 gopkg.in/yaml.v2 v2.3.0 h1:clyUAQHOM3G0M3f5vQj7LuJrETvjVot3Z5el9nffUtU=
 gopkg.in/yaml.v2 v2.3.0/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
+jaytaylor.com/html2text v0.0.0-20200412013138-3577fbdbcff7 h1:mub0MmFLOn8XLikZOAhgLD1kXJq8jgftSrrv7m00xFo=
+jaytaylor.com/html2text v0.0.0-20200412013138-3577fbdbcff7/go.mod h1:OxvTsCwKosqQ1q7B+8FwXqg4rKZ/UG9dUW+g/VL2xH4=
 layeh.com/gumble v0.0.0-20180508205105-1ea1159c4956 h1:TaQ2ECrcAom2bkjRvOxhsUkD6l5iiCJ/++lHHZ42zII=
 layeh.com/gumble v0.0.0-20180508205105-1ea1159c4956/go.mod h1:ZWnZxbDNsg1uFq6Zu7mRdCi7xechwiqWYsFdedd0GUc=
