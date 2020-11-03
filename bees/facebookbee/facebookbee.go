@@ -30,6 +30,7 @@ import (
 	"net/url"
 	"path"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/huandu/facebook"
@@ -244,7 +245,6 @@ func (mod *FacebookBee) Action(action bees.Action) []bees.Placeholder {
 	case "post":
 		var text string
 		action.Options.Bind("text", &text)
-		mod.Logf("Attempting to post \"%s\" to Facebook Page \"%s\"", text, mod.pageID)
 
 		// transform possible html in the text
 		textNoHtml, err := html2text.FromString(text, html2text.Options{PrettyTables: true})
@@ -253,12 +253,20 @@ func (mod *FacebookBee) Action(action bees.Action) []bees.Placeholder {
 			text = textNoHtml
 		}
 
+		// newline workaround for html2text
+		text = strings.Replace(text, "[NEWLINE]", "\n", -1)
+
+		mod.Logf("Attempting to post \"%s\" to Facebook Page \"%s\"", text, mod.pageID)
+
 		// See https://developers.facebook.com/docs/pages/publishing#before-you-start
 		baseURL := "https://graph.facebook.com/" + mod.pageID + "/feed"
 		v := url.Values{}
 		v.Set("message", text)
 		v.Set("access_token", mod.pageAccessToken)
 		graphUrl := baseURL + "?" + v.Encode()
+
+		//mod.Logf("graphUrl: \"%s\"", graphUrl)
+		//return outs
 
 		var buf io.ReadWriter
 		res, err := http.Post(graphUrl, "", buf)
