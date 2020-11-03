@@ -22,6 +22,7 @@
 package facebookbee
 
 import (
+	"encoding/json"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -45,7 +46,7 @@ type FacebookBee struct {
 	clientID        string
 	clientSecret    string
 	accessToken     string
-	pageId          string
+	pageID          string
 	pageAccessToken string
 
 	session *facebook.Session
@@ -55,6 +56,7 @@ type FacebookBee struct {
 
 // Run executes the Bee's event loop.
 func (mod *FacebookBee) Run(eventChan chan bees.Event) {
+	mod.handlePermanentPageToken()
 	mod.evchan = eventChan
 
 	since := strconv.FormatInt(time.Now().UTC().Unix(), 10)
@@ -76,6 +78,158 @@ func (mod *FacebookBee) Run(eventChan chan bees.Event) {
 	}
 }
 
+func (mod *FacebookBee) handlePermanentPageToken() {
+	if mod.pageAccessToken != "" {
+		// return
+	}
+
+	mod.Logf("Attempting to fetch long lived user access token")
+
+	longToken := mod.fetchLongLivedUserAccessToken()
+
+	if longToken == "" {
+		mod.LogErrorf("No long lived user access token!")
+		return
+	}
+
+	// mod.Logf("Long lived user access token: \"%s\"", longToken)
+	accountID := mod.fetchAccountID(longToken)
+
+	if accountID == "" {
+		mod.LogErrorf("No account id!")
+		return
+	}
+
+	pageToken := mod.fetchPermanentPageAccessToken(accountID, longToken)
+	mod.Logf("pageToken: \"%s\"", pageToken)
+}
+
+func (mod *FacebookBee) fetchLongLivedUserAccessToken() string {
+	// See https://developers.facebook.com/docs/pages/access-tokens/#get-a-long-lived-user-access-token
+	baseURL := "https://graph.facebook.com/oauth/access_token"
+	v := url.Values{}
+	v.Set("grant_type", "fb_exchange_token")
+	v.Set("client_id", mod.clientID)
+	v.Set("client_secret", mod.clientSecret)
+	v.Set("fb_exchange_token", mod.accessToken)
+	graphUrl := baseURL + "?" + v.Encode()
+
+	res, err := http.Get(graphUrl)
+
+	if err != nil || res == nil {
+		mod.LogErrorf("Fetching long lived user access token failed: %v", err)
+		return ""
+	}
+
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+
+	if err != nil {
+		mod.LogErrorf("Reading content while fetching long lived user access token failed: %v", err)
+		return ""
+	}
+
+	// mod.Logf("Long lived user access token result: \"%s\"", body)
+
+	type RequestResult struct {
+		AccessToken string `json:"access_token"`
+	}
+
+	var tokenRes RequestResult
+	err = json.Unmarshal(body, &tokenRes)
+
+	if err != nil {
+		mod.LogErrorf("Parsing result while fetching long lived user access token failed: %v", err)
+		return ""
+	}
+
+	return tokenRes.AccessToken
+}
+
+func (mod *FacebookBee) fetchAccountID(accessToken string) string {
+	baseURL := "https://graph.facebook.com/v8.0/me"
+	v := url.Values{}
+	v.Set("access_token", accessToken)
+	v.Set("fields", "id")
+	graphUrl := baseURL + "?" + v.Encode()
+
+	res, err := http.Get(graphUrl)
+
+	if err != nil || res == nil {
+		mod.LogErrorf("Fetching user id failed: %v", err)
+		return ""
+	}
+
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+
+	if err != nil {
+		mod.LogErrorf("Reading content while fetching user id failed: %v", err)
+		return ""
+	}
+
+	// mod.Logf("user id result: \"%s\"", body)
+
+	type RequestResult struct {
+		ID string `json:"id"`
+	}
+
+	var tokenRes RequestResult
+	err = json.Unmarshal(body, &tokenRes)
+
+	if err != nil {
+		mod.LogErrorf("Parsing result while fetching user id failed: %v", err)
+		return ""
+	}
+
+	return tokenRes.ID
+}
+
+func (mod *FacebookBee) fetchPermanentPageAccessToken(accountID string, accessToken string) string {
+	// the method in https://developers.facebook.com/docs/pages/access-tokens/#get-a-page-access-token doesn't work!
+	// https://github.com/Bnjis/Facebook-permanent-token-generator/blob/master/src/components/Form.js helped a lot
+	baseURL := "https://graph.facebook.com/v8.0/" + accountID + "/accounts"
+	v := url.Values{}
+	v.Set("access_token", accessToken)
+	graphUrl := baseURL + "?" + v.Encode()
+
+	// var buf io.ReadWriter
+	res, err := http.Get(graphUrl)
+
+	if err != nil || res == nil {
+		mod.LogErrorf("Fetching page token failed: %v", err)
+		return ""
+	}
+
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+
+	if err != nil {
+		mod.LogErrorf("Reading content while fetching page token failed: %v", err)
+		return ""
+	}
+
+	// mod.Logf("Page token result: \"%s\"", body)
+
+	type RequestResultInner struct {
+		AccessToken string `json:"access_token"`
+	}
+
+	type RequestResult struct {
+		Data []RequestResultInner `json:"data"`
+	}
+
+	var tokenRes RequestResult
+	err = json.Unmarshal(body, &tokenRes)
+
+	if err != nil {
+		mod.LogErrorf("Parsing result while fetching page token failed: %v", err)
+		return ""
+	}
+
+	return tokenRes.Data[0].AccessToken
+}
+
 // Action triggers the action passed to it.
 func (mod *FacebookBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
@@ -83,10 +237,10 @@ func (mod *FacebookBee) Action(action bees.Action) []bees.Placeholder {
 	case "post":
 		var text string
 		action.Options.Bind("text", &text)
-		mod.Logf("Attempting to post \"%s\" to Facebook Page \"%s\"", text, mod.pageId)
+		mod.Logf("Attempting to post \"%s\" to Facebook Page \"%s\"", text, mod.pageID)
 
 		// See https://developers.facebook.com/docs/pages/publishing#before-you-start
-		baseURL := "https://graph.facebook.com/" + mod.pageId + "/feed"
+		baseURL := "https://graph.facebook.com/" + mod.pageID + "/feed"
 		v := url.Values{}
 		v.Set("message", text)
 		v.Set("access_token", mod.pageAccessToken)
@@ -205,6 +359,6 @@ func (mod *FacebookBee) ReloadOptions(options bees.BeeOptions) {
 	options.Bind("client_id", &mod.clientID)
 	options.Bind("client_secret", &mod.clientSecret)
 	options.Bind("access_token", &mod.accessToken)
-	options.Bind("page_id", &mod.pageId)
+	options.Bind("page_id", &mod.pageID)
 	options.Bind("page_access_token", &mod.pageAccessToken)
 }
