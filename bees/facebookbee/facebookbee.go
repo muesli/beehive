@@ -81,7 +81,7 @@ func (mod *FacebookBee) Run(eventChan chan bees.Event) {
 
 func (mod *FacebookBee) handlePermanentPageToken() {
 	if mod.pageAccessToken != "" {
-		// return
+		return
 	}
 
 	mod.Logf("Attempting to fetch long lived user access token")
@@ -102,7 +102,9 @@ func (mod *FacebookBee) handlePermanentPageToken() {
 	}
 
 	pageToken := mod.fetchPermanentPageAccessToken(accountID, longToken)
-	mod.Logf("pageToken: \"%s\"", pageToken)
+	setRes := mod.SetOption("page_access_token", pageToken)
+
+	mod.Logf("Permanent pageToken: \"%s\" (stored: %s)", pageToken, setRes)
 }
 
 func (mod *FacebookBee) fetchLongLivedUserAccessToken() string {
