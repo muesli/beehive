@@ -62,7 +62,7 @@ func (mod *FacebookBee) Run(eventChan chan bees.Event) {
 	err := mod.handlePermanentPageToken()
 
 	if err != nil {
-		mod.LogErrorf("Error while handling permanent page token: %w", err)
+		mod.LogErrorf("Error while handling permanent page token: %v", err)
 	}
 
 	mod.evchan = eventChan
@@ -272,7 +272,7 @@ func (mod *FacebookBee) Action(action bees.Action) []bees.Placeholder {
 		res, err := http.Post(graphUrl, "", buf)
 
 		if err != nil || res == nil {
-			mod.LogErrorf("Posting to Facebook Page failed: %w", err)
+			mod.LogErrorf("Posting to Facebook Page failed: %v", err)
 			return outs
 		}
 
@@ -280,7 +280,7 @@ func (mod *FacebookBee) Action(action bees.Action) []bees.Placeholder {
 		body, err := ioutil.ReadAll(res.Body)
 
 		if err != nil {
-			mod.LogErrorf("Reading content from post request to Facebook Page failed: %w", err)
+			mod.LogErrorf("Reading content from post request to Facebook Page failed: %v", err)
 			return outs
 		}
 
