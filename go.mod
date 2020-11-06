@@ -49,7 +49,6 @@ require (
 	github.com/jpillora/backoff v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.6 // indirect
 	github.com/kelvins/sunrisesunset v0.0.0-20170601204625-14f1915ad4b4
-	github.com/kevinburke/go-bindata v3.21.0+incompatible // indirect
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
 	github.com/kr/pretty v0.1.0
 	github.com/kurrik/oauth1a v0.0.0-20151019171716-cb1b80e32dd4 // indirect
@@ -104,5 +103,6 @@ require (
 	gopkg.in/mail.v2 v2.3.1 // indirect
 	gopkg.in/mgo.v2 v2.0.0-20180705113604-9856a29383ce // indirect
 	gopkg.in/yaml.v2 v2.3.0
+	jaytaylor.com/html2text v0.0.0-20200412013138-3577fbdbcff7
 	layeh.com/gumble v0.0.0-20180508205105-1ea1159c4956
 )

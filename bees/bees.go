@@ -264,6 +264,19 @@ func (bee *Bee) SetOptions(options BeeOptions) {
 	bee.config.Options = options
 }
 
+// SetOption sets one option for a bee.
+func (bee *Bee) SetOption(name string, value string) bool {
+	for i := 0 ; i < len(bee.config.Options); i++ {
+		if bee.config.Options[i].Name == name {
+			bee.config.Options[i].Value = value
+
+			return true
+		}
+	}
+
+	return false
+}
+
 // SetSigChan sets the signaling channel for a bee.
 func (bee *Bee) SetSigChan(c chan bool) {
 	bee.SigChan = c
