@@ -49,10 +49,16 @@ type IrcBee struct {
 	ssl      bool
 }
 
+func sendLines(to string, msg string, sendFunc func(string, string)) {
+	for _, s := range strings.Split(msg, "\n") {
+		sendFunc(to, s)
+	}
+}
+
 // Action triggers the action passed to it.
 func (mod *IrcBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
-	var sendFunc func(t, msg string)
+	var sendFunc func(to, msg string)
 
 	switch action.Name {
 	case "notice":
@@ -76,7 +82,7 @@ func (mod *IrcBee) Action(action bees.Action) []bees.Placeholder {
 			if recv == "*" {
 				// special: send to all joined channels
 				for _, to := range mod.channels {
-					sendFunc(to, text)
+					sendLines(to, text, sendFunc)
 				}
 			} else {
 				// needs stripping hostname when sending to user!host
@@ -84,7 +90,7 @@ func (mod *IrcBee) Action(action bees.Action) []bees.Placeholder {
 					recv = recv[0:strings.Index(recv, "!")]
 				}
 
-				sendFunc(recv, text)
+				sendLines(recv, text, sendFunc)
 			}
 		}
 
