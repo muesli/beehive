@@ -39,6 +39,9 @@ type RSSBee struct {
 	// decides whether the next fetch should be skipped
 	skipNextFetch bool
 
+	// decides whether only the newest item from the next fetch should to get through
+	skipNextFetchAllowNewest bool
+
 	eventChan chan bees.Event
 }
 
@@ -130,6 +133,12 @@ func (mod *RSSBee) itemHandler(feed *rss.Feed, ch *rss.Channel, newitems []*rss.
 		}
 
 		mod.eventChan <- newitemEvent
+
+		if mod.skipNextFetchAllowNewest == true {
+			// the first time only let the newest item pass
+			mod.skipNextFetchAllowNewest = false
+			break
+		}
 	}
 	mod.Logf("%d new item(s) in %s", len(newitems), feed.Url)
 }
@@ -166,5 +175,6 @@ func (mod *RSSBee) ReloadOptions(options bees.BeeOptions) {
 	mod.SetOptions(options)
 
 	options.Bind("skip_first", &mod.skipNextFetch)
+	options.Bind("skip_first_allow_newest", &mod.skipNextFetchAllowNewest)
 	options.Bind("url", &mod.url)
 }
