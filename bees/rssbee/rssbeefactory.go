@@ -80,6 +80,13 @@ func (factory *RSSBeeFactory) Options() []bees.BeeOptionDescriptor {
 			Mandatory:   false,
 			Default:     false,
 		},
+		{
+			Name:        "skip_first_allow_newest",
+			Description: "Whether to skip already existing entries, but allow the newest item to get through once",
+			Type:        "bool",
+			Mandatory:   false,
+			Default:     false,
+		},
 	}
 	return opts
 }
