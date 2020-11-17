@@ -50,7 +50,7 @@ func (mod *RSSBee) chanHandler(feed *rss.Feed, newchannels []*rss.Channel) {
 }
 
 func (mod *RSSBee) itemHandler(feed *rss.Feed, ch *rss.Channel, newitems []*rss.Item) {
-	if mod.skipNextFetch == true || mod.skipNextFetchAllowNewest {
+	if mod.skipNextFetch == true || mod.skipNextFetchAllowNewest == true {
 		mod.skipNextFetch = false
 		return
 	}
