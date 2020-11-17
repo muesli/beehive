@@ -66,6 +66,5 @@ func (filter *TemplateFilter) Passes(data map[string]interface{}, v string) bool
 
 func init() {
 	f := TemplateFilter{}
-
 	filters.RegisterFilter(&f)
 }
