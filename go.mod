@@ -62,15 +62,13 @@ require (
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/mreiferson/go-httpclient v0.0.0-20160630210159-31f0106b4474 // indirect
 	github.com/mrexodia/wray v0.0.0-20160318003008-78a2c1f284ff // indirect
-	github.com/muesli/clusters v0.0.0-20190807044042-ba9c57dd9228 // indirect
-	github.com/muesli/gamut v0.0.0-20190807050624-0d3f7d26a44e
+	github.com/muesli/gamut v0.2.0
 	github.com/muesli/go-app-paths v0.2.1
 	github.com/muesli/go-pkg-rss v0.0.0-20180307042412-3bef0f3126ec
 	github.com/muesli/go-pkg-xmlx v0.0.0-20151201012946-76f54ee73233 // indirect
 	github.com/muesli/go.hue v0.0.0-20140802040715-8aefcc693caf
 	github.com/muesli/goefa v0.0.0-20180507204150-08d8ee2555d2
 	github.com/muesli/gominatim v0.1.1-0.20200501135808-f6af22631c72
-	github.com/muesli/kmeans v0.0.0-20190917235210-80dfc71e6c5a // indirect
 	github.com/muesli/smolder v0.0.0-20190505085143-9c21fc7135ee
 	github.com/nicklaw5/helix v0.5.7
 	github.com/nlopes/slack v0.6.0
@@ -92,7 +90,6 @@ require (
 	github.com/ssor/bom v0.0.0-20170718123548-6386211fdfcf // indirect
 	github.com/stretchr/objx v0.2.0 // indirect
 	github.com/tomnomnom/linkheader v0.0.0-20180905144013-02ca5825eb80 // indirect
-	github.com/xrash/smetrics v0.0.0-20170218160415-a3153f7040e9 // indirect
 	golang.org/x/crypto v0.0.0-20190426145343-a29dc8fdc734
 	golang.org/x/oauth2 v0.0.0-20190402181905-9f3314589c9a
 	golang.org/x/text v0.3.2 // indirect
