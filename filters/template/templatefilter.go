@@ -45,28 +45,23 @@ func (filter *TemplateFilter) Description() string {
 }
 
 // Passes returns true when the Filter matched the data.
-func (filter *TemplateFilter) Passes(data interface{}, value interface{}) bool {
-	switch v := value.(type) {
-	case string:
-		var res bytes.Buffer
+func (filter *TemplateFilter) Passes(data map[string]interface{}, v string) bool {
+	var res bytes.Buffer
 
-		if strings.Index(v, "{{test") >= 0 {
-			v = strings.Replace(v, "{{test", "{{if", -1)
-			v += "true{{end}}"
-		}
-
-		tmpl, err := template.New("_" + v).Funcs(templatehelper.FuncMap).Parse(v)
-		if err == nil {
-			err = tmpl.Execute(&res, data)
-		}
-		if err != nil {
-			panic(err)
-		}
-
-		return strings.TrimSpace(res.String()) == "true"
+	if strings.Contains(v, "{{test") {
+		v = strings.Replace(v, "{{test", "{{if", -1)
+		v += "true{{end}}"
 	}
 
-	return false
+	tmpl, err := template.New("_" + v).Funcs(templatehelper.FuncMap).Parse(v)
+	if err == nil {
+		err = tmpl.Execute(&res, data)
+	}
+	if err != nil {
+		panic(err)
+	}
+
+	return strings.TrimSpace(res.String()) == "true"
 }
 
 func init() {

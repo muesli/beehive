@@ -1,6 +1,6 @@
 module github.com/muesli/beehive
 
-go 1.12
+go 1.13
 
 require (
 	github.com/ChimeraCoder/anaconda v2.0.0+incompatible
@@ -62,15 +62,13 @@ require (
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/mreiferson/go-httpclient v0.0.0-20160630210159-31f0106b4474 // indirect
 	github.com/mrexodia/wray v0.0.0-20160318003008-78a2c1f284ff // indirect
-	github.com/muesli/clusters v0.0.0-20190807044042-ba9c57dd9228 // indirect
-	github.com/muesli/gamut v0.0.0-20190807050624-0d3f7d26a44e
+	github.com/muesli/gamut v0.2.0
 	github.com/muesli/go-app-paths v0.2.1
 	github.com/muesli/go-pkg-rss v0.0.0-20180307042412-3bef0f3126ec
 	github.com/muesli/go-pkg-xmlx v0.0.0-20151201012946-76f54ee73233 // indirect
 	github.com/muesli/go.hue v0.0.0-20140802040715-8aefcc693caf
 	github.com/muesli/goefa v0.0.0-20180507204150-08d8ee2555d2
 	github.com/muesli/gominatim v0.1.1-0.20200501135808-f6af22631c72
-	github.com/muesli/kmeans v0.0.0-20190917235210-80dfc71e6c5a // indirect
 	github.com/muesli/smolder v0.0.0-20190505085143-9c21fc7135ee
 	github.com/nicklaw5/helix v0.5.7
 	github.com/nlopes/slack v0.6.0
@@ -80,6 +78,7 @@ require (
 	github.com/onsi/gomega v1.9.0 // indirect
 	github.com/prometheus/client_golang v0.9.2
 	github.com/rdegges/go-ipify v0.0.0-20150526035502-2d94a6a86c40
+	github.com/robfig/cron/v3 v3.0.1
 	github.com/rogpeppe/go-charset v0.0.0-20180617210344-2471d30d28b4 // indirect
 	github.com/shuheiktgw/go-travis v0.1.10-0.20190502100712-2d0b3e9898f0
 	github.com/simplepush/simplepush-go v0.0.0-20170307205831-8980e96b7b02
@@ -90,9 +89,7 @@ require (
 	github.com/sromku/go-gitter v0.0.0-20170828210750-70f7030a94a6
 	github.com/ssor/bom v0.0.0-20170718123548-6386211fdfcf // indirect
 	github.com/stretchr/objx v0.2.0 // indirect
-	github.com/technoweenie/multipartstreamer v1.0.1 // indirect
 	github.com/tomnomnom/linkheader v0.0.0-20180905144013-02ca5825eb80 // indirect
-	github.com/xrash/smetrics v0.0.0-20170218160415-a3153f7040e9 // indirect
 	golang.org/x/crypto v0.0.0-20190426145343-a29dc8fdc734
 	golang.org/x/oauth2 v0.0.0-20190402181905-9f3314589c9a
 	golang.org/x/text v0.3.2 // indirect
@@ -102,5 +99,7 @@ require (
 	gopkg.in/ini.v1 v1.42.0 // indirect
 	gopkg.in/mail.v2 v2.3.1 // indirect
 	gopkg.in/mgo.v2 v2.0.0-20180705113604-9856a29383ce // indirect
+	gopkg.in/yaml.v2 v2.3.0
+	jaytaylor.com/html2text v0.0.0-20200412013138-3577fbdbcff7
 	layeh.com/gumble v0.0.0-20180508205105-1ea1159c4956
 )

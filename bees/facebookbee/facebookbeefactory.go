@@ -81,7 +81,7 @@ func (factory *FacebookBeeFactory) OAuth2AccessToken(id, secret, code string) (*
 		ClientID:     id,
 		ClientSecret: secret,
 		RedirectURL:  api.CanonicalURL().String() + "/" + path.Join("oauth2", factory.ID(), id, secret),
-		Scopes:       []string{"public_profile", "publish_actions"},
+		Scopes:       []string{"public_profile", "pages_manage_posts", "publish_to_groups", "pages_read_engagement"},
 		Endpoint:     oauth2fb.Endpoint,
 	}
 	token, err := conf.Exchange(oauth2.NoContext, code)
@@ -99,7 +99,7 @@ func (factory *FacebookBeeFactory) Options() []bees.BeeOptionDescriptor {
 		ClientID:     "__client_id__",
 		ClientSecret: "__client_secret__",
 		RedirectURL:  api.CanonicalURL().String() + "/" + path.Join("oauth2", factory.ID(), "__client_id__", "__client_secret__"),
-		Scopes:       []string{"public_profile", "publish_actions"},
+		Scopes:       []string{"public_profile", "pages_manage_posts", "publish_to_groups", "pages_read_engagement"},
 		Endpoint:     oauth2fb.Endpoint,
 	}
 	u, err := url.Parse(conf.Endpoint.AuthURL)
@@ -128,6 +128,16 @@ func (factory *FacebookBeeFactory) Options() []bees.BeeOptionDescriptor {
 		{
 			Name:        "access_token",
 			Description: "Access token for the Facebook API",
+			Type:        "oauth2:" + u.String(),
+		},
+		{
+			Name:        "page_id",
+			Description: "Page ID of your Facebook page (see wiki)",
+			Type:        "string",
+		},
+		{
+			Name:        "page_access_token",
+			Description: "Page access token for the Facebook API (leave blank to get a permanent token)",
 			Type:        "oauth2:" + u.String(),
 		},
 	}

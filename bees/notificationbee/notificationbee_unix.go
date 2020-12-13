@@ -25,7 +25,11 @@
 // Package notificationbee is a Bee that can trigger desktop notifications.
 package notificationbee
 
-import dbus "github.com/guelfey/go.dbus"
+import (
+	"fmt"
+
+	dbus "github.com/guelfey/go.dbus"
+)
 
 // Run executes the Bee's event loop.
 func (mod *NotificationBee) execAction(text string, urgency uint32) {
@@ -40,6 +44,6 @@ func (mod *NotificationBee) execAction(text string, urgency uint32) {
 		map[string]dbus.Variant{"urgency": dbus.MakeVariant(urgency)}, int32(5000))
 
 	if call.Err != nil {
-		mod.Logln("(" + string(urgency) + ") Failed to print message: " + text)
+		mod.Logln("(" + fmt.Sprint(urgency) + ") Failed to print message: " + text)
 	}
 }

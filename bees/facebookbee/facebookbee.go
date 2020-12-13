@@ -22,9 +22,16 @@
 package facebookbee
 
 import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"io/ioutil"
+	"jaytaylor.com/html2text"
+	"net/http"
 	"net/url"
 	"path"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/huandu/facebook"
@@ -39,9 +46,11 @@ import (
 type FacebookBee struct {
 	bees.Bee
 
-	clientID     string
-	clientSecret string
-	accessToken  string
+	clientID        string
+	clientSecret    string
+	accessToken     string
+	pageID          string
+	pageAccessToken string
 
 	session *facebook.Session
 
@@ -50,6 +59,12 @@ type FacebookBee struct {
 
 // Run executes the Bee's event loop.
 func (mod *FacebookBee) Run(eventChan chan bees.Event) {
+	err := mod.handlePermanentPageToken()
+
+	if err != nil {
+		mod.LogErrorf("Error while handling permanent page token: %v", err)
+	}
+
 	mod.evchan = eventChan
 
 	since := strconv.FormatInt(time.Now().UTC().Unix(), 10)
@@ -71,6 +86,158 @@ func (mod *FacebookBee) Run(eventChan chan bees.Event) {
 	}
 }
 
+func (mod *FacebookBee) handlePermanentPageToken() error {
+	if mod.pageAccessToken != "" {
+		return nil
+	}
+
+	mod.Logf("Attempting to fetch long lived user access token")
+
+	longToken, err := mod.fetchLongLivedUserAccessToken()
+
+	if longToken == "" || err != nil {
+		return fmt.Errorf("no long lived user access token: %w", err)
+	}
+
+	// mod.Logf("Long lived user access token: \"%s\"", longToken)
+	accountID, err := mod.fetchAccountID(longToken)
+
+	if accountID == "" || err != nil {
+		return fmt.Errorf("no account id: %w", err)
+	}
+
+	pageToken, err := mod.fetchPermanentPageAccessToken(accountID, longToken)
+
+	if pageToken == "" || err != nil {
+		return fmt.Errorf("no permanent page token: %w", err)
+	}
+
+	mod.Logf("Permanent pageToken: \"%s\"", pageToken)
+
+	setRes := mod.SetOption("page_access_token", pageToken)
+
+	if !setRes {
+		return fmt.Errorf("could not set permanent page token")
+	}
+
+	return nil
+}
+
+func (mod *FacebookBee) fetchLongLivedUserAccessToken() (string, error) {
+	// See https://developers.facebook.com/docs/pages/access-tokens/#get-a-long-lived-user-access-token
+	baseURL := "https://graph.facebook.com/oauth/access_token"
+	v := url.Values{}
+	v.Set("grant_type", "fb_exchange_token")
+	v.Set("client_id", mod.clientID)
+	v.Set("client_secret", mod.clientSecret)
+	v.Set("fb_exchange_token", mod.accessToken)
+	graphUrl := baseURL + "?" + v.Encode()
+
+	res, err := http.Get(graphUrl)
+
+	if err != nil || res == nil {
+		return "", fmt.Errorf("fetching long lived user access token failed: %w", err)
+	}
+
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+
+	if err != nil {
+		return "", fmt.Errorf("reading content while fetching long lived user access token failed: %w", err)
+	}
+
+	// mod.Logf("Long lived user access token result: \"%s\"", body)
+
+	type RequestResult struct {
+		AccessToken string `json:"access_token"`
+	}
+
+	var tokenRes RequestResult
+	err = json.Unmarshal(body, &tokenRes)
+
+	if err != nil {
+		return "", fmt.Errorf("parsing result while fetching long lived user access token failed: %w", err)
+	}
+
+	return tokenRes.AccessToken, nil
+}
+
+func (mod *FacebookBee) fetchAccountID(accessToken string) (string, error) {
+	baseURL := "https://graph.facebook.com/v8.0/me"
+	v := url.Values{}
+	v.Set("access_token", accessToken)
+	v.Set("fields", "id")
+	graphUrl := baseURL + "?" + v.Encode()
+
+	res, err := http.Get(graphUrl)
+
+	if err != nil || res == nil {
+		return "", fmt.Errorf("fetching user id failed: %w", err)
+	}
+
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+
+	if err != nil {
+		return "", fmt.Errorf("fetching user id failed: %w", err)
+	}
+
+	// mod.Logf("user id result: \"%s\"", body)
+
+	type RequestResult struct {
+		ID string `json:"id"`
+	}
+
+	var tokenRes RequestResult
+	err = json.Unmarshal(body, &tokenRes)
+
+	if err != nil {
+		return "", fmt.Errorf("parsing result while fetching user id failed: %w", err)
+	}
+
+	return tokenRes.ID, nil
+}
+
+func (mod *FacebookBee) fetchPermanentPageAccessToken(accountID string, accessToken string) (string, error) {
+	// the method in https://developers.facebook.com/docs/pages/access-tokens/#get-a-page-access-token doesn't work!
+	// https://github.com/Bnjis/Facebook-permanent-token-generator/blob/master/src/components/Form.js helped a lot
+	baseURL := "https://graph.facebook.com/v8.0/" + accountID + "/accounts"
+	v := url.Values{}
+	v.Set("access_token", accessToken)
+	graphUrl := baseURL + "?" + v.Encode()
+
+	// var buf io.ReadWriter
+	res, err := http.Get(graphUrl)
+
+	if err != nil || res == nil {
+		return "", fmt.Errorf("fetching page token failed: %w", err)
+	}
+
+	defer res.Body.Close()
+	body, err := ioutil.ReadAll(res.Body)
+
+	if err != nil {
+		return "", fmt.Errorf("reading content while fetching page token failed: %w", err)
+	}
+
+	// mod.Logf("Page token result: \"%s\"", body)
+
+	type RequestResult struct {
+		Data []struct {
+			AccessToken string `json:"access_token"`
+		} `json:"data"`
+	}
+
+	var tokenRes RequestResult
+	err = json.Unmarshal(body, &tokenRes)
+
+	if err != nil {
+		return "", fmt.Errorf("parsing result while fetching page token failed: %w", err)
+	}
+
+	return tokenRes.Data[0].AccessToken, nil
+}
+
 // Action triggers the action passed to it.
 func (mod *FacebookBee) Action(action bees.Action) []bees.Placeholder {
 	outs := []bees.Placeholder{}
@@ -78,22 +245,46 @@ func (mod *FacebookBee) Action(action bees.Action) []bees.Placeholder {
 	case "post":
 		var text string
 		action.Options.Bind("text", &text)
-		mod.Logf("Attempting to post \"%s\" to Facebook", text)
 
-		params := facebook.Params{}
-		params["message"] = text
+		// transform possible html in the text
+		textNoHtml, err := html2text.FromString(text, html2text.Options{PrettyTables: true})
 
-		_, err := mod.session.Post("/me/feed", params)
-		if err != nil {
-			// err can be an facebook API error.
-			// if so, the Error struct contains error details.
-			if e, ok := err.(*facebook.Error); ok {
-				mod.LogErrorf("Error: [message:%v] [type:%v] [code:%v] [subcode:%v]",
-					e.Message, e.Type, e.Code, e.ErrorSubcode)
-				return outs
-			}
-			mod.LogErrorf(err.Error())
+		if err == nil {
+			text = textNoHtml
 		}
+
+		// newline workaround for html2text
+		text = strings.Replace(text, "[NEWLINE]", "\n", -1)
+
+		mod.Logf("Attempting to post \"%s\" to Facebook Page \"%s\"", text, mod.pageID)
+
+		// See https://developers.facebook.com/docs/pages/publishing#before-you-start
+		baseURL := "https://graph.facebook.com/" + mod.pageID + "/feed"
+		v := url.Values{}
+		v.Set("message", text)
+		v.Set("access_token", mod.pageAccessToken)
+		graphUrl := baseURL + "?" + v.Encode()
+
+		//mod.Logf("graphUrl: \"%s\"", graphUrl)
+		//return outs
+
+		var buf io.ReadWriter
+		res, err := http.Post(graphUrl, "", buf)
+
+		if err != nil || res == nil {
+			mod.LogErrorf("Posting to Facebook Page failed: %v", err)
+			return outs
+		}
+
+		defer res.Body.Close()
+		body, err := ioutil.ReadAll(res.Body)
+
+		if err != nil {
+			mod.LogErrorf("Reading content from post request to Facebook Page failed: %v", err)
+			return outs
+		}
+
+		mod.Logf("Facebook Page post: \"%s\"", body)
 
 	default:
 		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
@@ -132,7 +323,7 @@ func (mod *FacebookBee) handleStream(since string) (string, error) {
 		ClientID:     mod.clientID,
 		ClientSecret: mod.clientSecret,
 		RedirectURL:  api.CanonicalURL().String() + "/" + path.Join("oauth2", mod.Namespace(), mod.clientID, mod.clientSecret),
-		Scopes:       []string{"public_profile", "publish_actions"},
+		Scopes:       []string{"public_profile", "pages_manage_posts", "publish_to_groups", "pages_read_engagement"},
 		Endpoint:     oauth2fb.Endpoint,
 	}
 
@@ -190,4 +381,6 @@ func (mod *FacebookBee) ReloadOptions(options bees.BeeOptions) {
 	options.Bind("client_id", &mod.clientID)
 	options.Bind("client_secret", &mod.clientSecret)
 	options.Bind("access_token", &mod.accessToken)
+	options.Bind("page_id", &mod.pageID)
+	options.Bind("page_access_token", &mod.pageAccessToken)
 }

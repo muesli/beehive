@@ -24,10 +24,11 @@
 package cronbee
 
 import (
+	"strings"
 	"time"
 
 	"github.com/muesli/beehive/bees"
-	"github.com/muesli/beehive/bees/cronbee/cron"
+	"github.com/robfig/cron/v3"
 )
 
 // CronBee is a Bee that acts like a time-based job scheduler (cron).
@@ -37,28 +38,37 @@ type CronBee struct {
 	eventChan chan bees.Event
 }
 
+func (mod *CronBee) runTask() {
+	mod.LogDebugf("Running cron task " + strings.Join(mod.input[:], " "))
+	event := bees.Event{
+		Bee:  mod.Name(),
+		Name: "time",
+		Options: []bees.Placeholder{
+			{
+				Name:  "timestamp",
+				Type:  "string",
+				Value: time.Now().Format(time.RFC3339),
+			},
+		},
+	}
+	mod.eventChan <- event
+}
+
 // Run executes the Bee's event loop.
 func (mod *CronBee) Run(eventChan chan bees.Event) {
 	mod.eventChan = eventChan
-	timer := cron.ParseInput(mod.input)
+	c := cron.New(cron.WithSeconds())
+	mod.LogDebugf("Scheduling " + strings.Join(mod.input[:], " "))
+	_, err := c.AddFunc(strings.Join(mod.input[:], " "), mod.runTask)
+	if err != nil {
+		mod.LogFatal(err)
+	}
+	c.Start()
+
 	for {
 		select {
 		case <-mod.SigChan:
 			return
-
-		case <-time.After(timer.DurationUntilNextEvent()):
-			event := bees.Event{
-				Bee:  mod.Name(),
-				Name: "time",
-				Options: []bees.Placeholder{
-					{
-						Name:  "timestamp",
-						Type:  "string",
-						Value: timer.GetNextEvent().Format(time.RFC3339),
-					},
-				},
-			}
-			mod.eventChan <- event
 		}
 	}
 }

@@ -22,7 +22,11 @@
 
 package telegrambee
 
-import "github.com/muesli/beehive/bees"
+import (
+	"fmt"
+
+	"github.com/muesli/beehive/bees"
+)
 
 // TelegramBeeFactory is a factory for TelegramBees.
 type TelegramBeeFactory struct {
@@ -129,6 +133,12 @@ func (factory *TelegramBeeFactory) Actions() []bees.ActionDescriptor {
 				Description: "Content of the message",
 				Type:        "string",
 				Mandatory:   true,
+			},
+			{
+				Name:        "parse_mode",
+				Description: fmt.Sprintf("Parse mode (%s, %s, or leave empty)", ModeHTML, ModeMarkdown),
+				Type:        "string",
+				Mandatory:   false,
 			},
 		},
 	}}
