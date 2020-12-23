@@ -509,6 +509,53 @@ func (factory *GitHubBeeFactory) Events() []bees.EventDescriptor {
 				},
 			},
 		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "release",
+			Description: "A new release has been published",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "public",
+					Description: "Indicates whether this was a public activity",
+					Type:        "string",
+				},
+				{
+					Name:        "repo",
+					Description: "The repository that the release belongs to",
+					Type:        "string",
+				},
+				{
+					Name:        "repo_url",
+					Description: "The repository's URL",
+					Type:        "url",
+				},
+				{
+					Name:        "username",
+					Description: "Username that published the release",
+					Type:        "string",
+				},
+				{
+					Name:        "event_id",
+					Description: "ID of the GitHub event",
+					Type:        "string",
+				},
+				{
+					Name:        "release_title",
+					Description: "The release title",
+					Type:        "string",
+				},
+				{
+					Name:        "release_tag_version",
+					Description: "The release tag version",
+					Type:        "string",
+				},
+				{
+					Name:        "release_description",
+					Description: "The release description",
+					Type:        "string",
+				},
+			},
+		},
 	}
 	return events
 }

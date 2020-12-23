@@ -30,6 +30,59 @@ import (
 	"github.com/muesli/beehive/bees"
 )
 
+func (mod *GitHubBee) handleReleaseEvent(event *github.Event) {
+	var b github.ReleaseEvent
+	json.Unmarshal(*event.RawPayload, &b)
+
+	ev := bees.Event{
+		Bee:  mod.Name(),
+		Name: "release",
+		Options: []bees.Placeholder{
+			{
+				Name:  "public",
+				Type:  "bool",
+				Value: *event.Public,
+			},
+			{
+				Name:  "repo",
+				Type:  "string",
+				Value: *event.Repo.Name,
+			},
+			{
+				Name:  "repo_url",
+				Type:  "url",
+				Value: "https://github.com/" + *event.Repo.Name,
+			},
+			{
+				Name:  "username",
+				Type:  "string",
+				Value: *event.Actor.Login,
+			},
+			{
+				Name:  "event_id",
+				Type:  "string",
+				Value: *event.ID,
+			},
+			{
+				Name:  "release_title",
+				Type:  "string",
+				Value: *b.Release.Name,
+			},
+			{
+				Name:  "release_tag_version",
+				Type:  "string",
+				Value: *b.Release.TagName,
+			},
+			{
+				Name:  "release_description",
+				Type:  "string",
+				Value: *b.Release.Body,
+			},
+		},
+	}
+	mod.eventChan <- ev
+}
+
 func (mod *GitHubBee) handlePushEvent(event *github.Event) {
 	var b github.PushEvent
 	json.Unmarshal(*event.RawPayload, &b)

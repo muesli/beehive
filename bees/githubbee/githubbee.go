@@ -151,6 +151,8 @@ func (mod *GitHubBee) getRepositoryEvents(owner, repo string, since time.Time) {
 				mod.handlePullRequestEvent(v)
 			case "PullRequestReviewCommentEvent":
 				mod.handlePullRequestReviewCommentEvent(v)
+			case "ReleaseEvent":
+				mod.handleReleaseEvent(v)
 
 			default:
 				mod.LogErrorf("Unhandled event: %s", *v.Type)
