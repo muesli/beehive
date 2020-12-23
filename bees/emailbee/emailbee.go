@@ -73,14 +73,18 @@ func (mod *EmailBee) Action(action bees.Action) []bees.Placeholder {
 			portstr = "587"
 		}
 		port, _ := strconv.Atoi(portstr)
-		s, err := mail.NewDialer(host, port, mod.username, mod.password).Dial()
-		if err != nil {
-			panic(err)
-		}
 
-		// Send the email.
-		if err := mail.Send(s, m); err != nil {
-			panic(err)
+		if len(mod.username) > 0 && len(mod.password) > 0 {
+			// With authentication
+			if err := mail.NewDialer(host, port, mod.username, mod.password).DialAndSend(m); err != nil {
+				panic(err)
+			}
+		} else {
+			// No Auth
+			d := mail.Dialer{Host: host, Port: port}
+			if err := d.DialAndSend(m); err != nil {
+				panic(err)
+			}
 		}
 
 	default:
