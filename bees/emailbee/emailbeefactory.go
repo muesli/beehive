@@ -71,13 +71,13 @@ func (factory *EmailBeeFactory) Options() []bees.BeeOptionDescriptor {
 			Name:        "username",
 			Description: "Username used for SMTP auth",
 			Type:        "string",
-			Mandatory:   true,
+			Mandatory:   false,
 		},
 		{
 			Name:        "password",
 			Description: "Password used for SMTP auth",
 			Type:        "password",
-			Mandatory:   true,
+			Mandatory:   false,
 		},
 		{
 			Name:        "address",
