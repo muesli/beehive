@@ -64,17 +64,17 @@ func (mod *GitHubBee) handleReleaseEvent(event *github.Event) {
 				Value: *event.ID,
 			},
 			{
-				Name:  "release_title",
+				Name:  "title",
 				Type:  "string",
 				Value: *b.Release.Name,
 			},
 			{
-				Name:  "release_tag_version",
+				Name:  "tag_version",
 				Type:  "string",
 				Value: *b.Release.TagName,
 			},
 			{
-				Name:  "release_description",
+				Name:  "description",
 				Type:  "string",
 				Value: *b.Release.Body,
 			},

@@ -540,17 +540,17 @@ func (factory *GitHubBeeFactory) Events() []bees.EventDescriptor {
 					Type:        "string",
 				},
 				{
-					Name:        "release_title",
+					Name:        "title",
 					Description: "The release title",
 					Type:        "string",
 				},
 				{
-					Name:        "release_tag_version",
+					Name:        "tag_version",
 					Description: "The release tag version",
 					Type:        "string",
 				},
 				{
-					Name:        "release_description",
+					Name:        "description",
 					Description: "The release description",
 					Type:        "string",
 				},
