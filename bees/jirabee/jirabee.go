@@ -76,11 +76,9 @@ func (mod *JiraBee) Action(action bees.Action) []bees.Placeholder {
 		action.Options.Bind("issue_key", &issueKey)
 		action.Options.Bind("issue_new_status", &issueNewStatus)
 
-		issueUpdated, err := mod.handleUpdateIssueStatusAction(issueKey, issueNewStatus)
+		_, err := mod.handleUpdateIssueStatusAction(issueKey, issueNewStatus)
 		if err != nil {
 			mod.LogErrorf("Error during handleUpdateIssueStatusAction: %v", err)
-		} else {
-			mod.Logf("Issue %s new status: %s", issueUpdated.Key, issueUpdated.Fields.Status)
 		}
 
 	default:
