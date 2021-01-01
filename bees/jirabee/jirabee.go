@@ -69,6 +69,20 @@ func (mod *JiraBee) Action(action bees.Action) []bees.Placeholder {
 			mod.Logf("Issue created: %s", issueCreated.Key)
 		}
 
+	case "update_issue_status":
+		var issueKey string
+		var issueNewStatus string
+
+		action.Options.Bind("issue_key", &issueKey)
+		action.Options.Bind("issue_new_status", &issueNewStatus)
+
+		issueUpdated, err := mod.handleUpdateIssueStatusAction(issueKey, issueNewStatus)
+		if err != nil {
+			mod.LogErrorf("Error during handleUpdateIssueStatusAction: %v", err)
+		} else {
+			mod.Logf("Issue %s new status: %s", issueUpdated.Key, issueUpdated.Fields.Status)
+		}
+
 	default:
 		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
 	}
@@ -153,6 +167,41 @@ func (mod *JiraBee) handleCreateIssueAction(project string, reporterEmail string
 	}
 
 	return issueCreated, nil
+}
+
+func (mod *JiraBee) handleUpdateIssueStatusAction(issueKey string, issueNewStatus string) (*jira.Issue, error) {
+
+	var transitionID string
+
+	// Get possible transitions
+	transitions, _, err := mod.client.Issue.GetTransitions(issueKey)
+	if err != nil {
+		return nil, fmt.Errorf("error occured during Issue.GetTransitions: %v", err)
+	}
+
+	for _, v := range transitions {
+		if v.Name == issueNewStatus {
+			transitionID = v.ID
+			break
+		}
+	}
+
+	if len(transitionID) == 0 {
+		return nil, fmt.Errorf("Transition %s not available for issue %s", issueNewStatus, issueKey)
+	}
+
+	// Update issue status
+	_, err = mod.client.Issue.DoTransition(issueKey, transitionID)
+	if err != nil {
+		return nil, fmt.Errorf("error occured during Issue.DoTransition: %v", err)
+	}
+
+	// Get issue and return it
+	issue, _, err := mod.client.Issue.Get(issueKey, nil)
+	if err != nil {
+		return nil, fmt.Errorf("error occured during Issue.Get: %v", err)
+	}
+	return issue, nil
 }
 
 func (mod *JiraBee) getJiraUser(email string) (*jira.User, error) {

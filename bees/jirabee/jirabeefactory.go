@@ -142,6 +142,25 @@ func (factory *JiraBeeFactory) Actions() []bees.ActionDescriptor {
 				},
 			},
 		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "update_issue_status",
+			Description: "Update an issue status",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "issue_key",
+					Description: "Key of the issue (for example, BEEH-123)",
+					Type:        "string",
+					Mandatory:   true,
+				},
+				{
+					Name:        "issue_new_status",
+					Description: "New status of the issue (for example, Done)",
+					Type:        "string",
+					Mandatory:   true,
+				},
+			},
+		},
 	}
 
 	return actions
