@@ -81,6 +81,18 @@ func (mod *JiraBee) Action(action bees.Action) []bees.Placeholder {
 			mod.LogErrorf("Error during handleUpdateIssueStatusAction: %v", err)
 		}
 
+	case "comment_issue":
+		var issueKey string
+		var commentBody string
+
+		action.Options.Bind("issue_key", &issueKey)
+		action.Options.Bind("comment_body", &commentBody)
+
+		_, err := mod.handleCommentIssueAction(issueKey, commentBody)
+		if err != nil {
+			mod.LogErrorf("Error during handleCommentIssueAction: %v", err)
+		}
+
 	default:
 		panic("Unknown action triggered in " + mod.Name() + ": " + action.Name)
 	}
@@ -217,4 +229,15 @@ func (mod *JiraBee) getJiraUser(email string) (*jira.User, error) {
 		return &usersFound[0], nil
 	}
 	return nil, nil
+}
+
+func (mod *JiraBee) handleCommentIssueAction(issueKey string, commentBody string) (*jira.Comment, error) {
+
+	comment := &jira.Comment{
+		Body: commentBody,
+	}
+
+	jiraComment, _, err := mod.client.Issue.AddComment(issueKey, comment)
+
+	return jiraComment, err
 }

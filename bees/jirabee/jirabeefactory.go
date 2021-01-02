@@ -161,6 +161,25 @@ func (factory *JiraBeeFactory) Actions() []bees.ActionDescriptor {
 				},
 			},
 		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "comment_issue",
+			Description: "Comment an issue",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "issue_key",
+					Description: "Key of the issue (for example, BEEH-123)",
+					Type:        "string",
+					Mandatory:   true,
+				},
+				{
+					Name:        "comment_body",
+					Description: "Body of the comment",
+					Type:        "string",
+					Mandatory:   true,
+				},
+			},
+		},
 	}
 
 	return actions
