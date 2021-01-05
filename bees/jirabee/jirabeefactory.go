@@ -62,7 +62,7 @@ func (factory *JiraBeeFactory) Image() string {
 
 // LogoColor returns the preferred logo background color (used by the admin interface).
 func (factory *JiraBeeFactory) LogoColor() string {
-	return "#6098d0"
+	return "#0052cc"
 }
 
 // Options returns the options available to configure this Bee.
