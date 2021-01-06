@@ -10,6 +10,7 @@ require (
 	github.com/Profpatsch/GoOse v0.0.0-20181012194242-da5de31b9bd2
 	github.com/PuerkitoBio/goquery v1.5.0
 	github.com/akashshinde/go_cricket v0.0.0-20170322162016-01a06b2c3f22
+	github.com/andygrunwald/go-jira v1.13.0
 	github.com/araddon/dateparse v0.0.0-20190426192744-0d74ffceef83 // indirect
 	github.com/asaskevich/EventBus v0.0.0-20180315140547-d46933a94f05 // indirect
 	github.com/azr/backoff v0.0.0-20160115115103-53511d3c7330 // indirect

@@ -86,13 +86,42 @@ func (factory *JiraBeeFactory) Options() []bees.BeeOptionDescriptor {
 			Type:        "string",
 			Mandatory:   true,
 		},
+		{
+			Name:        "address",
+			Description: "Which address to listen on, eg: 0.0.0.0:12345",
+			Type:        "address",
+			Mandatory:   true,
+		},
 	}
 	return opts
 }
 
 // Events describes the available events provided by this Bee.
 func (factory *JiraBeeFactory) Events() []bees.EventDescriptor {
-	events := []bees.EventDescriptor{}
+	events := []bees.EventDescriptor{
+		{
+			Namespace:   factory.Name(),
+			Name:        "issue_created",
+			Description: "Event triggered when an issue is created",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "key",
+					Description: "Key of the issue (example, BEEH-123)",
+					Type:        "string",
+				},
+				{
+					Name:        "title",
+					Description: "Title of the issue",
+					Type:        "string",
+				},
+				{
+					Name:        "description",
+					Description: "Description of the issue",
+					Type:        "string",
+				},
+			},
+		},
+	}
 	return events
 }
 
