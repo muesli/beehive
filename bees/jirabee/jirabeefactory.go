@@ -121,6 +121,28 @@ func (factory *JiraBeeFactory) Events() []bees.EventDescriptor {
 				},
 			},
 		},
+		{
+			Namespace:   factory.Name(),
+			Name:        "issue_status_updated",
+			Description: "Event triggered when an issue status is updated",
+			Options: []bees.PlaceholderDescriptor{
+				{
+					Name:        "key",
+					Description: "Key of the issue (example, BEEH-123)",
+					Type:        "string",
+				},
+				{
+					Name:        "fromStatus",
+					Description: "Previous status of the issue",
+					Type:        "string",
+				},
+				{
+					Name:        "toStatus",
+					Description: "New status of the issue",
+					Type:        "string",
+				},
+			},
+		},
 	}
 	return events
 }

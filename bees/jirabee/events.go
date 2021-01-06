@@ -31,8 +31,9 @@ import (
 
 // JiraEvent represents a Jira Event
 type JiraEvent struct {
-	WebhookEvent string      `json:"webhookEvent"`
-	Issue        *jira.Issue `json:"issue"`
+	WebhookEvent     string                 `json:"webhookEvent"`
+	Issue            *jira.Issue            `json:"issue"`
+	ChangelogHistory *jira.ChangelogHistory `json:"changelog"`
 }
 
 func (mod *JiraBee) handleJiraEvent(data []byte) (*JiraEvent, error) {
@@ -46,6 +47,8 @@ func (mod *JiraBee) handleJiraEvent(data []byte) (*JiraEvent, error) {
 
 	case "jira:issue_created":
 		mod.handleIssueCreatedEvent(jiraEvent)
+	case "jira:issue_updated":
+		mod.handleIssueUpdatedEvent(jiraEvent)
 
 	default:
 		return jiraEvent, fmt.Errorf("Unhandled event: %s", jiraEvent.WebhookEvent)
@@ -84,6 +87,53 @@ func (mod *JiraBee) handleIssueCreatedEvent(data *JiraEvent) error {
 				Name:  "description",
 				Type:  "string",
 				Value: description,
+			},
+		},
+	}
+
+	mod.eventChan <- ev
+	return nil
+}
+
+func (mod *JiraBee) handleIssueUpdatedEvent(jiraEvent *JiraEvent) error {
+
+	if jiraEvent.Issue == nil {
+		return fmt.Errorf("Issue field is empty, impossible to identify the issue key")
+	}
+
+	if jiraEvent.ChangelogHistory == nil {
+		return fmt.Errorf("Changelog field is empty, impossible to identify the change type")
+	}
+
+	for _, item := range jiraEvent.ChangelogHistory.Items {
+		if item.Field == "status" {
+			mod.handleIssueStatusUpdatedEvent(jiraEvent.Issue.Key, item.FromString, item.ToString)
+		}
+	}
+
+	return nil
+}
+
+func (mod *JiraBee) handleIssueStatusUpdatedEvent(key string, fromStatus string, toStatus string) error {
+
+	ev := bees.Event{
+		Bee:  mod.Name(),
+		Name: "issue_status_updated",
+		Options: []bees.Placeholder{
+			{
+				Name:  "key",
+				Type:  "string",
+				Value: key,
+			},
+			{
+				Name:  "fromStatus",
+				Type:  "string",
+				Value: fromStatus,
+			},
+			{
+				Name:  "toStatus",
+				Type:  "string",
+				Value: toStatus,
 			},
 		},
 	}
