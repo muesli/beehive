@@ -60,13 +60,9 @@ func (mod *JiraBee) handleIssueCreatedEvent(data *JiraEvent) error {
 	summary := ""
 	description := ""
 
-	if data.Issue != nil && data.Issue.Key != nil {
+	if data.Issue != nil {
 		key = data.Issue.Key
-	}
-	if data.Issue != nil && data.Issue.Fields.Summary != nil {
 		summary = data.Issue.Fields.Summary
-	}
-	if data.Issue != nil && data.Issue.Fields.Description != nil {
 		description = data.Issue.Fields.Description
 	}
 
