@@ -46,10 +46,15 @@ func (mod *JiraBee) handleJiraEvent(data []byte) (*JiraEvent, error) {
 	switch jiraEvent.WebhookEvent {
 
 	case "jira:issue_created":
-		mod.handleIssueCreatedEvent(jiraEvent)
+		err = mod.handleIssueCreatedEvent(jiraEvent)
+		if err != nil {
+			return nil, err
+		}
 	case "jira:issue_updated":
-		mod.handleIssueUpdatedEvent(jiraEvent)
-
+		err = mod.handleIssueUpdatedEvent(jiraEvent)
+		if err != nil {
+			return nil, err
+		}
 	default:
 		return jiraEvent, fmt.Errorf("Unhandled event: %s", jiraEvent.WebhookEvent)
 	}
@@ -59,15 +64,13 @@ func (mod *JiraBee) handleJiraEvent(data []byte) (*JiraEvent, error) {
 
 func (mod *JiraBee) handleIssueCreatedEvent(data *JiraEvent) error {
 
-	key := ""
-	summary := ""
-	description := ""
-
-	if data.Issue != nil {
-		key = data.Issue.Key
-		summary = data.Issue.Fields.Summary
-		description = data.Issue.Fields.Description
+	if data.Issue == nil {
+		return fmt.Errorf("Error occured during handleIssueCreatedEvent, Issue field was empty")
 	}
+
+	key := data.Issue.Key
+	summary := data.Issue.Fields.Summary
+	description := data.Issue.Fields.Description
 
 	ev := bees.Event{
 		Bee:  mod.Name(),
