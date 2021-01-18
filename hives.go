@@ -47,6 +47,7 @@ import (
 	_ "github.com/muesli/beehive/bees/ircbee"
 	_ "github.com/muesli/beehive/bees/jabberbee"
 	_ "github.com/muesli/beehive/bees/jenkinsbee"
+	_ "github.com/muesli/beehive/bees/jirabee"
 	_ "github.com/muesli/beehive/bees/mastodonbee"
 	_ "github.com/muesli/beehive/bees/mixcloudbee"
 	_ "github.com/muesli/beehive/bees/mumblebee"
