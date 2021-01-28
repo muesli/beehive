@@ -175,7 +175,17 @@ func (factory *MastodonBeeFactory) Events() []bees.EventDescriptor {
 				},
 				{
 					Name:        "username",
-					Description: "Mastodon handle of the user which triggered the follow event",
+					Description: "Mastodon username of the user which triggered the follow event",
+					Type:        "string",
+				},
+				{
+					Name:        "display_name",
+					Description: "Mastodon display name of the user which triggered the follow event",
+					Type:        "string",
+				},
+				{
+					Name:        "acct",
+					Description: "Mastodon account of the user which triggered the follow event",
 					Type:        "string",
 				},
 				{
@@ -266,7 +276,17 @@ func (factory *MastodonBeeFactory) Events() []bees.EventDescriptor {
 				},
 				{
 					Name:        "username",
-					Description: "The Mastodon handle of the user that favourited your toot",
+					Description: "The Mastodon username of the user that favourited your toot",
+					Type:        "string",
+				},
+				{
+					Name:        "display_name",
+					Description: "The Mastodon display name of the user that favourited your toot",
+					Type:        "string",
+				},
+				{
+					Name:        "acct",
+					Description: "The Mastodon account of the user that favourited your toot",
 					Type:        "string",
 				},
 				{
@@ -335,7 +355,17 @@ func (factory *MastodonBeeFactory) Events() []bees.EventDescriptor {
 				},
 				{
 					Name:        "username",
-					Description: "Mastodon handle of the user that reblogged your toot",
+					Description: "Mastodon username of the user that reblogged your toot",
+					Type:        "string",
+				},
+				{
+					Name:        "display_name",
+					Description: "Mastodon display name of the user that reblogged your toot",
+					Type:        "string",
+				},
+				{
+					Name:        "acct",
+					Description: "Mastodon account of the user that reblogged your toot",
 					Type:        "string",
 				},
 				{
@@ -404,7 +434,17 @@ func (factory *MastodonBeeFactory) Events() []bees.EventDescriptor {
 				},
 				{
 					Name:        "username",
-					Description: "The Mastodon handle of the mention's author",
+					Description: "The Mastodon username of the mention's author",
+					Type:        "string",
+				},
+				{
+					Name:        "display_name",
+					Description: "The Mastodon display_name of the mention's author",
+					Type:        "string",
+				},
+				{
+					Name:        "acct",
+					Description: "The Mastodon account of the mention's author",
 					Type:        "string",
 				},
 				{

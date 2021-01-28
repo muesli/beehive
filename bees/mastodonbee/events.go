@@ -109,7 +109,17 @@ func (mod *MastodonBee) handleNotification(notif *mastodon.Notification) {
 				},
 				{
 					Name:  "username",
+					Value: notif.Account.Username,
+					Type:  "string",
+				},
+				{
+					Name:  "display_name",
 					Value: notif.Account.DisplayName,
+					Type:  "string",
+				},
+				{
+					Name:  "acct",
+					Value: notif.Account.Acct,
 					Type:  "string",
 				},
 				{
@@ -153,7 +163,17 @@ func (mod *MastodonBee) handleNotification(notif *mastodon.Notification) {
 				},
 				{
 					Name:  "username",
+					Value: notif.Account.Username,
+					Type:  "string",
+				},
+				{
+					Name:  "display_name",
 					Value: notif.Account.DisplayName,
+					Type:  "string",
+				},
+				{
+					Name:  "acct",
+					Value: notif.Account.Acct,
 					Type:  "string",
 				},
 				{
@@ -187,7 +207,17 @@ func (mod *MastodonBee) handleNotification(notif *mastodon.Notification) {
 				},
 				{
 					Name:  "username",
-					Value: notif.Status.Account.DisplayName,
+					Value: notif.Account.Username,
+					Type:  "string",
+				},
+				{
+					Name:  "display_name",
+					Value: notif.Account.DisplayName,
+					Type:  "string",
+				},
+				{
+					Name:  "acct",
+					Value: notif.Account.Acct,
 					Type:  "string",
 				},
 				{
@@ -226,7 +256,17 @@ func (mod *MastodonBee) handleNotification(notif *mastodon.Notification) {
 				},
 				{
 					Name:  "username",
-					Value: notif.Status.Account.DisplayName,
+					Value: notif.Account.Username,
+					Type:  "string",
+				},
+				{
+					Name:  "display_name",
+					Value: notif.Account.DisplayName,
+					Type:  "string",
+				},
+				{
+					Name:  "acct",
+					Value: notif.Account.Acct,
 					Type:  "string",
 				},
 				{
