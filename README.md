@@ -2,7 +2,7 @@ Beehive
 =======
 
 [![Build Status](https://travis-ci.org/muesli/beehive.svg?branch=master)](https://travis-ci.org/muesli/beehive)
-[![Go ReportCard](http://goreportcard.com/badge/muesli/beehive)](http://goreportcard.com/report/muesli/beehive)
+[![Go ReportCard](https://goreportcard.com/badge/muesli/beehive)](https://goreportcard.com/report/muesli/beehive)
 [![GoDoc](https://godoc.org/github.com/golang/gddo?status.svg)](https://godoc.org/github.com/muesli/beehive)
 
 Beehive is an event and agent system, which allows you to create your own
@@ -44,7 +44,7 @@ You can find even more official releases [here](https://github.com/muesli/beehiv
 ### From source
 
 Beehive requires Go 1.13 or higher. Make sure you have a working Go environment.
-See the [install instructions](http://golang.org/doc/install.html).
+See the [install instructions](https://golang.org/doc/install.html).
 
 The recommended way is to fetch the sources and run make.
 
