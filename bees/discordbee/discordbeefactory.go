@@ -135,6 +135,25 @@ func (factory *DiscordBeeFactory) Actions() []bees.ActionDescriptor {
 				},
 			},
 		},
+        {
+            Namespace:   factory.Name(),
+            Name:        "send_news",
+            Description: "Sends a message to a news channel and publish it",
+            Options: []bees.PlaceholderDescriptor{
+                {
+                    Name:        "contents",
+                    Description: "Contents of the message",
+                    Type:        "string",
+                    Mandatory:   true,
+                },
+                {
+                    Name:        "channel_id",
+                    Description: "ID of the channel to post in",
+                    Type:        "string",
+                    Mandatory:   true,
+                },
+            },
+        },
 		{
 			Namespace:   factory.Name(),
 			Name:        "set_status",
