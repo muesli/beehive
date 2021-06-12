@@ -15,7 +15,7 @@ require (
 	github.com/asaskevich/EventBus v0.0.0-20180315140547-d46933a94f05 // indirect
 	github.com/azr/backoff v0.0.0-20160115115103-53511d3c7330 // indirect
 	github.com/briandowns/openweathermap v0.0.0-20180804155945-5f41b7c9d92d
-	github.com/bwmarrin/discordgo v0.19.0
+    github.com/bwmarrin/discordgo v0.23.1
 	github.com/carlosdp/twiliogo v0.0.0-20161027183705-b26045ebb9d1
 	github.com/cloudflare/cloudflare-go v0.10.6
 	github.com/coreos/go-systemd v0.0.0-20190719114852-fd7a80b32e1f
@@ -50,6 +50,7 @@ require (
 	github.com/jpillora/backoff v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.6 // indirect
 	github.com/kelvins/sunrisesunset v0.0.0-20170601204625-14f1915ad4b4
+	github.com/kevinburke/go-bindata v3.22.0+incompatible // indirect
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
 	github.com/kr/pretty v0.1.0
 	github.com/kurrik/oauth1a v0.0.0-20151019171716-cb1b80e32dd4 // indirect
