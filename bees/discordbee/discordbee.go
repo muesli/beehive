@@ -73,7 +73,7 @@ func (mod *DiscordBee) isReady(s *discordgo.Session, event *discordgo.Ready) {
 	// Default status - once the persistance layer exists:
 	// TODO: Persist status, use it here.
 	mod.LogDebugf("isReady called")
-	s.UpdateStatus(0, "with bees")
+	s.UpdateGameStatus(0, "with bees")
 }
 
 func (mod *DiscordBee) onSend(s *discordgo.Session, event *discordgo.MessageCreate) {
@@ -130,11 +130,25 @@ func (mod *DiscordBee) Action(action bees.Action) []bees.Placeholder {
 		if err != nil {
 			mod.LogErrorf("Unable to send message: %v", err)
 		}
+	case "send_news":
+		var contents string
+		var channelID string
+		action.Options.Bind("contents", &contents)
+		action.Options.Bind("channel_id", &channelID)
+
+		message, err := mod.discord.ChannelMessageSend(channelID, contents)
+		if err != nil {
+			mod.LogErrorf("Unable to send message: %v", err)
+		}
+		_, err = mod.discord.ChannelMessageCrosspost(channelID, message.ID)
+		if err != nil {
+			mod.LogErrorf("Unable to publish message: %v", err)
+		}
 	case "set_status":
 		var status string
 		action.Options.Bind("status", &status)
 
-		err := mod.discord.UpdateStatus(0, status)
+		err := mod.discord.UpdateGameStatus(0, status)
 		if err != nil {
 			mod.LogErrorf("Unable to update status: %v", err)
 		}
