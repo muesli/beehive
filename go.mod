@@ -15,7 +15,7 @@ require (
 	github.com/asaskevich/EventBus v0.0.0-20180315140547-d46933a94f05 // indirect
 	github.com/azr/backoff v0.0.0-20160115115103-53511d3c7330 // indirect
 	github.com/briandowns/openweathermap v0.0.0-20180804155945-5f41b7c9d92d
-    github.com/bwmarrin/discordgo v0.23.1
+	github.com/bwmarrin/discordgo v0.23.1
 	github.com/carlosdp/twiliogo v0.0.0-20161027183705-b26045ebb9d1
 	github.com/cloudflare/cloudflare-go v0.10.6
 	github.com/coreos/go-systemd v0.0.0-20190719114852-fd7a80b32e1f

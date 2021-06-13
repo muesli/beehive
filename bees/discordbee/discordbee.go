@@ -141,10 +141,10 @@ func (mod *DiscordBee) Action(action bees.Action) []bees.Placeholder {
 		if err != nil {
 			mod.LogErrorf("Unable to send message: %v", err)
 		}
-        message, err2 := mod.discord.ChannelMessageCrosspost(channelID, message.ID)
-        if err2 != nil {
-                mod.LogErrorf("Unable to publish message: %v", err2)
-        }
+		message, err2 := mod.discord.ChannelMessageCrosspost(channelID, message.ID)
+		if err2 != nil {
+				mod.LogErrorf("Unable to publish message: %v", err2)
+		}
 	case "set_status":
 		var status string
 		action.Options.Bind("status", &status)
