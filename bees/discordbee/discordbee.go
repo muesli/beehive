@@ -133,7 +133,6 @@ func (mod *DiscordBee) Action(action bees.Action) []bees.Placeholder {
 	case "send_news":
 		var contents string
 		var channelID string
-		var message *discordgo.Message
 		action.Options.Bind("contents", &contents)
 		action.Options.Bind("channel_id", &channelID)
 
@@ -141,9 +140,9 @@ func (mod *DiscordBee) Action(action bees.Action) []bees.Placeholder {
 		if err != nil {
 			mod.LogErrorf("Unable to send message: %v", err)
 		}
-		message, err2 := mod.discord.ChannelMessageCrosspost(channelID, message.ID)
-		if err2 != nil {
-				mod.LogErrorf("Unable to publish message: %v", err2)
+		_, err = mod.discord.ChannelMessageCrosspost(channelID, message.ID)
+		if err != nil {
+			mod.LogErrorf("Unable to publish message: %v", err)
 		}
 	case "set_status":
 		var status string

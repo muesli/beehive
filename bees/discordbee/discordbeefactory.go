@@ -138,7 +138,7 @@ func (factory *DiscordBeeFactory) Actions() []bees.ActionDescriptor {
 		{
 			Namespace:   factory.Name(),
 			Name:        "send_news",
-			Description: "Sends a message to a news channel and publish it",
+			Description: "Sends a message to a news channel and publishes it",
 			Options: []bees.PlaceholderDescriptor{
 				{
 					Name:        "contents",
