@@ -22,8 +22,10 @@
 package bees
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"net/url"
 	"reflect"
 	"strconv"
@@ -225,6 +227,80 @@ func ConvertValue(v interface{}, dst interface{}) error {
 			*d, _ = url.ParseQuery(vt)
 		default:
 			panic(fmt.Sprintf("Unhandled type %+v for url.Values conversion", reflect.TypeOf(vt)))
+		}
+
+	case *BinaryValue:
+		switch vt := v.(type) {
+		case *BinaryValue:
+			d = vt
+		case []byte:
+			if d != nil {
+				d.MimeType = "unknwown"
+				d.Data = ioutil.NopCloser(bytes.NewBuffer(vt))
+			} else {
+				*d = BinaryValue{
+					MimeType: "unknown",
+					Data:     ioutil.NopCloser(bytes.NewBuffer(vt)),
+				}
+			}
+
+		default:
+			panic(fmt.Sprintf("Unhandled type %+v for *BinaryValue conversion", reflect.TypeOf(vt)))
+		}
+
+	case *[]*BinaryValue:
+		switch vt := v.(type) {
+		case []*BinaryValue:
+			d = &vt
+		case *[]*BinaryValue:
+			d = vt
+		case [][]byte:
+			bvs := make([]*BinaryValue, len(vt))
+			for i, b := range vt {
+				bvs[i] = &BinaryValue{
+					MimeType: "unknown",
+					Data:     ioutil.NopCloser(bytes.NewBuffer(b)),
+				}
+			}
+			*d = bvs
+		default:
+			panic(fmt.Sprintf("Unhandled type %+v for []*BinaryValue conversion", reflect.TypeOf(vt)))
+		}
+
+	case *[]byte:
+		switch vt := v.(type) {
+		case []byte:
+			*d = vt
+		case *[]byte:
+			d = vt
+		case *BinaryValue:
+			b, err := ioutil.ReadAll(vt.Data)
+			if err != nil {
+				panic(fmt.Sprintf("Unhandled error during type conversion for []byte from *BinaryValue: %s", err))
+			}
+			*d = b
+		default:
+			panic(fmt.Sprintf("Unhandled type %+v for []byte conversion", reflect.TypeOf(vt)))
+		}
+
+	case *[][]byte:
+		switch vt := v.(type) {
+		case [][]byte:
+			d = &vt
+		case *[][]byte:
+			d = vt
+		case []*BinaryValue:
+			bb := make([][]byte, len(vt))
+			for _, bv := range vt {
+				b, err := ioutil.ReadAll(bv.Data)
+				if err != nil {
+					panic(fmt.Sprintf("Unhandled error during type conversion for [][]byte from []*BinaryValue: %s", err))
+				}
+				bb = append(bb, b)
+			}
+			d = &bb
+		default:
+			panic(fmt.Sprintf("Unhandled type %+v for [][]byte conversion", reflect.TypeOf(vt)))
 		}
 
 	default:
