@@ -59,6 +59,7 @@ import (
 	_ "github.com/muesli/beehive/bees/redisbee"
 	_ "github.com/muesli/beehive/bees/rocketchatbee"
 	_ "github.com/muesli/beehive/bees/rssbee"
+	_ "github.com/muesli/beehive/bees/ryanairbee"
 	_ "github.com/muesli/beehive/bees/s3bee"
 	_ "github.com/muesli/beehive/bees/simplepushbee"
 	_ "github.com/muesli/beehive/bees/slackbee"
