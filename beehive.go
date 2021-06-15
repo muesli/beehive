@@ -28,8 +28,6 @@ import (
 	"fmt"
 	"net/url"
 	"os"
-	"os/signal"
-	"syscall"
 
 	"github.com/mattn/go-colorable"
 	log "github.com/sirupsen/logrus"
@@ -39,6 +37,7 @@ import (
 	"github.com/muesli/beehive/cfg"
 	_ "github.com/muesli/beehive/filters"
 	_ "github.com/muesli/beehive/filters/template"
+	"github.com/muesli/beehive/reactor"
 
 	"github.com/muesli/beehive/bees"
 )
@@ -126,45 +125,7 @@ func main() {
 		}
 	}
 
-	// Load actions from config
-	bees.SetActions(config.Actions)
-	// Load chains from config
-	bees.SetChains(config.Chains)
-	// Initialize bees
-	bees.StartBees(config.Bees)
-
-	// Wait for signals
-	ch := make(chan os.Signal, 1)
-	signal.Notify(ch, os.Interrupt, syscall.SIGHUP, syscall.SIGTERM, syscall.SIGKILL)
-
-	for s := range ch {
-		log.Println("Got signal:", s)
-
-		abort := false
-		switch s {
-		case syscall.SIGHUP:
-			err := config.Load()
-			if err != nil {
-				log.Panicf("Error loading config from %s: %v", config.URL(), err)
-			}
-			bees.StopBees()
-			bees.SetActions(config.Actions)
-			bees.SetChains(config.Chains)
-			bees.StartBees(config.Bees)
-
-		case syscall.SIGTERM:
-			fallthrough
-		case syscall.SIGKILL:
-			fallthrough
-		case os.Interrupt:
-			abort = true
-			break
-		}
-
-		if abort {
-			break
-		}
-	}
+	reactor.Run(config)
 
 	// Save actions & chains to config
 	log.Printf("Saving config to %s", config.URL())

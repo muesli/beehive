@@ -26,6 +26,7 @@ package hellobee
 
 import (
 	"github.com/muesli/beehive/bees"
+	log "github.com/sirupsen/logrus"
 )
 
 // HelloBee is an example for a Bee skeleton, designed to help you get started
@@ -47,7 +48,16 @@ func (mod *HelloBee) Run(eventChan chan bees.Event) {
 
 // Action triggers the action passed to it.
 func (mod *HelloBee) Action(action bees.Action) []bees.Placeholder {
-	return []bees.Placeholder{}
+	outs := []bees.Placeholder{}
+
+	switch action.Name {
+	case "say_hello":
+		log.Info("Hello!")
+	default:
+		log.Debug("un")
+	}
+
+	return outs
 }
 
 // ReloadOptions parses the config options and initializes the Bee.
