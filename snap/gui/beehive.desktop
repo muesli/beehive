@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Beehive
+Comment=Beehive
+Exec=beehive
+Terminal=false
+Type=Application
+Icon=${SNAP}/meta/gui/icon.png
+StartupWMClass=beehive
+X-Desktop-File-Install-Version=0.24
+
