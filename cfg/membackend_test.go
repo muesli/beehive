@@ -1,13 +1,12 @@
 package cfg
 
 import (
-	"net/url"
 	"path/filepath"
 	"testing"
 )
 
 func TestMemLoad(t *testing.T) {
-	u, _ := url.Parse("mem://")
+	u, _ := ParseURL("mem://")
 	backend := NewMemBackend()
 	_, err := backend.Load(u)
 	if err != nil {
@@ -17,7 +16,7 @@ func TestMemLoad(t *testing.T) {
 
 func TestMemSave(t *testing.T) {
 	path := filepath.Join("testdata", "foobar")
-	u, _ := url.Parse(filepath.Join("testdata", "foobar"))
+	u, _ := ParseURL(filepath.Join("testdata", "foobar"))
 	backend := NewMemBackend()
 	conf := &Config{url: u}
 	err := backend.Save(conf)

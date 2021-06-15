@@ -2,9 +2,11 @@ package cfg
 
 import (
 	"fmt"
-	"net/url"
 	"os"
 	"path/filepath"
+	"regexp"
+	"runtime"
+	"strings"
 
 	"github.com/muesli/beehive/bees"
 	gap "github.com/muesli/go-app-paths"
@@ -21,7 +23,7 @@ type Config struct {
 	Actions []bees.Action
 	Chains  []bees.Chain
 	backend ConfigBackend
-	url     *url.URL
+	url     *URL
 }
 
 // ConfigBackend is the interface implemented by the configuration backends.
@@ -29,7 +31,7 @@ type Config struct {
 // Backends are responsible for loading and saving the Config struct to
 // memory, the local filesystem, the network, etc.
 type ConfigBackend interface {
-	Load(*url.URL) (*Config, error)
+	Load(*URL) (*Config, error)
 	Save(*Config) error
 }
 
@@ -66,7 +68,7 @@ func (c *Config) Backend() ConfigBackend {
 // Next time the config is loaded or saved
 // the new URL will be used.
 func (c *Config) SetURL(u string) error {
-	url, err := url.Parse(u)
+	url, err := ParseURL(u)
 	if err != nil {
 		return err
 	}
@@ -77,7 +79,7 @@ func (c *Config) SetURL(u string) error {
 }
 
 // URL currently being used.
-func (c *Config) URL() *url.URL {
+func (c *Config) URL() *URL {
 	return c.url
 }
 
@@ -97,22 +99,20 @@ func New(url string) (*Config, error) {
 		return nil, fmt.Errorf("Empty URL provided but not supported")
 	}
 
-	err := config.SetURL(url)
+	winURL := regexp.MustCompile(`^[a-zA-Z]:`)
+	var err error
+	if runtime.GOOS == "windows" && winURL.MatchString(url) {
+		err = config.SetURL("file://" + url)
+	} else {
+		err = config.SetURL(url)
+	}
 	if err != nil {
 		return nil, err
 	}
 
 	switch config.url.Scheme {
 	case "", "file":
-		if ok, _ := IsEncrypted(config.url); ok {
-			log.Debugf("Loading encrypted configuration file")
-			backend, err = NewAESBackend(config.url)
-			if err != nil {
-				log.Fatalf("error loading the AES configuration backend. err: %v", err)
-			}
-		} else {
-			backend = NewFileBackend()
-		}
+		backend = loadLocalFileBackend(config)
 	case "mem":
 		backend = NewMemBackend()
 	case "crypto":
@@ -129,6 +129,23 @@ func New(url string) (*Config, error) {
 	return config, nil
 }
 
+func loadLocalFileBackend(config *Config) ConfigBackend {
+	var backend ConfigBackend
+	var err error
+
+	if ok, _ := IsEncrypted(config.url); ok {
+		log.Debugf("Loading encrypted configuration file")
+		backend, err = NewAESBackend(config.url)
+		if err != nil {
+			log.Fatalf("error loading the AES configuration backend. err: %v", err)
+		}
+	} else {
+		backend = NewFileBackend()
+	}
+
+	return backend
+}
+
 // DefaultPath returns Beehive's default config path.
 //
 // The path returned is OS dependant. If there's an error
@@ -141,7 +158,7 @@ func DefaultPath() string {
 		return cfgFileName
 	}
 
-	return path
+	return fixWindowsPath(path)
 }
 
 // Lookup tries to find the config file.
@@ -184,4 +201,14 @@ func Lookup() string {
 func exist(file string) bool {
 	_, err := os.Stat(file)
 	return err == nil
+}
+
+// Replace backward slashes in Windows paths with /, to make them suitable
+// for Go URL parsing.
+func fixWindowsPath(path string) string {
+	if runtime.GOOS == "windows" {
+		return strings.Replace(path, `\`, "/", -1)
+	}
+
+	return path
 }

@@ -2,14 +2,13 @@ package cfg
 
 import (
 	"io/ioutil"
-	"net/url"
 	"os"
 	"path/filepath"
 	"testing"
 )
 
 func TestFileLoad(t *testing.T) {
-	u, _ := url.Parse("file://foobar")
+	u, _ := ParseURL("file://foobar")
 	backend := NewFileBackend()
 
 	_, err := backend.Load(u)
@@ -18,14 +17,14 @@ func TestFileLoad(t *testing.T) {
 	}
 
 	// try to load the config from a relative path
-	u, err = url.Parse(filepath.Join("testdata", "beehive.conf"))
+	u, err = ParseURL(filepath.Join("testdata", "beehive.conf"))
 	if err != nil {
-		t.Error("cannot parse config path")
+		t.Fatalf("Can't parse URL. %v", err)
 	}
 	backend = NewFileBackend()
 	conf, err := backend.Load(u)
 	if err != nil {
-		t.Errorf("Error loading config file fixture from relative path %s. %v", u, err)
+		t.Errorf("Error loading config file fixture from relative path %s. %v", u.Raw, err)
 	}
 	if conf.Bees[0].Name != "echo" {
 		t.Error("The first bee should be an exec bee named echo")
@@ -33,14 +32,15 @@ func TestFileLoad(t *testing.T) {
 
 	// try to load the config from an absolute path using a URI
 	cwd, _ := os.Getwd()
-	u, err = url.Parse(filepath.Join("file://", cwd, "testdata", "beehive.conf"))
+	p := fixWindowsPath(filepath.Join(cwd, "testdata", "beehive.conf"))
+	u, err = ParseURL("file://" + p)
 	if err != nil {
-		t.Error("cannot parse config path")
+		t.Fatalf("Error parsing URL. %v", err)
 	}
 	backend = NewFileBackend()
 	conf, err = backend.Load(u)
 	if err != nil {
-		t.Errorf("Error loading config file fixture from absolute path %s. %v", u, err)
+		t.Errorf("Error loading config file fixture from absolute path %s. %v", u.Raw, err)
 	}
 	if conf.Bees[0].Name != "echo" {
 		t.Error("The first bee should be an exec bee named echo")
@@ -49,52 +49,45 @@ func TestFileLoad(t *testing.T) {
 
 func TestFileSave(t *testing.T) {
 	tmpdir, err := ioutil.TempDir("", "beehivetest")
+	u, err := ParseURL(filepath.Join("testdata", "beehive.conf"))
 	if err != nil {
-		t.Error("Could not create temp directory")
-	}
-
-	u, err := url.Parse(filepath.Join("testdata", "beehive.conf"))
-	if err != nil {
-		t.Error("cannot parse config path")
+		t.Fatalf("Can't parse URL. %v", err)
 	}
 	backend := NewFileBackend()
 	c, err := backend.Load(u)
 	if err != nil {
-		t.Errorf("Failed to load config fixture from relative path %s: %v", u, err)
+		t.Errorf("Failed to load config fixture from relative path %s: %v", u.Raw, err)
 	}
 
 	// Save the config file to a new absolute path using a URL
-	p := filepath.Join(tmpdir, "beehive.conf")
-	u, err = url.Parse("file://" + p)
+	p := fixWindowsPath(filepath.Join(tmpdir, "beehive.conf"))
+	u, err = ParseURL("file://" + p)
 	if err != nil {
 		t.Error("cannot parse config path")
 	}
-	err = c.SetURL(u.String())
+	c.SetURL(u.String())
 	if err != nil {
 		t.Error("cannot set url")
 	}
 	backend = NewFileBackend()
 	err = backend.Save(c)
 	if err != nil {
-		t.Errorf("Failed to save the config to %s", u)
+		t.Errorf("Failed to save the config to %s", u.Raw)
 	}
 	if !exist(p) {
 		t.Errorf("Configuration file wasn't saved to %s", p)
 	}
 	c, err = backend.Load(u)
 	if err != nil {
-		t.Errorf("Failed to load config fixture from absolute path %s: %v", u, err)
+		t.Errorf("Failed to load config fixture from absolute path %s: %v", u.Raw, err)
 	}
 
 	// Save the config file to a new absolute path using a regular path
-	p = filepath.Join(tmpdir, "beehive.conf")
-	u, err = url.Parse(p)
+	p = tmpConfPath()
+	c.SetURL(p)
+	u, err = ParseURL(p)
 	if err != nil {
-		t.Error("cannot parse config path")
-	}
-	err = c.SetURL(u.String())
-	if err != nil {
-		t.Error("cannot set url")
+		t.Error("cannot parse url")
 	}
 	err = backend.Save(c)
 	if err != nil {
@@ -107,7 +100,7 @@ func TestFileSave(t *testing.T) {
 
 func Test_FileLoad_FileSave_YAML(t *testing.T) {
 	// load
-	u, err := url.Parse(filepath.Join("testdata", "beehive.yaml"))
+	u, err := ParseURL(filepath.Join("testdata", "beehive.yaml"))
 	if err != nil {
 		t.Error("cannot parse config path")
 	}
@@ -125,7 +118,7 @@ func Test_FileLoad_FileSave_YAML(t *testing.T) {
 		t.Error("Could not create temp directory")
 	}
 	p := filepath.Join(tmpdir, "beehive.yaml")
-	u, err = url.Parse("file://" + p)
+	u, err = ParseURL("file://" + p)
 	if err != nil {
 		t.Error("cannot parse config path")
 	}
