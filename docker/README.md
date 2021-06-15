@@ -24,7 +24,9 @@ You can simply clone the repository with git and cd into the directory.
 Alternatively if you have the package installed with `go get` you can navigate
 to `$GOPATH/src/github.com/muesli/beehive`
 
-Either way once you're there you can build the docker container
+Either way once you're there you can adjust the Dockerfile to your needs (see the 
+Dockerfile for an example of adding an additional layer of tools to the build), 
+and build the docker container
 
     docker build -t beehive .
 
