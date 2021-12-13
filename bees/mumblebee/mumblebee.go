@@ -16,6 +16,7 @@
  *
  *    Authors:
  *      Martin Schlierf <go@koma666.de>
+ *      Nicholas Kreimeyer <go@keridos.de>
  */
 
 // Package mumblebee is a Bee that can connect to a Mumble/XMPP server.
@@ -133,6 +134,10 @@ func (mod *MumbleBee) Run(eventChan chan bees.Event) {
 
 	config.Attach(gumbleutil.Listener{
 		TextMessage: func(e *gumble.TextMessageEvent) {
+			senderName := "Server"
+			if e.Sender != nil {
+				senderName = e.Sender.Name
+			}
 			ev := bees.Event{
 				Bee:  mod.Name(),
 				Name: "message",
@@ -145,7 +150,7 @@ func (mod *MumbleBee) Run(eventChan chan bees.Event) {
 					{
 						Name:  "user",
 						Type:  "string",
-						Value: e.Sender.Name,
+						Value: senderName,
 					},
 					{
 						Name:  "text",
