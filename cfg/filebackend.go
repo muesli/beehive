@@ -3,7 +3,6 @@ package cfg
 import (
 	"encoding/json"
 	"io/ioutil"
-	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -30,7 +29,7 @@ func NewFileBackend() *FileBackend {
 }
 
 // Load loads chains from config
-func (fs *FileBackend) Load(u *url.URL) (*Config, error) {
+func (fs *FileBackend) Load(u *URL) (*Config, error) {
 	var config Config
 
 	// detect file format by extension
