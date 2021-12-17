@@ -34,6 +34,9 @@ import (
 // FuncMap contains a few convenient template helpers
 var (
 	FuncMap = template.FuncMap{
+		"Array": func(values ...interface{}) []interface{} {
+			return values
+		},
 		"JSON": func(values ...interface{}) htmlTemplate.JS {
 			json, _ := json.Marshal(values)
 			return htmlTemplate.JS(json)
@@ -74,10 +77,33 @@ var (
 			}
 			return items[len(items)-1], nil
 		},
+		"ContainsAny": func(target, subs string, other ...string) bool {
+			// contains any symbol from the given string
+			if len(other) == 0 {
+				return strings.ContainsAny(target, subs)
+			}
+			// contains any of the given strings
+			for _, another := range other {
+				if strings.Contains(target, another) {
+					return true
+				}
+			}
+			return strings.Contains(target, subs)
+		},
+		"ContainsAll": func(target string, other ...string) (bool, error) {
+			if len(other) == 0 {
+				return false, errors.New("to find substring in a string, use Contains")
+			}
+			for _, another := range other {
+				if !strings.Contains(target, another) {
+					return false, nil
+				}
+			}
+			return true, nil
+		},
 		// strings functions
 		"Compare":      strings.Compare, // 1.5+ only
 		"Contains":     strings.Contains,
-		"ContainsAny":  strings.ContainsAny,
 		"Count":        strings.Count,
 		"EqualFold":    strings.EqualFold,
 		"HasPrefix":    strings.HasPrefix,
