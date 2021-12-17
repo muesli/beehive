@@ -27,6 +27,7 @@ import (
 	"time"
 
 	"github.com/muesli/beehive/bees"
+	log "github.com/sirupsen/logrus"
 )
 
 // TimeBee is a Bee that can fire events at a specific time.
@@ -80,6 +81,7 @@ func (mod *TimeBee) timer() {
 		return
 	}
 
+	log.Debug("timebee: triggering timer")
 	mod.lastEvent = mod.curTime
 	event := bees.Event{
 		Bee:  mod.Name(),
