@@ -49,10 +49,11 @@ func (mod *FSNotifyBee) Run(eventChan chan bees.Event) {
 		case <-mod.SigChan:
 			return
 		case event := <-watcher.Events:
-			if event.Op != fsnotify.Write && event.Op != 0 {
+			if event.Op != 0 {
 				sendEvent(mod.Name(), event.Op.String(), event.Name, eventChan)
 			}
-		case <-watcher.Errors:
+		case err := <-watcher.Errors:
+			mod.LogErrorf("error received: %s", err)
 		}
 	}
 }
