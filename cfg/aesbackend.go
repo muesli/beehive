@@ -31,12 +31,19 @@ import (
 	"os"
 	"path/filepath"
 
+	"os/exec"
+	"strings"
+
 	"golang.org/x/crypto/scrypt"
 )
 
 // PasswordEnvVar defines the environment variable name that should
 // contain the configuration password.
 const PasswordEnvVar = "BEEHIVE_CONFIG_PASSWORD"
+
+// PasswordCmdEnvVar defines the environment variable name that should
+// contain the external command to get the configuration password
+const PasswordCmdEnvVar = "BEEHIVE_CONFIG_PASSWORD_COMMAND"
 
 // EncryptedHeaderPrefix is added to the encrypted configuration
 // to make it possible to detect it's an encrypted configuration file
@@ -226,6 +233,15 @@ func getPassword(u *url.URL) (string, error) {
 	p := os.Getenv(PasswordEnvVar)
 	if p != "" {
 		return p, nil
+	}
+	if cmd := os.Getenv(PasswordCmdEnvVar); cmd != "" {
+		args := strings.Split(cmd, " ")
+		cmd := exec.Command(args[0], args[1:]...)
+		output, err := cmd.Output()
+		if err != nil {
+			return "", err
+		}
+		return strings.TrimSpace(string(output)), nil
 	}
 
 	if u != nil && u.User != nil {

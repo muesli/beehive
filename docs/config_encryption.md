@@ -29,7 +29,12 @@ Will happily detect and load an encrypted configuration file.
 
 ## Using user keyrings to store the password
 
-A sample wrapper script (Linux only) is provided in [tools/encrypted-config-wrapper] that will read the configuration password from the sessions's keyring.
+You can also set the `BEEHIVE_CONFIG_PASSWORD_COMMAND` environment variable to automatically retrieve the password from an external command.
+For example this environment setting will retrieve the password using the Secret Service API (Gnome Keyring):
+
+```
+export BEEHIVE_CONFIG_PASSWORD_COMMAND="secret-tool lookup user behive"
+```
 
 Something similar could be written to do it on macOS using Keychain and its `security(1)` CLI.
 
