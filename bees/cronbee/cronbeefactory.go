@@ -85,11 +85,6 @@ func (factory *CronBeeFactory) Options() []bees.BeeOptionDescriptor {
 			Type:        "string",
 		},
 		{
-			Name:        "day_of_week",
-			Description: "0-6 0 = Sunday 6 = Saturday; * for ignore",
-			Type:        "string",
-		},
-		{
 			Name:        "day_of_month",
 			Description: "01-31 for a specific day of the month; * for ignore",
 			Type:        "string",
@@ -97,6 +92,11 @@ func (factory *CronBeeFactory) Options() []bees.BeeOptionDescriptor {
 		{
 			Name:        "month",
 			Description: "01 - 12 for a specific month; * for ignore",
+			Type:        "string",
+		},
+		{
+			Name:        "day_of_week",
+			Description: "0-6 0 = Sunday 6 = Saturday; * for ignore",
 			Type:        "string",
 		},
 	}
